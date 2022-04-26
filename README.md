@@ -11,7 +11,7 @@ custom fork called 3.0 that's significantly different from the public MastodonKi
 
 * QuickToot and Mastonaut need to be in the same team.
 
-* That team ID (the above UI will show it; it looks something like `74J34U3R6X`) is hardcoded. Adjust `MastonautPersistentContainer.swift` accordingly:
+* That team ID (the above UI will show it; it looks something like `74J34U3R6X`) is hardcoded. Adjust `MastonautPersistentContainer.swift` accordingly (otherwise, it will build but immediately crash):
 
 ```swift
 class MastonautPersistentContainer: NSPersistentContainer
@@ -19,5 +19,4 @@ class MastonautPersistentContainer: NSPersistentContainer
 	static let appGroup = "(insert enter your Team ID here).app.mastonaut.mac"
 ```
 
-Otherwise, it will build but immediately crash.
-
+That should be it.
