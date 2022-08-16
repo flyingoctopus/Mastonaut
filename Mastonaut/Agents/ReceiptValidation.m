@@ -507,10 +507,6 @@ int OhOhTakeTheMoneyAndRun(int argc, char *argv[])
 int main(int argc, char *argv[])
 {
 	@autoreleasepool {
-#ifdef DEBUG
 		return NSApplicationMain(argc, (const char **)argv);
-#else
-		return OhOhTakeTheMoneyAndRun(argc, argv);
-#endif
 	}
 }
