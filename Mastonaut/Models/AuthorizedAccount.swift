@@ -27,7 +27,7 @@ extension AuthorizedAccount
 	{
 		for list in lists
 		{
-			var accountReference = try FollowedList.fetchOrInsert(for: list, authorizedAccount: self)
+			let accountReference = try FollowedList.fetchOrInsert(for: list, authorizedAccount: self)
 			accountReference.authorizedAccount = self
 		}
 	}

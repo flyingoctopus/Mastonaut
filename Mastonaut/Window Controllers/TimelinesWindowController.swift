@@ -537,9 +537,12 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		NSLayoutConstraint.deactivate(popUpButtonConstraints)
 		popUpButtonConstraints.removeAll()
 
-		var allSelectableModels = ColumnMode.allItems
+		let staticColumnModes = ColumnMode.allItems
 		
-		allSelectableModels.append(ColumnMode.list(name: "hello"))
+		// BUG: `currentAccount` isn't set yet. Need to either set it, or do this for all accounts?
+		let followedLists = currentAccount?.followedLists
+//
+//		staticColumnModes.append(ColumnMode.list(name: "hello"))
 		
 		let takenModels = columnViewControllers.compactMap({ $0.modelRepresentation as? ColumnMode })
 
@@ -556,11 +559,32 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 			}
 
 			let menu = NSMenu(title: "")
-			var items: [NSMenuItem] = allSelectableModels.filter({ !takenModels.contains($0) })
+			var items: [NSMenuItem] = staticColumnModes.filter({ !takenModels.contains($0) })
 														 .map({ $0.makeMenuItemForChanging(with: self, columnId: index) })
 
 			items.append(currentModel.makeMenuItemForChanging(with: self, columnId: index))
 			items.sort(by: { $0.columnModel! < $1.columnModel! })
+			
+			if let followedLists = followedLists
+			{
+				if followedLists.count > 0 {
+					items.append(.separator())
+					
+					let listSectionItem = NSMenuItem()
+					listSectionItem.title = 🔠("Lists")
+					listSectionItem.isEnabled = false
+					items.append(listSectionItem)
+					
+					for _list in followedLists {
+						if let list = _list as? FollowedList
+						{
+							let columnMode = ColumnMode.list(list: list)
+							
+							items.append(columnMode.makeMenuItemForChanging(with: self, columnId: index))
+						}
+					}
+				}
+			}
 
 			items.append(.separator())
 

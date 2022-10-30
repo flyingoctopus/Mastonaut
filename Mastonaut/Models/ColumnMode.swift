@@ -29,7 +29,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 	case localTimeline
 	case publicTimeline
 	case notifications
-	case list(name: String)
+	case list(list: FollowedList)
 	case tag(name: String)
 
 	var rawValue: RawValue
@@ -40,7 +40,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 		case .localTimeline:	return "localTimeline"
 		case .publicTimeline:	return "publicTimeline"
 		case .notifications:	return "notifications"
-		case .list(let name):	return "list:\(name)"
+		case .list(let list):	return "list:\(list.title ?? "")"
 		case .tag(let name):	return "tag:\(name)"
 		}
 	}
@@ -53,9 +53,9 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 		case "localTimeline":	self = .localTimeline
 		case "publicTimeline":	self = .publicTimeline
 		case "notifications":	self = .notifications
-		case let rawValue where rawValue.hasPrefix("list:"):
-			let name = rawValue.suffix(from: rawValue.index(after: rawValue.range(of: "list:")!.upperBound))
-			self = .list(name: String(name))
+//		case let rawValue where rawValue.hasPrefix("list:"):
+//			let id = rawValue.suffix(from: rawValue.index(after: rawValue.range(of: "list:")!.upperBound))
+//			self = .list(list: List(from: <#T##Decoder#>) String(name))
 
 		case let rawValue where rawValue.hasPrefix("tag:"):
 			let name = rawValue.suffix(from: rawValue.index(after: rawValue.range(of: "tag:")!.upperBound))
@@ -87,7 +87,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 		case .localTimeline:	return TimelineViewController(source: .localTimeline)
 		case .publicTimeline:	return TimelineViewController(source: .publicTimeline)
 		case .notifications:	return NotificationListViewController()
-		case .list(let name):	return TimelineViewController(source: .list(name: name))
+		case .list(let list):	return TimelineViewController(source: .list(list: list))
 		case .tag(let name):	return TimelineViewController(source: .tag(name: name))
 		}
 	}
@@ -115,8 +115,8 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 			menuItem.title = 🔠("Notifications")
 			menuItem.image = #imageLiteral(resourceName: "bell")
 			
-		case .list(let name):
-			menuItem.title = 🔠("List: %@", name)
+		case .list(let list):
+			menuItem.title = 🔠("List: %@", list.title)
 			menuItem.image = NSImage.CoreTootin.globe
 
 		case .tag(let name):
@@ -162,7 +162,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 		case (.notifications, .notifications):
 			return true
 		case (.list(let leftList), .list(let rightList)):
-			return leftList == rightList
+			return leftList.id == rightList.id
 		case (.tag(let leftTag), .tag(let righTag)):
 			return leftTag == righTag
 		default:

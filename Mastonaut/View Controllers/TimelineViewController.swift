@@ -19,6 +19,7 @@
 
 import Cocoa
 import MastodonKit
+import CoreTootin
 
 class TimelineViewController: StatusListViewController
 {
@@ -64,8 +65,8 @@ class TimelineViewController: StatusListViewController
 		case .publicTimeline:
 			setClientEventStream(.public)
 			
-		case .list(let name):
-			setClientEventStream(.list(name))
+		case .list(let list):
+			setClientEventStream(.list(list))
 
 		case .tag(let name):
 			setClientEventStream(.hashtag(name))
@@ -215,7 +216,7 @@ class TimelineViewController: StatusListViewController
 		case userStatuses(id: String)
 		case userStatusesAndReplies(id: String)
 		case userMediaStatuses(id: String)
-		case list(name: String)
+		case list(list: FollowedList)
 		case tag(name: String)
 	}
 }
@@ -238,7 +239,7 @@ extension TimelineViewController: ColumnPresentable
 		case .timeline:			return ColumnMode.timeline
 		case .localTimeline:	return ColumnMode.localTimeline
 		case .publicTimeline:	return ColumnMode.publicTimeline
-		case .list(let name):	return ColumnMode.list(name: name)
+		case .list(let name):	return ColumnMode.list(list: name)
 		case .tag(let name):	return ColumnMode.tag(name: name)
 
 		case .userStatuses, .userMediaStatuses, .userStatusesAndReplies, .favorites:
