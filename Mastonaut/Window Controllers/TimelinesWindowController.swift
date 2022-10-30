@@ -537,7 +537,10 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		NSLayoutConstraint.deactivate(popUpButtonConstraints)
 		popUpButtonConstraints.removeAll()
 
-		let allSelectableModels = ColumnMode.allItems
+		var allSelectableModels = ColumnMode.allItems
+		
+		allSelectableModels.append(ColumnMode.list(name: "hello"))
+		
 		let takenModels = columnViewControllers.compactMap({ $0.modelRepresentation as? ColumnMode })
 
 		var previousButton = currentUserPopUpButton

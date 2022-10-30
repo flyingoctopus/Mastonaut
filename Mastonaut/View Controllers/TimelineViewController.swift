@@ -63,6 +63,9 @@ class TimelineViewController: StatusListViewController
 
 		case .publicTimeline:
 			setClientEventStream(.public)
+			
+		case .list(let name):
+			setClientEventStream(.list(name))
 
 		case .tag(let name):
 			setClientEventStream(.hashtag(name))
@@ -110,6 +113,9 @@ class TimelineViewController: StatusListViewController
 		case .userMediaStatuses(let account):
 			request = Accounts.statuses(id: account, mediaOnly: true, range: rangeForEntryFetch(for: insertion))
 
+		case .list(let listId):
+			request = Timelines.list("645", range: rangeForEntryFetch(for: insertion))
+			
 		case .tag(let tagName):
 			request = Timelines.tag(tagName, range: rangeForEntryFetch(for: insertion))
 		}
@@ -169,6 +175,8 @@ class TimelineViewController: StatusListViewController
 			tableView.setAccessibilityLabel("Public Timeline")
 		case .favorites:
 			tableView.setAccessibilityLabel("Favorites Timeline")
+		case .list(let name):
+			tableView.setAccessibilityLabel("Timelinen for list \(name)")
 		case .tag(let name):
 			tableView.setAccessibilityLabel("Timeline for tag \(name)")
 		default:
@@ -187,6 +195,7 @@ class TimelineViewController: StatusListViewController
 		case .favorites: currentContext = .home
 		case .localTimeline: currentContext = .public
 		case .publicTimeline: currentContext = .public
+		case .list: currentContext = .home
 		case .tag: currentContext = .home
 		case .timeline: currentContext = .home
 		case .userMediaStatuses: currentContext = .account
@@ -206,6 +215,7 @@ class TimelineViewController: StatusListViewController
 		case userStatuses(id: String)
 		case userStatusesAndReplies(id: String)
 		case userMediaStatuses(id: String)
+		case list(name: String)
 		case tag(name: String)
 	}
 }
@@ -228,6 +238,7 @@ extension TimelineViewController: ColumnPresentable
 		case .timeline:			return ColumnMode.timeline
 		case .localTimeline:	return ColumnMode.localTimeline
 		case .publicTimeline:	return ColumnMode.publicTimeline
+		case .list(let name):	return ColumnMode.list(name: name)
 		case .tag(let name):	return ColumnMode.tag(name: name)
 
 		case .userStatuses, .userMediaStatuses, .userStatusesAndReplies, .favorites:
