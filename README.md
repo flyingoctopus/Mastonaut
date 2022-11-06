@@ -1,6 +1,6 @@
 # Build
 
-The following instructions assume Xcode 13.3 on macOS 12.3.
+The following instructions assume Xcode 14.1 on macOS 12.6.
 
 ## Setup
 
@@ -17,7 +17,8 @@ That should be it.
 ## Pitfalls
 
 - Make sure `MastodonKit` is fetched _as a git submodule_. (For example, Xcode's git clone functionality seems to not do this!) This appears to be a
-custom fork called 3.0 that's significantly different from the public MastodonKit. So don't try and pull the regular MastodonKit using CocoaPods.
+custom fork called 3.0 that's significantly different from the public MastodonKit. So don't try to change the project to pull the regular MastodonKit using
+CocoaPods.
 
 - The `.xcconfig` will auto-append `.mac` and other suffixes to the `MASTONAUT_BUNDLE_ID_BASE`, so you should pick something like
 `com.example.mastonaut` (replacing `com.example` with whatever reverse domain name you have set up for your account).
