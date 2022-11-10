@@ -188,7 +188,6 @@
 		154B6BC4234A161A0025A9DB /* NavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BC4157226255B200C2A150 /* NavigationStack.swift */; };
 		154B6BC5234A165E0025A9DB /* NSCoder+RawRepresentableKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15ADB6A8221E01ED0083A224 /* NSCoder+RawRepresentableKeys.swift */; };
 		154B6BC7234A16C50025A9DB /* NavigationStackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154B6BC6234A16C50025A9DB /* NavigationStackTests.swift */; };
-		154BDBCB232D9DF2005FC827 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 155A9375232D967B0055C667 /* Assets.xcassets */; };
 		154D4351237F459E005D99D9 /* FilterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154D4350237F459E005D99D9 /* FilterService.swift */; };
 		154D4352237F459E005D99D9 /* FilterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154D4350237F459E005D99D9 /* FilterService.swift */; };
 		154E9FDA23453E8B00885966 /* ResolverService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1530427722AE8F4300489F31 /* ResolverService.swift */; };
@@ -505,6 +504,9 @@
 		15F9F30C232EB9E900931594 /* SuggestionWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1530428122AEC64E00489F31 /* SuggestionWindowController.xib */; };
 		15FD4C33223870B000D699EF /* TransientWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FD4C32223870B000D699EF /* TransientWindow.swift */; };
 		15FD4C34223870B000D699EF /* TransientWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FD4C32223870B000D699EF /* TransientWindow.swift */; };
+		5F3A17EF291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
+		5F3A17F0291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
+		5F3A17F1291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
 		8018496C90237DCCDED54D8E /* Pods_Mastonaut.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092B4EA6357A3987C4DB12B9 /* Pods_Mastonaut.framework */; };
 		9BF0CEF5AD6BE645406760FA /* Pods_Mastonaut__Mock_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0D2DCB52811AC15559D8AE9 /* Pods_Mastonaut__Mock_.framework */; };
 		BB0D8382B9BA154D27AFBC63 /* Pods_CoreTootin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07C7A9AB62B40D2AFDAA70E9 /* Pods_CoreTootin.framework */; };
@@ -730,7 +732,6 @@
 		15570C2622025C920030DAFB /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		15570C2C22038E650030DAFB /* AttributedLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttributedLabel.h; sourceTree = "<group>"; };
 		15570C2D22038E650030DAFB /* AttributedLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AttributedLabel.m; sourceTree = "<group>"; };
-		155A9375232D967B0055C667 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		155A9377232D97040055C667 /* NSImage+Resources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+Resources.swift"; sourceTree = "<group>"; };
 		155B9388237A23E5006EBF3C /* AnyObject+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyObject+Helpers.swift"; sourceTree = "<group>"; };
 		155E55C1220F1A1900F00091 /* ComposerTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerTextView.swift; sourceTree = "<group>"; };
@@ -933,6 +934,7 @@
 		39AA9CF1114711021688EDCD /* Pods-QuickToot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuickToot.release.xcconfig"; path = "Target Support Files/Pods-QuickToot/Pods-QuickToot.release.xcconfig"; sourceTree = "<group>"; };
 		451D67EA024CBB6908731041 /* Pods-CoreTootin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreTootin.debug.xcconfig"; path = "Target Support Files/Pods-CoreTootin/Pods-CoreTootin.debug.xcconfig"; sourceTree = "<group>"; };
 		4BCC49A8ECAB04865B510BFF /* Pods_QuickToot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuickToot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = CoreAssets.xcassets; sourceTree = "<group>"; };
 		613EECFE95639DB968A362BE /* Pods-QuickToot.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuickToot.adhoc.xcconfig"; path = "Target Support Files/Pods-QuickToot/Pods-QuickToot.adhoc.xcconfig"; sourceTree = "<group>"; };
 		7AEAB27D6CB6D651C5299936 /* Pods-MastonautTests.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastonautTests.adhoc.xcconfig"; path = "Target Support Files/Pods-MastonautTests/Pods-MastonautTests.adhoc.xcconfig"; sourceTree = "<group>"; };
 		8BE1B4746437CF8AAE269D73 /* Pods-Mastonaut (Mock).adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mastonaut (Mock).adhoc.xcconfig"; path = "Target Support Files/Pods-Mastonaut (Mock)/Pods-Mastonaut (Mock).adhoc.xcconfig"; sourceTree = "<group>"; };
@@ -1260,11 +1262,11 @@
 		154478B4232B0E8F009C71D4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */,
 				153A6FA2220E23AD004245E0 /* Localizable.strings */,
 				154478A1232B0223009C71D4 /* CoreTootin.h */,
 				152DA63421E1B3140065CC1B /* Mastonaut.xcdatamodeld */,
 				154478A2232B0223009C71D4 /* Info.plist */,
-				155A9375232D967B0055C667 /* Assets.xcassets */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -1988,6 +1990,7 @@
 				1523C70921E94C7F006DE234 /* AuthWindowController.xib in Resources */,
 				1523C70A21E94C7F006DE234 /* TripleAttachmentView.xib in Resources */,
 				152B7317220E34D3004121F1 /* Pods-Mastonaut-acknowledgements.plist in Resources */,
+				5F3A17F0291DB26700EA6FEC /* CoreAssets.xcassets in Resources */,
 				1594392D2299917800E47DBB /* InstanceTableCellView.xib in Resources */,
 				151E9A2E230C830500A76DB0 /* DebugWindowController.xib in Resources */,
 				1538FB3D2218A817006B5F78 /* Preferences.xcassets in Resources */,
@@ -2000,7 +2003,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				15EE2B0C232EA35000155E16 /* AttachmentItem.xib in Resources */,
-				154BDBCB232D9DF2005FC827 /* Assets.xcassets in Resources */,
+				5F3A17F1291DB26700EA6FEC /* CoreAssets.xcassets in Resources */,
 				1545FC0923357143006CCD2C /* AttachmentDescriptionViewController.xib in Resources */,
 				159C2182232D382200139BD5 /* Localizable.strings in Resources */,
 				15EE2B0E232EA35000155E16 /* ProposedAttachmentItem.xib in Resources */,
@@ -2054,6 +2057,7 @@
 				15BF72D12342B3AF0020CE70 /* SidebarTitleViewController.xib in Resources */,
 				15A947962495ACB600E413B2 /* FilteredEntryCellView.xib in Resources */,
 				152DA64521E2C2DB0065CC1B /* StatusTableCellView.xib in Resources */,
+				5F3A17EF291DB26700EA6FEC /* CoreAssets.xcassets in Resources */,
 				1538FB3C2218A817006B5F78 /* Preferences.xcassets in Resources */,
 				159891A02200528700FA92F7 /* Mastonaut.icns in Resources */,
 				15E9E7ED22B91ACD00C1C701 /* PollViewController.xib in Resources */,
