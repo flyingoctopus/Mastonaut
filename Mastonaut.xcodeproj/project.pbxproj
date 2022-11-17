@@ -509,6 +509,7 @@
 		5F3A17F1291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
 		5FC3E18D2926EF3F0086DCEE /* LoggingOSLog in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC3E18C2926EF3F0086DCEE /* LoggingOSLog */; };
 		5FC3E18F2926F0E80086DCEE /* Logger+CurrentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */; };
+		5FC3E193292700EB0086DCEE /* Logger+CurrentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */; };
 		8018496C90237DCCDED54D8E /* Pods_Mastonaut.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092B4EA6357A3987C4DB12B9 /* Pods_Mastonaut.framework */; };
 		9BF0CEF5AD6BE645406760FA /* Pods_Mastonaut__Mock_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0D2DCB52811AC15559D8AE9 /* Pods_Mastonaut__Mock_.framework */; };
 		BB0D8382B9BA154D27AFBC63 /* Pods_CoreTootin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07C7A9AB62B40D2AFDAA70E9 /* Pods_CoreTootin.framework */; };
@@ -2316,6 +2317,7 @@
 				150B1EE1227E33C30048EA22 /* NSView+EmojiSubviews.m in Sources */,
 				151199CC22BFCF05007F2AEB /* ComposerPollViewController.swift in Sources */,
 				1572C55D22A2038100FAA77F /* StringCapableTextAttachment.swift in Sources */,
+				5FC3E193292700EB0086DCEE /* Logger+CurrentType.swift in Sources */,
 				15B44D5B225D0D9B00EDFDC1 /* AnnotatedURL.m in Sources */,
 				15A1CA0D221F72C400CF51F1 /* AccountsPreferencesController.swift in Sources */,
 				1538FB3A22188CCA006B5F78 /* PropertyObserver.swift in Sources */,
