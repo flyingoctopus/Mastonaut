@@ -20,6 +20,8 @@
 import Cocoa
 import MastodonKit
 import CoreTootin
+import LoggingOSLog
+import Logging
 
 class AppDelegate: NSObject, NSApplicationDelegate
 {
@@ -106,6 +108,11 @@ class AppDelegate: NSObject, NSApplicationDelegate
 
 	func applicationDidFinishLaunching(_ notification: Foundation.Notification)
 	{
+		LoggingSystem.bootstrap(LoggingOSLog.init)
+		
+		let logger = Logger(subsystemType: self)
+		logger.debug("applicationDidFinishLaunching")
+		
 		if accountsService.authorizedAccounts.isEmpty
 		{
 			authController.removeAllAuthorizationArtifacts()

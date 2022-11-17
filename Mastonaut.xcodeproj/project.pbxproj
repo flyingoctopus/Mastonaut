@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -507,6 +507,8 @@
 		5F3A17EF291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
 		5F3A17F0291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
 		5F3A17F1291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
+		5FC3E18D2926EF3F0086DCEE /* LoggingOSLog in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC3E18C2926EF3F0086DCEE /* LoggingOSLog */; };
+		5FC3E18F2926F0E80086DCEE /* Logger+CurrentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */; };
 		8018496C90237DCCDED54D8E /* Pods_Mastonaut.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092B4EA6357A3987C4DB12B9 /* Pods_Mastonaut.framework */; };
 		9BF0CEF5AD6BE645406760FA /* Pods_Mastonaut__Mock_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0D2DCB52811AC15559D8AE9 /* Pods_Mastonaut__Mock_.framework */; };
 		BB0D8382B9BA154D27AFBC63 /* Pods_CoreTootin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07C7A9AB62B40D2AFDAA70E9 /* Pods_CoreTootin.framework */; };
@@ -935,6 +937,7 @@
 		451D67EA024CBB6908731041 /* Pods-CoreTootin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreTootin.debug.xcconfig"; path = "Target Support Files/Pods-CoreTootin/Pods-CoreTootin.debug.xcconfig"; sourceTree = "<group>"; };
 		4BCC49A8ECAB04865B510BFF /* Pods_QuickToot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuickToot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = CoreAssets.xcassets; sourceTree = "<group>"; };
+		5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+CurrentType.swift"; sourceTree = "<group>"; };
 		613EECFE95639DB968A362BE /* Pods-QuickToot.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuickToot.adhoc.xcconfig"; path = "Target Support Files/Pods-QuickToot/Pods-QuickToot.adhoc.xcconfig"; sourceTree = "<group>"; };
 		7AEAB27D6CB6D651C5299936 /* Pods-MastonautTests.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastonautTests.adhoc.xcconfig"; path = "Target Support Files/Pods-MastonautTests/Pods-MastonautTests.adhoc.xcconfig"; sourceTree = "<group>"; };
 		8BE1B4746437CF8AAE269D73 /* Pods-Mastonaut (Mock).adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mastonaut (Mock).adhoc.xcconfig"; path = "Target Support Files/Pods-Mastonaut (Mock)/Pods-Mastonaut (Mock).adhoc.xcconfig"; sourceTree = "<group>"; };
@@ -978,6 +981,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1596DB46235F65D300B349B7 /* DirectoryService.framework in Frameworks */,
+				5FC3E18D2926EF3F0086DCEE /* LoggingOSLog in Frameworks */,
 				15765563229692C200783FFE /* AVKit.framework in Frameworks */,
 				154478A6232B0223009C71D4 /* CoreTootin.framework in Frameworks */,
 				8018496C90237DCCDED54D8E /* Pods_Mastonaut.framework in Frameworks */,
@@ -1118,6 +1122,7 @@
 				152DA63E21E23FD30065CC1B /* String+HTMLEntities.swift */,
 				15E7452822372001009A1252 /* SVGKImage+Helpers.swift */,
 				15431283232EEB960010854A /* UserPopUpButtonController+Helper.swift */,
+				5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1852,6 +1857,9 @@
 				15608F4C232C4DED00923CB7 /* PBXTargetDependency */,
 			);
 			name = Mastonaut;
+			packageProductDependencies = (
+				5FC3E18C2926EF3F0086DCEE /* LoggingOSLog */,
+			);
 			productName = Sengi;
 			productReference = 15C4DD0C21D41EC0002AF6DA /* Mastonaut.app */;
 			productType = "com.apple.product-type.application";
@@ -1927,6 +1935,9 @@
 				Base,
 			);
 			mainGroup = 15C4DD0321D41EC0002AF6DA;
+			packageReferences = (
+				5FC3E18B2926EF3F0086DCEE /* XCRemoteSwiftPackageReference "swift-log-oslog" */,
+			);
 			productRefGroup = 15C4DD0D21D41EC0002AF6DA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -2554,6 +2565,7 @@
 				151199CB22BFCF05007F2AEB /* ComposerPollViewController.swift in Sources */,
 				1572C55C22A2038100FAA77F /* StringCapableTextAttachment.swift in Sources */,
 				15B44D5A225D0D9B00EDFDC1 /* AnnotatedURL.m in Sources */,
+				5FC3E18F2926F0E80086DCEE /* Logger+CurrentType.swift in Sources */,
 				1538FB3922188CCA006B5F78 /* PropertyObserver.swift in Sources */,
 				15A1CA0C221F72C400CF51F1 /* AccountsPreferencesController.swift in Sources */,
 				15C4DD4521D42F87002AF6DA /* TimelineViewController.swift in Sources */,
@@ -3456,6 +3468,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5FC3E18B2926EF3F0086DCEE /* XCRemoteSwiftPackageReference "swift-log-oslog" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/chrisaljoudi/swift-log-oslog.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5FC3E18C2926EF3F0086DCEE /* LoggingOSLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5FC3E18B2926EF3F0086DCEE /* XCRemoteSwiftPackageReference "swift-log-oslog" */;
+			productName = LoggingOSLog;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		152DA63421E1B3140065CC1B /* Mastonaut.xcdatamodeld */ = {
