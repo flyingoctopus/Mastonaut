@@ -111,7 +111,10 @@ class AppDelegate: NSObject, NSApplicationDelegate
 		LoggingSystem.bootstrap(LoggingOSLog.init)
 		
 		let logger = Logger(subsystemType: self)
-		logger.debug("applicationDidFinishLaunching")
+		logger.info("applicationDidFinishLaunching")
+		
+		UserDefaults.standard.addObserver(self, forKeyPath: "appearance", context: nil)
+		updateAppearance()
 		
 		if accountsService.authorizedAccounts.isEmpty
 		{
@@ -159,6 +162,26 @@ class AppDelegate: NSObject, NSApplicationDelegate
 		{
 			migrationErrorPresenter = nil
 			errorPresenter()
+		}
+	}
+	
+	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+		switch keyPath {
+		case "appearance":
+			updateAppearance()
+		default:
+			print("Key path \(keyPath ?? "") has changed")
+		}
+	}
+	
+	func updateAppearance() {
+		switch Preferences.appearance {
+		case .light:
+			NSApp.appearance = NSAppearance(named: .aqua)
+		case .dark:
+			NSApp.appearance = NSAppearance(named: .darkAqua)
+		default:
+			NSApp.appearance = NSAppearance()
 		}
 	}
 

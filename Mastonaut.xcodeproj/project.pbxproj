@@ -509,7 +509,9 @@
 		5F3A17F1291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
 		5FC3E18D2926EF3F0086DCEE /* LoggingOSLog in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC3E18C2926EF3F0086DCEE /* LoggingOSLog */; };
 		5FC3E18F2926F0E80086DCEE /* Logger+CurrentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */; };
+		5FC3E1922926FD640086DCEE /* AppearancePreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */; };
 		5FC3E193292700EB0086DCEE /* Logger+CurrentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */; };
+		5FC3E1952927018A0086DCEE /* LoggingOSLog in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC3E1942927018A0086DCEE /* LoggingOSLog */; };
 		8018496C90237DCCDED54D8E /* Pods_Mastonaut.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092B4EA6357A3987C4DB12B9 /* Pods_Mastonaut.framework */; };
 		9BF0CEF5AD6BE645406760FA /* Pods_Mastonaut__Mock_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0D2DCB52811AC15559D8AE9 /* Pods_Mastonaut__Mock_.framework */; };
 		BB0D8382B9BA154D27AFBC63 /* Pods_CoreTootin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07C7A9AB62B40D2AFDAA70E9 /* Pods_CoreTootin.framework */; };
@@ -939,6 +941,7 @@
 		4BCC49A8ECAB04865B510BFF /* Pods_QuickToot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuickToot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = CoreAssets.xcassets; sourceTree = "<group>"; };
 		5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+CurrentType.swift"; sourceTree = "<group>"; };
+		5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearancePreferencesView.swift; sourceTree = "<group>"; };
 		613EECFE95639DB968A362BE /* Pods-QuickToot.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuickToot.adhoc.xcconfig"; path = "Target Support Files/Pods-QuickToot/Pods-QuickToot.adhoc.xcconfig"; sourceTree = "<group>"; };
 		7AEAB27D6CB6D651C5299936 /* Pods-MastonautTests.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastonautTests.adhoc.xcconfig"; path = "Target Support Files/Pods-MastonautTests/Pods-MastonautTests.adhoc.xcconfig"; sourceTree = "<group>"; };
 		8BE1B4746437CF8AAE269D73 /* Pods-Mastonaut (Mock).adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mastonaut (Mock).adhoc.xcconfig"; path = "Target Support Files/Pods-Mastonaut (Mock)/Pods-Mastonaut (Mock).adhoc.xcconfig"; sourceTree = "<group>"; };
@@ -958,6 +961,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BF0CEF5AD6BE645406760FA /* Pods_Mastonaut__Mock_.framework in Frameworks */,
+				5FC3E1952927018A0086DCEE /* LoggingOSLog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1030,6 +1034,7 @@
 		1507919521D5AB5B009EE4A3 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5FC3E1902926FD520086DCEE /* Preferences */,
 				1547C99A220A356E00F64665 /* Collection View Items */,
 				150CEA3921FCBF7900F815A9 /* Table Cell Views */,
 				15BF72C92342B3200020CE70 /* Sidebar Title Views */,
@@ -1725,6 +1730,14 @@
 			path = "Window Controllers";
 			sourceTree = "<group>";
 		};
+		5FC3E1902926FD520086DCEE /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */,
+			);
+			path = Preferences;
+			sourceTree = "<group>";
+		};
 		98ECDB4860F1D57879765C05 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1795,6 +1808,9 @@
 				156F7A5F23FB3E720061ABFB /* PBXTargetDependency */,
 			);
 			name = "Mastonaut (Mock)";
+			packageProductDependencies = (
+				5FC3E1942927018A0086DCEE /* LoggingOSLog */,
+			);
 			productName = Sengi;
 			productReference = 1523C71221E94C7F006DE234 /* Mastonaut.app */;
 			productType = "com.apple.product-type.application";
@@ -2675,6 +2691,7 @@
 				15BC415E2262A8CA00C2A150 /* SidebarSubcontroller.swift in Sources */,
 				155B9389237A23E5006EBF3C /* AnyObject+Helpers.swift in Sources */,
 				15BB378C22A854880094B5A3 /* EmphasizedTextField.m in Sources */,
+				5FC3E1922926FD640086DCEE /* AppearancePreferencesView.swift in Sources */,
 				15D3B9C824A298CB00DC3B10 /* BPAnimatedImageLayer.swift in Sources */,
 				152DA63F21E23FD30065CC1B /* String+HTMLEntities.swift in Sources */,
 				15C4DD1021D41EC0002AF6DA /* AppDelegate.swift in Sources */,
@@ -3484,6 +3501,11 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		5FC3E18C2926EF3F0086DCEE /* LoggingOSLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5FC3E18B2926EF3F0086DCEE /* XCRemoteSwiftPackageReference "swift-log-oslog" */;
+			productName = LoggingOSLog;
+		};
+		5FC3E1942927018A0086DCEE /* LoggingOSLog */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5FC3E18B2926EF3F0086DCEE /* XCRemoteSwiftPackageReference "swift-log-oslog" */;
 			productName = LoggingOSLog;
