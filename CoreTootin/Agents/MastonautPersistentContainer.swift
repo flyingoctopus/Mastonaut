@@ -22,7 +22,7 @@ import CoreData
 
 class MastonautPersistentContainer: NSPersistentContainer
 {
-	static let appGroup = Bundle.main.object(forInfoDictionaryKey: "MTNAppGroupIdentifier") as! String
+	static let appGroup = "\(BuildConfig.DEVELOPMENT_TEAM).\(BuildConfig.MASTONAUT_BUNDLE_ID_BASE)"
 
 	override open class func defaultDirectoryURL() -> URL {
 		let storeURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)!

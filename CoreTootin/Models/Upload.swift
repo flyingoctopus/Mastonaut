@@ -19,6 +19,7 @@
 
 import Foundation
 import MastodonKit
+import AppKit
 
 public class Upload
 {

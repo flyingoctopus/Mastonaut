@@ -21,10 +21,10 @@ import Foundation
 
 public class Keychain
 {
-	static let appGroup = Bundle.main.object(forInfoDictionaryKey: "MTNAppGroupIdentifier") as! String
+	static let appGroup = "\(BuildConfig.DEVELOPMENT_TEAM).\(BuildConfig.MASTONAUT_BUNDLE_ID_BASE)"
 
 	public private(set) lazy var keychainController: KeychainController = {
-		let controller = KeychainController(service: "app.mastonaut.mac.keychain")
+		let controller = KeychainController(service: "\(BuildConfig.DEVELOPMENT_TEAM).keychain")
 		controller.keychainGroupIdentifier = Keychain.appGroup
 		return controller
 	}()
