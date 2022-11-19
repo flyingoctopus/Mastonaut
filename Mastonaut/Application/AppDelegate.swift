@@ -112,8 +112,8 @@ class AppDelegate: NSObject, NSApplicationDelegate
 		
 		let logger = Logger(subsystemType: self)
 		logger.info("applicationDidFinishLaunching")
-		
-		UserDefaults.standard.addObserver(self, forKeyPath: "appearance", context: nil)
+
+		Preferences.addObserver(self, forKeyPath: "appearance")
 		updateAppearance()
 		
 		if accountsService.authorizedAccounts.isEmpty

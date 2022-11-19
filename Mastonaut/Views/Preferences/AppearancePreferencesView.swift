@@ -21,15 +21,13 @@ struct AppearancePreferencesView: View {
 		LazyVGrid(columns: columns) {
 			Text("Appearance:")
 			
-			HStack {
-				Picker("", selection: $appearance) {
-					Text("Light").tag(Appearance.light)
-					Text("Dark").tag(Appearance.dark)
-					Text("Auto").tag(Appearance.auto)
-				}
-				.pickerStyle(.radioGroup)
-				.horizontalRadioGroupLayout()
+			Picker("", selection: $appearance) {
+				Text("System Default").tag(MastonautPreferences.Appearance.auto)
+				Text("Light").tag(MastonautPreferences.Appearance.light)
+				Text("Dark").tag(MastonautPreferences.Appearance.dark)
 			}
+			.pickerStyle(.radioGroup)
+			.horizontalRadioGroupLayout()
 		}
 		.onChange(of: appearance) { newValue in
 			Preferences.appearance = newValue

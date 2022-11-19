@@ -145,6 +145,12 @@ public class MastonautPreferences: PreferencesController
 		frames["\(index)"] = NSStringFromRect(frame)
 		defaults.setValue(frames, forKey: "MastonautPreferences.preservedWindowFrames")
 	}
+	
+	// KVO
+	
+	public func addObserver(_ observer: NSObject, forKeyPath keyPath: String) {
+		defaults.addObserver(observer, forKeyPath: keyPath, context: nil)
+	}
 }
 
 public extension MastonautPreferences
