@@ -20,6 +20,8 @@
 import Cocoa
 import MastodonKit
 import CoreTootin
+import LoggingOSLog
+import Logging
 
 class AppDelegate: NSObject, NSApplicationDelegate
 {
@@ -106,6 +108,14 @@ class AppDelegate: NSObject, NSApplicationDelegate
 
 	func applicationDidFinishLaunching(_ notification: Foundation.Notification)
 	{
+		LoggingSystem.bootstrap(LoggingOSLog.init)
+		
+		let logger = Logger(subsystemType: self)
+		logger.info("applicationDidFinishLaunching")
+
+		Preferences.addObserver(self, forKeyPath: "appearance")
+		updateAppearance()
+		
 		if accountsService.authorizedAccounts.isEmpty
 		{
 			authController.removeAllAuthorizationArtifacts()
@@ -152,6 +162,26 @@ class AppDelegate: NSObject, NSApplicationDelegate
 		{
 			migrationErrorPresenter = nil
 			errorPresenter()
+		}
+	}
+	
+	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+		switch keyPath {
+		case "appearance":
+			updateAppearance()
+		default:
+			print("Key path \(keyPath ?? "") has changed")
+		}
+	}
+	
+	func updateAppearance() {
+		switch Preferences.appearance {
+		case .light:
+			NSApp.appearance = NSAppearance(named: .aqua)
+		case .dark:
+			NSApp.appearance = NSAppearance(named: .darkAqua)
+		default:
+			NSApp.appearance = NSAppearance()
 		}
 	}
 

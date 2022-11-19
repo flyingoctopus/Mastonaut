@@ -74,6 +74,12 @@ public class MastonautPreferences: PreferencesController
 		get { return bool(forKey: #keyPath(didMigrateToSharedLocalKeychain)) ?? false }
 		set { defaults.setValue(newValue, forKey: #keyPath(didMigrateToSharedLocalKeychain)) }
 	}
+	
+	@objc public dynamic var appearance: Appearance
+	{
+		get { return integerRepresentable(for: #keyPath(appearance), default: .auto) }
+		set { defaults.setValue(newValue.rawValue, forKey: #keyPath(appearance)) }
+	}
 
 	// Viewing preferences
 
@@ -139,10 +145,22 @@ public class MastonautPreferences: PreferencesController
 		frames["\(index)"] = NSStringFromRect(frame)
 		defaults.setValue(frames, forKey: "MastonautPreferences.preservedWindowFrames")
 	}
+	
+	// KVO
+	
+	public func addObserver(_ observer: NSObject, forKeyPath keyPath: String) {
+		defaults.addObserver(observer, forKeyPath: keyPath, context: nil)
+	}
 }
 
 public extension MastonautPreferences
 {
+	@objc enum Appearance : Int {
+	    case auto = 1
+	    case light
+	    case dark
+    }
+	
 	@objc enum MediaDisplayMode: Int
 	{
 		case alwaysHide = 1
