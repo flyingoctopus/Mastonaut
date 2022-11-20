@@ -116,7 +116,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 			menuItem.image = #imageLiteral(resourceName: "bell")
 			
 		case .list(let list):
-			menuItem.title = 🔠("List: %@", list.title)
+			menuItem.title = 🔠(list.title!)
 			menuItem.image = NSImage.CoreTootin.globe
 
 		case .tag(let name):
