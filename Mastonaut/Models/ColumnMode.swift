@@ -117,7 +117,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 			
 		case .list(let list):
 			menuItem.title = 🔠(list.title!)
-			menuItem.image = NSImage.CoreTootin.globe
+			menuItem.image = NSImage(systemSymbolName: "list.bullet", accessibilityDescription: "List")
 
 		case .tag(let name):
 			menuItem.title = 🔠("Tag: %@", name)
