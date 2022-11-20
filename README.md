@@ -4,7 +4,7 @@ The following instructions assume Xcode 14.1 on macOS 12.6.
 
 ## Setup
 
-- Open the file `userspecific.xcconfig`.
+- Copy the file `userspecific.template.xcconfig` to `userspecific.xcconfig`, and open that file.
 
 - Set `MASTONAUT_BUNDLE_ID_BASE` to a bundle ID for the app that works with your Apple ID.
 
@@ -13,6 +13,15 @@ The following instructions assume Xcode 14.1 on macOS 12.6.
 - **Do not check in your changes to `userspecific.xcconfig`!**
 
 That should be it.
+
+## Bundle IDs
+
+The bundle ID _base_ is used because Mastonaut consists of multiple projects, which use an app group to share information. Given a `MASTONAUT_BUNDLE_ID_BASE` of `com.example.mastonaut` and a `DEVELOPMENT_TEAM` of `ABCDEFGH`:
+
+- the main app will be `com.example.mastonaut.mac`
+- the macOS Sharing extension will be `com.example.mastonaut.mac.QuickToot`
+- the Core Data database shared by the two above will be stored in `~/Library/Group Containers/ABCDEFGH.com.example.mastonaut/Mastonaut/Mastonaut.sqlite`
+- Keychain credentials will be prefixed `ABCDEFGH.com.example.mastonaut.keychain`
 
 ## Pitfalls
 
