@@ -565,7 +565,15 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 			var items: [NSMenuItem] = staticColumnModes.filter({ !takenModels.contains($0) })
 														 .map({ $0.makeMenuItemForChanging(with: self, columnId: index) })
 
-			items.append(currentModel.makeMenuItemForChanging(with: self, columnId: index))
+			// don't double-append menu item if it's a list (which we're building later)
+			switch currentModel {
+			case .list(_):
+				break
+			default:
+				items.append(currentModel.makeMenuItemForChanging(with: self, columnId: index))
+				break
+			}
+			
 			items.sort(by: { $0.columnModel! < $1.columnModel! })
 			
 			if let followedLists = followedLists
