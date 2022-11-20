@@ -559,6 +559,9 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 			}
 
 			let menu = NSMenu(title: "")
+			
+			menu.autoenablesItems = false
+			
 			var items: [NSMenuItem] = staticColumnModes.filter({ !takenModels.contains($0) })
 														 .map({ $0.makeMenuItemForChanging(with: self, columnId: index) })
 
@@ -569,11 +572,7 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 			{
 				if followedLists.count > 0 {
 					items.append(.separator())
-					
-					let listSectionItem = NSMenuItem()
-					listSectionItem.title = 🔠("Lists")
-					listSectionItem.isEnabled = false
-					items.append(listSectionItem)
+					items.append(.sectionHeader(🔠("Lists")))
 					
 					for _list in followedLists {
 						if let list = _list as? FollowedList
