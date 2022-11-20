@@ -115,7 +115,7 @@ class TimelineViewController: StatusListViewController
 			request = Accounts.statuses(id: account, mediaOnly: true, range: rangeForEntryFetch(for: insertion))
 
 		case .list(let listId):
-			request = Timelines.list("645", range: rangeForEntryFetch(for: insertion))
+			request = Timelines.list(listId.id!, range: rangeForEntryFetch(for: insertion))
 			
 		case .tag(let tagName):
 			request = Timelines.tag(tagName, range: rangeForEntryFetch(for: insertion))
