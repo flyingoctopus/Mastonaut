@@ -27,7 +27,7 @@ public class MastonautPreferences: PreferencesController
 
 	override var suiteName: String?
 	{
-		return "R85D3K8ATT.app.mastonaut.mac"
+		return "\(BuildConfig.DEVELOPMENT_TEAM).\(BuildConfig.MASTONAUT_BUNDLE_ID_BASE)"
 	}
 
 	/// Initializer declared as private to avoid accidental creation of new instances.

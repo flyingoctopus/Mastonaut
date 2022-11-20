@@ -898,7 +898,7 @@ extension AccountsPreferencesController
 
 private extension NSPasteboard.PasteboardType
 {
-	static let accountTableViewDragAndDropType = NSPasteboard.PasteboardType(rawValue: "app.mastonaut.mac.account.d&d")
+	static let accountTableViewDragAndDropType = NSPasteboard.PasteboardType(rawValue: "\(BuildConfig.MASTONAUT_BUNDLE_ID_BASE).account.d&d")
 }
 
 /// Class that translates the Account struct into an Objective-C class that Cocoa bindings can be attached to.
