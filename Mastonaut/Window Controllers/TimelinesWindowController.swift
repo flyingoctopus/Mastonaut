@@ -536,15 +536,8 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 
 		NSLayoutConstraint.deactivate(popUpButtonConstraints)
 		popUpButtonConstraints.removeAll()
-
-		let staticColumnModes = ColumnMode.allItems
 		
-		// BUG: `currentAccount` isn't set yet. Need to either set it, or do this for all accounts?
-		let followedLists = currentAccount?.followedLists
-//
-//		staticColumnModes.append(ColumnMode.list(name: "hello"))
-		
-		let takenModels = columnViewControllers.compactMap({ $0.modelRepresentation as? ColumnMode })
+		let takenModes = columnViewControllers.compactMap({ $0.modelRepresentation as? ColumnMode })
 
 		var previousButton = currentUserPopUpButton
 
@@ -558,63 +551,13 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 				continue
 			}
 
-			let menu = NSMenu(title: "")
+			let popupButtonMenu = buildColumnsPopupButtonMenu(currentColumnMode: currentModel,
+															  takenModes: takenModes,
+															  index: index)
 			
-			menu.autoenablesItems = false
-			
-			var items: [NSMenuItem] = staticColumnModes.filter({ !takenModels.contains($0) })
-														 .map({ $0.makeMenuItemForChanging(with: self, columnId: index) })
-
-			// don't double-append menu item if it's a list (which we're building later)
-			switch currentModel {
-			case .list(_):
-				break
-			default:
-				items.append(currentModel.makeMenuItemForChanging(with: self, columnId: index))
-				break
-			}
-			
-			items.sort(by: { $0.columnModel! < $1.columnModel! })
-			
-			if let followedLists = followedLists
-			{
-				if followedLists.count > 0 {
-					items.append(.separator())
-					items.append(.sectionHeader(🔠("Lists")))
-					
-					for _list in followedLists {
-						if let list = _list as? FollowedList
-						{
-							let columnMode = ColumnMode.list(list: list)
-							
-							items.append(columnMode.makeMenuItemForChanging(with: self, columnId: index))
-						}
-					}
-				}
-			}
-
-			items.append(.separator())
-
-			let reloadColumnItem = NSMenuItem()
-			reloadColumnItem.title = 🔠("Reload this Column")
-			reloadColumnItem.target = self
-			reloadColumnItem.representedObject = index
-			reloadColumnItem.action = #selector(TimelinesWindowController.reloadColumn(_:))
-			items.append(reloadColumnItem)
-
-			if index > 0 {
-				let removeColumnItem = NSMenuItem()
-				removeColumnItem.title = 🔠("Remove this Column")
-				removeColumnItem.target = self
-				removeColumnItem.representedObject = index
-				removeColumnItem.action = #selector(TimelinesWindowController.removeColumn(_:))
-				items.append(removeColumnItem)
-			}
-
-			menu.setItems(items)
-			popUpButton.menu = menu
+			popUpButton.menu = popupButtonMenu
 			popUpButton.tag = index
-			popUpButton.select(menu.item(withRepresentedObject: currentModel))
+			popUpButton.select(popupButtonMenu.item(withRepresentedObject: currentModel))
 
 			popUpButtonConstraints.append(TrackingLayoutConstraint
 											.constraint(trackingMidXOf: column.view,
@@ -637,12 +580,98 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 											constant: 8))
 		}
 
-		newColumnMenu.setItems(ColumnMode.allItems.filter({ !takenModels.contains($0)} )
-												  .map({ $0.makeMenuItemForAdding(with: self) }))
+		let newColumnMenuItems = buildNewColumnMenuItems(takenModes: takenModes)
+		
+		newColumnMenu.setItems(newColumnMenuItems)
 
 		newColumnSegmentedControl.setEnabled(!newColumnMenu.items.isEmpty, forSegment: 0)
 
 		NSLayoutConstraint.activate(popUpButtonConstraints)
+	}
+	
+	func buildColumnsPopupButtonMenu(currentColumnMode: ColumnMode,
+									 takenModes: [ColumnMode],
+									 index: Int) -> NSMenu {
+
+		let followedLists = currentAccount?.followedLists
+
+		let staticColumnModes = ColumnMode.staticItems
+		
+		let menu = NSMenu(title: "")
+		
+		menu.autoenablesItems = false
+		
+		var items: [NSMenuItem] = staticColumnModes.filter({ !takenModes.contains($0) })
+													 .map({ $0.makeMenuItemForChanging(with: self, columnId: index) })
+
+		// don't double-append menu item if it's a list (which we're building later)
+		switch currentColumnMode {
+		case .list(_):
+			break
+		default:
+			items.append(currentColumnMode.makeMenuItemForChanging(with: self, columnId: index))
+			break
+		}
+		
+		items.sort(by: { $0.columnModel! < $1.columnModel! })
+
+		items.append(.separator())
+
+		let reloadColumnItem = NSMenuItem()
+		reloadColumnItem.title = 🔠("Reload this Column")
+		reloadColumnItem.target = self
+		reloadColumnItem.representedObject = index
+		reloadColumnItem.action = #selector(TimelinesWindowController.reloadColumn(_:))
+		items.append(reloadColumnItem)
+
+		if index > 0 {
+			let removeColumnItem = NSMenuItem()
+			removeColumnItem.title = 🔠("Remove this Column")
+			removeColumnItem.target = self
+			removeColumnItem.representedObject = index
+			removeColumnItem.action = #selector(TimelinesWindowController.removeColumn(_:))
+			items.append(removeColumnItem)
+		}
+
+		menu.setItems(items)
+		
+		return menu
+	}
+	
+	func buildNewColumnMenuItems(takenModes: [ColumnMode]) -> [NSMenuItem] {
+		var items: [NSMenuItem] = ColumnMode.staticItems.filter({ !takenModes.contains($0)} )
+														.map({ $0.makeMenuItemForAdding(with: self) })
+		
+		let followedLists = currentAccount?.followedLists
+		
+		var listItems: [NSMenuItem] = []
+		var haveAtLeastOneList = false
+
+		if let followedLists = followedLists
+		{
+			if followedLists.count > 0 {
+				listItems.append(.separator())
+				listItems.append(.sectionHeader(🔠("Lists")))
+				
+				for _list in followedLists {
+					if let list = _list as? FollowedList
+					{
+						let columnMode = ColumnMode.list(list: list)
+						
+						if !takenModes.contains(columnMode) {
+							listItems.append(columnMode.makeMenuItemForAdding(with: self))
+							haveAtLeastOneList = true
+						}
+					}
+				}
+			}
+		}
+		
+		if haveAtLeastOneList {
+			items.append(contentsOf: listItems)
+		}
+		
+		return items
 	}
 
 	// MARK: - Keyboard Navigation

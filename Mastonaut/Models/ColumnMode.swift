@@ -144,7 +144,8 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 		return menuItem
 	}
 
-	static var allItems: [ColumnMode]
+	/// Column modes that are always available (as opposed to lists, hashtags, etc.)
+	static var staticItems: [ColumnMode]
 	{
 		return [.timeline, .localTimeline, .publicTimeline, .notifications]
 	}

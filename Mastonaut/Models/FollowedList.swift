@@ -17,10 +17,10 @@ extension FollowedList
 		let context = AppDelegate.shared.managedObjectContext
 		let fetchRequest = self.fetchRequest(id: list.id, authorizedAccount: authorizedAccount)
 
-		let accountReference = try context.fetch(fetchRequest).first ?? insert(id: list.id)
-		accountReference.title = list.title
+		let followedList = try context.fetch(fetchRequest).first ?? insert(id: list.id)
+		followedList.title = list.title
 
-		return accountReference
+		return followedList
 	}
 	
 	fileprivate static func fetchRequest(id: String, authorizedAccount: AuthorizedAccount) -> NSFetchRequest<FollowedList>
