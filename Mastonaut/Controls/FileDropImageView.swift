@@ -18,10 +18,11 @@
 //
 
 import Cocoa
+import UniformTypeIdentifiers
 
 class FileDropImageView: NSImageView
 {
-	var allowedDropFileTypes: [CFString]? = nil
+	var allowedDropFileTypes: [UTType]? = nil
 
 	private(set) var isReceivingDrag: Bool = false
 	{

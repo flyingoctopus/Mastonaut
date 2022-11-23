@@ -18,22 +18,23 @@
 //
 
 import AppKit
+import UniformTypeIdentifiers
 
 public class ImageRestrainer {
-	let typeConversionMap: [CFString: CFString]
+	let typeConversionMap: [UTType: UTType]
 	let maximumImageSize: NSSize
 
-	init(typeConversionMap: [CFString: CFString], maximumImageSize: NSSize) {
+	init(typeConversionMap: [UTType: UTType], maximumImageSize: NSSize) {
 		self.typeConversionMap = typeConversionMap
 		self.maximumImageSize = maximumImageSize
 	}
 
-	func restrain(imageAtURL fileURL: URL, fileUTI: CFString) throws -> Data {
-		let restrainedFileUTI = restrain(type: fileUTI)
+	func restrain(imageAtURL fileURL: URL, fileUTT: UTType) throws -> Data {
+		let restrainedFileUTT = restrain(type: fileUTT)
 
 		func fallbackData() throws -> Data {
 			let image = NSImage(byReferencing: fileURL)
-			return try restrain(staticImage: image).dataUsingRepresentation(for: restrainedFileUTI)
+			return try restrain(staticImage: image).dataUsingRepresentation(for: restrainedFileUTT)
 		}
 
 		// Check if this is an animation. If not, just use the static image restrainer.
@@ -49,10 +50,10 @@ public class ImageRestrainer {
 		let frameCount = CGImageSourceGetCount(imageSource)
 
 		// Check if animated image needs to be resized or converted
-		guard originalSize.area >= maximumImageSize.area || restrainedFileUTI != fileUTI,
+		guard originalSize.area >= maximumImageSize.area || restrainedFileUTT != fileUTT,
 			  let destinationData = CFDataCreateMutable(kCFAllocatorDefault, originalData.count),
 			  let imageDestination = CGImageDestinationCreateWithData(destinationData,
-																	  restrainedFileUTI,
+																	  restrainedFileUTT.identifier as CFString,
 																	  frameCount, nil)
 		else {
 			return originalData
@@ -91,7 +92,7 @@ public class ImageRestrainer {
 		return staticImage.resizedImage(withSize: newSize)
 	}
 
-	func restrain(type: CFString) -> CFString {
+	func restrain(type: UTType) -> UTType {
 		return typeConversionMap[type] ?? type
 	}
 }
