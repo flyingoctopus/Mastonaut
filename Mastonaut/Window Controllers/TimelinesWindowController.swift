@@ -20,6 +20,7 @@
 import Cocoa
 import MastodonKit
 import CoreTootin
+import PullRefreshableScrollView
 
 class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, ToolbarWindowController
 {

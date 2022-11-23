@@ -20,6 +20,7 @@
 import Cocoa
 import MastodonKit
 import CoreTootin
+import PullRefreshableScrollView
 
 let ListViewControllerMinimumWidth: CGFloat = 280
 
@@ -31,13 +32,43 @@ fileprivate struct ListCellViewIdentifier
 	
 }
 
+class ListViewPullToRefreshAccessoryView : NSView, AccessoryViewForPullRefreshable {
+	func viewDidEnterElasticity(_ sender: Any?) {
+		print("elasticity entered")
+	}
+	
+	func viewDidEnterValidationArea(_ sender: Any?) {
+		print("validation entered")
+	}
+	
+	func viewDidStick(_ sender: Any?) {
+		print("sticked")
+	}
+	
+	func viewDidRecede(_ sender: Any?) {
+		print("receded")
+	}
+	
+	func viewDidReachElasticityPercentage(_ sender: Any?, percentage: Double) {
+		print("percentage : \(percentage)")
+	}
+}
+
 class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController,
 																MastonautTableViewDelegate,
+																PullRefreshableScrollViewDelegate,
 																NSTableViewDataSource,
 																RemoteEventsReceiver,
 																ClientObserver
 {
-	@IBOutlet internal private(set) unowned var scrollView: NSScrollView!
+	func prScrollView(_ sender: PullRefreshableScrollView, triggeredOnEdge: PullRefreshableScrollView.ViewEdge) -> Bool {
+		return true
+	}
+	
+	@IBOutlet var accessoryView : ListViewPullToRefreshAccessoryView!
+	@IBOutlet var bottomView : ListViewPullToRefreshAccessoryView!
+	
+	@IBOutlet internal private(set) unowned var scrollView: PullRefreshableScrollView!
 	@IBOutlet internal private(set) unowned var tableView: NSTableView!
 	@IBOutlet internal private(set) unowned var topConstraint: NSLayoutConstraint!
 
