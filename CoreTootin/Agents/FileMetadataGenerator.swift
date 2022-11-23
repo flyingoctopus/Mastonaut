@@ -49,12 +49,17 @@ public struct FileMetadataGenerator
 	{
 		assert(!Thread.isMainThread)
 
-		if fileUrl.fileConforms(toUTI: kUTTypeMovie)
+		if fileUrl.fileConforms(toUTT: .movie)
 		{
-			let duration = AVURLAsset(url: fileUrl).duration.seconds
-			return .movie(duration: duration)
+			/* TODO: AVAsset.duration has been deprecated, and we're supposed to use
+			 * an async call to asset.load(.duration) to fetch metadata and then do stuff with it.
+			 * That introduces async/await into the mix, which is fine, but is out of the scope
+			 * of the current work. */
+				let asset = AVURLAsset(url: fileUrl)
+				let duration = asset.duration.seconds
+				return .movie(duration: duration)
 		}
-		else if fileUrl.fileConforms(toUTI: kUTTypeImage)
+		else if fileUrl.fileConforms(toUTT: .image)
 		{
 			guard
 				let imageSource = CGImageSourceCreateWithURL(fileUrl as CFURL, nil),
