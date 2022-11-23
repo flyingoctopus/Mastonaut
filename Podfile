@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :macos, '13.0'
+platform :macos, '12.0'
 
 target 'Mastonaut' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
