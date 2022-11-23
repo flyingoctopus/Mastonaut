@@ -8,6 +8,9 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ListViewController" customModule="Mastonaut" customModuleProvider="target">
             <connections>
+                <outlet property="accessoryView" destination="Gme-NE-xDC" id="AxW-54-FLZ"/>
+                <outlet property="bottomView" destination="bdY-Mo-6lJ" id="r7C-O6-0TE"/>
+                <outlet property="scrollView" destination="lEl-8Y-AXZ" id="wVe-3T-X0o"/>
                 <outlet property="tableView" destination="HHi-zb-f2j" id="lVJ-TF-4XD"/>
                 <outlet property="topConstraint" destination="A00-pG-ajV" id="t7d-dk-0bf"/>
                 <outlet property="view" destination="RcC-AV-4Ia" id="gb3-oJ-xSh"/>
@@ -74,6 +77,16 @@
                 <constraint firstAttribute="bottom" secondItem="lEl-8Y-AXZ" secondAttribute="bottom" constant="-59" id="bfv-yM-QXL"/>
             </constraints>
             <point key="canvasLocation" x="85" y="288"/>
+        </customView>
+        <customView id="Gme-NE-xDC" customClass="ListViewPullToRefreshAccessoryView" customModule="Mastonaut" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="163" height="96"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <point key="canvasLocation" x="-40" y="-114"/>
+        </customView>
+        <customView id="bdY-Mo-6lJ" customClass="ListViewPullToRefreshAccessoryView" customModule="Mastonaut" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="163" height="96"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <point key="canvasLocation" x="175" y="-115"/>
         </customView>
     </objects>
 </document>
