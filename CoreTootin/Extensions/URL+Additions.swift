@@ -18,59 +18,28 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
 
 public extension URL
 {
-	var fileUTI: String?
+	var fileUTT: UTType?
 	{
-		return (try? resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier) ?? fallbackFileUTI
-	}
-
-	/// This routine allows computing the UTI for remote URLs and URLs for files that don't exist.
-	private var fallbackFileUTI: String?
-	{
-		let utiRef = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, pathExtension as CFString, nil)
-
-		guard let utiCFString = utiRef?.takeUnretainedValue() else
-		{
-			utiRef?.release()
-			return nil
-		}
-
-		let utiString = String(utiCFString)
-		utiRef?.release()
-		return utiString
+		return (try? resourceValues(forKeys: [.contentTypeKey]).contentType)
 	}
 
 	var preferredMimeType: String?
 	{
-		guard
-			let fileUTI = self.fileUTI,
-			let mimeReference = UTTypeCopyPreferredTagWithClass(fileUTI as CFString, kUTTagClassMIMEType)
-		else
-		{
-			return nil
-		}
-
-		let mimeType = String(mimeReference.takeUnretainedValue())
-		mimeReference.release()
-
-		return mimeType
+		return fileUTT?.preferredMIMEType
 	}
 
-	func fileConforms(toUTI: String) -> Bool
+	func fileConforms(toUTT: UTType) -> Bool
 	{
-		return fileConforms(toUTI: toUTI as CFString)
-	}
-
-	func fileConforms(toUTI: CFString) -> Bool
-	{
-		guard let fileUTI = self.fileUTI else
+		guard let fileUTT = self.fileUTT else
 		{
 			return false
 		}
 
-		return UTTypeConformsTo(fileUTI as CFString, toUTI)
+		return fileUTT.conforms(to: toUTT)
 	}
 
 	var mastodonHandleFromAccountURI: String

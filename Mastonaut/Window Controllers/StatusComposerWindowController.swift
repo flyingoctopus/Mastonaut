@@ -432,7 +432,7 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 	private lazy var openPanel: NSOpenPanel = {
 		let panel = NSOpenPanel()
 		panel.allowsMultipleSelection = true
-		panel.allowedFileTypes = AttachmentUploader.supportedAttachmentTypes.map({ $0 as String })
+		panel.allowedContentTypes = AttachmentUploader.supportedAttachmentTypes
 		panel.message = 🔠("Select one or more files to upload and attach to your status.")
 		panel.prompt = 🔠("Attach")
 		return panel
