@@ -93,7 +93,12 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 
 	internal var currentUser: UUID? {
 		get { return currentAccount?.uuid }
-		set { currentAccount = newValue.flatMap({ accountsService.account(with: $0) }) }
+		set
+		{
+			currentAccount = newValue.flatMap({ accountsService.account(with: $0) })
+			
+			updateColumnsPopUpButtons(for: timelinesViewController.columnViewControllers)
+		}
 	}
 
 	internal var currentAccount: AuthorizedAccount? = nil {
@@ -601,7 +606,7 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 
 		let followedLists = currentAccount?.followedLists
 		
-		logger.debug2("Building columns popup menu. Followed lists: \(followedLists?.count)")
+		logger.debug2("Building columns popup menu. Followed lists: \(followedLists?.count ?? 0)")
 
 		let staticColumnModes = ColumnMode.staticItems
 		
@@ -652,12 +657,10 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		
 		let followedLists = currentAccount?.followedLists
 		
-		logger.debug2("Building new column menu. Followed lists: \(followedLists?.count)")
+		logger.debug2("Building new column menu. Followed lists: \(followedLists?.count ?? 0)")
 
 		var listItems: [NSMenuItem] = []
 		var haveAtLeastOneList = false
-		
-		
 
 		if let followedLists = followedLists
 		{
