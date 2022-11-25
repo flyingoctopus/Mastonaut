@@ -21,6 +21,7 @@ import Cocoa
 import MastodonKit
 import CoreTootin
 import PullRefreshableScrollView
+import SwiftUI
 
 let ListViewControllerMinimumWidth: CGFloat = 280
 
@@ -50,6 +51,10 @@ class ListViewPullToRefreshAccessoryView : NSView, AccessoryViewForPullRefreshab
 	}
 	
 	func viewDidReachElasticityPercentage(_ sender: Any?, percentage: Double) {
+		subviews.removeAll()
+		let pullToRefreshView = PullToRefreshInnerView(percentage: percentage)
+		AppKitSwiftUIIntegration.hostSwiftUIView(pullToRefreshView, inView: self)
+
 		print("percentage : \(percentage)")
 	}
 }
@@ -61,12 +66,23 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 																RemoteEventsReceiver,
 																ClientObserver
 {
+	// MARK: - Pull to Refresh
 	func prScrollView(_ sender: PullRefreshableScrollView, triggeredOnEdge: PullRefreshableScrollView.ViewEdge) -> Bool {
-		return true
+		reload()
+		
+		// the [readme](https://github.com/deicoon/PullRefreshableScrollView/blob/639e37e811c50cf39264f125e6df12eeec35f0e4/README.md)
+		// seems to say we're supposed to return `true`, but returning `false` seems to be easiest
+		// to un-stick the accessory view
+		return false
 	}
 	
-	@IBOutlet var accessoryView : ListViewPullToRefreshAccessoryView!
-	@IBOutlet var bottomView : ListViewPullToRefreshAccessoryView!
+	@IBOutlet var topPullToRefreshAccessoryView : ListViewPullToRefreshAccessoryView!
+	
+	var topAccessoryView: (NSView & AccessoryViewForPullRefreshable)? {
+		get {
+			return topPullToRefreshAccessoryView
+		}
+	}
 	
 	@IBOutlet internal private(set) unowned var scrollView: PullRefreshableScrollView!
 	@IBOutlet internal private(set) unowned var tableView: NSTableView!
@@ -124,7 +140,7 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 	override func viewDidLoad()
 	{
 		super.viewDidLoad()
-
+		
 		tableView.target = self
 		tableView.doubleAction = #selector(ListViewController.didDoubleClickTableView(_:))
 
