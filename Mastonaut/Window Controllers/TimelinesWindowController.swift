@@ -615,7 +615,7 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		menu.autoenablesItems = false
 		
 		var items: [NSMenuItem] = staticColumnModes.filter({ !takenModes.contains($0) })
-													 .map({ $0.makeMenuItemForChanging(with: self, columnId: index) })
+												   .map({ $0.makeMenuItemForChanging(with: self, columnId: index) })
 
 		// don't double-append menu item if it's a list (which we're building later)
 		switch currentColumnMode {
@@ -644,6 +644,31 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 			removeColumnItem.representedObject = index
 			removeColumnItem.action = #selector(TimelinesWindowController.removeColumn(_:))
 			items.append(removeColumnItem)
+		}
+		
+		var listItems: [NSMenuItem] = []
+		var haveAtLeastOneList = false
+
+		if let followedLists = followedLists
+		{
+			if followedLists.count > 0 {
+				listItems.append(.separator())
+				listItems.append(.sectionHeader(🔠("Lists")))
+				
+				for _list in followedLists {
+					if let list = _list as? FollowedList
+					{
+						let columnMode = ColumnMode.list(list: list)
+						
+						listItems.append(columnMode.makeMenuItemForChanging(with: self, columnId: index))
+						haveAtLeastOneList = true
+					}
+				}
+			}
+		}
+		
+		if haveAtLeastOneList {
+			items.append(contentsOf: listItems)
 		}
 
 		menu.setItems(items)
