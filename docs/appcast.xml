@@ -12,16 +12,18 @@
                 type="application/octet-stream" />-->
             <description>
                 <![CDATA[
-                    <div class="comment-body markdown-body js-preview-body" style="min-height: 509px;"><p>This is the first feature release since Mastodon went open source.</p>
-                    <p><strong>Note:</strong> This release requires macOS 12.0 Monterey or newer. 1.3.10 is still available for macOS 10.15 Catalina and macOS 11.0 Big Sur.</p>
-                    <h2>Features</h2>
-                    <p><strong>Pull-to-refresh</strong>: You can pull from the top of a timeline column to refresh it.</p>
-                    <p><strong>Always in Dark Mode</strong>: There's a new preference to make Mastonaut always show in <g-emoji class="g-emoji" alias="new_moon_with_face" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f31a.png">🌚</g-emoji> <strong>Dark Mode</strong> or <g-emoji class="g-emoji" alias="sun_with_face" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f31e.png">🌞</g-emoji> Light Mode. (By default, it uses whatever you have your system set to.)</p>
-                    <p><strong>Lists</strong>: The columns popup now also shows any lists you've created, so you can browse those as well. (However, there is no support yet for managing your lists.)</p>
-                    <h2>Fixes</h2>
-                    <p>If a timeline was empty, a loading indicator would keep spinning in perpetuity.</p>
-                    <h2>Contributors</h2>
-                    <p><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/uliwitness/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/uliwitness">@uliwitness</a> and <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/sbeitzel/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/sbeitzel">@sbeitzel</a> made their first contributions in this release cycle. Thanks!</p></div>
+<div data-pjax="true" data-test-selector="body-content" data-view-component="true" class="markdown-body my-3"><p>This is the first feature release since Mastodon went open source.</p>
+<p><strong>Note:</strong></p>
+<p><g-emoji class="g-emoji" alias="exclamation" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2757.png">❗️</g-emoji> This release requires macOS 12.0 Monterey or newer. 1.3.10 is still available for macOS 10.15 Catalina and macOS 11.0 Big Sur.</p>
+<p><g-emoji class="g-emoji" alias="exclamation" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2757.png">❗️</g-emoji> If you have a previous version (including 1.3.10), you'll notice that your accounts and preferences don't migrate, due to a clerical error in 1.3.10. (Sorry!) Manually moving stuff over in your <code>~/Library</code> folder should work, but due to sandboxing, this cannot be automated.</p>
+<h2>Features</h2>
+<p><strong>Pull-to-refresh</strong>: You can pull from the top of a timeline column to refresh it.</p>
+<p><strong>Always in Dark Mode</strong>: There's a new preference to make Mastonaut always show in <g-emoji class="g-emoji" alias="new_moon_with_face" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f31a.png">🌚</g-emoji> <strong>Dark Mode</strong> or <g-emoji class="g-emoji" alias="sun_with_face" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f31e.png">🌞</g-emoji> Light Mode. (By default, it uses whatever you have your system set to.)</p>
+<p><strong>Lists</strong>: The columns popup now also shows any lists you've created, so you can browse those as well. (However, there is no support yet for managing your lists.)</p>
+<h2>Fixes</h2>
+<p>If a timeline was empty, a loading indicator would keep spinning in perpetuity.</p>
+<h2>Contributors</h2>
+<p><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/uliwitness/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/uliwitness">@uliwitness</a> and <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/sbeitzel/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/sbeitzel">@sbeitzel</a> made their first contributions in this release cycle. Thanks!</p></div>
                 ]]>
             </description>
         </item>
