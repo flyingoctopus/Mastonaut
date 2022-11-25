@@ -21,9 +21,12 @@ import Cocoa
 import MastodonKit
 import CoreTootin
 import PullRefreshableScrollView
+import Logging
 
 class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, ToolbarWindowController
 {
+	private var logger: Logger!
+	
 	// MARK: Outlets
 	@IBOutlet private weak var newColumnMenu: NSMenu!
 
@@ -263,6 +266,8 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 
 	override func windowDidLoad() {
 		super.windowDidLoad()
+
+		logger = Logger(subsystemType: self)
 
 		shouldCascadeWindows = true
 
@@ -595,6 +600,8 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 									 index: Int) -> NSMenu {
 
 		let followedLists = currentAccount?.followedLists
+		
+		logger.debug2("Building columns popup menu. Followed lists: \(followedLists?.count)")
 
 		let staticColumnModes = ColumnMode.staticItems
 		
@@ -645,8 +652,12 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		
 		let followedLists = currentAccount?.followedLists
 		
+		logger.debug2("Building new column menu. Followed lists: \(followedLists?.count)")
+
 		var listItems: [NSMenuItem] = []
 		var haveAtLeastOneList = false
+		
+		
 
 		if let followedLists = followedLists
 		{
