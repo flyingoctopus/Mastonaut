@@ -7,7 +7,7 @@
             <title>1.4.0</title>
             <pubDate>2022-11-25</pubDate>
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://chucker.github.io/Mastonaut/Mastonaut-1.4.0.zip"
+            <enclosure url="https://github.com/chucker/Mastonaut/releases/download/app-1.4/Mastonaut-1.4.0.zip"
                 sparkle:version="1.4.0" sparkle:shortVersionString="1.4.0" length="8102623"
                 type="application/octet-stream" />-->
             <description>
