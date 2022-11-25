@@ -20,6 +20,7 @@
 import Cocoa
 import CoreTootin
 import MastodonKit
+import UniformTypeIdentifiers
 
 class ShareViewController: NSViewController, UserPopUpButtonDisplaying
 {
@@ -267,17 +268,17 @@ class ShareViewController: NSViewController, UserPopUpButtonDisplaying
 
 		for attachment in attachments
 		{
-			if attachment.hasItemConformingToTypeIdentifier(kUTTypeURL as String)
+			if attachment.hasItemConformingToTypeIdentifier(UTType.url.identifier)
 			{
 				dispatchGroup.enter()
 				loadURL(from: attachment) { dispatchGroup.leave() }
 			}
-			else if attachment.hasItemConformingToTypeIdentifier(kUTTypeImage as String)
+			else if attachment.hasItemConformingToTypeIdentifier(UTType.image.identifier)
 			{
 				dispatchGroup.enter()
 				loadImage(from: attachment) { dispatchGroup.leave() }
 			}
-			else if attachment.hasItemConformingToTypeIdentifier(kUTTypePlainText as String)
+			else if attachment.hasItemConformingToTypeIdentifier(UTType.plainText.identifier)
 			{
 				dispatchGroup.enter()
 				loadString(from: attachment) { dispatchGroup.leave() }
@@ -298,12 +299,12 @@ class ShareViewController: NSViewController, UserPopUpButtonDisplaying
 
 	private func loadURL(from attachment: NSItemProvider, completion: @escaping () -> Void)
 	{
-		let supportedUTIs = AttachmentUploader.supportedAttachmentTypes
+		let supportedUTTs = AttachmentUploader.supportedAttachmentTypes
 
-		attachment.loadItem(forTypeIdentifier: kUTTypeURL as String, options: nil) { [weak self] (object, _) in
+		attachment.loadItem(forTypeIdentifier: UTType.url.identifier, options: nil) { [weak self] (object, _) in
 			if let url = object as? URL, let self = self
 			{
-				if url.isFileURL, let uti = url.fileUTI, supportedUTIs.contains(uti as CFString)
+				if url.isFileURL, let utt = url.fileUTT, supportedUTTs.contains(utt)
 				{
 					self.attachmentsSubcontroller.addAttachments([url])
 				}
@@ -319,7 +320,7 @@ class ShareViewController: NSViewController, UserPopUpButtonDisplaying
 
 	private func loadImage(from attachment: NSItemProvider, completion: @escaping () -> Void)
 	{
-		attachment.loadItem(forTypeIdentifier: kUTTypeImage as String, options: nil) { [weak self] (object, _) in
+		attachment.loadItem(forTypeIdentifier: UTType.image.identifier, options: nil) { [weak self] (object, _) in
 			if let image = object as? NSImage
 			{
 				self?.attachmentsSubcontroller.addAttachments([image])
@@ -330,7 +331,7 @@ class ShareViewController: NSViewController, UserPopUpButtonDisplaying
 
 	private func loadString(from attachment: NSItemProvider, completion: @escaping () -> Void)
 	{
-		attachment.loadItem(forTypeIdentifier: kUTTypePlainText as String, options: nil) { [weak self] (object, _) in
+		attachment.loadItem(forTypeIdentifier: UTType.plainText.identifier, options: nil) { [weak self] (object, _) in
 			if let string = object as? String
 			{
 				self?.textElementsToInsert.insert(string, at: 0)

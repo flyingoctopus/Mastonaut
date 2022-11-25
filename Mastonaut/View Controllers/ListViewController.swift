@@ -141,6 +141,8 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 	{
 		super.viewDidLoad()
 		
+		needsLoadingIndicator = true
+
 		tableView.target = self
 		tableView.doubleAction = #selector(ListViewController.didDoubleClickTableView(_:))
 
@@ -257,6 +259,8 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 	}
 
 	func reload() {
+		needsLoadingIndicator = true
+		
 		lastPaginationResult = nil
 		revealedFilteredEntryKeys.removeAll()
 		reloadList()
@@ -265,7 +269,7 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 	internal func reloadList()
 	{
 		assert(Thread.isMainThread)
-
+		
 		let entryCount = entryList.count
 		var removedIndexSet = IndexSet(0..<entryCount)
 
@@ -368,10 +372,7 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 		return .default
 	}
 
-	internal var needsLoadingIndicator: Bool
-	{
-		return entryMap.isEmpty
-	}
+	internal var needsLoadingIndicator: Bool = false
 
 	internal func fetchEntries(for insertion: InsertionPoint)
 	{
@@ -479,6 +480,8 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 
 	internal func prepareNewEntries(_ entries: [Entry], for insertion: InsertionPoint, pagination: Pagination?)
 	{
+		needsLoadingIndicator = false
+		
 		let newEntries = entries.filter({ entryMap[$0.key] == nil })
 		handleNewEntries(newEntries, for: insertion, pagination: pagination)
 	}
