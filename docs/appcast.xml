@@ -12,7 +12,11 @@
                 type="application/octet-stream" />-->
             <description>
                 <![CDATA[
-<strong>Note:</strong> Unfortunately, you have to install this update manually by going <a href="https://github.com/chucker/Mastonaut/releases/tag/app-1.4">over here</a>.
+<p><strong>Note:</strong> Unfortunately, you have to install this update manually by going <a href="https://github.com/chucker/Mastonaut/releases/tag/app-1.4">over here</a>.</p>
+
+<p>Sorry about that!</p>
+
+<p>But this release does bring some new stuff, so it's worth it!</p>
                 ]]>
             </description>
         </item>
