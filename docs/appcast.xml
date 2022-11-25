@@ -26,16 +26,16 @@
             </description>
         </item>
         
-        <item>
+        <!--<item>
             <title>1.3.10</title>
-            <!-- TODO <pubDate></pubDate>
+            <pubDate></pubDate>
             <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
             <enclosure url="https://chucker.github.io/Mastonaut/Mastonaut-1.3.10.zip"
                 sparkle:version="1.0.6" sparkle:shortVersionString="1.0b6" length="14249054"
-                type="application/octet-stream" />-->
+                type="application/octet-stream" />
             <description>
                 <![CDATA[Added <em>widgets</em>]]>
             </description>
-        </item>
+        </item>-->
     </channel>
 </rss>
