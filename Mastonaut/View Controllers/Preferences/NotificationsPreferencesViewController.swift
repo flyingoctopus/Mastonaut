@@ -29,6 +29,8 @@ class NotificationsPreferencesViewController: BaseAccountsPreferencesViewControl
 	@IBOutlet unowned var notificationsDetailsAlwaysRadioButton: NSButton!
 	@IBOutlet unowned var notificationsDetailsNeverRadioButton: NSButton!
 	@IBOutlet unowned var notificationsDetailsWhenActiveRadioButton: NSButton!
+	
+	@IBOutlet private weak var perAccountNotificationPreferencesView: NSView!
 
 	@objc dynamic private var accountPreferences: AccountPreferences?
 	{
@@ -40,7 +42,7 @@ class NotificationsPreferencesViewController: BaseAccountsPreferencesViewControl
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-
+		
 		accountCountObserver = AppDelegate.shared.accountsService.observe(\.authorizedAccountsCount)
 			{
 				[weak self] (service, _) in
@@ -59,6 +61,8 @@ class NotificationsPreferencesViewController: BaseAccountsPreferencesViewControl
 
 	private func updatePropertyObservers()
 	{
+		// TODO remove entirely
+		return
 		guard let preferences = self.accountPreferences else
 		{
 			preferenceObservers = []
@@ -99,5 +103,13 @@ class NotificationsPreferencesViewController: BaseAccountsPreferencesViewControl
 		}
 
 		accountPreferences = accounts?[row].preferences(context: AppDelegate.shared.managedObjectContext)
+
+		if (accountPreferences != nil) {
+			let view = NotificationPerAccountPreferencesView(accountPreferences: accountPreferences,
+															 notificationDisplayMode: accountPreferences?.notificationDisplayMode ?? .always,
+															 notificationDetailMode: accountPreferences?.notificationDetailMode ?? .always)
+			
+			AppKitSwiftUIIntegration.hostSwiftUIView(view, inView: perAccountNotificationPreferencesView)
+		}
 	}
 }
