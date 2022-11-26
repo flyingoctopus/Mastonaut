@@ -31,6 +31,18 @@ struct NotificationPerAccountPreferencesView: View {
 						.foregroundColor(.secondary)
 						.padding(.top, 1)
 				}
+				
+				Text("Notification Types:")
+				
+				VStack(alignment: .leading) {
+					Button("Configure…") {
+						print("Hello")
+					}
+
+					Text("All")
+						.font(.system(size: 11))
+						.foregroundColor(.secondary)
+				}
 
 				Text("Show Details:")
 				
