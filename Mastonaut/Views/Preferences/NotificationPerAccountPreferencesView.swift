@@ -56,7 +56,8 @@ struct NotificationPerAccountPreferencesView: View {
 						.padding(.top, 2)
 
 					HStack {
-						Text("All")
+						// we _could_ summarize here which ones have been enabled
+						//Text("All")
 						
 						Button("Configure…") {
 							showingConfigureTypesSheet.toggle()
