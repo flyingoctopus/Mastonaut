@@ -22,25 +22,17 @@ import CoreTootin
 
 class NotificationsPreferencesViewController: BaseAccountsPreferencesViewController
 {
-	@IBOutlet unowned var showNotificationsAlwaysRadioButton: NSButton!
-	@IBOutlet unowned var showNotificationsNeverRadioButton: NSButton!
-	@IBOutlet unowned var showNotificationsWhenActiveRadioButton: NSButton!
-
-	@IBOutlet unowned var notificationsDetailsAlwaysRadioButton: NSButton!
-	@IBOutlet unowned var notificationsDetailsNeverRadioButton: NSButton!
-	@IBOutlet unowned var notificationsDetailsWhenActiveRadioButton: NSButton!
+	@IBOutlet private weak var perAccountNotificationPreferencesView: NSView!
 
 	@objc dynamic private var accountPreferences: AccountPreferences?
-	{
-		didSet { updatePropertyObservers() }
-	}
+	@objc dynamic private var accountNotificationPreferences: AccountNotificationPreferences?
 
 	private var accountCountObserver: NSKeyValueObservation?
 	private var preferenceObservers: [AnyObject] = []
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-
+		
 		accountCountObserver = AppDelegate.shared.accountsService.observe(\.authorizedAccountsCount)
 			{
 				[weak self] (service, _) in
@@ -57,35 +49,6 @@ class NotificationsPreferencesViewController: BaseAccountsPreferencesViewControl
 		AppDelegate.shared.saveContext()
 	}
 
-	private func updatePropertyObservers()
-	{
-		guard let preferences = self.accountPreferences else
-		{
-			preferenceObservers = []
-			return
-		}
-
-		let displayModeButtonMap: [AccountPreferences.NotificationDisplayMode: NSButton] = [
-			.always: showNotificationsAlwaysRadioButton,
-			.never: showNotificationsNeverRadioButton,
-			.whenActive: showNotificationsWhenActiveRadioButton
-		]
-
-		preferenceObservers.append(PropertyEnumRadioObserver(object: preferences,
-												   keyPath: \AccountPreferences.notificationDisplayMode,
-												   buttonMap: displayModeButtonMap))
-
-		let displayDetailButtonMap: [AccountPreferences.NotificationDetailMode: NSButton] = [
-			.always: notificationsDetailsAlwaysRadioButton,
-			.never: notificationsDetailsNeverRadioButton,
-			.whenClean: notificationsDetailsWhenActiveRadioButton
-		]
-
-		preferenceObservers.append(PropertyEnumRadioObserver(object: preferences,
-												   keyPath: \AccountPreferences.notificationDetailMode,
-												   buttonMap: displayDetailButtonMap))
-	}
-
 	// MARK: - Table View Delegate
 
 	func tableViewSelectionDidChange(_ notification: Foundation.Notification)
@@ -95,9 +58,20 @@ class NotificationsPreferencesViewController: BaseAccountsPreferencesViewControl
 		guard row >= 0 else
 		{
 			accountPreferences = nil
+			accountNotificationPreferences = nil
 			return
 		}
 
 		accountPreferences = accounts?[row].preferences(context: AppDelegate.shared.managedObjectContext)
+		accountNotificationPreferences = accounts?[row].notificationPreferences(context: AppDelegate.shared.managedObjectContext)
+
+		if (accountPreferences != nil && accountNotificationPreferences != nil) {
+			let view = NotificationPerAccountPreferencesView(accountPreferences: accountPreferences,
+															 accountNotificationPreferences: accountNotificationPreferences,
+															 notificationDisplayMode: accountPreferences?.notificationDisplayMode ?? .always,
+															 notificationDetailMode: accountPreferences?.notificationDetailMode ?? .always)
+			
+			AppKitSwiftUIIntegration.hostSwiftUIView(view, inView: perAccountNotificationPreferencesView)
+		}
 	}
 }
