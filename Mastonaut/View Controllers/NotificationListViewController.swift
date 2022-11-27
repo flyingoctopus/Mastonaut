@@ -27,6 +27,8 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 	private var observations: [NSKeyValueObservation] = []
 	private var reduceMotionNotificationObserver: NSObjectProtocol? = nil
 	private var filterService: FilterService?
+	
+	private var accountNotificationPreferences: AccountNotificationPreferences?
 
 	internal var updatedPolls: [String: Poll] = [:]
 	internal var pollRefreshTimers: [String: Timer] = [:]
@@ -96,6 +98,8 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 
 		filterService = FilterService.service(for: account)
 		filterService?.register(observer: self)
+		
+		accountNotificationPreferences = account.notificationPreferences(context: AppDelegate.shared.managedObjectContext)
 	}
 
 	func handle(updatedStatus: Status)
@@ -254,7 +258,7 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 									for insertion: ListViewController<MastodonNotification>.InsertionPoint,
 									pagination: Pagination?)
 	{
-		let filteredNotifications = notifications.filter({ $0.isOfKnownType })
+		var filteredNotifications = notifications.filter({ $0.isOfKnownType })
 
 		for notification in filteredNotifications
 		{
@@ -263,6 +267,24 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 				statusIdNotificationIdMap[statusID] = notification.id
 			}
 		}
+		
+		filteredNotifications = filteredNotifications.filter({
+			($0.type == .mention && accountNotificationPreferences?.showMentions ?? true) ||
+			($0.type == .status && accountNotificationPreferences?.showStatuses ?? true) ||
+
+			($0.type == .follow && accountNotificationPreferences?.showNewFollowers ?? true) ||
+			($0.type == .follow_request && accountNotificationPreferences?.showFollowRequests ?? true) ||
+
+			($0.type == .reblog && accountNotificationPreferences?.showBoosts ?? true) ||
+			($0.type == .favourite && accountNotificationPreferences?.showFavorites ?? true) ||
+
+			($0.type == .poll && accountNotificationPreferences?.showPollResults ?? true) ||
+
+			($0.type == .update && accountNotificationPreferences?.showEdits ?? true) ||
+
+			($0.type == .admin_sign_up && accountNotificationPreferences?.showAdminSignUps ?? true) ||
+			($0.type == .admin_report && accountNotificationPreferences?.showAdminReports ?? true)
+		})
 
 		super.prepareNewEntries(filteredNotifications, for: insertion, pagination: pagination)
 	}
@@ -280,7 +302,8 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 		case .follow:
 			return NotificationListViewController.CellViewIdentifier.follow
 
-		case .other:
+		default:
+			return NSUserInterfaceItemIdentifier("")
 			fatalError("Unknown notification types should be filtered!")
 		}
 	}
@@ -289,7 +312,8 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 	{
 		guard
 			let attachmentPresenter = authorizedAccountProvider?.attachmentPresenter,
-			let instance = authorizedAccountProvider?.currentInstance
+			let instance = authorizedAccountProvider?.currentInstance,
+			let accountNotificationPreferences
 			else
 		{
 			return
@@ -325,7 +349,7 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 								 interactionHandler: self,
 								 activeInstance: instance)
 
-		case .other:
+		default:
 			break
 		}
 	}
@@ -334,6 +358,12 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 	{
 		super.prepareToDisplay(cellView: cellView, at: row)
 
+		if let interactionCellView = cellView as? InteractionCellView {
+			if interactionCellView.displayedNotificationId == nil {
+				return
+			}
+		}
+		
 		if let window = view.window, let statusCellView = cellView as? StatusTableCellView
 		{
 			statusCellView.updateContentsVisibility()
@@ -503,6 +533,14 @@ extension MastodonNotification: ListViewPresentable
 
 	var isOfKnownType: Bool
 	{
+		// these are known, but not currently supported
+		switch type {
+		case .status, .follow_request, .update, .admin_sign_up, .admin_report:
+			return false
+		default:
+			break
+		}
+		
 		if case .other = type
 		{
 			return false

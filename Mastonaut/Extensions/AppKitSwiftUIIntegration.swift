@@ -11,6 +11,8 @@ import SwiftUI
 
 class AppKitSwiftUIIntegration {
 	public static func hostSwiftUIView<TSwiftUIView: View>(_ swiftView: TSwiftUIView, inView nsView: NSView) {
+		nsView.subviews.removeAll()
+		
 		let hostingView: NSHostingView<TSwiftUIView> = NSHostingView(rootView: swiftView)
 		nsView.addSubview(hostingView)
 		

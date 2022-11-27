@@ -504,6 +504,10 @@
 		15F9F30C232EB9E900931594 /* SuggestionWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1530428122AEC64E00489F31 /* SuggestionWindowController.xib */; };
 		15FD4C33223870B000D699EF /* TransientWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FD4C32223870B000D699EF /* TransientWindow.swift */; };
 		15FD4C34223870B000D699EF /* TransientWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FD4C32223870B000D699EF /* TransientWindow.swift */; };
+		5F043C53293286110095C702 /* NotificationTypeFilterPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F043C52293286110095C702 /* NotificationTypeFilterPreferencesView.swift */; };
+		5F043C54293286110095C702 /* NotificationTypeFilterPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F043C52293286110095C702 /* NotificationTypeFilterPreferencesView.swift */; };
+		5F043C562932872D0095C702 /* NotificationPerAccountPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F043C552932872D0095C702 /* NotificationPerAccountPreferencesView.swift */; };
+		5F043C572932872D0095C702 /* NotificationPerAccountPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F043C552932872D0095C702 /* NotificationPerAccountPreferencesView.swift */; };
 		5F176FAC290EF03900DF043C /* FollowedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F176FAB290EF03900DF043C /* FollowedList.swift */; };
 		5F176FAF290EF65200DF043C /* FollowedListsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F176FAE290EF65200DF043C /* FollowedListsService.swift */; };
 		5F38B52C29302F0C00FCB9FC /* AppKitSwiftUIIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F38B52B29302F0C00FCB9FC /* AppKitSwiftUIIntegration.swift */; };
@@ -960,6 +964,9 @@
 		4BCC49A8ECAB04865B510BFF /* Pods_QuickToot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuickToot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		551239562917FA370026C1D5 /* userspecific.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = userspecific.xcconfig; sourceTree = "<group>"; };
 		5512395829181BCA0026C1D5 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5F043C52293286110095C702 /* NotificationTypeFilterPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTypeFilterPreferencesView.swift; sourceTree = "<group>"; };
+		5F043C552932872D0095C702 /* NotificationPerAccountPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPerAccountPreferencesView.swift; sourceTree = "<group>"; };
+		5F043C582933A8D30095C702 /* Mastonaut 10.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mastonaut 10.xcdatamodel"; sourceTree = "<group>"; };
 		5F176FAB290EF03900DF043C /* FollowedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedList.swift; sourceTree = "<group>"; };
 		5F176FAD290EF4AD00DF043C /* Mastonaut 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mastonaut 8.xcdatamodel"; sourceTree = "<group>"; };
 		5F176FAE290EF65200DF043C /* FollowedListsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedListsService.swift; sourceTree = "<group>"; };
@@ -1782,6 +1789,8 @@
 			isa = PBXGroup;
 			children = (
 				5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */,
+				5F043C52293286110095C702 /* NotificationTypeFilterPreferencesView.swift */,
+				5F043C552932872D0095C702 /* NotificationPerAccountPreferencesView.swift */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -2482,6 +2491,7 @@
 				1537103C225FE7E700689FDB /* NSLayoutConstraint+Additions.swift in Sources */,
 				15F1D24521F21E8F00B01F35 /* CustomEmojiCache.swift in Sources */,
 				15AD3D192205FCD10064E7BB /* NSAttributedString+Additions.m in Sources */,
+				5F043C572932872D0095C702 /* NotificationPerAccountPreferencesView.swift in Sources */,
 				15738895250195F000DE40F9 /* CellMenuItemHandler.swift in Sources */,
 				15FD4C34223870B000D699EF /* TransientWindow.swift in Sources */,
 				1530429122AEF5A100489F31 /* InfoWindow.swift in Sources */,
@@ -2512,6 +2522,7 @@
 				1552D6EA2286576C009B4BBD /* MenuItemsControllers.swift in Sources */,
 				15769617231A7206003C8B30 /* NotificationCenter+Helpers.swift in Sources */,
 				158A5CCA24994C4300E95113 /* MastonautTableView.swift in Sources */,
+				5F043C54293286110095C702 /* NotificationTypeFilterPreferencesView.swift in Sources */,
 				1523C6E821E94C7F006DE234 /* StatusComposerWindowController.swift in Sources */,
 				150CCC0421FE42D900FFA89A /* BackgroundTableRowView.swift in Sources */,
 				5FE72EB629298DB7001C7A6C /* BuildConfig.generated.swift in Sources */,
@@ -2702,6 +2713,7 @@
 				15A1CA0C221F72C400CF51F1 /* AccountsPreferencesController.swift in Sources */,
 				15C4DD4521D42F87002AF6DA /* TimelineViewController.swift in Sources */,
 				15E7451E2236FDF5009A1252 /* WelcomePlaceholderController.swift in Sources */,
+				5F043C53293286110095C702 /* NotificationTypeFilterPreferencesView.swift in Sources */,
 				15D648E92275F65A00E083F7 /* CyclicIterator.swift in Sources */,
 				150A9F0721FD202300DF42A1 /* AttributedStringCapable.swift in Sources */,
 				15B4AF12222A1AD2007AA447 /* NSAccessibility+Additions.swift in Sources */,
@@ -2758,6 +2770,7 @@
 				153B23912345763F00A317A2 /* MenuItemFactory.swift in Sources */,
 				15077EE22231DB9700965651 /* RemoteEventsListener.swift in Sources */,
 				1594392F229991F200E47DBB /* InstanceTableCellView.swift in Sources */,
+				5F043C562932872D0095C702 /* NotificationPerAccountPreferencesView.swift in Sources */,
 				15ECEECE22E8EEAB00A37CC0 /* LazyEvaluationAdapter.swift in Sources */,
 				150CEA3421FC963400F815A9 /* ListViewController.swift in Sources */,
 				1561EBAF225C02070034EAA6 /* MastodonURLResolver.swift in Sources */,
@@ -3656,6 +3669,7 @@
 		152DA63421E1B3140065CC1B /* Mastonaut.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				5F043C582933A8D30095C702 /* Mastonaut 10.xcdatamodel */,
 				5F176FB0290F00FB00DF043C /* Mastonaut 9.xcdatamodel */,
 				5F176FAD290EF4AD00DF043C /* Mastonaut 8.xcdatamodel */,
 				1572BDBF265730B8009BF68F /* Mastonaut 7.xcdatamodel */,
@@ -3666,7 +3680,7 @@
 				1531084922B0EDA7002FA1E7 /* Mastonaut 2.xcdatamodel */,
 				152DA63521E1B3140065CC1B /* Mastonaut.xcdatamodel */,
 			);
-			currentVersion = 5F176FB0290F00FB00DF043C /* Mastonaut 9.xcdatamodel */;
+			currentVersion = 5F043C582933A8D30095C702 /* Mastonaut 10.xcdatamodel */;
 			path = Mastonaut.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

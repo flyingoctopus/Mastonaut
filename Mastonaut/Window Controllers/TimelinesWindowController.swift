@@ -627,24 +627,6 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		}
 		
 		items.sort(by: { $0.columnModel! < $1.columnModel! })
-
-		items.append(.separator())
-
-		let reloadColumnItem = NSMenuItem()
-		reloadColumnItem.title = 🔠("Reload this Column")
-		reloadColumnItem.target = self
-		reloadColumnItem.representedObject = index
-		reloadColumnItem.action = #selector(TimelinesWindowController.reloadColumn(_:))
-		items.append(reloadColumnItem)
-
-		if index > 0 {
-			let removeColumnItem = NSMenuItem()
-			removeColumnItem.title = 🔠("Remove this Column")
-			removeColumnItem.target = self
-			removeColumnItem.representedObject = index
-			removeColumnItem.action = #selector(TimelinesWindowController.removeColumn(_:))
-			items.append(removeColumnItem)
-		}
 		
 		var listItems: [NSMenuItem] = []
 		var haveAtLeastOneList = false
@@ -669,6 +651,24 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		
 		if haveAtLeastOneList {
 			items.append(contentsOf: listItems)
+		}
+
+		items.append(.separator())
+
+		let reloadColumnItem = NSMenuItem()
+		reloadColumnItem.title = 🔠("Reload this Column")
+		reloadColumnItem.target = self
+		reloadColumnItem.representedObject = index
+		reloadColumnItem.action = #selector(TimelinesWindowController.reloadColumn(_:))
+		items.append(reloadColumnItem)
+
+		if index > 0 {
+			let removeColumnItem = NSMenuItem()
+			removeColumnItem.title = 🔠("Remove this Column")
+			removeColumnItem.target = self
+			removeColumnItem.representedObject = index
+			removeColumnItem.action = #selector(TimelinesWindowController.removeColumn(_:))
+			items.append(removeColumnItem)
 		}
 
 		menu.setItems(items)
