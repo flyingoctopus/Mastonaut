@@ -22,20 +22,9 @@ import CoreTootin
 
 class NotificationsPreferencesViewController: BaseAccountsPreferencesViewController
 {
-	@IBOutlet unowned var showNotificationsAlwaysRadioButton: NSButton!
-	@IBOutlet unowned var showNotificationsNeverRadioButton: NSButton!
-	@IBOutlet unowned var showNotificationsWhenActiveRadioButton: NSButton!
-
-	@IBOutlet unowned var notificationsDetailsAlwaysRadioButton: NSButton!
-	@IBOutlet unowned var notificationsDetailsNeverRadioButton: NSButton!
-	@IBOutlet unowned var notificationsDetailsWhenActiveRadioButton: NSButton!
-	
 	@IBOutlet private weak var perAccountNotificationPreferencesView: NSView!
 
 	@objc dynamic private var accountPreferences: AccountPreferences?
-	{
-		didSet { updatePropertyObservers() }
-	}
 
 	private var accountCountObserver: NSKeyValueObservation?
 	private var preferenceObservers: [AnyObject] = []
@@ -57,37 +46,6 @@ class NotificationsPreferencesViewController: BaseAccountsPreferencesViewControl
 		super.viewWillDisappear()
 
 		AppDelegate.shared.saveContext()
-	}
-
-	private func updatePropertyObservers()
-	{
-		// TODO remove entirely
-		return
-		guard let preferences = self.accountPreferences else
-		{
-			preferenceObservers = []
-			return
-		}
-
-		let displayModeButtonMap: [AccountPreferences.NotificationDisplayMode: NSButton] = [
-			.always: showNotificationsAlwaysRadioButton,
-			.never: showNotificationsNeverRadioButton,
-			.whenActive: showNotificationsWhenActiveRadioButton
-		]
-
-		preferenceObservers.append(PropertyEnumRadioObserver(object: preferences,
-												   keyPath: \AccountPreferences.notificationDisplayMode,
-												   buttonMap: displayModeButtonMap))
-
-		let displayDetailButtonMap: [AccountPreferences.NotificationDetailMode: NSButton] = [
-			.always: notificationsDetailsAlwaysRadioButton,
-			.never: notificationsDetailsNeverRadioButton,
-			.whenClean: notificationsDetailsWhenActiveRadioButton
-		]
-
-		preferenceObservers.append(PropertyEnumRadioObserver(object: preferences,
-												   keyPath: \AccountPreferences.notificationDetailMode,
-												   buttonMap: displayDetailButtonMap))
 	}
 
 	// MARK: - Table View Delegate

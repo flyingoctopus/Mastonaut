@@ -86,6 +86,8 @@ struct NotificationPerAccountPreferencesView: View {
 				accountPreferences?.notificationDetailMode = newValue
 			}
 		}
+		.frame(minWidth: 480, minHeight: 260)
+		.padding(.all, 10)
     }
 }
 
