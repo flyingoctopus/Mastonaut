@@ -27,15 +27,15 @@ public class AttachmentUploader
 {
 	public typealias ConvertedDataProvider = () throws -> Data
 
-	public static let supportedImageTypes: [UTType] = [.jpeg, .png, .heic, .gif, .tiff]
-	public static let supportedMovieTypes: [UTType] = [.movie]
+	public static let supportedImageTypes = [kUTTypeJPEG, kUTTypePNG, kUTTypeJPEG2000, kUTTypeHEIC, kUTTypeGIF, kUTTypeTIFF]
+	public static let supportedMovieTypes = [kUTTypeMovie]
 	public static let supportedAttachmentTypes = supportedImageTypes + supportedMovieTypes
 	public static let maxAttachmentImageSize = NSSize(width: 4096, height: 4096)
 
-	public static let imageTypeConversionMap: [UTType: UTType] = [
-//		kUTTypeJPEG2000: kUTTypeJPEG, JPEG2000 no longer supported
-		.heic: .jpeg,
-		.tiff: .jpeg
+	public static let imageTypeConversionMap: [CFString: CFString] = [
+		kUTTypeJPEG2000: kUTTypeJPEG,
+		kUTTypeHEIC: kUTTypeJPEG,
+		kUTTypeTIFF: kUTTypeJPEG
 	]
 
 	private var activeUploadFutures: [Upload: FutureTask] = [:]

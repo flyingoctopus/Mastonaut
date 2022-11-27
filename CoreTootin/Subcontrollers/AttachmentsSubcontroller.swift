@@ -19,7 +19,6 @@
 
 import AppKit
 import MastodonKit
-import UniformTypeIdentifiers
 
 @objc public protocol StatusComposerController: AnyObject
 {
@@ -440,7 +439,7 @@ public extension AttachmentsSubcontroller
 {
 	func addAttachments(pasteboard: NSPasteboard) -> Bool
 	{
-		let types = AttachmentUploader.supportedAttachmentTypes
+		let types = AttachmentUploader.supportedAttachmentTypes as [String]
 
 		if let fileUrls = pasteboard.readObjects(forClasses: [NSURL.self],
 												 options: [.urlReadingContentsConformToTypes: types,
