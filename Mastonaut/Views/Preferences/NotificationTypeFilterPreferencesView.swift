@@ -42,16 +42,16 @@ struct NotificationTypeFilterPreferencesView: View {
 			
 			VStack(alignment: .leading) {
 				Toggle("Mentions", isOn: $showMentions)
-				Toggle("Statuses", isOn: $showStatuses)
+//				Toggle("Statuses", isOn: $showStatuses)
 				
-				Text("For people for whom you've specifically enabled notifications")
-					.font(.system(size: 11))
-					.foregroundColor(.secondary)
-					.padding(.leading, 20)
+//				Text("For people for whom you've specifically enabled notifications")
+//					.font(.system(size: 11))
+//					.foregroundColor(.secondary)
+//					.padding(.leading, 20)
 					.padding(.bottom, 10)
 
 				Toggle("New followers", isOn: $showNewFollowers)
-				Toggle("Follow requests", isOn: $showFollowRequests)
+//				Toggle("Follow requests", isOn: $showFollowRequests)
 					.padding(.bottom, 10)
 
 				Toggle("Boosts", isOn: $showBoosts)
@@ -61,20 +61,20 @@ struct NotificationTypeFilterPreferencesView: View {
 				Toggle("Poll results", isOn: $showPollResults)
 					.padding(.bottom, 10)
 
-				Toggle("Edits", isOn: $showEdits)
-					.padding(.bottom, 10)
+//				Toggle("Edits", isOn: $showEdits)
+//					.padding(.bottom, 10)
 			}
 			
-			VStack(alignment: .leading) {
-				Text("For admins:")
-							
-				Toggle("Sign-ups", isOn: $showAdminSignUps)
-					.padding(.leading, 10)
-				Toggle("Reports", isOn: $showAdminReports)
-					.padding(.leading, 10)
-					.padding(.bottom, 10)
-			}
-			
+//			VStack(alignment: .leading) {
+//				Text("For admins:")
+//							
+//				Toggle("Sign-ups", isOn: $showAdminSignUps)
+//					.padding(.leading, 10)
+//				Toggle("Reports", isOn: $showAdminReports)
+//					.padding(.leading, 10)
+//					.padding(.bottom, 10)
+//			}
+
 			HStack {
 //				Button("All") {
 //					print("hello")
