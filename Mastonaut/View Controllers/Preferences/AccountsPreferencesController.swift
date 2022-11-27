@@ -64,7 +64,7 @@ class AccountsPreferencesController: BaseAccountsPreferencesViewController
 	private lazy var openPanel: NSOpenPanel = {
 		let panel = NSOpenPanel()
 		panel.allowsMultipleSelection = false
-		panel.allowedContentTypes = AttachmentUploader.supportedImageTypes
+		panel.allowedFileTypes = AttachmentUploader.supportedImageTypes.map({ $0 as String })
 		panel.message = 🔠("Select an image to upload.")
 		panel.prompt = 🔠("Upload")
 		return panel

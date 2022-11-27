@@ -342,12 +342,12 @@ private extension AttachmentWindowController
 	{
 		guard
 			let image = currentAttachment?.image,
-			let fileType = currentAttachment?.attachment.parsedUrl.fileUTT
+			let fileType = currentAttachment?.attachment.parsedUrl.fileUTI
 		else { return }
 
 		do
 		{
-			try image.dataUsingRepresentation(for: fileType).write(to: url)
+			try image.dataUsingRepresentation(for: fileType as CFString).write(to: url)
 		}
 		catch
 		{
@@ -424,11 +424,11 @@ extension AttachmentWindowController
 		guard
 			let window = self.window,
 			let attachment = currentAttachment?.attachment,
-			let fileType = attachment.parsedUrl.fileUTT
+			let fileType = attachment.parsedUrl.fileUTI
 		else { return }
 
 		let savePanel = NSSavePanel()
-		savePanel.allowedContentTypes = [fileType]
+		savePanel.allowedFileTypes = [fileType]
 		savePanel.nameFieldStringValue = attachment.parsedUrl.lastPathComponent
 		savePanel.beginSheetModal(for: window)
 		{
