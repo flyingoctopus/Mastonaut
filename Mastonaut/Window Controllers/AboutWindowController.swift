@@ -23,6 +23,7 @@ import CoreTootin
 class AboutWindowController: NSWindowController
 {
 	@IBOutlet weak var versionLabel: NSTextField!
+	@IBOutlet weak var copyrightLabel: NSTextField!
 
 	private lazy var acknowledgementsWindowController = AcknowledgementsWindowController()
 
@@ -36,6 +37,11 @@ class AboutWindowController: NSWindowController
 			let bundleBuild = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String
 		{
 			versionLabel.stringValue = 🔠("Version: %@ (%@)", bundleVersion, bundleBuild)
+		}
+
+		if let copyright = Bundle.main.object(forInfoDictionaryKey: "NSHumanReadableCopyright") as? String
+		{
+			copyrightLabel.stringValue = 🔠(copyright)
 		}
 	}
 
