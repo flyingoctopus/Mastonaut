@@ -12,6 +12,8 @@ target 'Mastonaut' do
   pod 'Starscream', '~> 3.1.0'
   pod 'SVGKit'
 
+  plugin 'cocoapods-acknowledgements'
+
   target 'MastonautTests' do
     inherit! :search_paths
     # Pods for testing

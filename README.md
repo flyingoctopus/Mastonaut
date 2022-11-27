@@ -23,6 +23,15 @@ The bundle ID _base_ is used because Mastonaut consists of multiple projects, wh
 - the Core Data database shared by the two above will be stored in `~/Library/Group Containers/ABCDEFGH.com.example.mastonaut/Mastonaut/Mastonaut.sqlite`
 - Keychain credentials will be prefixed `ABCDEFGH.com.example.mastonaut.keychain`
 
+## Acknowledgments
+
+Most of the **Acknowledgments** in the about box are
+auto-generated from Cocoapods dependencies. For this, you
+need to have the `cocoapods-acknowledgements` plug-in
+installed, and then just run `pod install`.
+
+Additional dependencies come via SwiftPM and Git submodules, and those get added manually in code.
+
 ## Pitfalls
 
 - Make sure `MastodonKit` is fetched _as a git submodule_. (For example, Xcode's git clone functionality seems to not do this!) This appears to be a
