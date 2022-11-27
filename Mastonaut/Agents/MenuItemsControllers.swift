@@ -260,7 +260,7 @@ class AccountMenuItemsController: MenuItemsController
 	}
 }
 
-private extension MenuItemsController
+internal extension MenuItemsController
 {
 	@objc func copyRepresentedObject(_ sender: NSMenuItem)
 	{

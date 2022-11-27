@@ -100,9 +100,14 @@
                                     <action selector="cut:" target="-1" id="YJe-68-I9s"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Copy" keyEquivalent="c" id="x3v-GG-iWU">
+                            <menuItem title="Copy Link to Toot" keyEquivalent="c" id="x3v-GG-iWU">
                                 <connections>
-                                    <action selector="copy:" target="-1" id="G1f-GL-Joy"/>
+                                    <action selector="copyTootLink:" target="-1" id="LTG-6R-s8e"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Copy Toot Text" keyEquivalent="C" id="jXV-XL-Yc0">
+                                <connections>
+                                    <action selector="copyTootText:" target="-1" id="P1O-jm-1Hx"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Paste" keyEquivalent="v" id="gVA-U4-sdL">

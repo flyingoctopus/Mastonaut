@@ -41,6 +41,12 @@ class CellMenuItemHandler {
 		}
 
 		switch menuItem.action {
+		case #selector(copyTootLink(_:)):
+			return true
+				
+		case #selector(copyTootText(_:)):
+			return true
+
 		case #selector(favoriteSelectedStatus(_:)):
 			menuItem.title = cellModel.isFavorited == true ? 🔠("status.action.favorite.undo")
 														   : 🔠("status.action.favorite")
@@ -86,6 +92,30 @@ class CellMenuItemHandler {
 
 	private func selectedCellViewModel() -> StatusCellModel? {
 		return selectedCellView()?.cellModel
+	}
+	
+	@IBAction func copyTootLink(_ sender: Any?) {
+		guard let status = selectedCellViewModel()?.status,
+			  let menuItem = sender as? NSMenuItem
+		else { return }
+		
+		let finalStatus = status.reblog ?? status
+
+		let representedObject = finalStatus.url?.absoluteString ?? finalStatus.uri
+		menuItem.representedObject = representedObject
+		
+		StatusMenuItemsController.shared.copyRepresentedObject(menuItem)
+	}
+
+	@IBAction func copyTootText(_ sender: Any?) {
+		guard let status = selectedCellViewModel()?.status,
+			  let menuItem = sender as? NSMenuItem
+		else { return }
+		
+		let representedObject = status.attributedContent.string as NSString
+		menuItem.representedObject = representedObject
+		
+		StatusMenuItemsController.shared.copyRepresentedObject(menuItem)
 	}
 
 	@IBAction
