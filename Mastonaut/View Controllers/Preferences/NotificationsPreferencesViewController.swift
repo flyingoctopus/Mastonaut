@@ -25,6 +25,7 @@ class NotificationsPreferencesViewController: BaseAccountsPreferencesViewControl
 	@IBOutlet private weak var perAccountNotificationPreferencesView: NSView!
 
 	@objc dynamic private var accountPreferences: AccountPreferences?
+	@objc dynamic private var accountNotificationPreferences: AccountNotificationPreferences?
 
 	private var accountCountObserver: NSKeyValueObservation?
 	private var preferenceObservers: [AnyObject] = []
@@ -57,13 +58,16 @@ class NotificationsPreferencesViewController: BaseAccountsPreferencesViewControl
 		guard row >= 0 else
 		{
 			accountPreferences = nil
+			accountNotificationPreferences = nil
 			return
 		}
 
 		accountPreferences = accounts?[row].preferences(context: AppDelegate.shared.managedObjectContext)
+		accountNotificationPreferences = accounts?[row].notificationPreferences(context: AppDelegate.shared.managedObjectContext)
 
-		if (accountPreferences != nil) {
+		if (accountPreferences != nil && accountNotificationPreferences != nil) {
 			let view = NotificationPerAccountPreferencesView(accountPreferences: accountPreferences,
+															 accountNotificationPreferences: accountNotificationPreferences,
 															 notificationDisplayMode: accountPreferences?.notificationDisplayMode ?? .always,
 															 notificationDetailMode: accountPreferences?.notificationDetailMode ?? .always)
 			

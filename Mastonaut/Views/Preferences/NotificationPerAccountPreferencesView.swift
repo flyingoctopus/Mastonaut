@@ -16,7 +16,8 @@ struct NotificationPerAccountPreferencesView: View {
 	]
 	
 	var accountPreferences: AccountPreferences?
-	
+	var accountNotificationPreferences: AccountNotificationPreferences?
+
 	@State var notificationDisplayMode: AccountPreferences.NotificationDisplayMode
 	
 	@State var notificationDetailMode: AccountPreferences.NotificationDetailMode
@@ -61,8 +62,23 @@ struct NotificationPerAccountPreferencesView: View {
 							showingConfigureTypesSheet.toggle()
 						}
 						.sheet(isPresented: $showingConfigureTypesSheet) {
-							NotificationTypeFilterPreferencesView(accountPreferences: accountPreferences!, accountName: accountPreferences!.account?.username ?? "(unknown)",
-																  dummyBool: true)
+							NotificationTypeFilterPreferencesView(accountNotificationPreferences: accountNotificationPreferences!, accountName: accountPreferences!.account?.username ?? "(unknown)",
+																  
+																  showMentions: accountNotificationPreferences!.showMentions,
+																  showStatuses: accountNotificationPreferences!.showStatuses,
+																  
+																  showNewFollowers: accountNotificationPreferences!.showNewFollowers,
+																  showFollowRequests: accountNotificationPreferences!.showFollowRequests,
+																  
+																  showBoosts: accountNotificationPreferences!.showBoosts,
+																  showFavorites: accountNotificationPreferences!.showFavorites,
+																  
+																  showPollResults: accountNotificationPreferences!.showPollResults,
+																  
+																  showEdits: accountNotificationPreferences!.showEdits,
+																  
+																  showAdminSignUps: accountNotificationPreferences!.showAdminSignUps,
+																  showAdminReports: accountNotificationPreferences!.showAdminReports)
 						}
 					}
 					.padding(.bottom, 10)

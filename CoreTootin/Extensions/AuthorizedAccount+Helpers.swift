@@ -33,6 +33,18 @@ public extension AuthorizedAccount
 		self.accountPreferences = preferences
 		return preferences
 	}
+	
+	func notificationPreferences(context: NSManagedObjectContext) -> AccountNotificationPreferences
+	{
+		if let notificationPreferences = self.accountNotificationPreferences
+		{
+			return notificationPreferences
+		}
+
+		let notificationPreferences = AccountNotificationPreferences(context: managedObjectContext ?? context)
+		self.accountNotificationPreferences = notificationPreferences
+		return notificationPreferences
+	}
 
 	static func insert(context: NSManagedObjectContext,
 					   account: String,
