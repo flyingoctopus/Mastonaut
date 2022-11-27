@@ -125,7 +125,7 @@ class InteractionCellView: MastonautTableCellView, NotificationDisplaying
 				// This type of notification is handled by adapting a status cell view.
 				break
 
-			case .other:
+			default:
 				// This should have been catch beforereaching the UI level.
 				break
 			}
@@ -192,7 +192,7 @@ class InteractionCellView: MastonautTableCellView, NotificationDisplaying
 			// This type of notification is handled by adapting a status cell view.
 			return
 
-		case .other:
+		default:
 			// This should have been catch beforereaching the UI level.
 			return
 		}

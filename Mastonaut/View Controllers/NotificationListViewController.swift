@@ -27,6 +27,8 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 	private var observations: [NSKeyValueObservation] = []
 	private var reduceMotionNotificationObserver: NSObjectProtocol? = nil
 	private var filterService: FilterService?
+	
+	private var accountNotificationPreferences: AccountNotificationPreferences?
 
 	internal var updatedPolls: [String: Poll] = [:]
 	internal var pollRefreshTimers: [String: Timer] = [:]
@@ -96,6 +98,8 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 
 		filterService = FilterService.service(for: account)
 		filterService?.register(observer: self)
+		
+		accountNotificationPreferences = account.notificationPreferences(context: AppDelegate.shared.managedObjectContext)
 	}
 
 	func handle(updatedStatus: Status)
@@ -280,7 +284,8 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 		case .follow:
 			return NotificationListViewController.CellViewIdentifier.follow
 
-		case .other:
+		default:
+			return NSUserInterfaceItemIdentifier("")
 			fatalError("Unknown notification types should be filtered!")
 		}
 	}
@@ -289,10 +294,62 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 	{
 		guard
 			let attachmentPresenter = authorizedAccountProvider?.attachmentPresenter,
-			let instance = authorizedAccountProvider?.currentInstance
+			let instance = authorizedAccountProvider?.currentInstance,
+			let accountNotificationPreferences
 			else
 		{
 			return
+		}
+		
+		switch notification.type {
+		case .mention:
+			if !accountNotificationPreferences.showMentions {
+				return
+			}
+		case .status:
+			if !accountNotificationPreferences.showStatuses {
+				return
+			}
+
+		case .follow:
+			if !accountNotificationPreferences.showNewFollowers {
+				return
+			}
+		case .follow_request:
+			if !accountNotificationPreferences.showFollowRequests {
+				return
+			}
+
+		case .reblog:
+			if !accountNotificationPreferences.showBoosts {
+				return
+			}
+		case .favourite:
+			if !accountNotificationPreferences.showFavorites {
+				return
+			}
+
+		case .poll:
+			if !accountNotificationPreferences.showPollResults {
+				return
+			}
+
+		case .update:
+			if !accountNotificationPreferences.showEdits {
+				return
+			}
+
+		case .admin_sign_up:
+			if !accountNotificationPreferences.showAdminSignUps {
+				return
+			}
+		case .admin_report:
+			if !accountNotificationPreferences.showAdminReports {
+				return
+			}
+
+		case .other(_):
+			break
 		}
 
 		switch notification.type
@@ -325,7 +382,7 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 								 interactionHandler: self,
 								 activeInstance: instance)
 
-		case .other:
+		default:
 			break
 		}
 	}
