@@ -21,6 +21,8 @@ struct NotificationPerAccountPreferencesView: View {
 	
 	@State var notificationDetailMode: AccountPreferences.NotificationDetailMode
 	
+	@State private var showingConfigureTypesSheet = false
+	
     var body: some View {
 		ScrollView {
 			VStack {
@@ -56,7 +58,11 @@ struct NotificationPerAccountPreferencesView: View {
 						Text("All")
 						
 						Button("Configure…") {
-							print("Hello")
+							showingConfigureTypesSheet.toggle()
+						}
+						.sheet(isPresented: $showingConfigureTypesSheet) {
+							NotificationTypeFilterPreferencesView(accountPreferences: accountPreferences!, accountName: accountPreferences!.account?.username ?? "(unknown)",
+																  dummyBool: true)
 						}
 					}
 					.padding(.bottom, 10)

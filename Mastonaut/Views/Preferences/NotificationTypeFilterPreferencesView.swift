@@ -7,12 +7,21 @@
 //
 
 import SwiftUI
+import CoreTootin
 
 struct NotificationTypeFilterPreferencesView: View {
+	var accountPreferences: AccountPreferences
+	
+	@State var accountName: String
+	
 	@State var dummyBool: Bool
 	
     var body: some View {
 		VStack(alignment: .leading) {
+			Text("For account \(accountName), only show these notifications:")
+				.font(.system(size: 13, weight: .semibold))
+				.padding(.bottom, 10)
+			
 			VStack(alignment: .leading) {
 				Toggle("Mentions", isOn: $dummyBool)
 				Toggle("Statuses", isOn: $dummyBool)
@@ -47,12 +56,17 @@ struct NotificationTypeFilterPreferencesView: View {
 					.padding(.leading, 10)
 					.padding(.bottom, 10)
 			}
-		}
+			
+			Button("Done") {
+				print("hello")
+			}
+			.frame(maxWidth: .infinity, alignment: .trailing)
+		}.padding(.all, 20)
     }
 }
 
 struct NotificationTypeFilterPreferencesView_Previews: PreviewProvider {
     static var previews: some View {
-		NotificationTypeFilterPreferencesView(dummyBool: true)
+		NotificationTypeFilterPreferencesView(accountPreferences: AccountPreferences(), accountName: "hello@example.com", dummyBool: true)
     }
 }
