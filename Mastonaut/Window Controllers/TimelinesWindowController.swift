@@ -41,6 +41,7 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 	// MARK: Toolbar Buttons
 	internal lazy var toolbarContainerView: NSView? = makeToolbarContainerView()
 	internal var currentUserPopUpButton: NSPopUpButton = makeAccountsPopUpButton()
+	private var searchSegmentedControl: NSSegmentedControl = makeSearchSegmentedControl()
 	private var statusComposerSegmentedControl: NSSegmentedControl = makeStatusComposerSegmentedControl()
 	private var newColumnSegmentedControl: NSSegmentedControl = makeNewColumnSegmentedControl()
 	private var userPopUpButtonController: UserPopUpButtonSubcontroller!
@@ -143,6 +144,7 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 				window?.title = 🔠("Mastonaut — No Account Selected")
 			}
 
+			searchSegmentedControl.isHidden = !hasUser
 			statusComposerSegmentedControl.isHidden = !hasUser
 			newColumnSegmentedControl.isHidden = !hasUser
 			timelinesViewController.columnViewControllers.forEach({ columnPopUpButtonMap.object(forKey: $0)?.isHidden = !hasUser })
@@ -519,7 +521,7 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		var constraints: [NSLayoutConstraint] = []
 		let contentView = timelinesViewController.mainContentView
 
-		[currentUserPopUpButton, statusComposerSegmentedControl, newColumnSegmentedControl].forEach {
+		[currentUserPopUpButton, statusComposerSegmentedControl, searchSegmentedControl, newColumnSegmentedControl].forEach {
 			toolbarView.addSubview($0)
 			let referenceView = toolbarView.superview ?? toolbarView
 			constraints.append(referenceView.centerYAnchor.constraint(equalTo: $0.centerYAnchor))
@@ -534,7 +536,9 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 
 		constraints.append(contentsOf: [
 			currentUserPopUpButton.leadingAnchor.constraint(equalTo: toolbarView.leadingAnchor, constant: 6),
-			newColumnSegmentedControl.leadingAnchor.constraint(equalTo: statusComposerSegmentedControl.trailingAnchor,
+			searchSegmentedControl.leadingAnchor.constraint(equalTo: statusComposerSegmentedControl.trailingAnchor,
+															   constant: 8),
+			newColumnSegmentedControl.leadingAnchor.constraint(equalTo: searchSegmentedControl.trailingAnchor,
 															   constant: 8),
 			toolbarView.trailingAnchor.constraint(greaterThanOrEqualTo: newColumnSegmentedControl.trailingAnchor, constant: 6)
 		])
@@ -1172,6 +1176,14 @@ private extension TimelinesWindowController {
 	static func makeStatusComposerSegmentedControl() -> NSSegmentedControl {
 		let segmentedControl = NSSegmentedControl(images: [#imageLiteral(resourceName: "compose")], trackingMode: .momentary,
 												  target: nil, action: #selector(composeStatus(_:)))
+		segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+		return segmentedControl
+	}
+	
+	static func makeSearchSegmentedControl() -> NSSegmentedControl {
+		let segmentedControl = NSSegmentedControl(images: [NSImage(systemSymbolName: "magnifyingglass", accessibilityDescription: "Search")!],
+												  trackingMode: .momentary,
+												  target: nil, action: #selector(showSearch(_:)))
 		segmentedControl.translatesAutoresizingMaskIntoConstraints = false
 		return segmentedControl
 	}
