@@ -1,6 +1,16 @@
+# About
+
+This is a fork of **Mastonaut** by @brunophilipe, whose original marketing page you can still look at [here](https://mastonaut.app). 
+
+# Install
+
+To use it, you probably want a pre-built release. The current one is 1.4 and can be downloaded [here](https://github.com/chucker/Mastonaut/releases/download/app-1.4/Mastonaut-1.4.0.zip).
+
 # Build
 
-The following instructions assume Xcode 14.1 on macOS 12.6.
+These are instructions for if you want to tinker with the code.
+
+The following instructions assume Xcode 14.1 on macOS 13.0.1.
 
 ## Setup
 
