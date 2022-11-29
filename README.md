@@ -1,18 +1,30 @@
-# About
+## About
 
 This is a fork of **Mastonaut** by @brunophilipe, whose original marketing page you can still look at [here](https://mastonaut.app). 
 
-# Install
+## 👩🏽‍💻 End Users: Install
 
 To use it, you probably want a pre-built release. The current one is 1.4 and can be downloaded [here](https://github.com/chucker/Mastonaut/releases/download/app-1.4/Mastonaut-1.4.0.zip).
 
-# Build
+## 🗺️ Roadmap
+
+This is purely a hobbyist effort, so I can't really promise anything. We can look back at the road so far:
+
+**April 2022:** the code was made open-source
+
+**August 2022:** this fork's first minor release
+
+**November 2022:** this fork's first _feature_ release
+
+I'm hoping to get another release out in December. Again, no promises!
+
+## 👩🏻‍🌾 Developers: Build
 
 These are instructions for if you want to tinker with the code.
 
 The following instructions assume Xcode 14.1 on macOS 13.0.1.
 
-## Setup
+### Setup
 
 - Copy the file `userspecific.template.xcconfig` to `userspecific.xcconfig`, and open that file.
 
@@ -24,7 +36,7 @@ The following instructions assume Xcode 14.1 on macOS 13.0.1.
 
 That should be it.
 
-## Bundle IDs
+### Bundle IDs
 
 The bundle ID _base_ is used because Mastonaut consists of multiple projects, which use an app group to share information. Given a `MASTONAUT_BUNDLE_ID_BASE` of `com.example.mastonaut` and a `DEVELOPMENT_TEAM` of `ABCDEFGH`:
 
@@ -33,7 +45,7 @@ The bundle ID _base_ is used because Mastonaut consists of multiple projects, wh
 - the Core Data database shared by the two above will be stored in `~/Library/Group Containers/ABCDEFGH.com.example.mastonaut/Mastonaut/Mastonaut.sqlite`
 - Keychain credentials will be prefixed `ABCDEFGH.com.example.mastonaut.keychain`
 
-## Acknowledgments
+### Acknowledgments
 
 Most of the **Acknowledgments** in the about box are
 auto-generated from Cocoapods dependencies. For this, you
@@ -42,7 +54,7 @@ installed, and then just run `pod install`.
 
 Additional dependencies come via SwiftPM and Git submodules, and those get added manually in code.
 
-## Pitfalls
+### Pitfalls
 
 - Make sure `MastodonKit` is fetched _as a git submodule_. (For example, Xcode's git clone functionality seems to not do this!) This appears to be a
 custom fork called 3.0 that's significantly different from the public MastodonKit. So don't try to change the project to pull the regular MastodonKit using
