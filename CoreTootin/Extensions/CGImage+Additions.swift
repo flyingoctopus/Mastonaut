@@ -17,8 +17,8 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
 import Accelerate
+import Foundation
 
 public extension CGImage
 {
@@ -29,27 +29,28 @@ public extension CGImage
 
 	func resizedImage(newHeight: CGFloat, scale: CGFloat = 1.0) -> CGImage?
 	{
-		let newWidth = (newHeight/CGFloat(height)) * CGFloat(width)
-		return resizedImage(newSize: CGSize(width: newWidth, height: newHeight), scale: scale)
+		let newWidth = (newHeight / CGFloat(height)) * CGFloat(width)
+		return self.resizedImage(newSize: CGSize(width: newWidth, height: newHeight), scale: scale)
 	}
 
 	func resizedImage(newSize: CGSize, scale: CGFloat = 1.0) -> CGImage?
 	{
-		var format = vImage_CGImageFormat(bitsPerComponent: 8,
-										  bitsPerPixel: 32,
-										  colorSpace: nil,
-										  bitmapInfo: bitmapInfo,
-										  version: 0, decode: nil, renderingIntent: .defaultIntent)
+		var format = vImage_CGImageFormat(bitsPerComponent: UInt32(self.bitsPerComponent),
+		                                  bitsPerPixel: UInt32(self.bitsPerPixel),
+		                                  colorSpace: Unmanaged.passUnretained(self.colorSpace!),
+		                                  bitmapInfo: self.bitmapInfo,
+		                                  version: 0, decode: nil, renderingIntent: .defaultIntent)
 
 		var sourceBuffer = vImage_Buffer()
 		defer
 		{
-			sourceBuffer.data.deallocate()
+			sourceBuffer.data?.deallocate()
 		}
 
 		var error: Int = kvImageNoError
 		error = vImageBuffer_InitWithCGImage(&sourceBuffer, &format, nil, self, numericCast(kvImageNoFlags))
-		guard error == kvImageNoError else
+		guard error == kvImageNoError
+		else
 		{
 			return nil
 		}
@@ -65,9 +66,9 @@ public extension CGImage
 		}
 
 		var destBuffer = vImage_Buffer(data: destData,
-									   height: vImagePixelCount(newHeight),
-									   width: vImagePixelCount(newWidth),
-									   rowBytes: destBytesPerRow)
+		                               height: vImagePixelCount(newHeight),
+		                               width: vImagePixelCount(newWidth),
+		                               rowBytes: destBytesPerRow)
 
 		if colorSpace?.model == .rgb
 		{
@@ -82,9 +83,10 @@ public extension CGImage
 
 		error = kvImageNoError
 		let resizedImageReference = vImageCreateCGImageFromBuffer(&destBuffer, &format, nil,
-																  nil, numericCast(kvImageNoFlags), &error)
+		                                                          nil, numericCast(kvImageNoFlags), &error)
 
-		guard error == kvImageNoError, let resizedImage = resizedImageReference?.takeRetainedValue() else
+		guard error == kvImageNoError, let resizedImage = resizedImageReference?.takeRetainedValue()
+		else
 		{
 			return nil
 		}
