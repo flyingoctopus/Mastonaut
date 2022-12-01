@@ -510,15 +510,16 @@
 		5F043C572932872D0095C702 /* NotificationPerAccountPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F043C552932872D0095C702 /* NotificationPerAccountPreferencesView.swift */; };
 		5F176FAC290EF03900DF043C /* FollowedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F176FAB290EF03900DF043C /* FollowedList.swift */; };
 		5F176FAF290EF65200DF043C /* FollowedListsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F176FAE290EF65200DF043C /* FollowedListsService.swift */; };
+		5F1F20D62938E86D0057E585 /* LoggingOSLog in Frameworks */ = {isa = PBXBuildFile; productRef = 5F1F20D52938E86D0057E585 /* LoggingOSLog */; };
+		5F1F20D72938E9130057E585 /* Logger+CurrentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */; };
+		5F1F20D82938E9140057E585 /* Logger+CurrentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */; };
+		5F1F20D92938E9140057E585 /* Logger+CurrentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */; };
 		5F38B52C29302F0C00FCB9FC /* AppKitSwiftUIIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F38B52B29302F0C00FCB9FC /* AppKitSwiftUIIntegration.swift */; };
 		5F38B52F2930301600FCB9FC /* PullToRefreshInnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F38B52E2930301600FCB9FC /* PullToRefreshInnerView.swift */; };
 		5F3A17EF291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
 		5F3A17F0291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
 		5F3A17F1291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
-		5FC3E18D2926EF3F0086DCEE /* LoggingOSLog in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC3E18C2926EF3F0086DCEE /* LoggingOSLog */; };
-		5FC3E18F2926F0E80086DCEE /* Logger+CurrentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */; };
 		5FC3E1922926FD640086DCEE /* AppearancePreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */; };
-		5FC3E193292700EB0086DCEE /* Logger+CurrentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */; };
 		5FC3E1952927018A0086DCEE /* LoggingOSLog in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC3E1942927018A0086DCEE /* LoggingOSLog */; };
 		5FE72EAE292982F0001C7A6C /* BuildConfig.sh in Resources */ = {isa = PBXBuildFile; fileRef = 5FE72EAD292982F0001C7A6C /* BuildConfig.sh */; };
 		5FE72EAF292982F0001C7A6C /* BuildConfig.sh in Resources */ = {isa = PBXBuildFile; fileRef = 5FE72EAD292982F0001C7A6C /* BuildConfig.sh */; };
@@ -1007,6 +1008,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB0D8382B9BA154D27AFBC63 /* Pods_CoreTootin.framework in Frameworks */,
+				5F1F20D62938E86D0057E585 /* LoggingOSLog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1023,7 +1025,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1596DB46235F65D300B349B7 /* DirectoryService.framework in Frameworks */,
-				5FC3E18D2926EF3F0086DCEE /* LoggingOSLog in Frameworks */,
 				15765563229692C200783FFE /* AVKit.framework in Frameworks */,
 				154478A6232B0223009C71D4 /* CoreTootin.framework in Frameworks */,
 				8018496C90237DCCDED54D8E /* Pods_Mastonaut.framework in Frameworks */,
@@ -1167,7 +1168,6 @@
 				152DA63E21E23FD30065CC1B /* String+HTMLEntities.swift */,
 				15E7452822372001009A1252 /* SVGKImage+Helpers.swift */,
 				15431283232EEB960010854A /* UserPopUpButtonController+Helper.swift */,
-				5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */,
 				5F38B52B29302F0C00FCB9FC /* AppKitSwiftUIIntegration.swift */,
 			);
 			path = Extensions;
@@ -1425,6 +1425,7 @@
 		159C216E232C56F800139BD5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */,
 				1543127E232EE39D0010854A /* Account+Shims.swift */,
 				15FA6FD92291AB3D0044B154 /* AccountOrder+Additions.swift */,
 				1531C1122331813900725A0C /* Array+Helpers.swift */,
@@ -1897,6 +1898,9 @@
 			dependencies = (
 			);
 			name = CoreTootin;
+			packageProductDependencies = (
+				5F1F20D52938E86D0057E585 /* LoggingOSLog */,
+			);
 			productName = CoreTootin;
 			productReference = 1544789F232B0223009C71D4 /* CoreTootin.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1942,7 +1946,6 @@
 			);
 			name = Mastonaut;
 			packageProductDependencies = (
-				5FC3E18C2926EF3F0086DCEE /* LoggingOSLog */,
 			);
 			productName = Sengi;
 			productReference = 15C4DD0C21D41EC0002AF6DA /* Mastonaut.app */;
@@ -2448,13 +2451,13 @@
 				15BD207C22583C67004197D7 /* AccountBound.swift in Sources */,
 				15BB379122A855080094B5A3 /* NavigationTextField.swift in Sources */,
 				15A1CA07221F4B9F00CF51F1 /* AccountTableCellView.swift in Sources */,
+				5F1F20D82938E9140057E585 /* Logger+CurrentType.swift in Sources */,
 				1599AE4A224AF6CC003F18EE /* ProfileViewController.swift in Sources */,
 				1573888F25018C5E00DE40F9 /* Selectable.swift in Sources */,
 				157D78C22284D27300DAE4A4 /* StatusListViewController.swift in Sources */,
 				150B1EE1227E33C30048EA22 /* NSView+EmojiSubviews.m in Sources */,
 				151199CC22BFCF05007F2AEB /* ComposerPollViewController.swift in Sources */,
 				1572C55D22A2038100FAA77F /* StringCapableTextAttachment.swift in Sources */,
-				5FC3E193292700EB0086DCEE /* Logger+CurrentType.swift in Sources */,
 				15B44D5B225D0D9B00EDFDC1 /* AnnotatedURL.m in Sources */,
 				15A1CA0D221F72C400CF51F1 /* AccountsPreferencesController.swift in Sources */,
 				1538FB3A22188CCA006B5F78 /* PropertyObserver.swift in Sources */,
@@ -2690,6 +2693,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F1F20D72938E9130057E585 /* Logger+CurrentType.swift in Sources */,
 				15608F45232C4DED00923CB7 /* ShareViewController.swift in Sources */,
 				15431287232EEDFF0010854A /* UserPopUpButtonController+Helper.swift in Sources */,
 			);
@@ -2708,7 +2712,6 @@
 				151199CB22BFCF05007F2AEB /* ComposerPollViewController.swift in Sources */,
 				1572C55C22A2038100FAA77F /* StringCapableTextAttachment.swift in Sources */,
 				15B44D5A225D0D9B00EDFDC1 /* AnnotatedURL.m in Sources */,
-				5FC3E18F2926F0E80086DCEE /* Logger+CurrentType.swift in Sources */,
 				1538FB3922188CCA006B5F78 /* PropertyObserver.swift in Sources */,
 				15A1CA0C221F72C400CF51F1 /* AccountsPreferencesController.swift in Sources */,
 				15C4DD4521D42F87002AF6DA /* TimelineViewController.swift in Sources */,
@@ -2823,6 +2826,7 @@
 				15BC415E2262A8CA00C2A150 /* SidebarSubcontroller.swift in Sources */,
 				155B9389237A23E5006EBF3C /* AnyObject+Helpers.swift in Sources */,
 				15BB378C22A854880094B5A3 /* EmphasizedTextField.m in Sources */,
+				5F1F20D92938E9140057E585 /* Logger+CurrentType.swift in Sources */,
 				5FC3E1922926FD640086DCEE /* AppearancePreferencesView.swift in Sources */,
 				15D3B9C824A298CB00DC3B10 /* BPAnimatedImageLayer.swift in Sources */,
 				152DA63F21E23FD30065CC1B /* String+HTMLEntities.swift in Sources */,
@@ -3653,7 +3657,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		5FC3E18C2926EF3F0086DCEE /* LoggingOSLog */ = {
+		5F1F20D52938E86D0057E585 /* LoggingOSLog */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5FC3E18B2926EF3F0086DCEE /* XCRemoteSwiftPackageReference "swift-log-oslog" */;
 			productName = LoggingOSLog;
