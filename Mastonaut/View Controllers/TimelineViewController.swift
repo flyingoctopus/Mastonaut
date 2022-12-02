@@ -240,13 +240,16 @@ extension TimelineViewController: ColumnPresentable
 
 		switch source
 		{
-		case .timeline:			return ColumnMode.timeline
-		case .localTimeline:	return ColumnMode.localTimeline
-		case .publicTimeline:	return ColumnMode.publicTimeline
-		case .list(let name):	return ColumnMode.list(list: name)
-		case .tag(let name):	return ColumnMode.tag(name: name)
+		case .timeline: return ColumnMode.timeline
+		case .localTimeline: return ColumnMode.localTimeline
+		case .publicTimeline: return ColumnMode.publicTimeline
 
-		case .userStatuses, .userMediaStatuses, .userStatusesAndReplies, .favorites:
+		case .favorites: return ColumnMode.favorites
+
+		case .list(let name): return ColumnMode.list(list: name)
+		case .tag(let name): return ColumnMode.tag(name: name)
+
+		case .userStatuses, .userMediaStatuses, .userStatusesAndReplies:
 			return nil
 		}
 	}
