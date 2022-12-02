@@ -103,7 +103,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 		case .localTimeline: return TimelineViewController(source: .localTimeline)
 		case .publicTimeline: return TimelineViewController(source: .publicTimeline)
 		case .notifications: return NotificationListViewController()
-			
+
 		case .favorites: return TimelineViewController(source: .favorites)
 //		case .bookmarks: return TimelineViewController(source: .bookmarks)
 
@@ -155,6 +155,21 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 		return menuItem
 	}
 
+	var menuItemSection: Int
+	{
+		switch self
+		{
+		case .timeline, .localTimeline, .publicTimeline, .notifications: return 0
+
+		case .favorites: return 1
+//		case .bookmarks: return -2
+
+		case .list: return 2
+
+		case .tag: return 3
+		}
+	}
+
 	func makeMenuItemForAdding(with target: AnyObject) -> NSMenuItem
 	{
 		let menuItem = self.makeMenuItem()
@@ -181,7 +196,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 	/// Personal column modes that are always available (as opposed to lists, hashtags, etc.)
 	static var staticPersonalItems: [ColumnMode]
 	{
-		return [.favorites]//, .bookmarks]
+		return [.favorites] // , .bookmarks]
 	}
 
 	static func == (lhs: ColumnMode, rhs: ColumnMode) -> Bool
