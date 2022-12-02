@@ -17,9 +17,9 @@
 //  GNU General Public License for more details.
 //
 
+import CoreTootin
 import Foundation
 import MastodonKit
-import CoreTootin
 
 enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 {
@@ -40,16 +40,16 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 	{
 		switch self
 		{
-		case .timeline:			return "timeline"
-		case .localTimeline:	return "localTimeline"
-		case .publicTimeline:	return "publicTimeline"
-		case .notifications:	return "notifications"
+		case .timeline: return "timeline"
+		case .localTimeline: return "localTimeline"
+		case .publicTimeline: return "publicTimeline"
+		case .notifications: return "notifications"
 
 		case .favorites: return "favorites"
 //		case .bookmarks: return "bookmarks"
 
-		case .list(let list):	return "list:\(list.title ?? "")"
-		case .tag(let name):	return "tag:\(name)"
+		case .list(let list): return "list:\(list.title ?? "")"
+		case .tag(let name): return "tag:\(name)"
 		}
 	}
 
@@ -57,10 +57,10 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 	{
 		switch rawValue
 		{
-		case "timeline":		self = .timeline
-		case "localTimeline":	self = .localTimeline
-		case "publicTimeline":	self = .publicTimeline
-		case "notifications":	self = .notifications
+		case "timeline": self = .timeline
+		case "localTimeline": self = .localTimeline
+		case "publicTimeline": self = .publicTimeline
+		case "notifications": self = .notifications
 
 		case "favorites": self = .favorites
 //		case "bookmarks": self = .bookmarks
@@ -90,8 +90,8 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 		case .favorites: return -3
 //		case .bookmarks: return -2
 
-		case .list:				return -1
-		case .tag:				return 0
+		case .list: return -1
+		case .tag: return 0
 		}
 	}
 
@@ -99,16 +99,16 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 	{
 		switch self
 		{
-		case .timeline:			return TimelineViewController(source: .timeline)
-		case .localTimeline:	return TimelineViewController(source: .localTimeline)
-		case .publicTimeline:	return TimelineViewController(source: .publicTimeline)
-		case .notifications:	return NotificationListViewController()
+		case .timeline: return TimelineViewController(source: .timeline)
+		case .localTimeline: return TimelineViewController(source: .localTimeline)
+		case .publicTimeline: return TimelineViewController(source: .publicTimeline)
+		case .notifications: return NotificationListViewController()
 			
 		case .favorites: return TimelineViewController(source: .favorites)
 //		case .bookmarks: return TimelineViewController(source: .bookmarks)
 
-		case .list(let list):	return TimelineViewController(source: .list(list: list))
-		case .tag(let name):	return TimelineViewController(source: .tag(name: name))
+		case .list(let list): return TimelineViewController(source: .list(list: list))
+		case .tag(let name): return TimelineViewController(source: .tag(name: name))
 		}
 	}
 
@@ -149,7 +149,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 
 		case .tag(let name):
 			menuItem.title = 🔠("Tag: %@", name)
-			menuItem.image = #imageLiteral(resourceName: "bell") // FIXME I don't think that's the right image?
+			menuItem.image = #imageLiteral(resourceName: "bell") // FIXME: I don't think that's the right image?
 		}
 
 		return menuItem
@@ -172,7 +172,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 		return menuItem
 	}
 
-	/// Column modes that are always available (as opposed to lists, hashtags, etc.)
+	/// Instance-wide column modes
 	static var staticItems: [ColumnMode]
 	{
 		return [.timeline, .localTimeline, .publicTimeline, .notifications]
@@ -226,6 +226,5 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 		default:
 			return false
 		}
-
 	}
 }
