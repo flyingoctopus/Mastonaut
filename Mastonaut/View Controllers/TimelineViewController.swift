@@ -18,8 +18,8 @@
 //
 
 import Cocoa
-import MastodonKit
 import CoreTootin
+import MastodonKit
 
 class TimelineViewController: StatusListViewController
 {
@@ -35,6 +35,7 @@ class TimelineViewController: StatusListViewController
 		updateAccessibilityAttributes()
 	}
 
+	@available(*, unavailable)
 	required init?(coder: NSCoder)
 	{
 		fatalError("init(coder:) has not been implemented")
@@ -49,7 +50,8 @@ class TimelineViewController: StatusListViewController
 	{
 		super.clientDidChange(client, oldClient: oldClient)
 
-		guard let source = self.source else
+		guard let source = source
+		else
 		{
 			return
 		}
@@ -64,7 +66,7 @@ class TimelineViewController: StatusListViewController
 
 		case .publicTimeline:
 			setClientEventStream(.public)
-			
+
 		case .list(let list):
 			setClientEventStream(.list(list))
 
@@ -75,13 +77,13 @@ class TimelineViewController: StatusListViewController
 			#if DEBUG
 			DispatchQueue.main.async { self.showStatusIndicator(state: .off) }
 			#endif
-			break
 		}
 	}
 
 	override internal func fetchEntries(for insertion: InsertionPoint)
 	{
-		guard let source = self.source else
+		guard let source = source
+		else
 		{
 			return
 		}
@@ -116,7 +118,7 @@ class TimelineViewController: StatusListViewController
 
 		case .list(let listId):
 			request = Timelines.list(listId.id!, range: rangeForEntryFetch(for: insertion))
-			
+
 		case .tag(let tagName):
 			request = Timelines.tag(tagName, range: rangeForEntryFetch(for: insertion))
 		}
@@ -130,20 +132,20 @@ class TimelineViewController: StatusListViewController
 		{
 		case .update(let status):
 			DispatchQueue.main.async
+			{
+				[weak self] in
+
+				guard let self = self else { return }
+
+				if self.entryMap[status.key] != nil
 				{
-					[weak self] in
-
-					guard let self = self else { return }
-
-					if self.entryMap[status.key] != nil
-					{
-						self.handle(updatedEntry: status)
-					}
-					else
-					{
-						self.prepareNewEntries([status], for: .above, pagination: nil)
-					}
+					self.handle(updatedEntry: status)
 				}
+				else
+				{
+					self.prepareNewEntries([status], for: .above, pagination: nil)
+				}
+			}
 
 		case .delete(let statusID):
 			DispatchQueue.main.async { [weak self] in self?.handle(deletedEntry: statusID) }
@@ -156,18 +158,23 @@ class TimelineViewController: StatusListViewController
 		}
 	}
 
-	override func viewDidLoad() {
+	override func viewDidLoad()
+	{
 		super.viewDidLoad()
 		updateAccessibilityAttributes()
 	}
 
-	private func updateAccessibilityAttributes() {
-		guard isViewLoaded, let source = source else {
+	private func updateAccessibilityAttributes()
+	{
+		guard isViewLoaded, let source = source
+		else
+		{
 			tableView?.setAccessibilityLabel(nil)
 			return
 		}
 
-		switch source {
+		switch source
+		{
 		case .timeline:
 			tableView.setAccessibilityLabel("Home Timeline")
 		case .localTimeline:
@@ -185,14 +192,18 @@ class TimelineViewController: StatusListViewController
 		}
 	}
 
-	override func applicableFilters() -> [UserFilter] {
-		guard let source = source else {
+	override func applicableFilters() -> [UserFilter]
+	{
+		guard let source = source
+		else
+		{
 			return super.applicableFilters()
 		}
 
 		let currentContext: Filter.Context
 
-		switch source {
+		switch source
+		{
 		case .favorites: currentContext = .home
 		case .localTimeline: currentContext = .public
 		case .publicTimeline: currentContext = .public
@@ -204,7 +215,7 @@ class TimelineViewController: StatusListViewController
 		case .userStatusesAndReplies: currentContext = .account
 		}
 
-		return super.applicableFilters().filter({ $0.context.contains(currentContext) })
+		return super.applicableFilters().filter { $0.context.contains(currentContext) }
 	}
 
 	enum Source: Equatable
@@ -219,7 +230,7 @@ class TimelineViewController: StatusListViewController
 		case userStatuses(id: String)
 		case userStatusesAndReplies(id: String)
 		case userMediaStatuses(id: String)
-		
+
 		case list(list: FollowedList)
 		case tag(name: String)
 	}
@@ -227,13 +238,15 @@ class TimelineViewController: StatusListViewController
 
 extension TimelineViewController: ColumnPresentable
 {
-	var mainResponder: NSResponder {
+	var mainResponder: NSResponder
+	{
 		return tableView
 	}
 
 	var modelRepresentation: ColumnModel?
 	{
-		guard let source = self.source else
+		guard let source = source
+		else
 		{
 			return nil
 		}
