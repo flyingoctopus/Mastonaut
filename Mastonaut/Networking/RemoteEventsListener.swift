@@ -166,6 +166,9 @@ class RemoteEventsListener: NSObject
 		case publicLocal
 		case hashtag(String)
 		case hashtagLocal(String)
+
+		case favorites
+
 		case list(FollowedList)
 		case direct
 
@@ -173,13 +176,16 @@ class RemoteEventsListener: NSObject
 		{
 			switch self
 			{
-			case .user:			return "user"
-			case .public:		return "public"
-			case .publicLocal:	return "public:local"
-			case .hashtag:		return "hashtag"
-			case .hashtagLocal:	return "hashtag:local"
-			case .list:			return "list"
-			case .direct:		return "direct"
+			case .user: return "user"
+			case .public: return "public"
+			case .publicLocal: return "public:local"
+			case .hashtag: return "hashtag"
+			case .hashtagLocal: return "hashtag:local"
+
+			case .favorites: return "favorites"
+
+			case .list: return "list"
+			case .direct: return "direct"
 			}
 		}
 
@@ -198,7 +204,7 @@ class RemoteEventsListener: NSObject
 			case .list(let list):
 				items.append(URLQueryItem(name: "list", value: list.id))
 
-			case .user, .public, .publicLocal, .direct:
+			case .user, .public, .publicLocal, .direct, .favorites:
 				break
 			}
 

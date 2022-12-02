@@ -651,6 +651,15 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 
 		items.sort(by: { $0.columnModel! < $1.columnModel! })
 
+		items.append(.separator())
+
+		let personalItems = ColumnMode.staticPersonalItems.filter { !takenModes.contains($0) }
+			.map { $0.makeMenuItemForChanging(with: self, columnId: index) }
+
+		for _item in personalItems {
+			items.append(_item)
+		}
+
 		var listItems: [NSMenuItem] = []
 		var haveAtLeastOneList = false
 
@@ -700,6 +709,15 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 	func buildNewColumnMenuItems(takenModes: [ColumnMode]) -> [NSMenuItem] {
 		var items: [NSMenuItem] = ColumnMode.staticItems.filter { !takenModes.contains($0) }
 			.map { $0.makeMenuItemForAdding(with: self) }
+
+		items.append(.separator())
+
+		let personalItems = ColumnMode.staticPersonalItems.filter { !takenModes.contains($0) }
+			.map { $0.makeMenuItemForAdding(with: self) }
+
+		for _item in personalItems {
+			items.append(_item)
+		}
 
 		let followedLists = currentAccount?.followedLists
 

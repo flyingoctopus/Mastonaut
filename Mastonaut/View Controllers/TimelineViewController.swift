@@ -212,10 +212,14 @@ class TimelineViewController: StatusListViewController
 		case timeline
 		case localTimeline
 		case publicTimeline
+
 		case favorites
+//		case bookmarks
+
 		case userStatuses(id: String)
 		case userStatusesAndReplies(id: String)
 		case userMediaStatuses(id: String)
+		
 		case list(list: FollowedList)
 		case tag(name: String)
 	}
