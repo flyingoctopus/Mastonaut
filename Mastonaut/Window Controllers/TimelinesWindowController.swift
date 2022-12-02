@@ -92,6 +92,14 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		}
 	}
 
+	var firstColumnFrame: NSRect? {
+		if timelinesViewController.columnViewControllers.count == 0 {
+			return nil
+		}
+
+		return timelinesViewController.columnViewControllers[0].view.frame
+	}
+
 	private(set) var client: ClientType? {
 		didSet {
 			guard AppDelegate.shared.appIsReady else { return }

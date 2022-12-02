@@ -242,12 +242,20 @@ class AppDelegate: NSObject, NSApplicationDelegate
 
 	func detachTimelinesWindow(for controller: TimelinesWindowController)
 	{
+		// if the window has more than one column, preserve the first column's width
+		let firstColumnWidth = controller.firstColumnFrame?.width
+
 		timelineWindowControllers.remove(controller)
 		controller.handleDetach()
 
 		if let windowFrame = controller.window?.frame
 		{
-			Preferences.set(frame: windowFrame, forTimelineWindowIndex: timelineWindowControllers.count)
+			let width = firstColumnWidth ?? windowFrame.width
+
+			let frame = NSRect(x: windowFrame.minX, y: windowFrame.minY,
+			                   width: width, height: windowFrame.height)
+
+			Preferences.set(frame: frame, forTimelineWindowIndex: timelineWindowControllers.count)
 		}
 	}
 
