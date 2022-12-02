@@ -17,10 +17,10 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
-import Starscream
-import MastodonKit
 import CoreTootin
+import Foundation
+import MastodonKit
+import Starscream
 
 class RemoteEventsListener: NSObject
 {
@@ -28,13 +28,13 @@ class RemoteEventsListener: NSObject
 	private let accessToken: String
 	private var lastResolvedURL: URL?
 
-	private var socket: WebSocket? = nil
+	private var socket: WebSocket?
 
 	private var isReconnecting: Bool = false
 	private var reconnectDelay: TimeInterval = 0.5
-	private var reconnectTimer: Timer? = nil
+	private var reconnectTimer: Timer?
 
-	weak var delegate: RemoteEventsListenerDelegate? = nil
+	weak var delegate: RemoteEventsListenerDelegate?
 
 	var isSocketConnected: Bool
 	{
@@ -54,12 +54,12 @@ class RemoteEventsListener: NSObject
 		socket?.disconnect()
 
 		RemoteEventsListener.cancelPreviousPerformRequests(withTarget: self,
-														   selector: #selector(watchdogBarked),
-														   object: nil)
+		                                                   selector: #selector(watchdogBarked),
+		                                                   object: nil)
 
 		RemoteEventsListener.cancelPreviousPerformRequests(withTarget: self,
-														   selector: #selector(releaseWatchdog),
-														   object: nil)
+		                                                   selector: #selector(releaseWatchdog),
+		                                                   object: nil)
 	}
 
 	func set(stream: Stream)
@@ -77,7 +77,7 @@ class RemoteEventsListener: NSObject
 
 		self.socket?.disconnect(forceTimeout: 0, closeCode: CloseCode.noStatusReceived.rawValue)
 		self.socket = socket
-		self.lastResolvedURL = resolvedSocketURL
+		lastResolvedURL = resolvedSocketURL
 
 		socket.connect()
 	}
@@ -92,22 +92,24 @@ class RemoteEventsListener: NSObject
 	func reconnect()
 	{
 		DispatchQueue.main.async
-			{
-				self.performReconnect()
-				self.debugLog("Reconnect")
-			}
+		{
+			self.performReconnect()
+			self.debugLog("Reconnect")
+		}
 	}
 
 	private func performReconnect()
 	{
-		guard let url = lastResolvedURL, !isReconnecting else
+		guard let url = lastResolvedURL, !isReconnecting
+		else
 		{
 			return
 		}
 
 		isReconnecting = true
 
-		DispatchQueue.main.asyncAfter(deadline: .now() + reconnectDelay) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + reconnectDelay)
+		{
 			self.set(resolvedSocketURL: url)
 			self.debugLog("Reconnecting")
 		}
@@ -122,12 +124,12 @@ class RemoteEventsListener: NSObject
 	private func resetWatchdog()
 	{
 		RemoteEventsListener.cancelPreviousPerformRequests(withTarget: self,
-														   selector: #selector(watchdogBarked),
-														   object: nil)
+		                                                   selector: #selector(watchdogBarked),
+		                                                   object: nil)
 
 		RemoteEventsListener.cancelPreviousPerformRequests(withTarget: self,
-														   selector: #selector(releaseWatchdog),
-														   object: nil)
+		                                                   selector: #selector(releaseWatchdog),
+		                                                   object: nil)
 
 		perform(#selector(releaseWatchdog), with: nil, afterDelay: 60)
 		debugLog("Watchdog was reset")
@@ -137,8 +139,8 @@ class RemoteEventsListener: NSObject
 	private func releaseWatchdog()
 	{
 		RemoteEventsListener.cancelPreviousPerformRequests(withTarget: self,
-														   selector: #selector(watchdogBarked),
-														   object: nil)
+		                                                   selector: #selector(watchdogBarked),
+		                                                   object: nil)
 
 		perform(#selector(watchdogBarked), with: nil, afterDelay: 5)
 		socket?.write(ping: Data("ping".utf8))
@@ -166,6 +168,9 @@ class RemoteEventsListener: NSObject
 		case publicLocal
 		case hashtag(String)
 		case hashtagLocal(String)
+
+		case favorites
+
 		case list(FollowedList)
 		case direct
 
@@ -173,13 +178,16 @@ class RemoteEventsListener: NSObject
 		{
 			switch self
 			{
-			case .user:			return "user"
-			case .public:		return "public"
-			case .publicLocal:	return "public:local"
-			case .hashtag:		return "hashtag"
-			case .hashtagLocal:	return "hashtag:local"
-			case .list:			return "list"
-			case .direct:		return "direct"
+			case .user: return "user"
+			case .public: return "public"
+			case .publicLocal: return "public:local"
+			case .hashtag: return "hashtag"
+			case .hashtagLocal: return "hashtag:local"
+
+			case .favorites: return "favorites"
+
+			case .list: return "list"
+			case .direct: return "direct"
 			}
 		}
 
@@ -198,7 +206,7 @@ class RemoteEventsListener: NSObject
 			case .list(let list):
 				items.append(URLQueryItem(name: "list", value: list.id))
 
-			case .user, .public, .publicLocal, .direct:
+			case .user, .public, .publicLocal, .direct, .favorites:
 				break
 			}
 
@@ -257,7 +265,8 @@ extension RemoteEventsListener: WebSocketDelegate, WebSocketPongDelegate
 
 	private func parseMastodonEvent(with data: Data)
 	{
-		guard data.isEmpty == false else
+		guard data.isEmpty == false
+		else
 		{
 			// This is a heartbeat message. Ignoring it…
 			return
@@ -282,7 +291,8 @@ private struct StreamPayload: Decodable
 
 	func parsedEvent() throws -> ClientEvent
 	{
-		guard let type = EventType(rawValue: event) else
+		guard let type = EventType(rawValue: event)
+		else
 		{
 			throw ParseErrors.unknownEventType(event)
 		}
@@ -311,9 +321,9 @@ private struct StreamPayload: Decodable
 
 	enum EventType: String
 	{
-		case update = "update"
-		case notification = "notification"
-		case delete = "delete"
+		case update
+		case notification
+		case delete
 		case filtersChanged = "filters_changed"
 	}
 
@@ -331,4 +341,3 @@ enum ClientEvent
 	case delete(statusID: String)
 	case keywordFiltersChanged
 }
-

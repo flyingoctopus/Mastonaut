@@ -632,6 +632,8 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 
 		logger.debug2("Building columns popup menu. Followed lists: \(followedLists?.count ?? 0)")
 
+		var menuItemSection = 0
+
 		let staticColumnModes = ColumnMode.staticItems
 
 		let menu = NSMenu(title: "")
@@ -641,15 +643,26 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		var items: [NSMenuItem] = staticColumnModes.filter { !takenModes.contains($0) }
 			.map { $0.makeMenuItemForChanging(with: self, columnId: index) }
 
-		// don't double-append menu item if it's a list (which we're building later)
-		switch currentColumnMode {
-		case .list:
-			break
-		default:
+		if currentColumnMode.menuItemSection == menuItemSection {
 			items.append(currentColumnMode.makeMenuItemForChanging(with: self, columnId: index))
 		}
 
 		items.sort(by: { $0.columnModel! < $1.columnModel! })
+
+		menuItemSection = 1
+
+		items.append(.separator())
+
+		let personalItems = ColumnMode.staticPersonalItems.filter { !takenModes.contains($0) }
+			.map { $0.makeMenuItemForChanging(with: self, columnId: index) }
+
+		for _item in personalItems {
+			items.append(_item)
+		}
+
+		if currentColumnMode.menuItemSection == menuItemSection {
+			items.append(currentColumnMode.makeMenuItemForChanging(with: self, columnId: index))
+		}
 
 		var listItems: [NSMenuItem] = []
 		var haveAtLeastOneList = false
@@ -700,6 +713,15 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 	func buildNewColumnMenuItems(takenModes: [ColumnMode]) -> [NSMenuItem] {
 		var items: [NSMenuItem] = ColumnMode.staticItems.filter { !takenModes.contains($0) }
 			.map { $0.makeMenuItemForAdding(with: self) }
+
+		items.append(.separator())
+
+		let personalItems = ColumnMode.staticPersonalItems.filter { !takenModes.contains($0) }
+			.map { $0.makeMenuItemForAdding(with: self) }
+
+		for _item in personalItems {
+			items.append(_item)
+		}
 
 		let followedLists = currentAccount?.followedLists
 
