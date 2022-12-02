@@ -18,31 +18,31 @@
 //
 
 import Cocoa
-import MastodonKit
 import CoreTootin
-import LoggingOSLog
 import Logging
+import LoggingOSLog
+import MastodonKit
 
 class AppDelegate: NSObject, NSApplicationDelegate
 {
-	@IBOutlet private weak var windowMenu: NSMenu!
-	@IBOutlet private weak var accountsMenu: NSMenu!
+	@IBOutlet private var windowMenu: NSMenu!
+	@IBOutlet private var accountsMenu: NSMenu!
 
 	private lazy var keychain = Keychain()
 
-	lazy private(set) var authController = AuthController(keychainController: keychainController, delegate: self)
-	lazy private(set) var customEmojiCache = CustomEmojiCache(delegate: self)
-	lazy private(set) var statusComposerWindowController = StatusComposerWindowController()
-	lazy private(set) var aboutWindowController = AboutWindowController()
-	lazy private(set) var attachmentWindowController = AttachmentWindowController()
-	lazy private(set) var notificationAgent = UserNotificationAgent()
-	lazy private(set) var accountsService = AccountsService(context: managedObjectContext,
-															keychainController: keychain.keychainController)
-	lazy private(set) var instanceService = InstanceService(urlSessionConfiguration: URLSessionConfiguration.forClients,
-															keychainController: keychain.keychainController,
-															accountsService: accountsService)
+	private(set) lazy var authController = AuthController(keychainController: keychainController, delegate: self)
+	private(set) lazy var customEmojiCache = CustomEmojiCache(delegate: self)
+	private(set) lazy var statusComposerWindowController = StatusComposerWindowController()
+	private(set) lazy var aboutWindowController = AboutWindowController()
+	private(set) lazy var attachmentWindowController = AttachmentWindowController()
+	private(set) lazy var notificationAgent = UserNotificationAgent()
+	private(set) lazy var accountsService = AccountsService(context: managedObjectContext,
+	                                                        keychainController: keychain.keychainController)
+	private(set) lazy var instanceService = InstanceService(urlSessionConfiguration: URLSessionConfiguration.forClients,
+	                                                        keychainController: keychain.keychainController,
+	                                                        accountsService: accountsService)
 
-	private var _preferencesWindowController: PreferencesWindowController? = nil
+	private var _preferencesWindowController: PreferencesWindowController?
 	var preferencesWindowController: PreferencesWindowController
 	{
 		if let controller = _preferencesWindowController
@@ -60,7 +60,7 @@ class AppDelegate: NSObject, NSApplicationDelegate
 
 	private var timelineWindowControllers: Set<TimelinesWindowController> = []
 
-	private weak var authorizingEntity: (AnyObject & AccountAuthorizationSource)? = nil
+	private weak var authorizingEntity: (AnyObject & AccountAuthorizationSource)?
 
 	private var observations = [NSKeyValueObservation]()
 	private var reauthNotificationObserver: NSObjectProtocol?
@@ -73,11 +73,11 @@ class AppDelegate: NSObject, NSApplicationDelegate
 	}
 
 	#if DEBUG
-	private var debugWindowController: DebugWindowController? = nil
+	private var debugWindowController: DebugWindowController?
 	#endif
 
-	let clientsUrlSession: URLSession = URLSession(configuration: .forClients)
-	let resourcesUrlSession: URLSession = URLSession(configuration: .forResources)
+	let clientsUrlSession: URLSession = .init(configuration: .forClients)
+	let resourcesUrlSession: URLSession = .init(configuration: .forResources)
 
 	lazy var avatarImageCache = AvatarImageCache(resourceURLSession: resourcesUrlSession)
 
@@ -99,30 +99,30 @@ class AppDelegate: NSObject, NSApplicationDelegate
 		migrateToSharedLocalKeychainIfNeeded()
 
 		observations.observe(NSApp, \NSApplication.keyWindow)
-			{
-				[unowned self] (_, _) in self.updateAccountsMenu()
-			}
+		{
+			[unowned self] _, _ in self.updateAccountsMenu()
+		}
 	}
-	
+
 	// MARK: App Lifecycle
 
 	func applicationDidFinishLaunching(_ notification: Foundation.Notification)
 	{
 		LoggingSystem.bootstrap(LoggingOSLog.init)
-		
+
 		let logger = Logger(subsystemType: self)
 		logger.debug2("applicationDidFinishLaunching")
 
 		Preferences.addObserver(self, forKeyPath: "appearance")
 		updateAppearance()
-		
+
 		if accountsService.authorizedAccounts.isEmpty
 		{
 			authController.removeAllAuthorizationArtifacts()
 		}
 
 		reauthNotificationObserver = NotificationCenter.default.addObserver(forName: .accountNeedsNewClientToken,
-																			object: nil, queue: .main)
+		                                                                    object: nil, queue: .main)
 		{
 			[unowned self] notification in
 
@@ -141,8 +141,8 @@ class AppDelegate: NSObject, NSApplicationDelegate
 		}
 
 		if let userInfoDict = notification.userInfo,
-			let userNotification = userInfoDict[NSApplication.launchUserNotificationUserInfoKey] as? NSUserNotification,
-			let payload = userNotification.payload
+		   let userNotification = userInfoDict[NSApplication.launchUserNotificationUserInfoKey] as? NSUserNotification,
+		   let payload = userNotification.payload
 		{
 			showTimelinesWindow(for: payload)
 			NSUserNotificationCenter.default.removeDeliveredNotification(userNotification)
@@ -164,18 +164,22 @@ class AppDelegate: NSObject, NSApplicationDelegate
 			errorPresenter()
 		}
 	}
-	
-	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-		switch keyPath {
+
+	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?)
+	{
+		switch keyPath
+		{
 		case "appearance":
 			updateAppearance()
 		default:
 			print("Key path \(keyPath ?? "") has changed")
 		}
 	}
-	
-	func updateAppearance() {
-		switch Preferences.appearance {
+
+	func updateAppearance()
+	{
+		switch Preferences.appearance
+		{
 		case .light:
 			NSApp.appearance = NSAppearance(named: .aqua)
 		case .dark:
@@ -205,7 +209,7 @@ class AppDelegate: NSObject, NSApplicationDelegate
 
 		return true
 	}
-	
+
 	// MARK: Timeline Windows Handling
 
 	@discardableResult
@@ -213,7 +217,8 @@ class AppDelegate: NSObject, NSApplicationDelegate
 	{
 		let timelinesStoryboard = NSStoryboard(name: "Timelines", bundle: .main)
 
-		guard let controller = timelinesStoryboard.instantiateInitialController() as? TimelinesWindowController else
+		guard let controller = timelinesStoryboard.instantiateInitialController() as? TimelinesWindowController
+		else
 		{
 			return nil
 		}
@@ -245,26 +250,27 @@ class AppDelegate: NSObject, NSApplicationDelegate
 			Preferences.set(frame: windowFrame, forTimelineWindowIndex: timelineWindowControllers.count)
 		}
 	}
-	
+
 	// MARK: Preferences Window Handling
 
 	func detachPreferencesWindow(for controller: PreferencesWindowController)
 	{
 		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0)
+		{
+			if controller == self._preferencesWindowController, controller.window?.isVisible != true
 			{
-				if controller == self._preferencesWindowController, controller.window?.isVisible != true {
-					self._preferencesWindowController = nil
-				}
+				self._preferencesWindowController = nil
 			}
+		}
 	}
-	
+
 	// MARK: Internal Setup
 
 	func updateAccountsMenu()
 	{
 		if let provider = (NSApp.keyWindow?.windowController as? AccountsMenuProvider)
 		{
-			self.accountsMenu.setItems(provider.accountsMenuItems)
+			accountsMenu.setItems(provider.accountsMenuItems)
 		}
 	}
 
@@ -278,14 +284,15 @@ class AppDelegate: NSObject, NSApplicationDelegate
 	private func storeLocalInfo(for account: Account, completion: @escaping () -> Void)
 	{
 		customEmojiCache.cacheEmojis(for: [account])
-			{
-				_ in DispatchQueue.main.async { completion() }
-			}
+		{
+			_ in DispatchQueue.main.async { completion() }
+		}
 	}
 
 	func removeAccount(for userUUID: UUID) -> Bool
 	{
-		guard let account = try? AuthorizedAccount.fetch(with: userUUID, context: managedObjectContext) else
+		guard let account = try? AuthorizedAccount.fetch(with: userUUID, context: managedObjectContext)
+		else
 		{
 			return false
 		}
@@ -293,17 +300,17 @@ class AppDelegate: NSObject, NSApplicationDelegate
 		managedObjectContext.delete(account)
 
 		updateAccountsMenu()
-		timelineWindowControllers.forEach()
+		timelineWindowControllers.forEach
+		{
+			windowController in
+
+			if windowController.currentUser == userUUID
 			{
-				windowController in
-
-				if windowController.currentUser == userUUID
-				{
-					windowController.currentUser = nil
-				}
-
-				windowController.updateUserPopUpButton()
+				windowController.currentUser = nil
 			}
+
+			windowController.updateUserPopUpButton()
+		}
 
 		// Make sure new user data is persisted.
 		saveContext()
@@ -353,8 +360,8 @@ class AppDelegate: NSObject, NSApplicationDelegate
 		let legacyPersistenceDataURL = NSPersistentContainer.defaultDirectoryURL()
 
 		if let contents = try? FileWrapper(url: legacyPersistenceDataURL, options: .immediate),
-			contents.isDirectory,
-			contents.fileWrappers?.count ?? 0 > 0
+		   contents.isDirectory,
+		   contents.fileWrappers?.count ?? 0 > 0
 		{
 			return contents
 		}
@@ -370,14 +377,16 @@ class AppDelegate: NSObject, NSApplicationDelegate
 
 	private func migrateToSharedLocalKeychainIfNeeded()
 	{
-		guard Preferences.didMigrateToSharedLocalKeychain == false else
+		guard Preferences.didMigrateToSharedLocalKeychain == false
+		else
 		{
 			return
 		}
 
 		let errors = accountsService.migrateAllAccountsToSharedLocalKeychain(keychainController: keychainController)
 
-		guard errors.isEmpty == false else
+		guard errors.isEmpty == false
+		else
 		{
 			Preferences.didMigrateToSharedLocalKeychain = true
 			return
@@ -393,32 +402,32 @@ class AppDelegate: NSObject, NSApplicationDelegate
 
 		// Schedule the error display to when applicationDidFinishLaunching is called
 		migrationErrorPresenter =
+		{
+			[unowned self] in
+
+			let alert = NSAlert(style: .warning,
+			                    title: 🔠("error.migration.title"),
+			                    message: 🔠("error.migration.message", accountURIs.joined(separator: "\n")))
+
+			alert.addButton(withTitle: 🔠("error.migration.button.accountsettings"))
+			alert.addButton(withTitle: 🔠("error.migration.button.moreinfo"))
+			alert.addButton(withTitle: 🔠("Cancel"))
+
+			if alert.runModal() == .alertFirstButtonReturn
 			{
-				[unowned self] in
-
-				let alert = NSAlert(style: .warning,
-									title: 🔠("error.migration.title"),
-									message: 🔠("error.migration.message", accountURIs.joined(separator: "\n")))
-
-				alert.addButton(withTitle: 🔠("error.migration.button.accountsettings"))
-				alert.addButton(withTitle: 🔠("error.migration.button.moreinfo"))
-				alert.addButton(withTitle: 🔠("Cancel"))
-
-				if alert.runModal() == .alertFirstButtonReturn
-				{
-					self.showAccountsPreferences()
-				}
-				else if alert.runModal() == .alertSecondButtonReturn
-				{
-					let message = errors.map({ "\($0.account.uri!): \($0.underlyingError)" }).joined(separator: "\n\n")
-					let alert = NSAlert(style: .informational, title: "Error Listing",
-										message: message)
-
-					alert.addButton(withTitle: 🔠("Close"))
-
-					alert.runModal()
-				}
+				self.showAccountsPreferences()
 			}
+			else if alert.runModal() == .alertSecondButtonReturn
+			{
+				let message = errors.map { "\($0.account.uri!): \($0.underlyingError)" }.joined(separator: "\n\n")
+				let alert = NSAlert(style: .informational, title: "Error Listing",
+				                    message: message)
+
+				alert.addButton(withTitle: 🔠("Close"))
+
+				alert.runModal()
+			}
+		}
 	}
 
 	private func showAccountsPreferences()
@@ -429,17 +438,23 @@ class AppDelegate: NSObject, NSApplicationDelegate
 
 	// MARK: Core Data Saving and Undo support
 
-	func saveContext() {
+	func saveContext()
+	{
 		// Performs the save action for the application, which is to send the save: message to the application's managed object context. Any encountered errors are presented to the user.
 		let context = persistentContainer.viewContext
 
-		if !context.commitEditing() {
+		if !context.commitEditing()
+		{
 			NSLog("\(NSStringFromClass(type(of: self))) unable to commit editing before saving")
 		}
-		if context.hasChanges {
-			do {
+		if context.hasChanges
+		{
+			do
+			{
 				try context.save()
-			} catch {
+			}
+			catch
+			{
 				// Customize this code block to include application-specific recovery steps.
 				let nserror = error as NSError
 				NSApplication.shared.presentError(nserror)
@@ -447,7 +462,8 @@ class AppDelegate: NSObject, NSApplicationDelegate
 		}
 	}
 
-	func windowWillReturnUndoManager(window: NSWindow) -> UndoManager? {
+	func windowWillReturnUndoManager(window: NSWindow) -> UndoManager?
+	{
 		// Returns the NSUndoManager for the application. In this case, the manager returned is that of the managed object context for the application.
 		return persistentContainer.viewContext.undoManager
 	}
@@ -456,11 +472,11 @@ class AppDelegate: NSObject, NSApplicationDelegate
 	{
 		for url in urls
 		{
-			if	url.pathComponents.count > 3,
-				url.pathComponents[1] == "grant",
-				url.pathComponents[3] == "code",
-				let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-				let code = components.queryItems?.first(where: { $0.name == "code" })?.value
+			if url.pathComponents.count > 3,
+			   url.pathComponents[1] == "grant",
+			   url.pathComponents[3] == "code",
+			   let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+			   let code = components.queryItems?.first(where: { $0.name == "code" })?.value
 			{
 				DispatchQueue.main.async
 				{
@@ -472,32 +488,39 @@ class AppDelegate: NSObject, NSApplicationDelegate
 		}
 	}
 
-	func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+	func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply
+	{
 		// Save changes in the application's managed object context before the application terminates.
 		let context = persistentContainer.viewContext
 
-		if !context.commitEditing() {
+		if !context.commitEditing()
+		{
 			NSLog("\(NSStringFromClass(type(of: self))) unable to commit editing to terminate")
 			return .terminateCancel
 		}
 
-		if !context.hasChanges {
+		if !context.hasChanges
+		{
 			return .terminateNow
 		}
 
-		do {
+		do
+		{
 			try context.save()
-		} catch {
+		}
+		catch
+		{
 			let nserror = error as NSError
 
 			// Customize this code block to include application-specific recovery steps.
 			let result = sender.presentError(nserror)
-			if (result) {
+			if result
+			{
 				return .terminateCancel
 			}
 
 			let question = NSLocalizedString("Could not save changes while quitting. Quit anyway?", comment: "Quit without saves error question message")
-			let info = NSLocalizedString("Quitting now will lose any changes you have made since the last successful save", comment: "Quit without saves error question info");
+			let info = NSLocalizedString("Quitting now will lose any changes you have made since the last successful save", comment: "Quit without saves error question info")
 			let quitButton = NSLocalizedString("Quit anyway", comment: "Quit anyway button title")
 			let cancelButton = NSLocalizedString("Cancel", comment: "Cancel button title")
 			let alert = NSAlert()
@@ -507,7 +530,8 @@ class AppDelegate: NSObject, NSApplicationDelegate
 			alert.addButton(withTitle: cancelButton)
 
 			let answer = alert.runModal()
-			if answer == .alertSecondButtonReturn {
+			if answer == .alertSecondButtonReturn
+			{
 				return .terminateCancel
 			}
 		}
@@ -536,18 +560,16 @@ extension AppDelegate: CacheDelegate
 	func cacheDidFinishLoadingFromDisk(_ cache: Cache)
 	{
 		DispatchQueue.main.async
-			{
-				[weak self] in
-				// Eventually, when other caches are created, all their `isLoaded` states must be true for
-				// `appIsReady` to be true as well
-				self?.updateAppIsReady()
-			}
+		{
+			[weak self] in
+			// Eventually, when other caches are created, all their `isLoaded` states must be true for
+			// `appIsReady` to be true as well
+			self?.updateAppIsReady()
+		}
 	}
 
 	func cacheDidFinishWritingToDisk(_ cache: Cache)
-	{
-
-	}
+	{}
 }
 
 // MARK: - IBActions
@@ -564,7 +586,7 @@ extension AppDelegate
 			NSApp.activate(ignoringOtherApps: true)
 		}
 	}
-	
+
 	@IBAction func newAuthorization(_ sender: Any?)
 	{
 		guard
@@ -600,7 +622,7 @@ extension AppDelegate
 	{
 		preferencesWindowController.showWindow(sender)
 	}
-	
+
 	#if DEBUG
 	@objc func showDebugInfoWindow(_ sender: Any?)
 	{
@@ -624,7 +646,8 @@ extension AppDelegate: AuthControllerDelegate
 		// Make sure new user data is persisted.
 		saveContext()
 
-		storeLocalInfo(for: account) { [unowned self] in
+		storeLocalInfo(for: account)
+		{ [unowned self] in
 			self.authorizingEntity?.successfullyAuthenticatedUser(with: uuid)
 			self.informOpenWindowsOfNewAccountCredentials(forAccountUUID: uuid)
 			self.resetAuthorizationState()
@@ -633,7 +656,8 @@ extension AppDelegate: AuthControllerDelegate
 
 	func authController(_ authController: AuthController, failedAuthorizingWithError error: AuthController.Errors)
 	{
-		DispatchQueue.main.async { [unowned self] in
+		DispatchQueue.main.async
+		{ [unowned self] in
 			self.resetAuthorizationState()
 
 			let alert = NSAlert(style: .warning, title: 🔠("authorization.title"), message: error.localizedDescription)
@@ -643,13 +667,14 @@ extension AppDelegate: AuthControllerDelegate
 
 	func authController(_ authController: AuthController, didUpdate account: Account, uuid: UUID)
 	{
-		storeLocalInfo(for: account) { [unowned self] in
+		storeLocalInfo(for: account)
+		{ [unowned self] in
 			self.authorizingEntity?.successfullyAuthenticatedUser(with: uuid)
 			self.informOpenWindowsOfNewAccountCredentials(forAccountUUID: uuid)
 			self.resetAuthorizationState()
 		}
 
-		timelineWindowControllers.forEach({ $0.updateUserPopUpButton() })
+		timelineWindowControllers.forEach { $0.updateUserPopUpButton() }
 
 		// Make sure new user data is persisted.
 		saveContext()
@@ -662,9 +687,7 @@ extension AppDelegate: AuthControllerDelegate
 	}
 
 	func authControllerDidUpdateAllAccountRelationships(_ authController: AuthController)
-	{
-
-	}
+	{}
 
 	func resetAuthorizationState()
 	{
@@ -673,10 +696,12 @@ extension AppDelegate: AuthControllerDelegate
 		authorizingEntity = nil
 	}
 
-	private func informOpenWindowsOfNewAccountCredentials(forAccountUUID uuid: UUID) {
-
-		for windowController in timelineWindowControllers {
-			if windowController.currentUser == uuid {
+	private func informOpenWindowsOfNewAccountCredentials(forAccountUUID uuid: UUID)
+	{
+		for windowController in timelineWindowControllers
+		{
+			if windowController.currentUser == uuid
+			{
 				// Re-setting this will cause the window to set itself up again in case it is stuck with bad credentials
 				windowController.currentUser = uuid
 			}
@@ -699,8 +724,8 @@ extension AppDelegate: NSUserNotificationCenterDelegate
 	}
 
 	func userNotificationCenter(_ center: NSUserNotificationCenter,
-								shouldPresent notification: NSUserNotification) -> Bool {
-
+	                            shouldPresent notification: NSUserNotification) -> Bool
+	{
 		guard let payload = notification.payload else { return false }
 
 		let uuid = payload.accountUUID
@@ -731,7 +756,7 @@ extension AppDelegate: NSUserNotificationCenterDelegate
 		else if
 			let account = accountsService.authorizedAccounts.first(where: { $0.uuid == uuid }),
 			let controller = findTimelinesWindowControllerWithNoAccount()
-								?? makeNewTimelinesWindow(forDecoder: false)
+			?? makeNewTimelinesWindow(forDecoder: false)
 		{
 			controller.currentAccount = account
 			showDetailForNotification(mode, in: controller)
@@ -741,17 +766,17 @@ extension AppDelegate: NSUserNotificationCenterDelegate
 	private func findBestTimelinesWindowController(forAccount uuid: UUID) -> TimelinesWindowController?
 	{
 		return timelineWindowControllers
-				.filter({ $0.currentAccount?.uuid == uuid && $0.hasNotificationsColumn })
-				.sorted(by: { ($0.window?.orderedIndex ?? -1) > ($1.window?.orderedIndex ?? -1) })
-				.first
+			.filter { $0.currentAccount?.uuid == uuid && $0.hasNotificationsColumn }
+			.sorted(by: { ($0.window?.orderedIndex ?? -1) > ($1.window?.orderedIndex ?? -1) })
+			.first
 	}
 
 	private func findTimelinesWindowControllerWithNoAccount() -> TimelinesWindowController?
 	{
 		return timelineWindowControllers
-				.filter({ $0.currentAccount?.uuid == nil })
-				.sorted(by: { ($0.window?.orderedIndex ?? -1) > ($1.window?.orderedIndex ?? -1) })
-				.first
+			.filter { $0.currentAccount?.uuid == nil }
+			.sorted(by: { ($0.window?.orderedIndex ?? -1) > ($1.window?.orderedIndex ?? -1) })
+			.first
 	}
 
 	private func showDetailForNotification(_ mode: SidebarMode, in controller: TimelinesWindowController)

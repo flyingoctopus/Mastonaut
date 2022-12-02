@@ -18,27 +18,31 @@
 //
 
 import Cocoa
-import MastodonKit
 import CoreTootin
-import PullRefreshableScrollView
 import Logging
+import MastodonKit
+import PullRefreshableScrollView
 
 class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, ToolbarWindowController
 {
 	private var logger: Logger!
-	
+
 	// MARK: Outlets
-	@IBOutlet private weak var newColumnMenu: NSMenu!
+
+	@IBOutlet private var newColumnMenu: NSMenu!
 
 	// MARK: Services
+
 	private unowned let accountsService = AppDelegate.shared.accountsService
 	private unowned let instanceService = AppDelegate.shared.instanceService
 
 	// MARK: KVO Observers
+
 	private var observations = [NSKeyValueObservation]()
 	private var accountObservations = [NSKeyValueObservation]()
 
 	// MARK: Toolbar Buttons
+
 	internal lazy var toolbarContainerView: NSView? = makeToolbarContainerView()
 	internal var currentUserPopUpButton: NSPopUpButton = makeAccountsPopUpButton()
 	private var searchSegmentedControl: NSSegmentedControl = makeSearchSegmentedControl()
@@ -47,18 +51,20 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 	private var userPopUpButtonController: UserPopUpButtonSubcontroller!
 	private var popUpButtonConstraints = [NSLayoutConstraint]()
 	private let columnPopUpButtonMap = NSMapTable<NSViewController, NSPopUpButton>(keyOptions: .weakMemory,
-																				   valueOptions: .weakMemory)
+	                                                                               valueOptions: .weakMemory)
 
 	// MARK: Toolbar Sidebar Controls
+
 	private var sidebarNavigationSegmentedControl: NSSegmentedControl = makeSidebarNavigationSegmentedControl()
 	private var sidebarTitleViewController = SidebarTitleViewController()
-	private var sidebarTitleViewCenterXConstraint: NSLayoutConstraint? = nil
+	private var sidebarTitleViewCenterXConstraint: NSLayoutConstraint?
 	private var closeSidebarSegmentedControl: NSSegmentedControl?
 
 	// MARK: Sidebar
+
 	private lazy var sidebarSubcontroller = SidebarSubcontroller(sidebarContainer: self,
-																 navigationControl: sidebarNavigationSegmentedControl,
-																 navigationStack: nil)
+	                                                             navigationControl: sidebarNavigationSegmentedControl,
+	                                                             navigationStack: nil)
 
 	internal var sidebarViewController: SidebarViewController? {
 		get { return timelinesSplitViewController.sidebarViewController }
@@ -66,51 +72,53 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 	}
 
 	// MARK: Child View Controllers
+
 	private var placeholderViewController: NSViewController?
 	private var searchWindowController: NSWindowController?
 
 	// MARK: Lifecycle Support
+
 	private var preservedWindowFrameStack: Stack<CGRect> = []
 
 	var currentInstance: Instance? {
 		didSet {
-			if let sidebarMode = self.sidebarSubcontroller.navigationStack?.currentItem,
-				self.sidebarViewController == nil {
+			if let sidebarMode = sidebarSubcontroller.navigationStack?.currentItem,
+			   sidebarViewController == nil
+			{
 				let oldStack = preservedWindowFrameStack
-				self.sidebarSubcontroller.installSidebar(mode: sidebarMode)
+				sidebarSubcontroller.installSidebar(mode: sidebarMode)
 				preservedWindowFrameStack = oldStack
 			}
 		}
 	}
 
-	private(set) var client: ClientType? = nil {
+	private(set) var client: ClientType? {
 		didSet {
 			guard AppDelegate.shared.appIsReady else { return }
 
-			timelinesViewController.columnViewControllers.forEach({ $0.client = client })
+			timelinesViewController.columnViewControllers.forEach { $0.client = client }
 			revalidateSidebarAccountReference()
 		}
 	}
 
 	internal var currentUser: UUID? {
 		get { return currentAccount?.uuid }
-		set
-		{
-			currentAccount = newValue.flatMap({ accountsService.account(with: $0) })
-			
+		set {
+			currentAccount = newValue.flatMap { accountsService.account(with: $0) }
+
 			updateColumnsPopUpButtons(for: timelinesViewController.columnViewControllers)
 		}
 	}
 
-	internal var currentAccount: AuthorizedAccount? = nil {
+	internal var currentAccount: AuthorizedAccount? {
 		didSet {
 			let hasUser: Bool
 
-			if let currentAccount = self.currentAccount {
+			if let currentAccount = currentAccount {
 				hasUser = true
 				let client = Client.create(for: currentAccount)
 
-				if let window = self.window {
+				if let window = window {
 					if let instance = currentAccount.baseDomain {
 						window.title = "@\(currentAccount.username!) — \(instance)"
 					}
@@ -123,15 +131,15 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 				updateUserPopUpButton()
 
 				instanceService.instance(for: currentAccount) {
-					[weak self] (instance) in
+					[weak self] instance in
 					DispatchQueue.main.async {
-							self?.client = client
-							self?.currentInstance = instance
-						}
+						self?.client = client
+						self?.currentInstance = instance
+					}
 				}
 
 				accountObservations.observe(currentAccount, \.bookmarkedTags) {
-					(_, _) in AppDelegate.shared.updateAccountsMenu()
+					_, _ in AppDelegate.shared.updateAccountsMenu()
 				}
 			}
 			else {
@@ -147,8 +155,8 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 			searchSegmentedControl.isHidden = !hasUser
 			statusComposerSegmentedControl.isHidden = !hasUser
 			newColumnSegmentedControl.isHidden = !hasUser
-			timelinesViewController.columnViewControllers.forEach({ columnPopUpButtonMap.object(forKey: $0)?.isHidden = !hasUser })
-			columnPopUpButtonMap.objectEnumerator()?.forEach({ ($0 as? NSControl)?.isHidden = !hasUser })
+			timelinesViewController.columnViewControllers.forEach { columnPopUpButtonMap.object(forKey: $0)?.isHidden = !hasUser }
+			columnPopUpButtonMap.objectEnumerator()?.forEach { ($0 as? NSControl)?.isHidden = !hasUser }
 
 			invalidateRestorableState()
 
@@ -177,16 +185,16 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 	}
 
 	private lazy var accountMenuItems: [NSMenuItem] = {
-		return [
+		[
 			NSMenuItem(title: 🔠("View Profile"),
-					   action: #selector(showUserProfile(_:)),
-					   keyEquivalent: ""),
+			           action: #selector(showUserProfile(_:)),
+			           keyEquivalent: ""),
 			NSMenuItem(title: 🔠("Open Profile in Browser"),
-					   action: #selector(openUserProfileInBrowser(_:)),
-					   keyEquivalent: ""),
+			           action: #selector(openUserProfileInBrowser(_:)),
+			           keyEquivalent: ""),
 			NSMenuItem(title: 🔠("View Favorites"),
-					   action: #selector(showUserFavorites(_:)),
-					   keyEquivalent: "F").with(modifierMask: [.command, .shift]),
+			           action: #selector(showUserFavorites(_:)),
+			           keyEquivalent: "F").with(modifierMask: [.command, .shift]),
 			.separator()
 		]
 	}()
@@ -205,12 +213,12 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 	}
 
 	override func encodeRestorableState(with coder: NSCoder) {
-		let columnModels = timelinesViewController.columnViewControllers.compactMap({ $0.modelRepresentation })
-		let encodedColumnModels = columnModels.map({ $0.rawValue }).joined(separator: ";")
+		let columnModels = timelinesViewController.columnViewControllers.compactMap { $0.modelRepresentation }
+		let encodedColumnModels = columnModels.map { $0.rawValue }.joined(separator: ";")
 
 		coder.encode(currentAccount?.uuid, forKey: CodingKeys.currentUser)
 		coder.encode(encodedColumnModels, forKey: CodingKeys.columns)
-		coder.encode(preservedWindowFrameStack.map({ NSValue(rect: $0) }), forKey: CodingKeys.preservedWindowFrameStack)
+		coder.encode(preservedWindowFrameStack.map { NSValue(rect: $0) }, forKey: CodingKeys.preservedWindowFrameStack)
 
 		if let navigationStack = sidebarSubcontroller.navigationStack {
 			// HOTFIX: Swift classes with parameter types do not encode properly in *Release*
@@ -226,7 +234,8 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 
 	override func restoreState(with coder: NSCoder) {
 		if let uuid: UUID = coder.decodeObject(forKey: CodingKeys.currentUser),
-			let account = accountsService.account(with: uuid) {
+		   let account = accountsService.account(with: uuid)
+		{
 			currentAccount = account
 		}
 		else {
@@ -235,7 +244,7 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 
 		if let encodedColumnModels: String = coder.decodeObject(forKey: CodingKeys.columns) {
 			let columnModels = encodedColumnModels.split(separator: ";")
-												  .compactMap({ ColumnMode(rawValue: String($0)) })
+				.compactMap { ColumnMode(rawValue: String($0)) }
 
 			for model in columnModels {
 				appendColumnIfFitting(model: model, expand: false)
@@ -243,7 +252,7 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		}
 
 		if let frameStack: [NSValue] = coder.decodeObject(forKey: CodingKeys.preservedWindowFrameStack) {
-			preservedWindowFrameStack = Stack(frameStack.compactMap({ $0.rectValue }))
+			preservedWindowFrameStack = Stack(frameStack.compactMap { $0.rectValue })
 		}
 		else {
 			preservedWindowFrameStack = []
@@ -263,8 +272,8 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 			if let stack = NavigationStack<SidebarMode>(coder: decoder) {
 				timelinesSplitViewController.preserveSplitViewSizeForNextSidebarInstall = true
 				sidebarSubcontroller = SidebarSubcontroller(sidebarContainer: self,
-															navigationControl: sidebarNavigationSegmentedControl,
-															navigationStack: stack)
+				                                            navigationControl: sidebarNavigationSegmentedControl,
+				                                            navigationStack: stack)
 			}
 		}
 
@@ -285,20 +294,20 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		userPopUpButtonController = UserPopUpButtonSubcontroller(display: self)
 
 		observations.observe(on: .main, timelinesViewController, \TimelinesViewController.columnViewControllersCount) {
-				[weak self] timelinesViewController, change in
-				self?.updateColumnsPopUpButtons(for: timelinesViewController.columnViewControllers)
-				self?.newColumnSegmentedControl.setEnabled(timelinesViewController.canAppendStatusList, forSegment: 0)
-				self?.invalidateRestorableState()
-			}
+			[weak self] timelinesViewController, _ in
+			self?.updateColumnsPopUpButtons(for: timelinesViewController.columnViewControllers)
+			self?.newColumnSegmentedControl.setEnabled(timelinesViewController.canAppendStatusList, forSegment: 0)
+			self?.invalidateRestorableState()
+		}
 
 		observations.observe(AppDelegate.shared, \AppDelegate.appIsReady) {
-				[weak self] (appDelegate, _) in
+			[weak self] appDelegate, _ in
 
-				if appDelegate.appIsReady, let client = self?.client {
-					self?.timelinesViewController.columnViewControllers.forEach({ $0.client = client })
-					self?.revalidateSidebarAccountReference()
-				}
+			if appDelegate.appIsReady, let client = self?.client {
+				self?.timelinesViewController.columnViewControllers.forEach { $0.client = client }
+				self?.revalidateSidebarAccountReference()
 			}
+		}
 
 		guard let window = window else { return }
 
@@ -306,7 +315,7 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 	}
 
 	func handleDetach() {
-		for _ in 0..<timelinesViewController.columnViewControllersCount {
+		for _ in 0 ..< timelinesViewController.columnViewControllersCount {
 			removeColumn(at: 0, contract: false)
 		}
 	}
@@ -355,7 +364,7 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 			viewController = AccountsPlaceholderController()
 		}
 
-		contentView.subviews.forEach({ $0.isHidden = true })
+		contentView.subviews.forEach { $0.isHidden = true }
 
 		contentViewController?.addChild(viewController)
 		contentView.addSubview(viewController.view)
@@ -374,7 +383,7 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		placeholderViewController?.removeFromParent()
 		placeholderViewController = nil
 
-		contentViewController?.view.subviews.forEach({ $0.isHidden = false })
+		contentViewController?.view.subviews.forEach { $0.isHidden = false }
 	}
 
 	func presentSearchWindow() {
@@ -382,11 +391,11 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 
 		guard
 			currentInstance != nil,
-			let account = self.currentAccount,
-			let client = self.client,
+			let account = currentAccount,
+			let client = client,
 			let searchWindowController = storyboard.instantiateInitialController() as? SearchWindowController,
 			let searchWindow = searchWindowController.window,
-			let	timelinesWindow = self.window
+			let timelinesWindow = window
 		else {
 			return
 		}
@@ -395,17 +404,17 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		searchWindowController.set(searchDelegate: self)
 
 		AppDelegate.shared.instanceService.instance(for: account) {
-				[weak self] (instance) in
+			[weak self] instance in
 
-				guard let instance = instance else { return }
+			guard let instance = instance else { return }
 
-				searchWindowController.set(instance: instance)
-				self?.searchWindowController = searchWindowController
+			searchWindowController.set(instance: instance)
+			self?.searchWindowController = searchWindowController
 
-				timelinesWindow.beginSheet(searchWindow) {
-						_ in self?.searchWindowController = nil
-					}
+			timelinesWindow.beginSheet(searchWindow) {
+				_ in self?.searchWindowController = nil
 			}
+		}
 	}
 
 	func adjustWindowFrame(adjustment: WindowSizeAdjustment) {
@@ -490,27 +499,28 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 
 	private func revalidateSidebarAccountReference() {
 		if let accountBoundSidebar = timelinesSplitViewController.sidebarViewController as? AccountBound,
-			let currentAccount = accountBoundSidebar.account,
-			let instance = currentInstance,
-			let client = client {
+		   let currentAccount = accountBoundSidebar.account,
+		   let instance = currentInstance,
+		   let client = client
+		{
 			ResolverService(client: client).resolve(account: currentAccount, activeInstance: instance) {
-					[weak self] (result) in
+				[weak self] result in
 
-					DispatchQueue.main.async {
-							switch result {
-							case .success(let account):
-								if AppDelegate.shared.appIsReady {
-									self?.timelinesSplitViewController.sidebarViewController?.client = client
-								}
-								accountBoundSidebar.setRecreatedAccount(account)
-								self?.invalidateRestorableState()
-
-							case .failure(let error):
-								self?.displayError(error)
-								self?.sidebarSubcontroller.uninstallSidebar()
-							}
+				DispatchQueue.main.async {
+					switch result {
+					case .success(let account):
+						if AppDelegate.shared.appIsReady {
+							self?.timelinesSplitViewController.sidebarViewController?.client = client
 						}
+						accountBoundSidebar.setRecreatedAccount(account)
+						self?.invalidateRestorableState()
+
+					case .failure(let error):
+						self?.displayError(error)
+						self?.sidebarSubcontroller.uninstallSidebar()
+					}
 				}
+			}
 		}
 		else {
 			timelinesSplitViewController.sidebarViewController?.client = client
@@ -528,18 +538,18 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		}
 
 		constraints.append(TrackingLayoutConstraint.constraint(trackingMaxXOf: contentView,
-															   targetView: newColumnSegmentedControl,
-															   containerView: toolbarView,
-															   targetAttribute: .trailing,
-															   containerAttribute: .leading)
-													.with(priority: .defaultLow))
+		                                                       targetView: newColumnSegmentedControl,
+		                                                       containerView: toolbarView,
+		                                                       targetAttribute: .trailing,
+		                                                       containerAttribute: .leading)
+				.with(priority: .defaultLow))
 
 		constraints.append(contentsOf: [
 			currentUserPopUpButton.leadingAnchor.constraint(equalTo: toolbarView.leadingAnchor, constant: 6),
 			searchSegmentedControl.leadingAnchor.constraint(equalTo: statusComposerSegmentedControl.trailingAnchor,
-															   constant: 8),
+			                                                constant: 8),
 			newColumnSegmentedControl.leadingAnchor.constraint(equalTo: searchSegmentedControl.trailingAnchor,
-															   constant: 8),
+			                                                   constant: 8),
 			toolbarView.trailingAnchor.constraint(greaterThanOrEqualTo: newColumnSegmentedControl.trailingAnchor, constant: 6)
 		])
 
@@ -547,12 +557,12 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 	}
 
 	private func updateColumnsPopUpButtons(for columnViewControllers: [ColumnViewController]) {
-		guard let toolbarView = self.toolbarContainerView?.superview else { return }
+		guard let toolbarView = toolbarContainerView?.superview else { return }
 
 		NSLayoutConstraint.deactivate(popUpButtonConstraints)
 		popUpButtonConstraints.removeAll()
-		
-		let takenModes = columnViewControllers.compactMap({ $0.modelRepresentation as? ColumnMode })
+
+		let takenModes = columnViewControllers.compactMap { $0.modelRepresentation as? ColumnMode }
 
 		var previousButton = currentUserPopUpButton
 
@@ -567,92 +577,91 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 			}
 
 			let popupButtonMenu = buildColumnsPopupButtonMenu(currentColumnMode: currentModel,
-															  takenModes: takenModes,
-															  index: index)
-			
+			                                                  takenModes: takenModes,
+			                                                  index: index)
+
 			popUpButton.menu = popupButtonMenu
 			popUpButton.tag = index
 			popUpButton.select(popupButtonMenu.item(withRepresentedObject: currentModel))
 
 			popUpButtonConstraints.append(TrackingLayoutConstraint
-											.constraint(trackingMidXOf: column.view,
-														targetView: popUpButton,
-														containerView: toolbarView,
-														targetAttribute: .centerX,
-														containerAttribute: .leading)
-											.with(priority: .defaultLow + 248))
+				.constraint(trackingMidXOf: column.view,
+				            targetView: popUpButton,
+				            containerView: toolbarView,
+				            targetAttribute: .centerX,
+				            containerAttribute: .leading)
+				.with(priority: .defaultLow + 248))
 
 			popUpButtonConstraints.append(popUpButton.leadingAnchor.constraint(
-											greaterThanOrEqualTo: previousButton.trailingAnchor,
-											constant: 8))
+				greaterThanOrEqualTo: previousButton.trailingAnchor,
+				constant: 8
+			))
 
 			previousButton = popUpButton
 		}
 
 		if previousButton != currentUserPopUpButton {
 			popUpButtonConstraints.append(statusComposerSegmentedControl.leadingAnchor.constraint(
-											greaterThanOrEqualTo: previousButton.trailingAnchor,
-											constant: 8))
+				greaterThanOrEqualTo: previousButton.trailingAnchor,
+				constant: 8
+			))
 		}
 
 		let newColumnMenuItems = buildNewColumnMenuItems(takenModes: takenModes)
-		
+
 		newColumnMenu.setItems(newColumnMenuItems)
 
 		newColumnSegmentedControl.setEnabled(!newColumnMenu.items.isEmpty, forSegment: 0)
 
 		NSLayoutConstraint.activate(popUpButtonConstraints)
 	}
-	
-	func buildColumnsPopupButtonMenu(currentColumnMode: ColumnMode,
-									 takenModes: [ColumnMode],
-									 index: Int) -> NSMenu {
 
+	func buildColumnsPopupButtonMenu(currentColumnMode: ColumnMode,
+	                                 takenModes: [ColumnMode],
+	                                 index: Int) -> NSMenu
+	{
 		let followedLists = currentAccount?.followedLists
-		
+
 		logger.debug2("Building columns popup menu. Followed lists: \(followedLists?.count ?? 0)")
 
 		let staticColumnModes = ColumnMode.staticItems
-		
+
 		let menu = NSMenu(title: "")
-		
+
 		menu.autoenablesItems = false
-		
-		var items: [NSMenuItem] = staticColumnModes.filter({ !takenModes.contains($0) })
-												   .map({ $0.makeMenuItemForChanging(with: self, columnId: index) })
+
+		var items: [NSMenuItem] = staticColumnModes.filter { !takenModes.contains($0) }
+			.map { $0.makeMenuItemForChanging(with: self, columnId: index) }
 
 		// don't double-append menu item if it's a list (which we're building later)
 		switch currentColumnMode {
-		case .list(_):
+		case .list:
 			break
 		default:
 			items.append(currentColumnMode.makeMenuItemForChanging(with: self, columnId: index))
-			break
 		}
-		
+
 		items.sort(by: { $0.columnModel! < $1.columnModel! })
-		
+
 		var listItems: [NSMenuItem] = []
 		var haveAtLeastOneList = false
 
-		if let followedLists = followedLists
-		{
+		if let followedLists = followedLists {
 			if followedLists.count > 0 {
 				listItems.append(.separator())
 				listItems.append(.sectionHeader(🔠("Lists")))
-				
+
 				for _list in followedLists {
-					if let list = _list as? FollowedList
-					{
+					if let list = _list as? FollowedList {
 						let columnMode = ColumnMode.list(list: list)
-						
+
 						listItems.append(columnMode.makeMenuItemForChanging(with: self, columnId: index))
 						haveAtLeastOneList = true
 					}
 				}
 			}
 		}
-		
+
 		if haveAtLeastOneList {
 			items.append(contentsOf: listItems)
 		}
@@ -676,32 +685,30 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		}
 
 		menu.setItems(items)
-		
+
 		return menu
 	}
-	
+
 	func buildNewColumnMenuItems(takenModes: [ColumnMode]) -> [NSMenuItem] {
-		var items: [NSMenuItem] = ColumnMode.staticItems.filter({ !takenModes.contains($0)} )
-														.map({ $0.makeMenuItemForAdding(with: self) })
-		
+		var items: [NSMenuItem] = ColumnMode.staticItems.filter { !takenModes.contains($0) }
+			.map { $0.makeMenuItemForAdding(with: self) }
+
 		let followedLists = currentAccount?.followedLists
-		
+
 		logger.debug2("Building new column menu. Followed lists: \(followedLists?.count ?? 0)")
 
 		var listItems: [NSMenuItem] = []
 		var haveAtLeastOneList = false
 
-		if let followedLists = followedLists
-		{
+		if let followedLists = followedLists {
 			if followedLists.count > 0 {
 				listItems.append(.separator())
 				listItems.append(.sectionHeader(🔠("Lists")))
-				
+
 				for _list in followedLists {
-					if let list = _list as? FollowedList
-					{
+					if let list = _list as? FollowedList {
 						let columnMode = ColumnMode.list(list: list)
-						
+
 						if !takenModes.contains(columnMode) {
 							listItems.append(columnMode.makeMenuItemForAdding(with: self))
 							haveAtLeastOneList = true
@@ -710,11 +717,11 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 				}
 			}
 		}
-		
+
 		if haveAtLeastOneList {
 			items.append(contentsOf: listItems)
 		}
-		
+
 		return items
 	}
 
@@ -723,11 +730,11 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 	override func moveRight(_ sender: Any?) {
 		timelinesViewController.makeNextColumnFirstResponder()
 	}
-	
+
 	override func moveDown(_ sender: Any?) {
 		timelinesViewController.makeNextColumnFirstResponder()
 	}
-	
+
 	override func moveUp(_ sender: Any?) {
 		timelinesViewController.makeNextColumnFirstResponder()
 	}
@@ -737,8 +744,7 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 	}
 }
 
-extension TimelinesWindowController: SidebarContainer
-{
+extension TimelinesWindowController: SidebarContainer {
 	func willInstallSidebar(viewController: NSViewController) {
 		if let currentWindowFrame = window?.frame {
 			preservedWindowFrameStack.push(currentWindowFrame)
@@ -749,7 +755,7 @@ extension TimelinesWindowController: SidebarContainer
 
 	func didInstallSidebar(viewController: NSViewController, with mode: SidebarMode) {
 		guard
-			let toolbarView = self.toolbarContainerView,
+			let toolbarView = toolbarContainerView,
 			closeSidebarSegmentedControl?.superview == nil,
 			sidebarNavigationSegmentedControl.superview == nil,
 			let titleMode = sidebarViewController?.titleMode
@@ -792,7 +798,7 @@ extension TimelinesWindowController: SidebarContainer
 			toolbarView.trailingAnchor.constraint(equalTo: closeSidebarButton.trailingAnchor, constant: 8),
 			leadingConstraint,
 			navigationControl.leadingAnchor.constraint(greaterThanOrEqualTo: newColumnSegmentedControl.trailingAnchor,
-													   constant: 10),
+			                                           constant: 10),
 
 			titleView.leadingAnchor.constraint(greaterThanOrEqualTo: navigationControl.trailingAnchor, constant: 8),
 			closeSidebarButton.leadingAnchor.constraint(greaterThanOrEqualTo: titleView.trailingAnchor, constant: 8),
@@ -809,8 +815,8 @@ extension TimelinesWindowController: SidebarContainer
 	}
 
 	func didUpdateSidebar(viewController: NSViewController, previousViewController: NSViewController, with mode: SidebarMode) {
-		guard let toolbarView = self.toolbarContainerView,
-			  let sidebarViewController = self.sidebarViewController
+		guard let toolbarView = toolbarContainerView,
+		      let sidebarViewController = sidebarViewController
 		else { return }
 
 		sidebarTitleViewController.titleMode = sidebarViewController.titleMode
@@ -861,8 +867,7 @@ extension TimelinesWindowController: SidebarContainer
 	}
 }
 
-extension TimelinesWindowController
-{
+extension TimelinesWindowController {
 	func appendColumnIfFitting(model: ColumnModel, expand: Bool = true) {
 		guard
 			let columnViewController = timelinesViewController.appendColumnIfFitting(model: model, expand: expand)
@@ -872,7 +877,7 @@ extension TimelinesWindowController
 
 		columnViewController.client = AppDelegate.shared.appIsReady ? client : nil
 
-		guard let toolbarView = self.toolbarContainerView else {
+		guard let toolbarView = toolbarContainerView else {
 			return
 		}
 
@@ -921,11 +926,10 @@ extension TimelinesWindowController
 	}
 }
 
-extension TimelinesWindowController: NSWindowDelegate
-{
+extension TimelinesWindowController: NSWindowDelegate {
 	func windowDidChangeOcclusionState(_ notification: Foundation.Notification) {
 		guard let occlusionState = window?.occlusionState else { return }
-		timelinesViewController.columnViewControllers.forEach({ $0.containerWindowOcclusionStateDidChange(occlusionState)})
+		timelinesViewController.columnViewControllers.forEach { $0.containerWindowOcclusionStateDidChange(occlusionState) }
 	}
 
 	func windowWillClose(_ notification: Foundation.Notification) {
@@ -934,8 +938,7 @@ extension TimelinesWindowController: NSWindowDelegate
 	}
 }
 
-extension TimelinesWindowController: NSMenuItemValidation
-{
+extension TimelinesWindowController: NSMenuItemValidation {
 	func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
 		if menuItem.action == #selector(TimelinesWindowController.dismissSidebar(_:)) {
 			return sidebarSubcontroller.sidebarMode != nil
@@ -945,8 +948,7 @@ extension TimelinesWindowController: NSMenuItemValidation
 	}
 }
 
-extension TimelinesWindowController: SearchViewDelegate
-{
+extension TimelinesWindowController: SearchViewDelegate {
 	func searchView(_ searchView: SearchViewController, userDidSelect selection: SearchResultSelection) {
 		guard let instance = currentInstance else { return }
 
@@ -963,14 +965,12 @@ extension TimelinesWindowController: SearchViewDelegate
 	}
 }
 
-extension TimelinesWindowController: AccountAuthorizationSource
-{
+extension TimelinesWindowController: AccountAuthorizationSource {
 	var sourceWindow: NSWindow? {
 		return window
 	}
 
-	func prepareForAuthorization() {
-	}
+	func prepareForAuthorization() {}
 
 	func successfullyAuthenticatedUser(with userUUID: UUID) {
 		currentAccount = accountsService.account(with: userUUID)
@@ -981,8 +981,7 @@ extension TimelinesWindowController: AccountAuthorizationSource
 	}
 }
 
-extension TimelinesWindowController: AuthorizedAccountProviding
-{
+extension TimelinesWindowController: AuthorizedAccountProviding {
 	var attachmentPresenter: AttachmentPresenting {
 		return timelinesViewController
 	}
@@ -1008,7 +1007,8 @@ extension TimelinesWindowController // IBActions
 		guard let composerWindow = composerWindowController.window else { return }
 
 		if let composerScreen = composerWindow.screen, let timelinesScreen = window?.screen,
-			composerScreen !== timelinesScreen {
+		   composerScreen !== timelinesScreen
+		{
 			// Move window to the inside of the screen where the current timelines window is
 			composerWindow.setFrameOrigin(timelinesScreen.visibleFrame.origin)
 		}
@@ -1050,7 +1050,7 @@ extension TimelinesWindowController // IBActions
 		guard
 			let selectableCurrentModel = columnViewControllers[columnIndex].modelRepresentation as? ColumnMode,
 			selectableCurrentModel != newModel
-			else {
+		else {
 			// Nothing to change
 			return
 		}
@@ -1062,7 +1062,7 @@ extension TimelinesWindowController // IBActions
 		guard
 			let menuItem = sender as? NSMenuItem,
 			let columnIndex = menuItem.representedObject as? Int
-			else {
+		else {
 			return
 		}
 
@@ -1073,11 +1073,9 @@ extension TimelinesWindowController // IBActions
 		guard
 			let menuItem = sender as? NSMenuItem,
 			let columnIndex = menuItem.representedObject as? Int
-			else {
+		else {
 			return
 		}
-
-
 
 		reloadColumn(at: columnIndex)
 	}
@@ -1118,10 +1116,10 @@ extension TimelinesWindowController: AccountsMenuProvider {
 
 	var accountsMenuItems: [NSMenuItem] {
 		let accountItems = accounts.makeMenuItems(currentUser: currentAccount?.uuid,
-												  action: #selector(UserPopUpButtonSubcontroller.selectAccount(_:)),
-												  target: userPopUpButtonController,
-												  emojiContainer: nil,
-												  setKeyEquivalents: true).menuItems
+		                                          action: #selector(UserPopUpButtonSubcontroller.selectAccount(_:)),
+		                                          target: userPopUpButtonController,
+		                                          emojiContainer: nil,
+		                                          setKeyEquivalents: true).menuItems
 
 		let bookmarkedTags = currentAccount?.bookmarkedTagsList ?? []
 		var tagMenuItems: [NSMenuItem] = []
@@ -1130,8 +1128,8 @@ extension TimelinesWindowController: AccountsMenuProvider {
 			tagMenuItems.append(.separator())
 
 			let bookmarkedTagItems = MenuItemFactory.makeMenuItems(forTags: bookmarkedTags,
-																   action: #selector(showTag(_:)),
-																   target: self)
+			                                                       action: #selector(showTag(_:)),
+			                                                       target: self)
 
 			let menu = NSMenu(title: "")
 			menu.setItems(bookmarkedTagItems)
@@ -1146,15 +1144,15 @@ extension TimelinesWindowController: AccountsMenuProvider {
 private extension TimelinesWindowController {
 	func makeCloseSidebarButton() -> NSSegmentedControl {
 		let button = NSSegmentedControl(images: [#imageLiteral(resourceName: "close_sidebar")], trackingMode: .momentary,
-										target: self, action: #selector(dismissSidebar(_:)))
+		                                target: self, action: #selector(dismissSidebar(_:)))
 		button.translatesAutoresizingMaskIntoConstraints = false
 		return button
 	}
 
 	static func makeSidebarNavigationSegmentedControl() -> NSSegmentedControl {
 		let segmentedControl = NSSegmentedControl(images: [NSImage(named: NSImage.goBackTemplateName)!,
-														   NSImage(named: NSImage.goForwardTemplateName)!],
-												  trackingMode: .momentary, target: nil, action: nil)
+		                                                   NSImage(named: NSImage.goForwardTemplateName)!],
+		                                          trackingMode: .momentary, target: nil, action: nil)
 		segmentedControl.translatesAutoresizingMaskIntoConstraints = false
 		return segmentedControl
 	}
@@ -1168,22 +1166,22 @@ private extension TimelinesWindowController {
 
 	static func makeNewColumnSegmentedControl() -> NSSegmentedControl {
 		let segmentedControl = NSSegmentedControl(images: [#imageLiteral(resourceName: "add_panel")], trackingMode: .momentary,
-												  target: nil, action: #selector(addColumnMode(_:)))
+		                                          target: nil, action: #selector(addColumnMode(_:)))
 		segmentedControl.translatesAutoresizingMaskIntoConstraints = false
 		return segmentedControl
 	}
 
 	static func makeStatusComposerSegmentedControl() -> NSSegmentedControl {
 		let segmentedControl = NSSegmentedControl(images: [#imageLiteral(resourceName: "compose")], trackingMode: .momentary,
-												  target: nil, action: #selector(composeStatus(_:)))
+		                                          target: nil, action: #selector(composeStatus(_:)))
 		segmentedControl.translatesAutoresizingMaskIntoConstraints = false
 		return segmentedControl
 	}
-	
+
 	static func makeSearchSegmentedControl() -> NSSegmentedControl {
 		let segmentedControl = NSSegmentedControl(images: [NSImage(systemSymbolName: "magnifyingglass", accessibilityDescription: "Search")!],
-												  trackingMode: .momentary,
-												  target: nil, action: #selector(showSearch(_:)))
+		                                          trackingMode: .momentary,
+		                                          target: nil, action: #selector(showSearch(_:)))
 		segmentedControl.translatesAutoresizingMaskIntoConstraints = false
 		return segmentedControl
 	}
