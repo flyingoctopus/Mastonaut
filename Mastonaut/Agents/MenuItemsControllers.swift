@@ -97,6 +97,9 @@ class StatusMenuItemsController: MenuItemsController
 			makeItemCopyStatusTextContents(status),
 			makeItemCopyLinkToStatus(status),
 			.separator(),
+			makeBoostItem(status, interactionHandler: handler),
+			makeFavoriteItem(status, interactionHandler: handler),
+			.separator(),
 			makeActionItem(title: 🔠("Mention @\(author.username)…"))
 			{ handler.mention(userHandle: "@\(author.acct)", directMessage: false) },
 			makeActionItem(title: 🔠("Direct message @\(author.username)…"))
@@ -156,6 +159,30 @@ class StatusMenuItemsController: MenuItemsController
 		}
 
 		return items
+	}
+
+	private func makeBoostItem(_ status: Status, interactionHandler: StatusInteractionHandling) -> NSMenuItem
+	{
+		if !(status.reblogged ?? false)
+		{
+			return makeActionItem(title: 🔠("Boost Toot")) { interactionHandler.reblogStatus(with: status.id) { _ in } }
+		}
+		else
+		{
+			return makeActionItem(title: 🔠("Unboost Toot")) { interactionHandler.unreblogStatus(with: status.id) { _ in } }
+		}
+	}
+
+	private func makeFavoriteItem(_ status: Status, interactionHandler: StatusInteractionHandling) -> NSMenuItem
+	{
+		if !(status.favourited ?? false)
+		{
+			return makeActionItem(title: 🔠("Favorite Toot")) { interactionHandler.favoriteStatus(with: status.id) { _ in } }
+		}
+		else
+		{
+			return makeActionItem(title: 🔠("Unfavorite Toot")) { interactionHandler.unfavoriteStatus(with: status.id) { _ in } }
+		}
 	}
 
 	private func makeItemCopyStatusTextContents(_ status: Status) -> NSMenuItem
