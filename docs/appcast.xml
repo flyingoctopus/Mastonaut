@@ -4,6 +4,30 @@
         <title>Mastonaut</title>
 
         <item>
+            <title>1.4.1</title>
+            <pubDate>2022-12-03</pubDate>
+            <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/chucker/Mastonaut/releases/download/app-1.4.1/Mastonaut-1.4.1.zip"
+                sparkle:version="137" sparkle:shortVersionString="1.4.1" length="8251300"
+                type="application/octet-stream" />-->
+            <description>
+                <![CDATA[
+<p>This release mostly squashes bugs <g-emoji class="g-emoji" alias="lady_beetle" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f41e.png">🐞</g-emoji>, which is adorable.</p>
+<h1>Features</h1>
+<p><strong>Filter notifications by type:</strong> for example, you can now only show notifications for mentions.</p>
+<p><strong>Show CW-hidden pictures if the picture is clicked</strong> (previously, you had to click the exclamation mark triangle)</p>
+<h1>Fixes, minor changes</h1>
+<p><code>cmd</code>-C and <code>cmd</code>-<code>shift</code>-C can now be used to copy a toot's URL or contents, respectively.</p>
+<p>You can once again paste text into the compose window.</p>
+<p>Search is now more discoverable with a <g-emoji class="g-emoji" alias="mag" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f50d.png">🔍</g-emoji> icon in the toolbar.</p>
+<p>Filters previously didn't apply to boosts.</p>
+<p>The sharing extension now actually includes the shared URL.</p>
+<p>Oh, and the sharing extension no longer crashes.</p>
+                ]]>
+            </description>
+        </item>
+        
+        <item>
             <title>1.4.0</title>
             <pubDate>2022-11-25</pubDate>
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
