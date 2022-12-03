@@ -31,7 +31,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 	case notifications
 
 	case favorites
-//	case bookmarks
+	case bookmarks
 
 	case list(list: FollowedList)
 	case tag(name: String)
@@ -46,7 +46,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 		case .notifications: return "notifications"
 
 		case .favorites: return "favorites"
-//		case .bookmarks: return "bookmarks"
+		case .bookmarks: return "bookmarks"
 
 		case .list(let list): return "list:\(list.title ?? "")"
 		case .tag(let name): return "tag:\(name)"
@@ -63,7 +63,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 		case "notifications": self = .notifications
 
 		case "favorites": self = .favorites
-//		case "bookmarks": self = .bookmarks
+		case "bookmarks": self = .bookmarks
 
 //		case let rawValue where rawValue.hasPrefix("list:"):
 //			let id = rawValue.suffix(from: rawValue.index(after: rawValue.range(of: "list:")!.upperBound))
@@ -88,7 +88,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 		case .notifications: return -4
 
 		case .favorites: return -3
-//		case .bookmarks: return -2
+		case .bookmarks: return -2
 
 		case .list: return -1
 		case .tag: return 0
@@ -105,7 +105,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 		case .notifications: return NotificationListViewController()
 
 		case .favorites: return TimelineViewController(source: .favorites)
-//		case .bookmarks: return TimelineViewController(source: .bookmarks)
+		case .bookmarks: return TimelineViewController(source: .bookmarks)
 
 		case .list(let list): return TimelineViewController(source: .list(list: list))
 		case .tag(let name): return TimelineViewController(source: .tag(name: name))
@@ -139,9 +139,9 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 			menuItem.title = 🔠("Favorites")
 			menuItem.image = NSImage(systemSymbolName: "star", accessibilityDescription: "Favorites")
 
-//		case .bookmarks:
-//			menuItem.title = 🔠("Bookmarks")
-//			menuItem.image = NSImage(systemSymbolName: "bookmark", accessibilityDescription: "Bookmarks")
+		case .bookmarks:
+			menuItem.title = 🔠("Bookmarks")
+			menuItem.image = NSImage(systemSymbolName: "bookmark", accessibilityDescription: "Bookmarks")
 
 		case .list(let list):
 			menuItem.title = 🔠(list.title!)
@@ -162,7 +162,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 		case .timeline, .localTimeline, .publicTimeline, .notifications: return 0
 
 		case .favorites: return 1
-//		case .bookmarks: return -2
+		case .bookmarks: return 1
 
 		case .list: return 2
 
@@ -196,7 +196,7 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 	/// Personal column modes that are always available (as opposed to lists, hashtags, etc.)
 	static var staticPersonalItems: [ColumnMode]
 	{
-		return [.favorites] // , .bookmarks]
+		return [.favorites, .bookmarks]
 	}
 
 	static func == (lhs: ColumnMode, rhs: ColumnMode) -> Bool
@@ -214,8 +214,8 @@ enum ColumnMode: RawRepresentable, ColumnModel, Equatable, Comparable
 
 		case (.favorites, .favorites):
 			return true
-//		case (.bookmarks, .bookmarks):
-//			return true
+		case (.bookmarks, .bookmarks):
+			return true
 
 		case (.list(let leftList), .list(let rightList)):
 			return leftList.id == rightList.id

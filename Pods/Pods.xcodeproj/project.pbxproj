@@ -161,6 +161,7 @@
 		5E6CEBB1E241E49B613DF521D8A7FAD5 /* SVGPreserveAspectRatio.m in Sources */ = {isa = PBXBuildFile; fileRef = A9B68124CB9BA503FA92409B70611971 /* SVGPreserveAspectRatio.m */; };
 		5EB797C886EBFAF932CDB2547EC1B337 /* Pods-QuickToot-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 709167ED5D653BA7760EAF37CB883A95 /* Pods-QuickToot-dummy.m */; };
 		5ECE4FACE2CB00D6ADAE8B11D11EA97D /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDB7C679E18DE441820379A4215E442 /* Card.swift */; };
+		5FD6B426293C003A008D90BE /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD6B425293C003A008D90BE /* Bookmarks.swift */; };
 		603ADC95C87F56998597BE374AC5299D /* CSSStyleSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D431E210C46EC5952848DFA7FFD2CB2 /* CSSStyleSheet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		613238FFB119069BB0FC9B3354498D94 /* Element.h in Headers */ = {isa = PBXBuildFile; fileRef = E870AAF01308FA35A5C93E8DE97590AF /* Element.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6134DDAE275EC4FF7BB6B1CCC3CF4183 /* SVGLineElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A02575430B550212546D642972B277E /* SVGLineElement.m */; };
@@ -605,6 +606,7 @@
 		5D10CE4B9DC3666FCDCDB8A112FF007E /* MediaList.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MediaList.h; path = "Source/DOM classes/Core DOM/MediaList.h"; sourceTree = "<group>"; };
 		5D3C0D067BD530C571B4D0B6B7760759 /* DDDispatchQueueLogFormatter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DDDispatchQueueLogFormatter.m; path = Sources/CocoaLumberjack/Extensions/DDDispatchQueueLogFormatter.m; sourceTree = "<group>"; };
 		5EAD4B42217DC5C178B6C210F6F23B56 /* ClientDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ClientDelegate.swift; path = Sources/MastodonKit/ClientDelegate.swift; sourceTree = "<group>"; };
+		5FD6B425293C003A008D90BE /* Bookmarks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmarks.swift; sourceTree = "<group>"; };
 		60245F69232DD550728C484767531D90 /* SVGKPointsAndPathsParser.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SVGKPointsAndPathsParser.h; path = Source/Parsers/SVGKPointsAndPathsParser.h; sourceTree = "<group>"; };
 		60D480C8F159A026238680A445EAAD72 /* SVGLength.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVGLength.m; path = "Source/DOM classes/SVG-DOM/SVGLength.m"; sourceTree = "<group>"; };
 		615C70298C9C2A4B1C5AFABEA2DBDC52 /* SVGRectElement.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVGRectElement.m; path = "Source/DOM classes/Unported or Partial DOM/SVGRectElement.m"; sourceTree = "<group>"; };
@@ -1242,6 +1244,7 @@
 				1D430D1AC7C31EB9F343789938C88A71 /* Search.swift */,
 				6A7D4582D7FB14F53D0AEC4B379275F3 /* Statuses.swift */,
 				781678549BE9B2E5CC5FCF55D9255649 /* Timelines.swift */,
+				5FD6B425293C003A008D90BE /* Bookmarks.swift */,
 			);
 			name = Requests;
 			path = Sources/MastodonKit/Requests;
@@ -2309,6 +2312,7 @@
 				5ECE4FACE2CB00D6ADAE8B11D11EA97D /* Card.swift in Sources */,
 				B2BFD6AA8748A63BBCF90848FC1AC92D /* CharacterSet.swift in Sources */,
 				189F75DE3897127568EEEDB05851D98F /* Client.swift in Sources */,
+				5FD6B426293C003A008D90BE /* Bookmarks.swift in Sources */,
 				1C56AF59E11587E64F9B815A6AF27979 /* ClientApplication.swift in Sources */,
 				EAC791131083317116835FE4D67C2A58 /* ClientDelegate.swift in Sources */,
 				319F88AD980E6C45106E567CAEBCBB3D /* ClientError.swift in Sources */,

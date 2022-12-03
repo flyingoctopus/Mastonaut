@@ -73,7 +73,7 @@ class TimelineViewController: StatusListViewController
 		case .tag(let name):
 			setClientEventStream(.hashtag(name))
 
-		case .userStatuses, .userMediaStatuses, .userStatusesAndReplies, .favorites:
+		case .userStatuses, .userMediaStatuses, .userStatusesAndReplies, .favorites, .bookmarks:
 			#if DEBUG
 			DispatchQueue.main.async { self.showStatusIndicator(state: .off) }
 			#endif
@@ -106,6 +106,10 @@ class TimelineViewController: StatusListViewController
 		case .favorites:
 			let range = lastPaginationResult?.next ?? rangeForEntryFetch(for: insertion)
 			request = Favourites.all(range: range)
+
+		case .bookmarks:
+			let range = lastPaginationResult?.next ?? rangeForEntryFetch(for: insertion)
+			request = Bookmarks.all(range: range)
 
 		case .userStatuses(let account):
 			request = Accounts.statuses(id: account, excludeReplies: true, range: rangeForEntryFetch(for: insertion))
@@ -204,9 +208,12 @@ class TimelineViewController: StatusListViewController
 
 		switch source
 		{
-		case .favorites: currentContext = .home
 		case .localTimeline: currentContext = .public
 		case .publicTimeline: currentContext = .public
+
+		case .favorites: currentContext = .home
+		case .bookmarks: currentContext = .home
+			
 		case .list: currentContext = .home
 		case .tag: currentContext = .home
 		case .timeline: currentContext = .home
@@ -225,7 +232,7 @@ class TimelineViewController: StatusListViewController
 		case publicTimeline
 
 		case favorites
-//		case bookmarks
+		case bookmarks
 
 		case userStatuses(id: String)
 		case userStatusesAndReplies(id: String)
@@ -258,6 +265,7 @@ extension TimelineViewController: ColumnPresentable
 		case .publicTimeline: return ColumnMode.publicTimeline
 
 		case .favorites: return ColumnMode.favorites
+		case .bookmarks: return ColumnMode.bookmarks
 
 		case .list(let name): return ColumnMode.list(list: name)
 		case .tag(let name): return ColumnMode.tag(name: name)
