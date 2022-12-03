@@ -126,6 +126,22 @@ extension StatusInteractionHandling
 			status in completion((status?.reblogged ?? true) != true)
 		}
 	}
+	
+	func bookmarkStatus(with statusID: String, completion: @escaping (Bool) -> Void)
+	{
+		interact(using: Statuses.bookmark(id: statusID))
+		{
+			status in completion((status?.bookmarked ?? false) == true)
+		}
+	}
+
+	func unbookmarkStatus(with statusID: String, completion: @escaping (Bool) -> Void)
+	{
+		interact(using: Statuses.unbookmark(id: statusID))
+		{
+			status in completion((status?.bookmarked ?? true) != true)
+		}
+	}
 
 	private func interact(using request: Request<Status>, completion: ((Status?) -> Void)? = nil)
 	{

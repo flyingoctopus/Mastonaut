@@ -99,6 +99,7 @@ class StatusMenuItemsController: MenuItemsController
 			.separator(),
 			makeBoostItem(status, interactionHandler: handler),
 			makeFavoriteItem(status, interactionHandler: handler),
+			makeBookmarkItem(status, interactionHandler: handler),
 			.separator(),
 			makeActionItem(title: 🔠("Mention @\(author.username)…"))
 			{ handler.mention(userHandle: "@\(author.acct)", directMessage: false) },
@@ -182,6 +183,18 @@ class StatusMenuItemsController: MenuItemsController
 		else
 		{
 			return makeActionItem(title: 🔠("Unfavorite Toot")) { interactionHandler.unfavoriteStatus(with: status.id) { _ in } }
+		}
+	}
+
+	private func makeBookmarkItem(_ status: Status, interactionHandler: StatusInteractionHandling) -> NSMenuItem
+	{
+		if !(status.bookmarked ?? false)
+		{
+			return makeActionItem(title: 🔠("Bookmark Toot")) { interactionHandler.bookmarkStatus(with: status.id) { _ in } }
+		}
+		else
+		{
+			return makeActionItem(title: 🔠("Unbookmark Toot")) { interactionHandler.unbookmarkStatus(with: status.id) { _ in } }
 		}
 	}
 
