@@ -17,9 +17,9 @@
 //  GNU General Public License for more details.
 //
 
+import CoreTootin
 import Foundation
 import MastodonKit
-import CoreTootin
 
 class MenuItemsController: NSObject
 {
@@ -51,7 +51,7 @@ class MenuItemsController: NSObject
 
 	fileprivate func makeOpenURLInBrowser(title: String, url: URL) -> NSMenuItem
 	{
-		return makeActionItem(title: title, { NSWorkspace.shared.open(url) })
+		return makeActionItem(title: title) { NSWorkspace.shared.open(url) }
 	}
 
 	fileprivate func makeShareItem(url: URL) -> NSMenuItem
@@ -59,18 +59,18 @@ class MenuItemsController: NSObject
 		let shareMenuItem = NSMenuItem(title: 🔠("Share"), submenu: NSMenu(title: ""))
 
 		DispatchQueue.global(qos: .background).async
-			{
-				let shareMenuItems = ShareMenuFactory.shareMenuItems(for: url)
+		{
+			let shareMenuItems = ShareMenuFactory.shareMenuItems(for: url)
 
-				if shareMenuItems.isEmpty
-				{
-					shareMenuItem.isHidden = true
-				}
-				else
-				{
-					shareMenuItem.submenu?.setItems(shareMenuItems)
-				}
+			if shareMenuItems.isEmpty
+			{
+				shareMenuItem.isHidden = true
 			}
+			else
+			{
+				shareMenuItem.submenu?.setItems(shareMenuItems)
+			}
+		}
 
 		return shareMenuItem
 	}
@@ -80,7 +80,8 @@ class StatusMenuItemsController: MenuItemsController
 {
 	static let shared = StatusMenuItemsController()
 
-	func menuItems(forFilteredStatus status: Status, interactionHandler: StatusInteractionHandling) -> [NSMenuItem] {
+	func menuItems(forFilteredStatus status: Status, interactionHandler: StatusInteractionHandling) -> [NSMenuItem]
+	{
 		return [makeShowDetailsItem(status: status, interactionHandler: interactionHandler)]
 	}
 
@@ -97,9 +98,9 @@ class StatusMenuItemsController: MenuItemsController
 			makeItemCopyLinkToStatus(status),
 			.separator(),
 			makeActionItem(title: 🔠("Mention @\(author.username)…"))
-				{ handler.mention(userHandle: "@\(author.acct)", directMessage: false) },
+			{ handler.mention(userHandle: "@\(author.acct)", directMessage: false) },
 			makeActionItem(title: 🔠("Direct message @\(author.username)…"))
-				{ handler.mention(userHandle: "@\(author.acct)", directMessage: true) },
+			{ handler.mention(userHandle: "@\(author.acct)", directMessage: true) }
 		].compacted()
 
 		if handler.canDelete(status: status)
@@ -122,7 +123,7 @@ class StatusMenuItemsController: MenuItemsController
 
 			items.append(.separator())
 			items.append(contentsOf: mentions.map { makeShowMentionItem(mention: $0,
-																		interactionHandler: handler) })
+			                                                            interactionHandler: handler) })
 		}
 
 		let tags = status.reblog?.tags ?? status.tags
@@ -170,14 +171,14 @@ class StatusMenuItemsController: MenuItemsController
 
 	private func makeShowDetailsItem(status: Status, interactionHandler: StatusInteractionHandling) -> NSMenuItem
 	{
-		return makeActionItem(title: 🔠("Show toot details"), { interactionHandler.show(status: status) })
+		return makeActionItem(title: 🔠("Show toot details")) { interactionHandler.show(status: status) }
 	}
 
 	private func makeDeleteStatusItems(status: Status, interactionHandler: StatusInteractionHandling) -> [NSMenuItem]
 	{
 		return [
-			makeActionItem(title: 🔠("Delete"), { interactionHandler.delete(status: status, redraft: false) }),
-			makeActionItem(title: 🔠("Delete & Re-draft"), { interactionHandler.delete(status: status, redraft: true) })
+			makeActionItem(title: 🔠("Delete")) { interactionHandler.delete(status: status, redraft: false) },
+			makeActionItem(title: 🔠("Delete & Re-draft")) { interactionHandler.delete(status: status, redraft: true) }
 		]
 	}
 
@@ -185,37 +186,37 @@ class StatusMenuItemsController: MenuItemsController
 	{
 		if status.pinned != true
 		{
-			return makeActionItem(title: 🔠("Pin to Profile"), { interactionHandler.pin(status: status) })
+			return makeActionItem(title: 🔠("Pin to Profile")) { interactionHandler.pin(status: status) }
 		}
 		else
 		{
-			return makeActionItem(title: 🔠("Unpin from Profile"), { interactionHandler.unpin(status: status) })
+			return makeActionItem(title: 🔠("Unpin from Profile")) { interactionHandler.unpin(status: status) }
 		}
 	}
 
 	private func makeShowAccountItem(account: Account, interactionHandler: StatusInteractionHandling) -> NSMenuItem
 	{
-		return makeActionItem(title: "@\(account.acct)", { interactionHandler.show(account: account) })
+		return makeActionItem(title: "@\(account.acct)") { interactionHandler.show(account: account) }
 	}
 
 	private func makeShowMentionItem(mention: Mention, interactionHandler: StatusInteractionHandling) -> NSMenuItem
 	{
-		return makeActionItem(title: "@\(mention.acct)", { interactionHandler.handle(linkURL: mention.url,
-																					 knownTags: nil) })
+		return makeActionItem(title: "@\(mention.acct)") { interactionHandler.handle(linkURL: mention.url,
+		                                                                             knownTags: nil) }
 	}
 
 	private func makeShowTagItem(tag: Tag, interactionHandler: StatusInteractionHandling) -> NSMenuItem
 	{
-		return makeActionItem(title: "#\(tag.name)", { interactionHandler.show(tag: tag) })
+		return makeActionItem(title: "#\(tag.name)") { interactionHandler.show(tag: tag) }
 	}
 
 	private func makeReloadPollItem(poll: Poll, status: Status,
-									interactionHandler: StatusInteractionHandling) -> NSMenuItem
+	                                interactionHandler: StatusInteractionHandling) -> NSMenuItem
 	{
 		return makeActionItem(title: 🔠("Reload poll results"))
-			{
-				interactionHandler.refreshPoll(statusID: status.id, pollID: poll.id)
-			}
+		{
+			interactionHandler.refreshPoll(statusID: status.id, pollID: poll.id)
+		}
 	}
 }
 
@@ -224,7 +225,7 @@ class NotificationMenuItemsController: MenuItemsController
 	static let shared = NotificationMenuItemsController()
 
 	func menuItems(for notification: MastodonNotification,
-				   interactionHandler: NotificationInteractionHandling) -> [NSMenuItem]
+	               interactionHandler: NotificationInteractionHandling) -> [NSMenuItem]
 	{
 		return [
 			makeShowAccountItem(account: notification.account, interactionHandler: interactionHandler)
@@ -233,7 +234,7 @@ class NotificationMenuItemsController: MenuItemsController
 
 	private func makeShowAccountItem(account: Account, interactionHandler: NotificationInteractionHandling) -> NSMenuItem
 	{
-		return makeActionItem(title: "@\(account.acct)", { interactionHandler.show(account: account) })
+		return makeActionItem(title: "@\(account.acct)") { interactionHandler.show(account: account) }
 	}
 }
 
@@ -244,12 +245,14 @@ class AccountMenuItemsController: MenuItemsController
 	func menuItems(for account: Account, interactionHandler handler: StatusInteractionHandling) -> [NSMenuItem]
 	{
 		return [
-			makeActionItem(title: 🔠("Mention @\(account.username)…"), {
+			makeActionItem(title: 🔠("Mention @\(account.username)…"))
+			{
 				handler.mention(userHandle: "@\(account.acct)", directMessage: false)
-			}),
-			makeActionItem(title: 🔠("Direct message @\(account.username)…"), {
+			},
+			makeActionItem(title: 🔠("Direct message @\(account.username)…"))
+			{
 				handler.mention(userHandle: "@\(account.acct)", directMessage: true)
-			}),
+			},
 			.separator(),
 			makeOpenURLInBrowser(title: 🔠("Open profile in Browser"), url: account.url),
 			makeStringCopyItem(title: 🔠("Copy link to profile"), account.url.absoluteString),
