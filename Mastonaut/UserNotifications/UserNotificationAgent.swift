@@ -17,12 +17,14 @@
 //  GNU General Public License for more details.
 //
 
+import CoreTootin
 import Foundation
 import MastodonKit
-import CoreTootin
 
-extension Foundation.Notification.Name {
-	static var contextObjectsDidChange: Foundation.Notification.Name {
+extension Foundation.Notification.Name
+{
+	static var contextObjectsDidChange: Foundation.Notification.Name
+	{
 		return Notification.Name.NSManagedObjectContextObjectsDidChange
 	}
 }
@@ -40,22 +42,21 @@ class UserNotificationAgent
 	private var accountReceiverMap: [String: (receiver: ConcreteRemoteEventsReceiver, reference: ReceiverRef)] = [:]
 	private var remoteEventsCoordinator: RemoteEventsCoordinator { return .shared }
 
-
 	func setUp()
 	{
 		observations.observe(accountService, \.authorizedAccountsCount)
-			{
-				[weak self] (_, _) in DispatchQueue.main.async { self?.updateActiveEventReceivers() }
-			}
+		{
+			[weak self] _, _ in DispatchQueue.main.async { self?.updateActiveEventReceivers() }
+		}
 
 		coreDataObserver = NotificationCenter.observer(for: .contextObjectsDidChange)
-			{
-				[weak self] notification in
-				
-				guard notification.hasChangedObjects(ofType: AccountPreferences.self) else { return }
-				
-				DispatchQueue.main.async { self?.updateActiveEventReceivers() }
-			}
+		{
+			[weak self] notification in
+
+			guard notification.hasChangedObjects(ofType: AccountPreferences.self) else { return }
+
+			DispatchQueue.main.async { self?.updateActiveEventReceivers() }
+		}
 
 		updateActiveEventReceivers()
 	}
@@ -90,8 +91,8 @@ class UserNotificationAgent
 		{
 			let receiver = ConcreteRemoteEventsReceiver(mode: account.preferences(context: context).notificationDetailMode)
 			let reference = remoteEventsCoordinator.add(receiver: receiver, for: .init(baseURL: baseURL,
-																					   accessToken: accessToken,
-																					   stream: .user))
+			                                                                           accessToken: accessToken,
+			                                                                           stream: .user))
 
 			accountReceiverMap[uuid] = (receiver, reference)
 
@@ -99,10 +100,10 @@ class UserNotificationAgent
 			let acountURI = account.uri!
 
 			receiver.eventReceivedHandler =
-				{
-					[weak self] event, detailMode in
+			{
+				[weak self] event, detailMode in
 
-					guard case .notification(let notification) = event else { return }
+				guard case .notification(let notification) = event else { return }
 
 				self?.postNotification(for: uuid,
 				                       account: account,
@@ -112,16 +113,16 @@ class UserNotificationAgent
 			}
 
 			receiver.didDisconnectHandler =
-				{
-					[weak self] in
+			{
+				[weak self] in
 
-					guard
-						let self = self,
-						let reference = self.accountReceiverMap[uuid.uuidString]?.reference
-						else { return }
+				guard
+					let self = self,
+					let reference = self.accountReceiverMap[uuid.uuidString]?.reference
+				else { return }
 
-					self.remoteEventsCoordinator.reconnectListener(for: reference)
-				}
+				self.remoteEventsCoordinator.reconnectListener(for: reference)
+			}
 		}
 	}
 
@@ -155,10 +156,11 @@ class UserNotificationAgent
 		if !UserNotificationAgent.shouldShowNotification(notification,
 		                                                 accountNotificationPreferences: accountNotificationPreferences)
 		{ return }
+
 		notificationTool.postNotification(mastodonEvent: notification,
-										  receiverName: receiverName,
-										  userAccount: accountUUID,
-										  detailMode: detailMode)
+		                                  receiverName: receiverName,
+		                                  userAccount: accountUUID,
+		                                  detailMode: detailMode)
 	}
 
 	private func removeReceiver(for account: AuthorizedAccount)
