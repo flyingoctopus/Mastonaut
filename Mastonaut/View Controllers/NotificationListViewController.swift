@@ -267,24 +267,8 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 				statusIdNotificationIdMap[statusID] = notification.id
 			}
 		}
-		
-		filteredNotifications = filteredNotifications.filter({
-			($0.type == .mention && accountNotificationPreferences?.showMentions ?? true) ||
-			($0.type == .status && accountNotificationPreferences?.showStatuses ?? true) ||
 
-			($0.type == .follow && accountNotificationPreferences?.showNewFollowers ?? true) ||
-			($0.type == .follow_request && accountNotificationPreferences?.showFollowRequests ?? true) ||
-
-			($0.type == .reblog && accountNotificationPreferences?.showBoosts ?? true) ||
-			($0.type == .favourite && accountNotificationPreferences?.showFavorites ?? true) ||
-
-			($0.type == .poll && accountNotificationPreferences?.showPollResults ?? true) ||
-
-			($0.type == .update && accountNotificationPreferences?.showEdits ?? true) ||
-
-			($0.type == .admin_sign_up && accountNotificationPreferences?.showAdminSignUps ?? true) ||
-			($0.type == .admin_report && accountNotificationPreferences?.showAdminReports ?? true)
-		})
+		filteredNotifications = filteredNotifications.filter { UserNotificationAgent.shouldShowNotification($0, accountNotificationPreferences: accountNotificationPreferences) }
 
 		super.prepareNewEntries(filteredNotifications, for: insertion, pagination: pagination)
 	}
@@ -421,7 +405,8 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 	{
 		guard
 			let account = authorizedAccountProvider?.currentAccount,
-			account.preferences(context: context).notificationDisplayMode == .whenActive
+			account.preferences(context: context).notificationDisplayMode == .whenActive,
+			UserNotificationAgent.shouldShowNotification(notification, accountNotificationPreferences: accountNotificationPreferences)
 		else
 		{
 			return

@@ -104,11 +104,12 @@ class UserNotificationAgent
 
 					guard case .notification(let notification) = event else { return }
 
-					self?.postNotification(for: uuid,
-										   receiverName: acountURI,
-										   notification: notification,
-										   detailMode: detailMode)
-				}
+				self?.postNotification(for: uuid,
+				                       account: account,
+				                       receiverName: acountURI,
+				                       notification: notification,
+				                       detailMode: detailMode)
+			}
 
 			receiver.didDisconnectHandler =
 				{
@@ -124,11 +125,36 @@ class UserNotificationAgent
 		}
 	}
 
-	private func postNotification(for accountUUID: UUID,
-								  receiverName: String?,
-								  notification: MastodonNotification,
-								  detailMode: AccountPreferences.NotificationDetailMode)
+	public static func shouldShowNotification(_ notification: MastodonNotification, accountNotificationPreferences: AccountNotificationPreferences?) -> Bool
 	{
+		(notification.type == .mention && accountNotificationPreferences?.showMentions ?? true) ||
+			(notification.type == .status && accountNotificationPreferences?.showStatuses ?? true) ||
+
+			(notification.type == .follow && accountNotificationPreferences?.showNewFollowers ?? true) ||
+			(notification.type == .follow_request && accountNotificationPreferences?.showFollowRequests ?? true) ||
+
+			(notification.type == .reblog && accountNotificationPreferences?.showBoosts ?? true) ||
+			(notification.type == .favourite && accountNotificationPreferences?.showFavorites ?? true) ||
+
+			(notification.type == .poll && accountNotificationPreferences?.showPollResults ?? true) ||
+
+			(notification.type == .update && accountNotificationPreferences?.showEdits ?? true) ||
+
+			(notification.type == .admin_sign_up && accountNotificationPreferences?.showAdminSignUps ?? true) ||
+			(notification.type == .admin_report && accountNotificationPreferences?.showAdminReports ?? true)
+	}
+
+	private func postNotification(for accountUUID: UUID,
+	                              account: AuthorizedAccount,
+	                              receiverName: String?,
+	                              notification: MastodonNotification,
+	                              detailMode: AccountPreferences.NotificationDetailMode)
+	{
+		let accountNotificationPreferences = account.notificationPreferences(context: AppDelegate.shared.managedObjectContext)
+
+		if !UserNotificationAgent.shouldShowNotification(notification,
+		                                                 accountNotificationPreferences: accountNotificationPreferences)
+		{ return }
 		notificationTool.postNotification(mastodonEvent: notification,
 										  receiverName: receiverName,
 										  userAccount: accountUUID,
