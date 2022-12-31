@@ -152,7 +152,8 @@ private extension String
 			}
 
 			let prefix = mutableCopy.substring(with: result.range(at: 1))
-			replacementRanges[result.range] = "\(prefix)\(String.linkPlaceholder)"
+			let suffix = mutableCopy.substring(with: result.range(at: result.numberOfRanges - 1))
+			replacementRanges[result.range] = "\(prefix)\(String.linkPlaceholder)\(suffix)"
 		}
 
 		mutableCopy.replaceCharacters(in: replacementRanges)
