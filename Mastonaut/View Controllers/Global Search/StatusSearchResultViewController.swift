@@ -20,7 +20,7 @@
 import Foundation
 import MastodonKit
 
-class StatusSearchResultsViewController: SearchResultsViewController<Account>
+class StatusSearchResultsViewController: SearchResultsViewController<Status>
 {
 	@IBOutlet unowned var _tableView: NSTableView!
 
@@ -32,23 +32,23 @@ class StatusSearchResultsViewController: SearchResultsViewController<Account>
 	}
 	override internal var cellIdentifier: NSUserInterfaceItemIdentifier
 	{
-		return NSUserInterfaceItemIdentifier("account")
+		return NSUserInterfaceItemIdentifier("status")
 	}
 
 	override func set(results: ResultsType, instance: Instance)
 	{
 		self.instance = instance
-		elements = results.accounts
+		elements = results.statuses
 	}
 
-	override internal func populate(cell: NSTableCellView, for account: Account)
+	override internal func populate(cell: NSTableCellView, for status: Status)
 	{
-		(cell as? AccountResultTableCellView)?.set(account: account, instance: instance)
+		(cell as? StatusResultTableCellView)?.set(status: status, instance: instance)
 	}
 
-	override internal func makeSelection(for account: Account) -> SearchResultSelection
+	override internal func makeSelection(for status: Status) -> SearchResultSelection
 	{
-		return .account(account)
+		return .status(status)
 	}
 }
 
@@ -82,16 +82,16 @@ class StatusResultTableCellView: NSTableCellView
 		bioLabel.linkHandler = nil
 	}
 
-	func set(account: Account, instance: Instance)
+	func set(status: Status, instance: Instance)
 	{
-		displayNameLabel.set(stringValue: account.bestDisplayName,
-							 applyingAttributes: StatusResultTableCellView.displayNameAttributes,
-							 applyingEmojis: account.cacheableEmojis)
-
-		handleLabel.stringValue = account.uri(in: instance)
-
-		bioLabel.set(attributedStringValue: account.attributedNote,
-					 applyingAttributes: StatusResultTableCellView.bioAttributes,
-					 applyingEmojis: account.cacheableEmojis)
+//		displayNameLabel.set(stringValue: account.bestDisplayName,
+//							 applyingAttributes: StatusResultTableCellView.displayNameAttributes,
+//							 applyingEmojis: account.cacheableEmojis)
+//
+//		handleLabel.stringValue = account.uri(in: instance)
+//
+//		bioLabel.set(attributedStringValue: account.attributedNote,
+//					 applyingAttributes: StatusResultTableCellView.bioAttributes,
+//					 applyingEmojis: account.cacheableEmojis)
 	}
 }
