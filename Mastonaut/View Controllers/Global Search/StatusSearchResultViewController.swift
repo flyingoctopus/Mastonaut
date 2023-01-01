@@ -30,6 +30,7 @@ class StatusSearchResultsViewController: SearchResultsViewController<Status>
 	{
 		return _tableView
 	}
+
 	override internal var cellIdentifier: NSUserInterfaceItemIdentifier
 	{
 		return NSUserInterfaceItemIdentifier("status")
@@ -54,41 +55,30 @@ class StatusSearchResultsViewController: SearchResultsViewController<Status>
 
 class StatusResultTableCellView: NSTableCellView
 {
-	private static let displayNameAttributes: [NSAttributedString.Key: AnyObject] = [
-		.font: NSFont.systemFont(ofSize: 13, weight: .semibold), .foregroundColor: NSColor.labelColor,
-		.underlineStyle: NSNumber(value: 0)
-	]
-
-	private static let bioAttributes: [NSAttributedString.Key: AnyObject] = [
-		.font: NSFont.labelFont(ofSize: 11), .foregroundColor: NSColor.labelColor,
-		.underlineStyle: NSNumber(value: 0)
-	]
-
-	private static let bioLinkAttributes: [NSAttributedString.Key: AnyObject] = [
-		.font: NSFont.labelFont(ofSize: 11), .foregroundColor: NSColor.labelColor,
-		.underlineStyle: NSNumber(value: 1)
+	/// See `StatusTableCellView`
+	private static let _authorLabelAttributes: [NSAttributedString.Key: AnyObject] = [
+		.foregroundColor: NSColor.labelColor, .font: NSFont.systemFont(ofSize: 14, weight: .semibold)
 	]
 
 	@IBOutlet private unowned var avatarImageView: NSImageView!
-	@IBOutlet private unowned var displayNameLabel: NSTextField!
+	@IBOutlet private unowned var authorNameButton: NSButton!
 	@IBOutlet private unowned var handleLabel: NSTextField!
-	@IBOutlet private unowned var bioLabel: AttributedLabel!
 
 	override func awakeFromNib()
 	{
 		super.awakeFromNib()
 
-		bioLabel.linkTextAttributes = StatusResultTableCellView.bioLinkAttributes
-		bioLabel.linkHandler = nil
+//		bioLabel.linkTextAttributes = StatusResultTableCellView.bioLinkAttributes
+//		bioLabel.linkHandler = nil
 	}
 
 	func set(status: Status, instance: Instance)
 	{
-//		displayNameLabel.set(stringValue: account.bestDisplayName,
-//							 applyingAttributes: StatusResultTableCellView.displayNameAttributes,
-//							 applyingEmojis: account.cacheableEmojis)
-//
-//		handleLabel.stringValue = account.uri(in: instance)
+		authorNameButton.set(stringValue: status.authorName,
+							 applyingAttributes: StatusResultTableCellView._authorLabelAttributes,
+							 applyingEmojis: status.account.cacheableEmojis)
+
+		handleLabel.stringValue = status.account.uri(in: instance)
 //
 //		bioLabel.set(attributedStringValue: account.attributedNote,
 //					 applyingAttributes: StatusResultTableCellView.bioAttributes,

@@ -535,6 +535,10 @@ DQ
                                                                 <constraint firstItem="qbU-68-4mD" firstAttribute="centerY" secondItem="vIQ-2g-PXG" secondAttribute="centerY" constant="1" id="zLb-0q-BIm"/>
                                                                 <constraint firstItem="1Pa-t0-xzM" firstAttribute="top" secondItem="zx3-ff-xN3" secondAttribute="bottom" constant="8" id="zU7-w1-fvb"/>
                                                             </constraints>
+                                                            <connections>
+                                                                <outlet property="authorNameButton" destination="yXn-vH-SPz" id="Ru6-2u-eOP"/>
+                                                                <outlet property="handleLabel" destination="zx3-ff-xN3" id="Sc5-NB-9Sw"/>
+                                                            </connections>
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
