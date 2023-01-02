@@ -67,7 +67,7 @@ class StatusResultTableCellView: NSTableCellView
 		// vertically when clicked.
 	]
 
-//	@IBOutlet private unowned var avatarImageView: NSImageView!
+	@IBOutlet var avatarImageView: NSButton!
 	@IBOutlet private unowned var authorNameButton: NSButton!
 	@IBOutlet private unowned var authorAccountLabel: NSTextField!
 	@IBOutlet var statusLabel: AttributedLabel!
@@ -107,8 +107,33 @@ class StatusResultTableCellView: NSTableCellView
 		timeLabel.formatter = RelativeDateFormatter.shared
 	}
 
+	func loadAccountAvatar(for status: Status, completion: @escaping (NSImage) -> Void)
+	{
+		AppDelegate.shared.avatarImageCache.fetchImage(account: status.account)
+		{ result in
+			switch result
+			{
+			case .inCache(let avatarImage):
+				assert(Thread.isMainThread)
+				completion(avatarImage)
+			case .loaded(let avatarImage):
+				DispatchQueue.main.async { completion(avatarImage) }
+			case .noImage:
+				DispatchQueue.main.async { completion(#imageLiteral(resourceName: "missing")) }
+			}
+		}
+	}
+
 	func set(status: Status, instance: Instance)
 	{
+		loadAccountAvatar(for: status)
+		{ [weak avatarImageView] in
+			if let avatarImageView
+			{
+				avatarImageView.image = $0
+			}
+		}
+
 		authorNameButton.set(stringValue: status.authorName,
 		                     applyingAttributes: StatusResultTableCellView._authorLabelAttributes,
 		                     applyingEmojis: status.account.cacheableEmojis)

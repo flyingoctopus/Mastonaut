@@ -539,6 +539,7 @@ DQ
                                                                 <outlet property="attachments" destination="vIQ-2g-PXG" id="ljJ-hi-inv"/>
                                                                 <outlet property="authorAccountLabel" destination="zx3-ff-xN3" id="Sc5-NB-9Sw"/>
                                                                 <outlet property="authorNameButton" destination="yXn-vH-SPz" id="Ru6-2u-eOP"/>
+                                                                <outlet property="avatarImageView" destination="BsF-7B-KkY" id="7fY-Nz-m16"/>
                                                                 <outlet property="contentWarningContainer" destination="gW3-aj-ZBy" id="1Rq-aS-THB"/>
                                                                 <outlet property="contentWarningLabel" destination="HYx-v7-ETn" id="uGs-jh-6MX"/>
                                                                 <outlet property="hasPoll" destination="d5l-Hj-RFY" id="2fD-j1-DME"/>
