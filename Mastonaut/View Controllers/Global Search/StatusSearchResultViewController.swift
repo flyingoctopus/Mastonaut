@@ -56,7 +56,7 @@ class StatusSearchResultsViewController: SearchResultsViewController<Status>
 
 class StatusResultTableCellView: NSTableCellView
 {
-	/// See `StatusTableCellView`
+	/// A lot of this code is just copied from `StatusTableCellView` and should probably be abstracted out
 	private static let _authorLabelAttributes: [NSAttributedString.Key: AnyObject] = [
 		.foregroundColor: NSColor.labelColor, .font: NSFont.systemFont(ofSize: 14, weight: .semibold)
 	]
@@ -72,7 +72,9 @@ class StatusResultTableCellView: NSTableCellView
 	@IBOutlet private unowned var authorAccountLabel: NSTextField!
 	@IBOutlet var statusLabel: AttributedLabel!
 
+	@IBOutlet var contentWarningContainer: BorderView!
 	@IBOutlet var contentWarningLabel: AttributedLabel!
+	@IBOutlet var warningButton: NSButton!
 
 	/// this used to be `RefreshingFormattedTextField`, but that type doesn't seem to be used anywhere else
 	@IBOutlet var timeLabel: NSTextField!
@@ -80,10 +82,28 @@ class StatusResultTableCellView: NSTableCellView
 
 	@IBOutlet var attachments: NSTextField!
 
+	@IBOutlet var mainContentStackView: NSStackView!
+
+	private(set) var hasSpoiler: Bool = false
+
+	var isContentHidden: Bool
+	{
+		return warningButton.state == .off
+	}
+
+	private lazy var spoilerCoverView: NSView =
+	{
+		let coverView = CoverView(backgroundColor: NSColor(named: "SpoilerCoverBackground")!,
+		                          message: 🔠("Content Hidden: Click warning button below to toggle display."))
+		coverView.target = self
+		coverView.action = #selector(toggleContentVisibility)
+		return coverView
+	}()
+
 	override func awakeFromNib()
 	{
 		super.awakeFromNib()
-		
+
 		timeLabel.formatter = RelativeDateFormatter.shared
 	}
 
@@ -94,8 +114,6 @@ class StatusResultTableCellView: NSTableCellView
 		                     applyingEmojis: status.account.cacheableEmojis)
 
 		authorAccountLabel.stringValue = status.account.uri(in: instance)
-
-		// TODO: CW
 
 		var statusString: NSAttributedString
 
@@ -125,8 +143,89 @@ class StatusResultTableCellView: NSTableCellView
 		}
 
 		hasPoll.isHidden = status.poll == nil
-		
+
 		timeLabel.objectValue = status.createdAt
 		timeLabel.toolTip = DateFormatter.longDateFormatter.string(from: status.createdAt)
+
+		if status.spoilerText.isEmpty
+		{
+			hasSpoiler = false
+
+			warningButton.isHidden = true
+			contentWarningContainer.isHidden = true
+		}
+		else
+		{
+			hasSpoiler = true
+
+			warningButton.isHidden = false
+			contentWarningLabel.set(attributedStringValue: status.attributedSpoiler,
+			                        applyingAttributes: StatusResultTableCellView._statusLabelAttributes,
+			                        applyingEmojis: status.cacheableEmojis)
+			installSpoilerCover()
+			contentWarningContainer.isHidden = false
+		}
+	}
+
+	override func prepareForReuse()
+	{
+		super.prepareForReuse()
+
+		removeSpoilerCover()
+	}
+
+	@objc func toggleContentVisibility()
+	{
+		guard hasSpoiler else { return }
+
+		setContentHidden(!isContentHidden)
+	}
+
+	func setContentHidden(_ hideContent: Bool)
+	{
+		let coverView = spoilerCoverView
+
+		warningButton.state = hideContent ? .off : .on
+
+		statusLabel.animator().alphaValue = hideContent ? 0 : 1
+		statusLabel.setAccessibilityEnabled(!hideContent)
+		coverView.setHidden(!hideContent, animated: true)
+		statusLabel.isEnabled = !hideContent
+	}
+
+	internal func installSpoilerCover()
+	{
+		removeSpoilerCover()
+
+		let spoilerCover = spoilerCoverView
+		addSubview(spoilerCover)
+
+		let spacing = mainContentStackView.spacing
+
+		NSLayoutConstraint.activate([
+			spoilerCover.topAnchor.constraint(equalTo: contentWarningContainer.bottomAnchor, constant: spacing),
+			spoilerCover.bottomAnchor.constraint(equalTo: mainContentStackView.bottomAnchor, constant: 2),
+			spoilerCover.leftAnchor.constraint(equalTo: mainContentStackView.leftAnchor),
+			spoilerCover.rightAnchor.constraint(equalTo: mainContentStackView.rightAnchor)
+		])
+	}
+
+	internal func removeSpoilerCover()
+	{
+		spoilerCoverView.removeFromSuperview()
+	}
+
+	@IBAction private func interactionButtonClicked(_ sender: NSButton)
+	{
+		switch (sender, sender.state)
+		{
+		case (warningButton, .on):
+			setContentHidden(false)
+
+		case (warningButton, .off):
+			setContentHidden(true)
+
+		default: break
+		}
 	}
 }

@@ -539,10 +539,13 @@ DQ
                                                                 <outlet property="attachments" destination="vIQ-2g-PXG" id="ljJ-hi-inv"/>
                                                                 <outlet property="authorAccountLabel" destination="zx3-ff-xN3" id="Sc5-NB-9Sw"/>
                                                                 <outlet property="authorNameButton" destination="yXn-vH-SPz" id="Ru6-2u-eOP"/>
+                                                                <outlet property="contentWarningContainer" destination="gW3-aj-ZBy" id="1Rq-aS-THB"/>
                                                                 <outlet property="contentWarningLabel" destination="HYx-v7-ETn" id="uGs-jh-6MX"/>
                                                                 <outlet property="hasPoll" destination="d5l-Hj-RFY" id="2fD-j1-DME"/>
+                                                                <outlet property="mainContentStackView" destination="1Pa-t0-xzM" id="0IJ-Pq-5n0"/>
                                                                 <outlet property="statusLabel" destination="h2V-C7-ooq" id="H4k-PZ-FQc"/>
                                                                 <outlet property="timeLabel" destination="k7G-3L-fTZ" id="DrO-bm-uy3"/>
+                                                                <outlet property="warningButton" destination="zsH-zk-n2x" id="ZCv-u1-ERv"/>
                                                             </connections>
                                                         </tableCellView>
                                                     </prototypeCellViews>
