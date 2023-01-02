@@ -17,6 +17,7 @@
 //  GNU General Public License for more details.
 //
 
+import CoreTootin
 import Foundation
 import MastodonKit
 
@@ -107,7 +108,19 @@ class StatusResultTableCellView: NSTableCellView
 		}
 
 		statusLabel.set(attributedStringValue: statusString,
-						applyingAttributes: StatusResultTableCellView._statusLabelAttributes,
+		                applyingAttributes: StatusResultTableCellView._statusLabelAttributes,
 		                applyingEmojis: status.cacheableEmojis)
+
+		if status.mediaAttachments.count > 0
+		{
+			attachments.isHidden = false
+			attachments.stringValue = 🔠("%@ attachments", String(status.mediaAttachments.count))
+		}
+		else
+		{
+			attachments.isHidden = true
+		}
+
+		hasPoll.isHidden = status.poll == nil
 	}
 }
