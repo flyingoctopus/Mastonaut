@@ -60,28 +60,54 @@ class StatusResultTableCellView: NSTableCellView
 		.foregroundColor: NSColor.labelColor, .font: NSFont.systemFont(ofSize: 14, weight: .semibold)
 	]
 
-	@IBOutlet private unowned var avatarImageView: NSImageView!
+	private static let _statusLabelAttributes: [NSAttributedString.Key: AnyObject] = [
+		.foregroundColor: NSColor.labelColor, .font: NSFont.labelFont(ofSize: 14),
+		.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
+		// vertically when clicked.
+	]
+
+//	@IBOutlet private unowned var avatarImageView: NSImageView!
 	@IBOutlet private unowned var authorNameButton: NSButton!
-	@IBOutlet private unowned var handleLabel: NSTextField!
+	@IBOutlet private unowned var authorAccountLabel: NSTextField!
+	@IBOutlet var statusLabel: AttributedLabel!
+
+	@IBOutlet var contentWarningLabel: AttributedLabel!
+
+	@IBOutlet var timestamp: RefreshingFormattedTextField!
+	@IBOutlet var hasPoll: NSTextField!
+
+	@IBOutlet var attachments: NSTextField!
 
 	override func awakeFromNib()
 	{
 		super.awakeFromNib()
-
-//		bioLabel.linkTextAttributes = StatusResultTableCellView.bioLinkAttributes
-//		bioLabel.linkHandler = nil
 	}
 
 	func set(status: Status, instance: Instance)
 	{
 		authorNameButton.set(stringValue: status.authorName,
-							 applyingAttributes: StatusResultTableCellView._authorLabelAttributes,
-							 applyingEmojis: status.account.cacheableEmojis)
+		                     applyingAttributes: StatusResultTableCellView._authorLabelAttributes,
+		                     applyingEmojis: status.account.cacheableEmojis)
 
-		handleLabel.stringValue = status.account.uri(in: instance)
-//
-//		bioLabel.set(attributedStringValue: account.attributedNote,
-//					 applyingAttributes: StatusResultTableCellView.bioAttributes,
-//					 applyingEmojis: account.cacheableEmojis)
+		authorAccountLabel.stringValue = status.account.uri(in: instance)
+
+		// TODO: CW
+
+		var statusString: NSAttributedString
+
+		if status.attributedContent.length > 500
+		{
+			let truncatedString = status.attributedContent.attributedSubstring(from: NSMakeRange(0, 100)).mutableCopy() as! NSMutableAttributedString
+			truncatedString.append(NSAttributedString(string: "…"))
+			statusString = truncatedString
+		}
+		else
+		{
+			statusString = status.attributedContent
+		}
+
+		statusLabel.set(attributedStringValue: statusString,
+						applyingAttributes: StatusResultTableCellView._statusLabelAttributes,
+		                applyingEmojis: status.cacheableEmojis)
 	}
 }
