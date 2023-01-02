@@ -74,7 +74,8 @@ class StatusResultTableCellView: NSTableCellView
 
 	@IBOutlet var contentWarningLabel: AttributedLabel!
 
-	@IBOutlet var timestamp: RefreshingFormattedTextField!
+	/// this used to be `RefreshingFormattedTextField`, but that type doesn't seem to be used anywhere else
+	@IBOutlet var timeLabel: NSTextField!
 	@IBOutlet var hasPoll: NSTextField!
 
 	@IBOutlet var attachments: NSTextField!
@@ -82,6 +83,8 @@ class StatusResultTableCellView: NSTableCellView
 	override func awakeFromNib()
 	{
 		super.awakeFromNib()
+		
+		timeLabel.formatter = RelativeDateFormatter.shared
 	}
 
 	func set(status: Status, instance: Instance)
@@ -122,5 +125,8 @@ class StatusResultTableCellView: NSTableCellView
 		}
 
 		hasPoll.isHidden = status.poll == nil
+		
+		timeLabel.objectValue = status.createdAt
+		timeLabel.toolTip = DateFormatter.longDateFormatter.string(from: status.createdAt)
 	}
 }
