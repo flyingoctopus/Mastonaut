@@ -105,6 +105,10 @@ class StatusResultTableCellView: NSTableCellView
 		super.awakeFromNib()
 
 		timeLabel.formatter = RelativeDateFormatter.shared
+		
+		// https://github.com/chucker/Mastonaut/issues/79 unclear why needed (otherwise set to pink)
+		contentWarningLabel.backgroundColor = NSColor.clear
+		statusLabel.backgroundColor = NSColor.clear
 	}
 
 	func loadAccountAvatar(for status: Status, completion: @escaping (NSImage) -> Void)
