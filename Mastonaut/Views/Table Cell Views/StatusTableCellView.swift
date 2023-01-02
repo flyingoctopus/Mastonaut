@@ -530,16 +530,16 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 	{
 		removeSpoilerCover()
 
-		let spolierCover = spoilerCoverView
-		addSubview(spolierCover)
+		let spoilerCover = spoilerCoverView
+		addSubview(spoilerCover)
 
 		let spacing = mainContentStackView.spacing
 
 		NSLayoutConstraint.activate([
-			spolierCover.topAnchor.constraint(equalTo: contentWarningContainer.bottomAnchor, constant: spacing),
-			spolierCover.bottomAnchor.constraint(equalTo: mainContentStackView.bottomAnchor, constant: 2),
-			spolierCover.leftAnchor.constraint(equalTo: mainContentStackView.leftAnchor),
-			spolierCover.rightAnchor.constraint(equalTo: mainContentStackView.rightAnchor)
+			spoilerCover.topAnchor.constraint(equalTo: contentWarningContainer.bottomAnchor, constant: spacing),
+			spoilerCover.bottomAnchor.constraint(equalTo: mainContentStackView.bottomAnchor, constant: 2),
+			spoilerCover.leftAnchor.constraint(equalTo: mainContentStackView.leftAnchor),
+			spoilerCover.rightAnchor.constraint(equalTo: mainContentStackView.rightAnchor)
 		])
 	}
 
