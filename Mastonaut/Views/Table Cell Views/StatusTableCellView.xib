@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -179,7 +179,7 @@
                                     <rect key="frame" x="66" y="322" width="240" height="33"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Mr1-Dk-o1f">
-                                            <rect key="frame" x="0.0" y="17" width="110" height="16"/>
+                                            <rect key="frame" x="0.0" y="17" width="109" height="16"/>
                                             <buttonCell key="cell" type="bevel" title="John Appleseed " bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" inset="2" id="Iq6-6n-4b7">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="systemSemibold" size="13"/>
@@ -403,6 +403,14 @@
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </customView>
+                                        <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="g2y-eF-y0S">
+                                            <rect key="frame" x="-2" y="274" width="33" height="14"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="8eC-sg-8Ah">
+                                                <font key="font" metaFont="controlContent" size="11"/>
+                                                <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                     <visibilityPriorities>
                                         <integer value="1000"/>
@@ -410,8 +418,10 @@
                                         <integer value="1000"/>
                                         <integer value="1000"/>
                                         <integer value="1000"/>
+                                        <integer value="1000"/>
                                     </visibilityPriorities>
                                     <customSpacing>
+                                        <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
@@ -569,6 +579,7 @@
                 <outlet property="contentWarningLabel" destination="NBR-vf-Qi5" id="Uo3-de-0Wn"/>
                 <outlet property="contextButton" destination="NCi-4w-lRO" id="U1H-Vo-bog"/>
                 <outlet property="contextImageView" destination="N4w-Tk-oy5" id="S4x-PP-kQd"/>
+                <outlet property="editedTimeLabel" destination="g2y-eF-y0S" id="Jc3-Xw-Hfp"/>
                 <outlet property="favoriteButton" destination="Bah-Xt-rKH" id="2hO-P0-JLs"/>
                 <outlet property="fullContentDisclosureView" destination="bPV-VO-5yH" id="SHD-eU-Ob0"/>
                 <outlet property="mainContentStackView" destination="NiZ-P1-sSE" id="9ry-ES-FJC"/>
@@ -583,6 +594,11 @@
             <point key="canvasLocation" x="-69" y="-64.5"/>
         </tableCellView>
     </objects>
+    <designables>
+        <designable name="mhw-7K-d4x">
+            <size key="intrinsicContentSize" width="400" height="400"/>
+        </designable>
+    </designables>
     <resources>
         <image name="disclosure_round" width="12" height="12"/>
         <image name="missing" width="400" height="400"/>

@@ -29,6 +29,7 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 	@IBOutlet private unowned var statusLabel: AttributedLabel!
 	@IBOutlet private unowned var fullContentDisclosureView: NSView?
 	@IBOutlet private unowned var timeLabel: NSTextField!
+	@IBOutlet private unowned var editedTimeLabel: NSTextField!
 	@IBOutlet private unowned var mainContentStackView: NSStackView!
 
 	@IBOutlet private unowned var contentWarningContainer: BorderView!
@@ -129,6 +130,7 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		super.awakeFromNib()
 
 		timeLabel.formatter = RelativeDateFormatter.shared
+		editedTimeLabel.formatter = RelativeDateFormatter.shared
 		statusLabel.linkTextAttributes = statusLabelLinkAttributes()
 
 		cardContainerView.clickHandler = { [weak self] in self?.cellModel?.openCardLink() }
@@ -176,6 +178,12 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		authorAccountLabel.stringValue = cellModel.visibleStatus.account.uri(in: activeInstance)
 		timeLabel.objectValue = cellModel.visibleStatus.createdAt
 		timeLabel.toolTip = DateFormatter.longDateFormatter.string(from: cellModel.visibleStatus.createdAt)
+		
+		if let editedAt = cellModel.visibleStatus.editedAt {
+			editedTimeLabel.isHidden = false
+			editedTimeLabel.objectValue = editedAt
+			editedTimeLabel.toolTip = DateFormatter.longDateFormatter.string(from: editedAt)
+		}
 
 		let attributedStatus = cellModel.visibleStatus.attributedContent
 
