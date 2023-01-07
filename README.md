@@ -14,9 +14,7 @@ This is purely a hobbyist effort, so I can't really promise anything. We can loo
 
 **August 2022:** this fork's first minor release
 
-**November 2022:** this fork's first _feature_ release
-
-I'm hoping to get another release out in December. Again, no promises!
+**November 2022 through January 2023:** on average one release per month
 
 ## 👩🏻‍🌾 Developers: Build
 
