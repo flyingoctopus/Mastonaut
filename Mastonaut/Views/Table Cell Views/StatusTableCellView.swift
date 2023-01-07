@@ -130,7 +130,6 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		super.awakeFromNib()
 
 		timeLabel.formatter = RelativeDateFormatter.shared
-		editedTimeLabel.formatter = RelativeDateFormatter.shared
 		statusLabel.linkTextAttributes = statusLabelLinkAttributes()
 
 		cardContainerView.clickHandler = { [weak self] in self?.cellModel?.openCardLink() }
@@ -181,7 +180,7 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		
 		if let editedAt = cellModel.visibleStatus.editedAt {
 			editedTimeLabel.isHidden = false
-			editedTimeLabel.objectValue = editedAt
+			editedTimeLabel.objectValue = "Edited \(RelativeDateFormatter.shared.string(from: editedAt))"
 			editedTimeLabel.toolTip = DateFormatter.longDateFormatter.string(from: editedAt)
 		}
 
