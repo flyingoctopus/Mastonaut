@@ -29,6 +29,7 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 	@IBOutlet private unowned var statusLabel: AttributedLabel!
 	@IBOutlet private unowned var fullContentDisclosureView: NSView?
 	@IBOutlet private unowned var timeLabel: NSTextField!
+	@IBOutlet private unowned var editInfoContainer: NSStackView!
 	@IBOutlet private unowned var editedTimeLabel: NSTextField!
 	@IBOutlet private unowned var mainContentStackView: NSStackView!
 
@@ -43,7 +44,7 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 
 	@IBOutlet private unowned var contextButton: NSButton?
 	@IBOutlet private unowned var contextImageView: NSImageView?
-	
+
 	@IBOutlet private unowned var mediaContainerView: NSView!
 
 	@IBOutlet private unowned var cardContainerView: CardView!
@@ -426,7 +427,30 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 
 		removeSpoilerCover()
 	}
-	
+
+	@IBAction func viewHistoryClicked(_ sender: NSButton)
+	{
+		guard let status = cellModel?.visibleStatus,
+		      let interactionHandler = cellModel?.interactionHandler
+		else { return }
+
+//		let handler = cellModel?.interactionHandler
+//
+//		cellModel?.handle(interaction: .showEditHistory)
+//
+		interactionHandler.fetchEditHistory(for: status.id)
+		{
+			[weak self] success in DispatchQueue.main.async
+			{
+				guard let edits = success else { return }
+
+				let sheetController = EditHistorySheetWindowController()
+//				sheetController.showWindow(self)
+				self?.window?.beginSheet(sheetController.window!)
+			}
+		}
+	}
+
 	@IBAction private func interactionButtonClicked(_ sender: NSButton)
 	{
 		switch (sender, sender.state)

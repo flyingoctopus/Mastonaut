@@ -142,6 +142,24 @@ extension StatusInteractionHandling
 			status in completion((status?.bookmarked ?? true) != true)
 		}
 	}
+	
+	func fetchEditHistory(for statusID: String, completion: (([StatusEdit]?) -> Void)? = nil)
+	{
+		client?.run(Statuses.history(id: statusID))
+		{
+			[weak self] result in
+
+			switch result
+			{
+			case .success(let statusEdits, _):
+				completion?(statusEdits)
+
+			case .failure(let error):
+				completion?(nil)
+				DispatchQueue.main.async { self?.handle(interactionError: NetworkError(error)) }
+			}
+		}
+	}
 
 	private func interact(using request: Request<Status>, completion: ((Status?) -> Void)? = nil)
 	{
