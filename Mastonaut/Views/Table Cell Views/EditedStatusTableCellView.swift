@@ -12,7 +12,17 @@ import MastodonKit
 class EditedStatusTableCellView: NSTableCellView {
 	@IBOutlet private unowned var statusLabel: AttributedLabel!
 	
-	func set(displayedStatusEdit: StatusEdit) {
+	override func awakeFromNib() {
+		super.awakeFromNib()
+	}
+	
+	@objc internal private(set) dynamic
+	var cellModel: StatusEditCellModel?
+	
+	func set(displayedStatusEdit statusEdit: StatusEdit) {
 		statusLabel.stringValue = "howdy"
+		
+		let cellModel = StatusEditCellModel(statusEdit: statusEdit)
+		self.cellModel = cellModel
 	}
 }
