@@ -525,6 +525,7 @@
 		5F8C1349296A06E3007BE2D5 /* EditedStatusTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C1348296A06E3007BE2D5 /* EditedStatusTableCellView.swift */; };
 		5F8C134B296A0B5C007BE2D5 /* EditHistorySheetWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F8C134A296A0B5C007BE2D5 /* EditHistorySheetWindowController.xib */; };
 		5F8C134D296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C134C296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift */; };
+		5F8C134F296A8C89007BE2D5 /* StatusEditCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C134E296A8C89007BE2D5 /* StatusEditCellModel.swift */; };
 		5FC3E1922926FD640086DCEE /* AppearancePreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */; };
 		5FC3E1952927018A0086DCEE /* LoggingOSLog in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC3E1942927018A0086DCEE /* LoggingOSLog */; };
 		5FE72EAE292982F0001C7A6C /* BuildConfig.sh in Resources */ = {isa = PBXBuildFile; fileRef = 5FE72EAD292982F0001C7A6C /* BuildConfig.sh */; };
@@ -986,6 +987,7 @@
 		5F8C1348296A06E3007BE2D5 /* EditedStatusTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditedStatusTableCellView.swift; sourceTree = "<group>"; };
 		5F8C134A296A0B5C007BE2D5 /* EditHistorySheetWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditHistorySheetWindowController.xib; sourceTree = "<group>"; };
 		5F8C134C296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditHistorySheetWindowController.swift; sourceTree = "<group>"; };
+		5F8C134E296A8C89007BE2D5 /* StatusEditCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusEditCellModel.swift; sourceTree = "<group>"; };
 		5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+CurrentType.swift"; sourceTree = "<group>"; };
 		5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearancePreferencesView.swift; sourceTree = "<group>"; };
 		5FE72EAD292982F0001C7A6C /* BuildConfig.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = BuildConfig.sh; sourceTree = "<group>"; };
@@ -1630,6 +1632,7 @@
 				157D266723B25F8600B3A8BE /* StatusCellModel.swift */,
 				1572C55B22A2038100FAA77F /* StringCapableTextAttachment.swift */,
 				15B7B2E12252A2AD00A3222C /* TrackingLayoutConstraint.swift */,
+				5F8C134E296A8C89007BE2D5 /* StatusEditCellModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2731,6 +2734,7 @@
 				1573888E25018C5E00DE40F9 /* Selectable.swift in Sources */,
 				150B1EE0227E33C30048EA22 /* NSView+EmojiSubviews.m in Sources */,
 				151199CB22BFCF05007F2AEB /* ComposerPollViewController.swift in Sources */,
+				5F8C134F296A8C89007BE2D5 /* StatusEditCellModel.swift in Sources */,
 				1572C55C22A2038100FAA77F /* StringCapableTextAttachment.swift in Sources */,
 				15B44D5A225D0D9B00EDFDC1 /* AnnotatedURL.m in Sources */,
 				1538FB3922188CCA006B5F78 /* PropertyObserver.swift in Sources */,

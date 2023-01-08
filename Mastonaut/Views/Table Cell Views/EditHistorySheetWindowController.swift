@@ -75,7 +75,10 @@ class EditHistorySheetWindowController: NSWindowController, NSTableViewDataSourc
 			return view
 		}
 
-		cellView.set(displayedStatusEdit: statusHistory[row])
+		let currentEdit = statusHistory[row]
+		let previousEdit = row < statusHistory.count - 1 ? statusHistory[row + 1] : nil
+		
+		cellView.set(displayedStatusEdit: statusHistory[row], previousStatusEdit: previousEdit)
 
 		return cellView
 	}

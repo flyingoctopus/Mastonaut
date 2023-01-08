@@ -57,6 +57,15 @@ extension Client
 	}
 }
 
+extension StatusEdit
+{
+	var attributedContent: NSAttributedString
+	{
+		return HTMLParsingService.shared.parse(HTML: content, removingTrailingUrl: nil,
+		                                       removingInvisibleSpans: true)
+	}
+}
+
 extension Status
 {
 	var authorName: String

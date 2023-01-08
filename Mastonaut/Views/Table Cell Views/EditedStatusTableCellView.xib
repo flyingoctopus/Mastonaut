@@ -88,10 +88,10 @@
                                     </customSpacing>
                                 </stackView>
                                 <stackView wantsLayer="YES" distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="751" horizontalHuggingPriority="249" verticalHuggingPriority="751" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" ambiguous="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hOu-is-kDh">
-                                    <rect key="frame" x="66" y="28" width="240" height="288"/>
+                                    <rect key="frame" x="66" y="52" width="240" height="264"/>
                                     <subviews>
                                         <customView ambiguous="YES" placeholderIntrinsicWidth="238" placeholderIntrinsicHeight="23" translatesAutoresizingMaskIntoConstraints="NO" id="wbv-Dd-3J2" customClass="BorderView" customModule="CoreTootin">
-                                            <rect key="frame" x="0.0" y="267" width="238" height="21"/>
+                                            <rect key="frame" x="0.0" y="243" width="238" height="21"/>
                                             <subviews>
                                                 <customView ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zJf-IG-CbP" customClass="BackgroundView" customModule="CoreTootin">
                                                     <rect key="frame" x="0.0" y="0.0" width="32" height="21"/>
@@ -155,37 +155,13 @@
                                             </userDefinedRuntimeAttributes>
                                         </customView>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VTv-FV-jId" customClass="AttributedLabel">
-                                            <rect key="frame" x="-2" y="243" width="75" height="16"/>
+                                            <rect key="frame" x="-2" y="219" width="75" height="16"/>
                                             <textFieldCell key="cell" selectable="YES" allowsUndo="NO" title="Hello there!" allowsEditingTextAttributes="YES" id="1fZ-nB-Kft">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <customView horizontalHuggingPriority="246" translatesAutoresizingMaskIntoConstraints="NO" id="pHk-L5-aBz">
-                                            <rect key="frame" x="0.0" y="219" width="240" height="16"/>
-                                            <subviews>
-                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="57E-Uq-Ix9">
-                                                    <rect key="frame" x="94" y="0.0" width="146" height="16"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="16" id="sKX-IA-aSF"/>
-                                                    </constraints>
-                                                    <buttonCell key="cell" type="inline" title="Show Entire Contents" bezelStyle="inline" image="disclosure_round" imagePosition="right" alignment="center" borderStyle="border" inset="2" id="QN0-FE-Rn8">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="smallSystemBold"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="showTootDetails:" target="wHx-2W-SPr" id="e7P-sD-5iR"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="57E-Uq-Ix9" secondAttribute="bottom" id="76P-ea-DL9"/>
-                                                <constraint firstAttribute="trailing" secondItem="57E-Uq-Ix9" secondAttribute="trailing" id="Eta-d4-8qJ"/>
-                                                <constraint firstItem="57E-Uq-Ix9" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="pHk-L5-aBz" secondAttribute="leading" id="iPR-cj-STM"/>
-                                                <constraint firstItem="57E-Uq-Ix9" firstAttribute="top" secondItem="pHk-L5-aBz" secondAttribute="top" id="mt3-HB-WQt"/>
-                                            </constraints>
-                                        </customView>
                                         <customView verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="hNd-nm-a3G">
                                             <rect key="frame" x="0.0" y="72" width="238" height="139"/>
                                             <constraints>
@@ -284,7 +260,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </customView>
                                         <stackView hidden="YES" distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LOm-Mw-xHU">
-                                            <rect key="frame" x="0.0" y="274" width="29" height="14"/>
+                                            <rect key="frame" x="0.0" y="250" width="29" height="14"/>
                                             <subviews>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8z9-DV-e8G">
                                                     <rect key="frame" x="-2" y="0.0" width="33" height="14"/>
@@ -309,10 +285,8 @@
                                         <integer value="1000"/>
                                         <integer value="1000"/>
                                         <integer value="1000"/>
-                                        <integer value="1000"/>
                                     </visibilityPriorities>
                                     <customSpacing>
-                                        <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
@@ -367,7 +341,6 @@
                 <outlet property="contentWarningLabel" destination="gzR-6O-Ptr" id="EBR-n2-X7e"/>
                 <outlet property="editInfoContainer" destination="LOm-Mw-xHU" id="L34-6o-Km5"/>
                 <outlet property="editedTimeLabel" destination="8z9-DV-e8G" id="Vhu-SH-rYm"/>
-                <outlet property="fullContentDisclosureView" destination="pHk-L5-aBz" id="vgG-TN-3ZD"/>
                 <outlet property="mainContentStackView" destination="hOu-is-kDh" id="n4I-rO-hyM"/>
                 <outlet property="mediaContainerView" destination="hNd-nm-a3G" id="poz-uY-eWe"/>
                 <outlet property="statusLabel" destination="VTv-FV-jId" id="ew0-xm-vUc"/>
@@ -382,7 +355,6 @@
         </designable>
     </designables>
     <resources>
-        <image name="disclosure_round" width="12" height="12"/>
         <image name="missing" width="400" height="400"/>
     </resources>
 </document>
