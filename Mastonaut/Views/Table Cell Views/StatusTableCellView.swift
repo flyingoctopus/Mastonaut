@@ -178,9 +178,10 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		authorAccountLabel.stringValue = cellModel.visibleStatus.account.uri(in: activeInstance)
 		timeLabel.objectValue = cellModel.visibleStatus.createdAt
 		timeLabel.toolTip = DateFormatter.longDateFormatter.string(from: cellModel.visibleStatus.createdAt)
-		
-		if let editedAt = cellModel.visibleStatus.editedAt {
-			editedTimeLabel.isHidden = false
+
+		if let editedAt = cellModel.visibleStatus.editedAt
+		{
+			editInfoContainer.isHidden = false
 			editedTimeLabel.objectValue = "Edited \(RelativeDateFormatter.shared.string(from: editedAt))"
 			editedTimeLabel.toolTip = DateFormatter.longDateFormatter.string(from: editedAt)
 		}
@@ -445,6 +446,7 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 				guard let edits = success else { return }
 
 				let sheetController = EditHistorySheetWindowController()
+				sheetController.statusHistory = edits.sorted { $0.createdAt > $1.createdAt }
 //				sheetController.showWindow(self)
 				self?.window?.beginSheet(sheetController.window!)
 			}
