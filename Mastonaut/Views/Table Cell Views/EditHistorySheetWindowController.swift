@@ -6,19 +6,65 @@
 //  Copyright © 2023 Bruno Philipe. All rights reserved.
 //
 
+import CoreTootin
 import Foundation
 import MastodonKit
 
-class EditHistorySheetWindowController: NSWindowController, NSTableViewDataSource, NSTableViewDelegate
+class EditHistoryViewController: NSViewController, BaseColumnViewController, SidebarPresentable,
+	NSTableViewDataSource, NSTableViewDelegate
 {
-	@IBOutlet private(set) var tableView: NSTableView!
+	var currentFocusRegion: NSRect?
 
-	override var windowNibName: NSNib.Name?
+	func activateKeyboardNavigation(preferredFocusRegion: NSRect?)
 	{
-		return "EditHistorySheetWindowController"
+		guard tableView.selectedRowIndexes.isEmpty,
+		      let statusHistory,
+		      statusHistory.isEmpty == false
+		else
+		{
+			return
+		}
+
+		tableView.selectFirstVisibleRow()
 	}
 
-	public var statusHistory: [StatusEdit] = []
+	init(status: Status?, edits: [StatusEdit]?)
+	{
+		self.status = status
+		self.statusHistory = edits
+
+		super.init(nibName: "EditHistorySheetWindowController", bundle: .main)
+	}
+
+	@available(*, unavailable)
+	required init?(coder: NSCoder)
+	{
+		fatalError("init(coder:) has not been implemented")
+	}
+
+	func containerWindowOcclusionStateDidChange(_ occlusionState: NSWindow.OcclusionState) {}
+
+	var mainResponder: NSResponder
+	{
+		return tableView
+	}
+
+	var sidebarModelValue: SidebarModel
+	{
+		return SidebarMode.edits(status: status, edits: statusHistory)
+	}
+
+	var client: MastodonKit.ClientType?
+
+	var titleMode: SidebarTitleMode
+	{
+		return .title(🔠("Edits"))
+	}
+
+	@IBOutlet private(set) var tableView: NSTableView!
+
+	var status: Status?
+	var statusHistory: [StatusEdit]? = []
 
 //	public convenience init(history: [StatusEdit])
 //	{
@@ -32,9 +78,9 @@ class EditHistorySheetWindowController: NSWindowController, NSTableViewDataSourc
 		static let editedStatus = NSUserInterfaceItemIdentifier("editedStatus")
 	}
 
-	override func windowDidLoad()
+	override func viewDidLoad()
 	{
-		super.windowDidLoad()
+		super.viewDidLoad()
 
 		tableView.register(NSNib(nibNamed: "EditedStatusTableCellView", bundle: .main),
 		                   forIdentifier: CellViewIdentifiers.editedStatus)
@@ -44,6 +90,8 @@ class EditHistorySheetWindowController: NSWindowController, NSTableViewDataSourc
 
 	func numberOfRows(in tableView: NSTableView) -> Int
 	{
+		guard let statusHistory else { return 0 }
+
 		return statusHistory.count
 	}
 
@@ -53,6 +101,8 @@ class EditHistorySheetWindowController: NSWindowController, NSTableViewDataSourc
 //		row: Int
 //	) -> Any?
 //	{
+//		guard let statusHistory else { return nil }
+//
 //		return statusHistory[row]
 //	}
 
@@ -69,7 +119,8 @@ class EditHistorySheetWindowController: NSWindowController, NSTableViewDataSourc
 		let view = tableView.makeView(withIdentifier: CellViewIdentifiers.editedStatus, owner: nil)
 
 		guard let cellView = view as? EditedStatusTableCellView,
-			  statusHistory.count > row
+		      let statusHistory,
+		      statusHistory.count > row
 		else
 		{
 			return view
@@ -77,7 +128,7 @@ class EditHistorySheetWindowController: NSWindowController, NSTableViewDataSourc
 
 		let currentEdit = statusHistory[row]
 		let previousEdit = row < statusHistory.count - 1 ? statusHistory[row + 1] : nil
-		
+
 		cellView.set(displayedStatusEdit: statusHistory[row], previousStatusEdit: previousEdit)
 
 		return cellView

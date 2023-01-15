@@ -445,20 +445,15 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		      let interactionHandler = cellModel?.interactionHandler
 		else { return }
 
-//		let handler = cellModel?.interactionHandler
-//
-//		cellModel?.handle(interaction: .showEditHistory)
-//
+		let handler = cellModel?.interactionHandler
+
 		interactionHandler.fetchEditHistory(for: status.id)
 		{
-			[weak self] success in DispatchQueue.main.async
+			success in DispatchQueue.main.async
 			{
 				guard let edits = success else { return }
 
-				let sheetController = EditHistorySheetWindowController()
-				sheetController.statusHistory = edits.sorted { $0.createdAt > $1.createdAt }
-//				sheetController.showWindow(self)
-				self?.window?.beginSheet(sheetController.window!)
+				interactionHandler.showStatusEdits(status: status, edits: edits)
 			}
 		}
 	}

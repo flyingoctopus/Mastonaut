@@ -67,6 +67,9 @@ protocol StatusInteractionHandling: AnyObject
 
 	/// Tells the handler the user asked for more details on a tag to be displayed.
 	func show(tag: Tag)
+	
+	/// Tells the handler the user asked for a status' edit history to be displayed.
+	func showStatusEdits(status: Status, edits: [StatusEdit])
 
 	/// Asks the handler whether the active account can delete the provided status.
 	func canDelete(status: Status) -> Bool
