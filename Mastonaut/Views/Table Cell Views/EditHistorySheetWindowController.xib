@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="EditHistoryViewController" customModule="Mastonaut" customModuleProvider="target">
             <connections>
+                <outlet property="highlightDifferences" destination="09q-Zs-SYV" id="neF-xl-vJB"/>
                 <outlet property="tableView" destination="CLo-9b-RNH" id="WWO-rX-BLI"/>
                 <outlet property="view" destination="AFs-y0-qvq" id="igy-3k-dfa"/>
             </connections>
@@ -18,15 +19,26 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="09q-Zs-SYV">
+                    <rect key="frame" x="12" y="568" width="137" height="18"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="check" title="Highlight Differences" bezelStyle="regularSquare" imagePosition="left" inset="2" id="q5p-Y4-aEM">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system" size="11"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="toggleHighlightDifferences:" target="-2" id="oQm-SI-aPT"/>
+                    </connections>
+                </button>
                 <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="319" horizontalPageScroll="10" verticalLineScroll="319" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2DZ-jb-NWq">
-                    <rect key="frame" x="0.0" y="0.0" width="321" height="601"/>
+                    <rect key="frame" x="0.0" y="0.0" width="321" height="556"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <clipView key="contentView" id="fwC-vr-swq">
-                        <rect key="frame" x="1" y="1" width="319" height="599"/>
+                        <rect key="frame" x="1" y="1" width="319" height="554"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="319" rowSizeStyle="automatic" viewBased="YES" id="CLo-9b-RNH">
-                                <rect key="frame" x="0.0" y="0.0" width="319" height="599"/>
+                                <rect key="frame" x="0.0" y="0.0" width="319" height="554"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="17" height="0.0"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>

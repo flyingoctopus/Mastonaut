@@ -61,6 +61,7 @@ class EditHistoryViewController: NSViewController, BaseColumnViewController, Sid
 		return .title(🔠("Edits"))
 	}
 
+	@IBOutlet var highlightDifferences: NSButton!
 	@IBOutlet private(set) var tableView: NSTableView!
 
 	var status: Status?
@@ -114,7 +115,11 @@ class EditHistoryViewController: NSViewController, BaseColumnViewController, Sid
 //		return nil
 //	}
 
-	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView?
+    @IBAction func toggleHighlightDifferences(_ sender: NSButton) {
+        tableView.reloadData()
+    }
+    
+    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView?
 	{
 		let view = tableView.makeView(withIdentifier: CellViewIdentifiers.editedStatus, owner: nil)
 
@@ -127,7 +132,7 @@ class EditHistoryViewController: NSViewController, BaseColumnViewController, Sid
 		}
 
 		let currentEdit = statusHistory[row]
-		let previousEdit = row < statusHistory.count - 1 ? statusHistory[row + 1] : nil
+		let previousEdit = (highlightDifferences.state == .on && row < statusHistory.count - 1) ? statusHistory[row + 1] : nil
 
 		cellView.set(displayedStatusEdit: statusHistory[row], previousStatusEdit: previousEdit)
 
