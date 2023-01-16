@@ -189,6 +189,10 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 			editedTimeLabel.objectValue = "Edited \(RelativeDateFormatter.shared.string(from: editedAt))"
 			editedTimeLabel.toolTip = DateFormatter.longDateFormatter.string(from: editedAt)
 		}
+		else
+		{
+			editInfoContainer.isHidden = true
+		}
 
 		let attributedStatus = cellModel.visibleStatus.attributedContent
 
