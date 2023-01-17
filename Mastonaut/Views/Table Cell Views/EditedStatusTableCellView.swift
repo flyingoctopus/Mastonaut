@@ -23,7 +23,7 @@ class EditedStatusTableCellView: NSTableCellView {
 	override func awakeFromNib() {
 		super.awakeFromNib()
 
-		/// BUG: outlets will be `nil` if window has been restored (e.g., after app relaunch)
+		/// BUG: outlets will be `nil` if window has been restored (e.g., after app relaunch) (see #88)
 		if let timeLabel {
 			timeLabel.formatter = RelativeDateFormatter.shared
 		}
@@ -32,7 +32,7 @@ class EditedStatusTableCellView: NSTableCellView {
 	@objc internal private(set) dynamic
 	var cellModel: StatusEditCellModel?
 
-	func set(forStatus status: Status, displayedStatusEdit statusEdit: StatusEdit, previousStatusEdit: StatusEdit?, activeInstance:Instance) {
+	func set(forStatus status: Status, displayedStatusEdit statusEdit: StatusEdit, previousStatusEdit: StatusEdit?, activeInstance: Instance) {
 		let cellModel = StatusEditCellModel(statusEdit: statusEdit)
 		self.cellModel = cellModel
 
@@ -43,7 +43,7 @@ class EditedStatusTableCellView: NSTableCellView {
 		authorAccountLabel.stringValue = status.account.uri(in: activeInstance)
 		timeLabel.objectValue = statusEdit.createdAt
 		timeLabel.toolTip = DateFormatter.longDateFormatter.string(from: statusEdit.createdAt)
-		
+
 		contentWarningContainer.isHidden = true
 
 		// https://github.com/chucker/Mastonaut/issues/79 unclear why needed (otherwise set to pink)
@@ -61,10 +61,6 @@ class EditedStatusTableCellView: NSTableCellView {
 		else {
 			statusLabel.stringValue = statusEdit.attributedContent.string
 		}
-
-//		statusLabel.set(attributedStringValue: statusEdit.content,
-//						applyingAttributes: _statusLabelAttributes
-//						applyingEmojis: nil) // TODO
 	}
 
 	private static let _diffAttributes: DiffAttributes =

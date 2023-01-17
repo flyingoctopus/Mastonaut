@@ -70,13 +70,6 @@ class EditHistoryViewController: NSViewController, BaseColumnViewController, Sid
 	var status: Status?
 	var statusHistory: [StatusEdit]? = []
 
-//	public convenience init(history: [StatusEdit])
-//	{
-//		self.statusHistory = history
-//
-//		self.init(windowNibName: NSNib.Name("EditHistorySheetWindowController"))
-//	}
-
 	enum CellViewIdentifiers
 	{
 		static let editedStatus = NSUserInterfaceItemIdentifier("editedStatus")
@@ -100,25 +93,6 @@ class EditHistoryViewController: NSViewController, BaseColumnViewController, Sid
 
 		return statusHistory.count
 	}
-
-//	func tableView(
-//		_ tableView: NSTableView,
-//		objectValueFor tableColumn: NSTableColumn?,
-//		row: Int
-//	) -> Any?
-//	{
-//		guard let statusHistory else { return nil }
-//
-//		return statusHistory[row]
-//	}
-
-//	func tableView(
-//		_ tableView: NSTableView,
-//		rowViewForRow row: Int
-//	) -> NSTableRowView?
-//	{
-//		return nil
-//	}
 
 	@IBAction func toggleHighlightDifferences(_ sender: NSButton)
 	{
