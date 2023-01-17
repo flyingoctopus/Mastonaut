@@ -17,9 +17,9 @@
 //  GNU General Public License for more details.
 //
 
+import CoreTootin
 import Foundation
 import MastodonKit
-import CoreTootin
 
 class StatusListViewController: ListViewController<Status>, StatusInteractionHandling, PollVotingCapable, FilterServiceObserver
 {
@@ -36,6 +36,7 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 		super.init(nibName: "ListViewController", bundle: .main)
 	}
 
+	@available(*, unavailable)
 	required init?(coder: NSCoder)
 	{
 		fatalError("init(coder:) has not been implemented")
@@ -47,12 +48,12 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 
 		observations.observePreference(\MastonautPreferences.mediaDisplayMode)
 		{
-			[unowned self] (preferences, change) in self.refreshVisibleCellViews()
+			[unowned self] _, _ in self.refreshVisibleCellViews()
 		}
 
 		observations.observePreference(\MastonautPreferences.spoilerDisplayMode)
 		{
-			[unowned self] (preferences, change) in self.refreshVisibleCellViews()
+			[unowned self] _, _ in self.refreshVisibleCellViews()
 		}
 	}
 
@@ -66,10 +67,11 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 		super.registerCells()
 
 		tableView.register(NSNib(nibNamed: "StatusTableCellView", bundle: .main),
-						   forIdentifier: CellViewIdentifier.status)
+		                   forIdentifier: CellViewIdentifier.status)
 	}
 
-	override func clientDidChange(_ client: ClientType?, oldClient: ClientType?) {
+	override func clientDidChange(_ client: ClientType?, oldClient: ClientType?)
+	{
 		super.clientDidChange(client, oldClient: oldClient)
 
 		guard let account = authorizedAccountProvider?.currentAccount else { return }
@@ -80,16 +82,16 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 
 	func handle(updatedStatus: Status)
 	{
-		self.handle(updatedEntry: updatedStatus)
+		handle(updatedEntry: updatedStatus)
 	}
 
 	func handle<T: UserDescriptionError>(interactionError error: T)
 	{
 		DispatchQueue.main.async
-			{
-				[weak self] in self?.view.window?.windowController?.displayError(error,
-																				 title: 🔠("interaction.status"))
-			}
+		{
+			[weak self] in self?.view.window?.windowController?.displayError(error,
+			                                                                 title: 🔠("interaction.status"))
+		}
 	}
 
 	func handle(linkURL: URL, knownTags: [Tag]?)
@@ -123,14 +125,15 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 	{
 		authorizedAccountProvider?.presentInSidebar(SidebarMode.tag(tag.name))
 	}
-	
-	func showStatusEdits(status: Status, edits: [StatusEdit]) {
+
+	func showStatusEdits(status: Status, edits: [StatusEdit])
+	{
 		let sidebarMode = SidebarMode.edits(status: status,
-											edits: edits)
+		                                    edits: edits)
 		authorizedAccountProvider?.presentInSidebar(sidebarMode)
 	}
-	
-	func canDelete(status: Status) -> Bool
+
+	func canDeleteOrEdit(status: Status) -> Bool
 	{
 		return currentUserIsAuthor(of: status)
 	}
@@ -145,21 +148,26 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 		let message: String = isRedrafting ? "The contents of this toot will be copied over to the composer, and you'll be able to make changes to it before re-submitting it." : "This action can not be undone."
 
 		let dialogMode: DialogMode = isRedrafting ? .custom(proceed: "Delete and Redraft", dismiss: "Cancel")
-												  : .custom(proceed: "Delete Toot", dismiss: "Cancel")
+			: .custom(proceed: "Delete Toot", dismiss: "Cancel")
 
 		view.window?.windowController?.showAlert(style: .informational,
-												 title: "Are you sure you want to delete this toot?",
-												 message: message,
-												 dialogMode: dialogMode)
-			{
-				response in
-				completion(response == .alertFirstButtonReturn)
-			}
+		                                         title: "Are you sure you want to delete this toot?",
+		                                         message: message,
+		                                         dialogMode: dialogMode)
+		{
+			response in
+			completion(response == .alertFirstButtonReturn)
+		}
 	}
 
 	func redraft(status: Status)
 	{
 		authorizedAccountProvider?.redraft(status: status)
+	}
+
+	func edit(status: Status)
+	{
+		authorizedAccountProvider?.edit(status: status)
 	}
 
 	override func menuItems(for entryReference: EntryReference) -> [NSMenuItem]
@@ -170,7 +178,9 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 
 	func menuItems(for status: Status) -> [NSMenuItem]
 	{
-		guard entryMatchesAnyFilter(status) == false else {
+		guard entryMatchesAnyFilter(status) == false
+		else
+		{
 			return StatusMenuItemsController.shared.menuItems(forFilteredStatus: status, interactionHandler: self)
 		}
 
@@ -199,10 +209,10 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 		}
 
 		statusCell.set(displayedStatus: status,
-					   poll: status.poll.flatMap { updatedPolls[$0.id] },
-					   attachmentPresenter: attachmentPresenter,
-					   interactionHandler: self,
-					   activeInstance: instance)
+		               poll: status.poll.flatMap { updatedPolls[$0.id] },
+		               attachmentPresenter: attachmentPresenter,
+		               interactionHandler: self,
+		               activeInstance: instance)
 	}
 
 	func set(hasActivePollTask: Bool, for statusID: String)
@@ -220,7 +230,8 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 
 	func handle(updatedPoll poll: Poll, statusID: String)
 	{
-		guard let index = entryList.firstIndex(where: { $0.entryKey == statusID }) else
+		guard let index = entryList.firstIndex(where: { $0.entryKey == statusID })
+		else
 		{
 			return
 		}
@@ -260,30 +271,36 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 
 	// MARK: - Filtering
 
-	override func applicableFilters() -> [UserFilter] {
+	override func applicableFilters() -> [UserFilter]
+	{
 		return filterService?.filters ?? []
 	}
 
-	override func checkEntry(_ status: Status, matchesFilter filter: UserFilter) -> Bool {
+	override func checkEntry(_ status: Status, matchesFilter filter: UserFilter) -> Bool
+	{
 		return filter.checkMatch(status: status)
 	}
 
-	func filterServiceDidUpdateFilters(_ service: FilterService) {
+	func filterServiceDidUpdateFilters(_ service: FilterService)
+	{
 		validFiltersDidChange()
 	}
 
 	// MARK: - Reuse Identifiers
 
-	struct CellViewIdentifier
+	enum CellViewIdentifier
 	{
 		static let status = NSUserInterfaceItemIdentifier("status")
 	}
 
 	// MARK: - Keyboard Navigation
 
-	override func showPreview(for status: Status, atRow row: Int) {
+	override func showPreview(for status: Status, atRow row: Int)
+	{
 		guard let cellView = tableView.rowView(atRow: row, makeIfNecessary: false)?.view(atColumn: 0),
-			  let mediaPresenterCell = cellView as? MediaPresenting else {
+		      let mediaPresenterCell = cellView as? MediaPresenting
+		else
+		{
 			return
 		}
 
@@ -291,44 +308,55 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 	}
 }
 
-extension StatusListViewController: NSMenuItemValidation {
-
-	func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+extension StatusListViewController: NSMenuItemValidation
+{
+	func validateMenuItem(_ menuItem: NSMenuItem) -> Bool
+	{
 		return cellMenuItemHandler.validateMenuItem(menuItem)
 	}
-	
-	@IBAction func copyTootLink(_ sender: Any?) {
+
+	@IBAction func copyTootLink(_ sender: Any?)
+	{
 		cellMenuItemHandler.copyTootLink(sender)
 	}
-	@IBAction func copyTootText(_ sender: Any?) {
+
+	@IBAction func copyTootText(_ sender: Any?)
+	{
 		cellMenuItemHandler.copyTootText(sender)
 	}
 
-	@IBAction func favoriteSelectedStatus(_ sender: Any?) {
+	@IBAction func favoriteSelectedStatus(_ sender: Any?)
+	{
 		cellMenuItemHandler.favoriteSelectedStatus(sender)
 	}
-	
-	@IBAction func reblogSelectedStatus(_ sender: Any?) {
+
+	@IBAction func reblogSelectedStatus(_ sender: Any?)
+	{
 		cellMenuItemHandler.reblogSelectedStatus(sender)
 	}
-	
-	@IBAction func replyToSelectedStatus(_ sender: Any?) {
+
+	@IBAction func replyToSelectedStatus(_ sender: Any?)
+	{
 		cellMenuItemHandler.replyToSelectedStatus(sender)
 	}
-	
-	@IBAction func toggleMediaVisibilityOfSelectedStatus(_ sender: Any?) {
+
+	@IBAction func toggleMediaVisibilityOfSelectedStatus(_ sender: Any?)
+	{
 		cellMenuItemHandler.toggleMediaVisibilityOfSelectedStatus(sender)
 	}
-	
-	@IBAction func toggleContentVisibilityOfSelectedStatus(_ sender: Any?) {
+
+	@IBAction func toggleContentVisibilityOfSelectedStatus(_ sender: Any?)
+	{
 		cellMenuItemHandler.toggleContentVisibilityOfSelectedStatus(sender)
 	}
-	
-	@IBAction func showDetailsOfSelectedStatus(_ sender: Any?) {
+
+	@IBAction func showDetailsOfSelectedStatus(_ sender: Any?)
+	{
 		cellMenuItemHandler.showDetailsOfSelectedStatus(sender)
 	}
 
-	@IBAction func togglePresentableMediaVisible(_ sender: Any?) {
+	@IBAction func togglePresentableMediaVisible(_ sender: Any?)
+	{
 		cellMenuItemHandler.togglePresentableMediaVisible(sender)
 	}
 }
