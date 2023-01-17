@@ -8,11 +8,14 @@
 
 import CoreTootin
 import Foundation
+import Logging
 import MastodonKit
 
 class EditHistoryViewController: NSViewController, BaseColumnViewController, SidebarPresentable,
 	NSTableViewDataSource, NSTableViewDelegate
 {
+	private var logger: Logger?
+
 	var currentFocusRegion: NSRect?
 
 	func activateKeyboardNavigation(preferredFocusRegion: NSRect?)
@@ -83,6 +86,8 @@ class EditHistoryViewController: NSViewController, BaseColumnViewController, Sid
 	{
 		super.viewDidLoad()
 
+		self.logger = Logger(subsystemType: self)
+
 		tableView.register(NSNib(nibNamed: "EditedStatusTableCellView", bundle: .main),
 		                   forIdentifier: CellViewIdentifiers.editedStatus)
 	}
@@ -115,26 +120,32 @@ class EditHistoryViewController: NSViewController, BaseColumnViewController, Sid
 //		return nil
 //	}
 
-    @IBAction func toggleHighlightDifferences(_ sender: NSButton) {
-        tableView.reloadData()
-    }
-    
-    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView?
+	@IBAction func toggleHighlightDifferences(_ sender: NSButton)
 	{
-		let view = tableView.makeView(withIdentifier: CellViewIdentifiers.editedStatus, owner: nil)
+		tableView.reloadData()
+	}
 
-		guard let cellView = view as? EditedStatusTableCellView,
+	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView?
+	{
+		let _cellView = tableView.makeView(withIdentifier: CellViewIdentifiers.editedStatus, owner: nil)
+
+		guard let cellView = _cellView as? EditedStatusTableCellView,
+		      let status,
 		      let statusHistory,
+		      let authorizedAccountProvider = view.window?.windowController as? AuthorizedAccountProviding,
+		      let activeInstance = authorizedAccountProvider.currentInstance,
 		      statusHistory.count > row
 		else
 		{
+			logger!.warning("could not prepare view")
+
 			return view
 		}
 
 		let currentEdit = statusHistory[row]
 		let previousEdit = (highlightDifferences.state == .on && row < statusHistory.count - 1) ? statusHistory[row + 1] : nil
 
-		cellView.set(displayedStatusEdit: statusHistory[row], previousStatusEdit: previousEdit)
+		cellView.set(forStatus: status, displayedStatusEdit: statusHistory[row], previousStatusEdit: previousEdit, activeInstance: activeInstance)
 
 		return cellView
 	}
