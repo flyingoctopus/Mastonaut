@@ -75,6 +75,9 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 		case edit
 	}
 
+	/// If an existing status is being edited, its ID.
+	private var existingStatusID: String?
+
 	private unowned let accountsService = AppDelegate.shared.accountsService
 	private unowned let instanceService = AppDelegate.shared.instanceService
 
@@ -458,6 +461,8 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 	override func awakeFromNib()
 	{
 		super.awakeFromNib()
+		
+		mutateSubmitControlBehavior(newMode: .submitNew)
 
 		window?.registerForDraggedTypes([.fileURL, .png])
 
@@ -720,38 +725,39 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 		updateRemainingCountLabel()
 	}
 
-	func setUpAsEdit(of status: Status, using account: AuthorizedAccount?)
+	func setUpAsEdit(of existingStatus: Status, using account: AuthorizedAccount?)
 	{
 		guard let account,
-		      account.isSameUser(as: status.account) else { return }
+		      account.isSameUser(as: existingStatus.account) else { return }
 
 		currentAccount = account
 
 		attachmentsSubcontroller.reset()
-		textView.string = status.fullAttributedContent.replacingMentionsWithURIs(mentions: status.mentions)
-		postingService?.set(status: status.fullAttributedContent.string)
+		textView.string = existingStatus.fullAttributedContent.replacingMentionsWithURIs(mentions: existingStatus.mentions)
+		postingService?.set(status: existingStatus.fullAttributedContent.string)
 
 		DispatchQueue.main.async
 		{
 			self.textView.replaceShortcodesWithEmojiIfPossible()
 		}
 
-		setContentWarning(status.spoilerText)
-		setAudienceSelection(visibility: status.visibility)
+		setContentWarning(existingStatus.spoilerText)
+		setAudienceSelection(visibility: existingStatus.visibility)
 
+		existingStatusID = existingStatus.id
 		mutateSubmitControlBehavior(newMode: .edit)
 		updateSubmitEnabled()
 		updateRemainingCountLabel()
 
-		if let poll = status.poll
+		if let poll = existingStatus.poll
 		{
 			pollEnabled = true
 			pollViewController.optionTitles = poll.options.map { $0.title }
 		}
 
-		guard !status.mediaAttachments.isEmpty else { return }
+		guard !existingStatus.mediaAttachments.isEmpty else { return }
 
-		let uploads = attachmentsSubcontroller.addAttachments(status.mediaAttachments)
+		let uploads = attachmentsSubcontroller.addAttachments(existingStatus.mediaAttachments)
 		let resourceFetcher = resourcesFetcher
 
 		for upload in uploads
@@ -917,6 +923,10 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 
 		switch newMode
 		{
+		case .submitNew:
+			toolbarLabel = 🔠("Send Toot")
+			buttonLabel = 🔠("Send toot!")
+
 		case .edit:
 			toolbarLabel = 🔠("Edit Toot")
 			buttonLabel = 🔠("Edit toot!")
@@ -985,10 +995,9 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 			}
 
 		case .edit:
-			postingService?.edit(visibility: audienceSelection,
+			postingService?.edit(existingID: existingStatusID!,
 			                     isSensitive: visibilitySegmentedControl.isSelected(forSegment: 0),
 			                     attachmentIds: attachments.compactMap { $0.attachment?.id },
-			                     replyStatusId: replyStatus?.id,
 			                     poll: poll)
 			{
 				[weak self] result in
