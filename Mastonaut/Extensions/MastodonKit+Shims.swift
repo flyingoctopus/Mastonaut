@@ -17,9 +17,9 @@
 //  GNU General Public License for more details.
 //
 
+import CoreTootin
 import Foundation
 import MastodonKit
-import CoreTootin
 
 typealias MastodonNotification = MastodonKit.Notification
 
@@ -36,9 +36,9 @@ extension Client
 	static func create(for account: AuthorizedAccount) -> ClientType?
 	{
 		return Client.create(for: account,
-							 keychainController: AppDelegate.shared.keychainController,
-							 reauthAgent: AppDelegate.shared.accountsService.reauthorizationAgent(for: account),
-							 urlSession: AppDelegate.shared.clientsUrlSession)
+		                     keychainController: AppDelegate.shared.keychainController,
+		                     reauthAgent: AppDelegate.shared.accountsService.reauthorizationAgent(for: account),
+		                     urlSession: AppDelegate.shared.clientsUrlSession)
 	}
 
 	static func registerMockResponses(for client: MockClient)
@@ -57,22 +57,31 @@ extension Client
 	}
 }
 
+extension StatusEdit
+{
+	var attributedContent: NSAttributedString
+	{
+		return HTMLParsingService.shared.parse(HTML: content, removingTrailingUrl: nil,
+		                                       removingInvisibleSpans: true)
+	}
+}
+
 extension Status
 {
 	var authorName: String
 	{
 		return account.bestDisplayName
 	}
-	
+
 	var authorAccount: String
 	{
 		return account.acct
 	}
-	
+
 	var attributedContent: NSAttributedString
 	{
 		return HTMLParsingService.shared.parse(HTML: content, removingTrailingUrl: card?.url,
-											   removingInvisibleSpans: true)
+		                                       removingInvisibleSpans: true)
 	}
 
 	var fullAttributedContent: NSAttributedString
@@ -104,16 +113,16 @@ extension Status
 		var links: [URL: String] = [:]
 
 		attributedContent.enumerateAttribute(.link, in: range, options: [])
-			{
-				(value, linkRange, _) in
+		{
+			value, linkRange, _ in
 
-				if let url = value as? URL
-				{
-					let title = attributedContent.attributedSubstring(from: linkRange).string
-					guard !title.hasPrefix("#") && !title.hasPrefix("@") else { return }
-					links[url] = title
-				}
+			if let url = value as? URL
+			{
+				let title = attributedContent.attributedSubstring(from: linkRange).string
+				guard !title.hasPrefix("#") && !title.hasPrefix("@") else { return }
+				links[url] = title
 			}
+		}
 
 		return links
 	}
@@ -129,8 +138,8 @@ extension Instance
 
 extension ClientType
 {
-	func makeStreamIdentifier(for stream: RemoteEventsListener.Stream) -> RemoteEventsCoordinator.StreamIdentifier? {
-
+	func makeStreamIdentifier(for stream: RemoteEventsListener.Stream) -> RemoteEventsCoordinator.StreamIdentifier?
+	{
 		guard
 			let baseUrl = URL(string: baseURL),
 			let accessToken = accessToken
@@ -158,7 +167,7 @@ extension MastodonNotification
 
 	var isClean: Bool
 	{
-		if let status = self.status
+		if let status = status
 		{
 			if status.spoilerText.isEmpty == false { return false }
 			if status.sensitive == true { return false }
@@ -187,14 +196,17 @@ extension Card
 
 	func fetchImage(completion: @escaping (NSImage?) -> Void)
 	{
-		guard let cardImageUrl = self.imageUrl else
+		guard let cardImageUrl = imageUrl
+		else
 		{
 			completion(nil)
 			return
 		}
 
-		Card.cardResourcesFetcher.fetchImage(with: cardImageUrl) { result in
-			switch result {
+		Card.cardResourcesFetcher.fetchImage(with: cardImageUrl)
+		{ result in
+			switch result
+			{
 			case .success(let image):
 				completion(image)
 			case .failure:
@@ -211,7 +223,7 @@ extension AttachmentMetadata
 {
 	var size: NSSize?
 	{
-		guard let width = self.width, let height = self.height else { return nil }
+		guard let width = width, let height = height else { return nil }
 		return NSSize(width: width, height: height)
 	}
 }
@@ -234,15 +246,17 @@ extension Visibility
 	{
 		switch self
 		{
-		case .public, .unlisted:	return #imageLiteral(resourceName: "retoot")
-		case .private:				return #imageLiteral(resourceName: "private")
-		case .direct:				return #imageLiteral(resourceName: "direct")
+		case .public, .unlisted: return #imageLiteral(resourceName: "retoot")
+		case .private: return #imageLiteral(resourceName: "private")
+		case .direct: return #imageLiteral(resourceName: "direct")
 		}
 	}
 
 	func reblogToolTip(didReblog: Bool) -> String
 	{
-		guard didReblog == false else {
+		guard didReblog == false
+		else
+		{
 			return 🔠("Unboost this toot")
 		}
 
@@ -287,8 +301,10 @@ extension NSAttributedString
 	{
 		var composedString = String()
 
-		enumerateAttribute(.link, in: NSMakeRange(0, length), options: []) { (value, effectiveRange, _) in
-			guard let linkURL = value as? URL, let mention = mentions.first(where: { $0.url == linkURL }) else
+		enumerateAttribute(.link, in: NSMakeRange(0, length), options: [])
+		{ value, effectiveRange, _ in
+			guard let linkURL = value as? URL, let mention = mentions.first(where: { $0.url == linkURL })
+			else
 			{
 				composedString.append(self.attributedSubstring(from: effectiveRange).string)
 				return

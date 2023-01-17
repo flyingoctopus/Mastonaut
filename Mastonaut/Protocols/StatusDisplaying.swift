@@ -67,6 +67,9 @@ protocol StatusInteractionHandling: AnyObject
 
 	/// Tells the handler the user asked for more details on a tag to be displayed.
 	func show(tag: Tag)
+	
+	/// Tells the handler the user asked for a status' edit history to be displayed.
+	func showStatusEdits(status: Status, edits: [StatusEdit])
 
 	/// Asks the handler whether the active account can delete the provided status.
 	func canDelete(status: Status) -> Bool
@@ -140,6 +143,24 @@ extension StatusInteractionHandling
 		interact(using: Statuses.unbookmark(id: statusID))
 		{
 			status in completion((status?.bookmarked ?? true) != true)
+		}
+	}
+	
+	func fetchEditHistory(for statusID: String, completion: (([StatusEdit]?) -> Void)? = nil)
+	{
+		client?.run(Statuses.history(id: statusID))
+		{
+			[weak self] result in
+
+			switch result
+			{
+			case .success(let statusEdits, _):
+				completion?(statusEdits)
+
+			case .failure(let error):
+				completion?(nil)
+				DispatchQueue.main.async { self?.handle(interactionError: NetworkError(error)) }
+			}
 		}
 	}
 

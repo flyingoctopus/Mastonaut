@@ -29,6 +29,7 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 	case tag(String)
 	case status(uri: String, status: Status?)
 	case favorites
+	case edits(status: Status?, edits: [StatusEdit]?)
 
 	var rawValue: String
 	{
@@ -45,6 +46,9 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 
 		case .favorites:
 			return "favorites"
+			
+		case .edits(let status, _):
+			return "edits\n\(status?.id ?? "")"
 		}
 	}
 
@@ -70,6 +74,10 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 			else if components.first == "status"
 			{
 				self = .status(uri: String(components[1]), status: nil)
+			}
+			else if components.first == "edits"
+			{
+				self = .edits(status: nil, edits: nil)
 			}
 			else
 			{
@@ -110,6 +118,9 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 
 		case .favorites:
 			return FavoritesViewController()
+			
+		case .edits(let status, let edits):
+			return EditHistoryViewController(status: status, edits: edits)
 		}
 	}
 
