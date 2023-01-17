@@ -132,8 +132,8 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 		                                    edits: edits)
 		authorizedAccountProvider?.presentInSidebar(sidebarMode)
 	}
-	func canDelete(status: Status) -> Bool
 
+	func canDeleteOrEdit(status: Status) -> Bool
 	{
 		return currentUserIsAuthor(of: status)
 	}
@@ -163,6 +163,11 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 	func redraft(status: Status)
 	{
 		authorizedAccountProvider?.redraft(status: status)
+	}
+
+	func edit(status: Status)
+	{
+		authorizedAccountProvider?.edit(status: status)
 	}
 
 	override func menuItems(for entryReference: EntryReference) -> [NSMenuItem]

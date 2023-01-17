@@ -72,7 +72,7 @@ protocol StatusInteractionHandling: AnyObject
 	func showStatusEdits(status: Status, edits: [StatusEdit])
 
 	/// Asks the handler whether the active account can delete the provided status.
-	func canDelete(status: Status) -> Bool
+	func canDeleteOrEdit(status: Status) -> Bool
 
 	/// Asks the handler whether the active account can pin/unpin the provided status.
 	func canPin(status: Status) -> Bool
@@ -83,6 +83,9 @@ protocol StatusInteractionHandling: AnyObject
 	/// Tells the handler the user wants to re-draft a status.
 	func redraft(status: Status)
 
+	/// Tells the handler the user wants to edit a status.
+	func edit(status:Status)
+	
 	/// Asks the handler to open a URL the user has clicked.
 	func handle(linkURL: URL, knownTags: [Tag]?)
 

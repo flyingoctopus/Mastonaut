@@ -35,6 +35,7 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 	@IBOutlet internal unowned var currentUserPopUpButton: NSPopUpButton!
 	@IBOutlet private unowned var audiencePopupButton: NSPopUpButton!
 
+	@IBOutlet private unowned var submitToolbarItem: NSToolbarItem!
 	@IBOutlet private unowned var submitSegmentedControl: NSSegmentedControl!
 
 	@IBOutlet private unowned var bottomControlsStackView: NSStackView!
@@ -65,6 +66,14 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 	@IBOutlet private unowned var emojiPickerPanelController: CustomEmojiPanelController!
 	@IBOutlet private unowned var emojiPickerPopover: NSPopover!
 	@IBOutlet private unowned var emojiSegmentedControl: NSSegmentedControl!
+
+	private var submitControlMode: SubmitControlMode = .submitNew
+
+	enum SubmitControlMode
+	{
+		case submitNew
+		case edit
+	}
 
 	private unowned let accountsService = AppDelegate.shared.accountsService
 	private unowned let instanceService = AppDelegate.shared.instanceService
@@ -711,6 +720,57 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 		updateRemainingCountLabel()
 	}
 
+	func setUpAsEdit(of status: Status, using account: AuthorizedAccount?)
+	{
+		guard let account,
+		      account.isSameUser(as: status.account) else { return }
+
+		currentAccount = account
+
+		attachmentsSubcontroller.reset()
+		textView.string = status.fullAttributedContent.replacingMentionsWithURIs(mentions: status.mentions)
+		postingService?.set(status: status.fullAttributedContent.string)
+
+		DispatchQueue.main.async
+		{
+			self.textView.replaceShortcodesWithEmojiIfPossible()
+		}
+
+		setContentWarning(status.spoilerText)
+		setAudienceSelection(visibility: status.visibility)
+
+		mutateSubmitControlBehavior(newMode: .edit)
+		updateSubmitEnabled()
+		updateRemainingCountLabel()
+
+		if let poll = status.poll
+		{
+			pollEnabled = true
+			pollViewController.optionTitles = poll.options.map { $0.title }
+		}
+
+		guard !status.mediaAttachments.isEmpty else { return }
+
+		let uploads = attachmentsSubcontroller.addAttachments(status.mediaAttachments)
+		let resourceFetcher = resourcesFetcher
+
+		for upload in uploads
+		{
+			guard let url = upload.attachment?.parsedPreviewUrl else { continue }
+			resourceFetcher.fetchImage(with: url)
+			{
+				[weak self] result in
+
+				guard case .success(let image) = result else { return }
+
+				DispatchQueue.main.async
+				{
+					self?.attachmentsSubcontroller.update(thumbnail: image, for: upload)
+				}
+			}
+		}
+	}
+
 	func setUpAsRedraft(of status: Status, using account: AuthorizedAccount?)
 	{
 		guard status.reblog == nil else { return }
@@ -848,6 +908,25 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 		updateSubmitEnabled()
 	}
 
+	func mutateSubmitControlBehavior(newMode: SubmitControlMode)
+	{
+		submitControlMode = newMode
+
+		var toolbarLabel: String
+		var buttonLabel: String
+
+		switch newMode
+		{
+		case .edit:
+			toolbarLabel = 🔠("Edit Toot")
+			buttonLabel = 🔠("Edit toot!")
+		}
+
+		submitToolbarItem.label = toolbarLabel
+		submitToolbarItem.paletteLabel = toolbarLabel
+		submitSegmentedControl.setLabel(buttonLabel, forSegment: 0)
+	}
+
 	func updateSubmitEnabled()
 	{
 		submitSegmentedControl.isEnabled = canSubmitStatus
@@ -881,24 +960,50 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 			                   multipleChoice: pollViewController.multipleChoice)
 		}
 
-		postingService?.post(visibility: audienceSelection,
-		                     isSensitive: visibilitySegmentedControl.isSelected(forSegment: 0),
-		                     attachmentIds: attachments.compactMap { $0.attachment?.id },
-		                     replyStatusId: replyStatus?.id,
-		                     poll: poll)
+		switch submitControlMode
 		{
-			[weak self] result in
-
-			guard let self = self else { return }
-
-			switch result
+		case .submitNew:
+			postingService?.post(visibility: audienceSelection,
+			                     isSensitive: visibilitySegmentedControl.isSelected(forSegment: 0),
+			                     attachmentIds: attachments.compactMap { $0.attachment?.id },
+			                     replyStatusId: replyStatus?.id,
+			                     poll: poll)
 			{
-			case .success:
-				self.reset()
+				[weak self] result in
 
-			case .failure(let error):
-				self.updateSubmitEnabled()
-				self.window?.windowController?.displayError(NetworkError(error))
+				guard let self = self else { return }
+
+				switch result
+				{
+				case .success:
+					self.reset()
+
+				case .failure(let error):
+					self.updateSubmitEnabled()
+					self.window?.windowController?.displayError(NetworkError(error))
+				}
+			}
+
+		case .edit:
+			postingService?.edit(visibility: audienceSelection,
+			                     isSensitive: visibilitySegmentedControl.isSelected(forSegment: 0),
+			                     attachmentIds: attachments.compactMap { $0.attachment?.id },
+			                     replyStatusId: replyStatus?.id,
+			                     poll: poll)
+			{
+				[weak self] result in
+
+				guard let self = self else { return }
+
+				switch result
+				{
+				case .success:
+					self.reset()
+
+				case .failure(let error):
+					self.updateSubmitEnabled()
+					self.window?.windowController?.displayError(NetworkError(error))
+				}
 			}
 		}
 

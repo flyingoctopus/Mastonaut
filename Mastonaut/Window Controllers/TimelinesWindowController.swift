@@ -343,6 +343,12 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		composerWindowController.showWindow(nil)
 		composerWindowController.setUpAsRedraft(of: status, using: currentAccount)
 	}
+	
+	func edit(status: Status) {
+		let composerWindowController = AppDelegate.shared.statusComposerWindowController
+		composerWindowController.showWindow(nil)
+		composerWindowController.setUpAsEdit(of: status, using: currentAccount)
+	}
 
 	func composeReply(for status: Status, sender: Any?) {
 		let composerWindowController = AppDelegate.shared.statusComposerWindowController
