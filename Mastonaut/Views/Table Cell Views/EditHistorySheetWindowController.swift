@@ -34,7 +34,7 @@ class EditHistoryViewController: NSViewController, BaseColumnViewController, Sid
 	init(status: Status?, edits: [StatusEdit]?)
 	{
 		self.status = status
-		self.statusHistory = edits
+		self.statusHistory = edits?.reversed()
 
 		super.init(nibName: "EditHistorySheetWindowController", bundle: .main)
 	}
@@ -86,7 +86,7 @@ class EditHistoryViewController: NSViewController, BaseColumnViewController, Sid
 	{
 		super.viewDidLoad()
 
-		self.logger = Logger(subsystemType: self)
+		logger = Logger(subsystemType: self)
 
 		tableView.register(NSNib(nibNamed: "EditedStatusTableCellView", bundle: .main),
 		                   forIdentifier: CellViewIdentifiers.editedStatus)
@@ -145,7 +145,7 @@ class EditHistoryViewController: NSViewController, BaseColumnViewController, Sid
 		let currentEdit = statusHistory[row]
 		let previousEdit = (highlightDifferences.state == .on && row < statusHistory.count - 1) ? statusHistory[row + 1] : nil
 
-		cellView.set(forStatus: status, displayedStatusEdit: statusHistory[row], previousStatusEdit: previousEdit, activeInstance: activeInstance)
+		cellView.set(forStatus: status, displayedStatusEdit: currentEdit, previousStatusEdit: previousEdit, activeInstance: activeInstance)
 
 		return cellView
 	}
