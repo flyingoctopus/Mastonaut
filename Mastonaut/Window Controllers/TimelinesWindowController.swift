@@ -1027,11 +1027,11 @@ extension TimelinesWindowController: AuthorizedAccountProviding {
 	}
 
 	func handle(linkURL: URL) {
-		MastodonURLResolver.resolve(url: linkURL, knownTags: nil, source: self)
+		MastodonURLResolver.resolve(using: client, url: linkURL, knownTags: nil, source: self)
 	}
 
 	func handle(linkURL: URL, knownTags: [Tag]?) {
-		MastodonURLResolver.resolve(url: linkURL, knownTags: knownTags, source: self)
+		MastodonURLResolver.resolve(using: client, url: linkURL, knownTags: knownTags, source: self)
 	}
 }
 
