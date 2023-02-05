@@ -1043,8 +1043,10 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 
 			DispatchQueue.main.async
 			{
-				guard let self = self, case .success(let emoji, _) = result else { return }
+				guard let self = self, case .success(let response) = result else { return }
 
+				let emoji = response.value
+				
 				self.currentClientEmoji = emoji.cacheable(instance: instance)
 					.sorted()
 					.filter { $0.visibleInPicker }

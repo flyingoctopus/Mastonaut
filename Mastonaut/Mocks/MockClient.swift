@@ -88,7 +88,7 @@ class MockClient: ClientType
 				completion(.failure(ClientError.invalidModel))
 				return nil
 			}
-
+			
 			completion(.success(.init(value: model, pagination: nil)))
 			return nil
 		}

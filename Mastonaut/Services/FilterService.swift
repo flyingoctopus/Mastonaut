@@ -130,7 +130,7 @@ class FilterService: NSObject, RemoteEventsReceiver {
 
 			switch result {
 			case .success(let response):
-				let filters = filters
+				let filters = response.value
 				
 				DispatchQueue.main.async {
 					self.account.setCachedFilters(from: filters)

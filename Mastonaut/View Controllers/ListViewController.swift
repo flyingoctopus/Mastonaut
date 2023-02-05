@@ -433,7 +433,10 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 
 						switch result
 						{
-						case .success(let entries, let pagination):
+						case .success(let response):
+							let entries = response.value,
+								pagination = response.pagination
+							
 							self.prepareNewEntries(entries, for: insertion, pagination: pagination)
 
 						case .failure(let error):

@@ -146,7 +146,7 @@ class AccountFiltersController: NSObject {
 		tableView.window?.beginSheet(editorWindow)
 	}
 
-	private func handleFilterCreateUpdateResponse(result: Result<Filter>) {
+	private func handleFilterCreateUpdateResponse(result: Result<Response<Filter>, Error>) {
 		guard let editorWindow = presentedFilterEditorWindowController?.window else { return }
 
 		switch result {
