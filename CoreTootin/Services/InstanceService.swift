@@ -80,7 +80,8 @@ public class InstanceService
 
 				switch result
 				{
-				case .success(let instance, _):
+				case .success(let response):
+					let instance = response.value
 					self?.instancesMap[account.uuid] = instance
 					completion?(instance)
 

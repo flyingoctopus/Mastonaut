@@ -88,17 +88,17 @@ class FilterService: NSObject, RemoteEventsReceiver {
 		setNeedsUpdate(hadFailure: false)
 	}
 
-	func delete(filter: UserFilter, completion: @escaping (Result<Empty>) -> Void) {
+	func delete(filter: UserFilter, completion: @escaping (Result<Response<Empty>, Error>) -> Void) {
 		client.run(FilterRequests.delete(id: filter.id), completion: completion)
 	}
 
-	func create(filter: UserFilter, completion: @escaping (Result<Filter>) -> Void) {
+	func create(filter: UserFilter, completion: @escaping (Result<Response<Filter>, Error>) -> Void) {
 		client.run(FilterRequests.create(phrase: filter.phrase, context: filter.context,
 		                                 irreversible: filter.irreversible, wholeWord: filter.wholeWord,
 		                                 expiresIn: filter.expiresAt), completion: completion)
 	}
 
-	func updateFilter(id: String, updatedFilter filter: UserFilter, completion: @escaping (Result<Filter>) -> Void) {
+	func updateFilter(id: String, updatedFilter filter: UserFilter, completion: @escaping (Result<Response<Filter>, Error>) -> Void) {
 		client.run(FilterRequests.update(id: id, phrase: filter.phrase, context: filter.context,
 		                                 irreversible: filter.irreversible, wholeWord: filter.wholeWord,
 		                                 expiresIn: filter.expiresAt), completion: completion)
@@ -129,7 +129,9 @@ class FilterService: NSObject, RemoteEventsReceiver {
 			guard let self = self else { return }
 
 			switch result {
-			case .success(let filters, _):
+			case .success(let response):
+				let filters = filters
+				
 				DispatchQueue.main.async {
 					self.account.setCachedFilters(from: filters)
 					self.filters = filters.map { UserFilter(filter: $0) }
