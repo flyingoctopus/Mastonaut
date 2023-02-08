@@ -1253,10 +1253,10 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SxE-ws-Vrx">
-                                                    <rect key="frame" x="20" y="97" width="342" height="153"/>
+                                                    <rect key="frame" x="20" y="158" width="342" height="92"/>
                                                     <subviews>
                                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GhL-dt-c4c">
-                                                            <rect key="frame" x="-2" y="136" width="109" height="18"/>
+                                                            <rect key="frame" x="-2" y="75" width="109" height="18"/>
                                                             <buttonCell key="cell" type="check" title="Lock Account" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="QXg-ZY-6MT">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="system"/>
@@ -1267,7 +1267,7 @@
                                                             </connections>
                                                         </button>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CbL-eT-0sG">
-                                                            <rect key="frame" x="-2" y="117" width="235" height="14"/>
+                                                            <rect key="frame" x="-2" y="56" width="235" height="14"/>
                                                             <textFieldCell key="cell" title="Requires you to manually approve followers." id="Mr0-dA-6gR">
                                                                 <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -1275,7 +1275,7 @@
                                                             </textFieldCell>
                                                         </textField>
                                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9Ag-YT-ubP">
-                                                            <rect key="frame" x="-2" y="94" width="152" height="18"/>
+                                                            <rect key="frame" x="-2" y="33" width="152" height="18"/>
                                                             <buttonCell key="cell" type="check" title="This is a bot account" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="DgH-7l-4Ev">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="system"/>
@@ -1286,7 +1286,7 @@
                                                             </connections>
                                                         </button>
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="SeI-nB-FiX">
-                                                            <rect key="frame" x="-2" y="61" width="346" height="28"/>
+                                                            <rect key="frame" x="-2" y="0.0" width="346" height="28"/>
                                                             <textFieldCell key="cell" title="This account mainly performs automated actions and might not be monitored." id="iZh-Lm-m4o">
                                                                 <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -1294,66 +1294,16 @@
                                                             </textFieldCell>
                                                         </textField>
                                                         <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="H6q-JV-C8D">
-                                                            <rect key="frame" x="-2" y="136" width="226" height="18"/>
+                                                            <rect key="frame" x="-2" y="75" width="226" height="18"/>
                                                             <buttonCell key="cell" type="check" title="List this account on the directory" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="aG7-wh-Qi1">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
                                                         </button>
                                                         <textField hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="LBa-S6-PDo">
-                                                            <rect key="frame" x="-2" y="139" width="536" height="14"/>
+                                                            <rect key="frame" x="-2" y="78" width="536" height="14"/>
                                                             <textFieldCell key="cell" title="The directory lets people find accounts based on interests and activity. Requires at least 10 followers." id="G7q-f7-YhI">
                                                                 <font key="font" metaFont="message" size="11"/>
-                                                                <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                            </textFieldCell>
-                                                        </textField>
-                                                        <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="250" verticalStackHuggingPriority="999" verticalCompressionResistancePriority="749" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nBT-fk-JCx">
-                                                            <rect key="frame" x="0.0" y="34" width="264" height="21"/>
-                                                            <subviews>
-                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="KOE-Fc-q1I">
-                                                                    <rect key="frame" x="-2" y="3" width="164" height="16"/>
-                                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Custom Toot Length Limit:" id="Uf6-gu-Vjv">
-                                                                        <font key="font" metaFont="system"/>
-                                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    </textFieldCell>
-                                                                </textField>
-                                                                <textField horizontalHuggingPriority="750" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="ejJ-OB-6ix">
-                                                                    <rect key="frame" x="168" y="0.0" width="96" height="21"/>
-                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="500" drawsBackground="YES" id="BeM-jc-Ob3">
-                                                                        <numberFormatter key="formatter" formatterBehavior="custom10_4" numberStyle="decimal" allowsFloats="NO" formatWidth="-1" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" id="LVk-BI-cHV">
-                                                                            <real key="minimum" value="1"/>
-                                                                            <real key="maximum" value="1000000"/>
-                                                                        </numberFormatter>
-                                                                        <font key="font" metaFont="system"/>
-                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    </textFieldCell>
-                                                                    <connections>
-                                                                        <binding destination="3t8-w7-ug2" name="enabled" keyPath="canEdit" id="8qW-It-0IW"/>
-                                                                        <binding destination="3t8-w7-ug2" name="value" keyPath="selectedAccount.customTootLengthLimit" id="mo3-qd-HV9">
-                                                                            <dictionary key="options">
-                                                                                <integer key="NSNullPlaceholder" value="500"/>
-                                                                            </dictionary>
-                                                                        </binding>
-                                                                    </connections>
-                                                                </textField>
-                                                            </subviews>
-                                                            <visibilityPriorities>
-                                                                <integer value="1000"/>
-                                                                <integer value="1000"/>
-                                                            </visibilityPriorities>
-                                                            <customSpacing>
-                                                                <real value="3.4028234663852886e+38"/>
-                                                                <real value="3.4028234663852886e+38"/>
-                                                            </customSpacing>
-                                                        </stackView>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="kwg-ag-fwF">
-                                                            <rect key="frame" x="-2" y="0.0" width="346" height="28"/>
-                                                            <textFieldCell key="cell" id="87m-cE-C7t">
-                                                                <font key="font" metaFont="message" size="11"/>
-                                                                <string key="title">This value will be used as the toot length limit for this account only. To reset to the default value, simply clear the input value.</string>
                                                                 <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
@@ -1366,12 +1316,8 @@
                                                         <integer value="1000"/>
                                                         <integer value="1000"/>
                                                         <integer value="1000"/>
-                                                        <integer value="1000"/>
-                                                        <integer value="1000"/>
                                                     </visibilityPriorities>
                                                     <customSpacing>
-                                                        <real value="3.4028234663852886e+38"/>
-                                                        <real value="3.4028234663852886e+38"/>
                                                         <real value="3.4028234663852886e+38"/>
                                                         <real value="3.4028234663852886e+38"/>
                                                         <real value="3.4028234663852886e+38"/>
@@ -1397,7 +1343,7 @@
                                                     <rect key="frame" x="17" y="17" width="348" height="226"/>
                                                     <clipView key="contentView" id="fSM-pz-NUz">
                                                         <rect key="frame" x="1" y="1" width="346" height="224"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" tableStyle="fullWidth" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="24" rowSizeStyle="systemDefault" headerView="GrU-US-sWU" viewBased="YES" id="ugb-tz-1iA">
                                                                 <rect key="frame" x="0.0" y="0.0" width="346" height="174"/>

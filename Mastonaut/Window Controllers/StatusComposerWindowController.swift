@@ -366,16 +366,8 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 				client = Client.create(for: currentAccount)
 				authorAvatarView.image = #imageLiteral(resourceName: "missing.png")
 
-				if let accountPreferences = currentAccount.accountPreferences
-				{
-					currentAccountObservations.observe(accountPreferences, \.customTootLengthLimit, sendInitial: true)
-					{
-						[weak self] accountPreferences, _ in
-
-						self?.statusCharacterLimit = accountPreferences.customTootLengthLimit?.intValue ?? 500
-						self?.updateRemainingCountLabel()
-					}
-				}
+				statusCharacterLimit = currentInstance?.configuration?.statuses?.maxCharacters ?? 500
+				updateRemainingCountLabel()
 
 				AppDelegate.shared.avatarImageCache.fetchImage(account: currentAccount)
 				{ [weak self] result in
@@ -461,7 +453,7 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 	override func awakeFromNib()
 	{
 		super.awakeFromNib()
-		
+
 		mutateSubmitControlBehavior(newMode: .submitNew)
 
 		window?.registerForDraggedTypes([.fileURL, .png])
@@ -1046,7 +1038,7 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 				guard let self = self, case .success(let response) = result else { return }
 
 				let emoji = response.value
-				
+
 				self.currentClientEmoji = emoji.cacheable(instance: instance)
 					.sorted()
 					.filter { $0.visibleInPicker }
