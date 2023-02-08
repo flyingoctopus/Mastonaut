@@ -95,7 +95,8 @@ public class AttachmentUploader
 
 			switch result
 			{
-			case .success(let attachment, _):
+			case .success(let response):
+				let attachment = response.value
 				upload.set(attachment: attachment)
 				self.delegate?.attachmentUploader(self, updatedDescription: attachment.description, for: upload)
 
@@ -194,7 +195,8 @@ public class AttachmentUploader
 
 				switch result
 				{
-				case .success(let attachment, _):
+				case .success(let response):
+					let attachment = response.value
 					upload.set(attachment: attachment)
 					self.delegate?.attachmentUploader(self, finishedUploading: upload)
 					self.dispatchPendingDescriptionUpdate(of: upload, for: client)

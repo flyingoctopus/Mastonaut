@@ -188,8 +188,12 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 	{
 		authorizedAccountProvider?.presentInSidebar(SidebarMode.tag(tag.name))
 	}
-
-	func canDelete(status: Status) -> Bool
+	
+	func showStatusEdits(status: MastodonKit.Status, edits: [StatusEdit]) {
+		authorizedAccountProvider?.presentInSidebar(SidebarMode.edits(status: status, edits: edits))
+	}
+	
+	func canDeleteOrEdit(status: Status) -> Bool
 	{
 		return currentUserIsAuthor(of: status)
 	}
@@ -219,6 +223,11 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 	func redraft(status: Status)
 	{
 		authorizedAccountProvider?.redraft(status: status)
+	}
+	
+	func edit(status: Status)
+	{
+		authorizedAccountProvider?.edit(status: status)
 	}
 
 	override func menuItems(for entryReference: EntryReference) -> [NSMenuItem]

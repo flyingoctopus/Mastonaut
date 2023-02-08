@@ -35,6 +35,7 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 	@IBOutlet internal unowned var currentUserPopUpButton: NSPopUpButton!
 	@IBOutlet private unowned var audiencePopupButton: NSPopUpButton!
 
+	@IBOutlet private unowned var submitToolbarItem: NSToolbarItem!
 	@IBOutlet private unowned var submitSegmentedControl: NSSegmentedControl!
 
 	@IBOutlet private unowned var bottomControlsStackView: NSStackView!
@@ -65,6 +66,17 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 	@IBOutlet private unowned var emojiPickerPanelController: CustomEmojiPanelController!
 	@IBOutlet private unowned var emojiPickerPopover: NSPopover!
 	@IBOutlet private unowned var emojiSegmentedControl: NSSegmentedControl!
+
+	private var submitControlMode: SubmitControlMode = .submitNew
+
+	enum SubmitControlMode
+	{
+		case submitNew
+		case edit
+	}
+
+	/// If an existing status is being edited, its ID.
+	private var existingStatusID: String?
 
 	private unowned let accountsService = AppDelegate.shared.accountsService
 	private unowned let instanceService = AppDelegate.shared.instanceService
@@ -441,6 +453,8 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 	override func awakeFromNib()
 	{
 		super.awakeFromNib()
+		
+		mutateSubmitControlBehavior(newMode: .submitNew)
 
 		window?.registerForDraggedTypes([.fileURL, .png])
 
@@ -654,7 +668,16 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 			window?.makeFirstResponder(textView)
 		}
 
-		setAudienceSelection(visibility: status.visibility)
+		// if the status we're replying to is already private, use that. Otherwise, use the reply default.
+		if status.visibility == .direct || status.visibility == .private
+		{
+			setAudienceSelection(visibility: status.visibility)
+		}
+		else
+		{
+			setAudienceSelection(visibility: Visibility.make(from: Preferences.defaultReplyAudience))
+		}
+
 		updateRemainingCountLabel()
 
 		// Do this last so that the setter gets to calculate the needed height for the constraint.
@@ -701,6 +724,58 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 
 		updateSubmitEnabled()
 		updateRemainingCountLabel()
+	}
+
+	func setUpAsEdit(of existingStatus: Status, using account: AuthorizedAccount?)
+	{
+		guard let account,
+		      account.isSameUser(as: existingStatus.account) else { return }
+
+		currentAccount = account
+
+		attachmentsSubcontroller.reset()
+		textView.string = existingStatus.fullAttributedContent.replacingMentionsWithURIs(mentions: existingStatus.mentions)
+		postingService?.set(status: existingStatus.fullAttributedContent.string)
+
+		DispatchQueue.main.async
+		{
+			self.textView.replaceShortcodesWithEmojiIfPossible()
+		}
+
+		setContentWarning(existingStatus.spoilerText)
+		setAudienceSelection(visibility: existingStatus.visibility)
+
+		existingStatusID = existingStatus.id
+		mutateSubmitControlBehavior(newMode: .edit)
+		updateSubmitEnabled()
+		updateRemainingCountLabel()
+
+		if let poll = existingStatus.poll
+		{
+			pollEnabled = true
+			pollViewController.optionTitles = poll.options.map { $0.title }
+		}
+
+		guard !existingStatus.mediaAttachments.isEmpty else { return }
+
+		let uploads = attachmentsSubcontroller.addAttachments(existingStatus.mediaAttachments)
+		let resourceFetcher = resourcesFetcher
+
+		for upload in uploads
+		{
+			guard let url = upload.attachment?.parsedPreviewUrl else { continue }
+			resourceFetcher.fetchImage(with: url)
+			{
+				[weak self] result in
+
+				guard case .success(let image) = result else { return }
+
+				DispatchQueue.main.async
+				{
+					self?.attachmentsSubcontroller.update(thumbnail: image, for: upload)
+				}
+			}
+		}
 	}
 
 	func setUpAsRedraft(of status: Status, using account: AuthorizedAccount?)
@@ -840,6 +915,29 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 		updateSubmitEnabled()
 	}
 
+	func mutateSubmitControlBehavior(newMode: SubmitControlMode)
+	{
+		submitControlMode = newMode
+
+		var toolbarLabel: String
+		var buttonLabel: String
+
+		switch newMode
+		{
+		case .submitNew:
+			toolbarLabel = 🔠("Send Toot")
+			buttonLabel = 🔠("Send toot!")
+
+		case .edit:
+			toolbarLabel = 🔠("Edit Toot")
+			buttonLabel = 🔠("Edit toot!")
+		}
+
+		submitToolbarItem.label = toolbarLabel
+		submitToolbarItem.paletteLabel = toolbarLabel
+		submitSegmentedControl.setLabel(buttonLabel, forSegment: 0)
+	}
+
 	func updateSubmitEnabled()
 	{
 		submitSegmentedControl.isEnabled = canSubmitStatus
@@ -873,17 +971,14 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 			                   multipleChoice: pollViewController.multipleChoice)
 		}
 
-		postingService?.post(visibility: audienceSelection,
-		                     isSensitive: visibilitySegmentedControl.isSelected(forSegment: 0),
-		                     attachmentIds: attachments.compactMap { $0.attachment?.id },
-		                     replyStatusId: replyStatus?.id,
-		                     poll: poll)
+		switch submitControlMode
 		{
-			[weak self] result in
-
-			guard let self = self else { return }
-
-			switch result
+		case .submitNew:
+			postingService?.post(visibility: audienceSelection,
+			                     isSensitive: visibilitySegmentedControl.isSelected(forSegment: 0),
+			                     attachmentIds: attachments.compactMap { $0.attachment?.id },
+			                     replyStatusId: replyStatus?.id,
+			                     poll: poll)
 			{
 			case .success:
 				self.reset()
@@ -891,6 +986,28 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 			case .failure(let error):
 				self.updateSubmitEnabled()
 				self.window?.windowController?.displayError(NetworkError(error))
+			}
+		}
+
+		case .edit:
+			postingService?.edit(existingID: existingStatusID!,
+			                     isSensitive: visibilitySegmentedControl.isSelected(forSegment: 0),
+			                     attachmentIds: attachments.compactMap { $0.attachment?.id },
+			                     poll: poll)
+			{
+				[weak self] result in
+
+				guard let self = self else { return }
+
+				switch result
+				{
+				case .success:
+					self.reset()
+
+				case .failure(let error):
+					self.updateSubmitEnabled()
+					self.window?.windowController?.displayError(NetworkError(error))
+				}
 			}
 		}
 
@@ -912,8 +1029,10 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 
 			DispatchQueue.main.async
 			{
-				guard let self = self, case .success(let emoji, _) = result else { return }
+				guard let self = self, case .success(let response) = result else { return }
 
+				let emoji = response.value
+				
 				self.currentClientEmoji = emoji.cacheable(instance: instance)
 					.sorted()
 					.filter { $0.visibleInPicker }

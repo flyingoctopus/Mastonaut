@@ -520,6 +520,14 @@
 		5F3A17F0291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
 		5F3A17F1291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
 		5F5338B32960B23200C1D9AE /* ReplaceCharactersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5338B22960B23200C1D9AE /* ReplaceCharactersTests.swift */; };
+		5F74B959294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */; };
+		5F74B95A294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */; };
+		5F8C133C2969F1D9007BE2D5 /* Sdifft in Frameworks */ = {isa = PBXBuildFile; productRef = 5F8C133B2969F1D9007BE2D5 /* Sdifft */; };
+		5F8C1347296A0661007BE2D5 /* EditedStatusTableCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F8C1346296A0661007BE2D5 /* EditedStatusTableCellView.xib */; };
+		5F8C1349296A06E3007BE2D5 /* EditedStatusTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C1348296A06E3007BE2D5 /* EditedStatusTableCellView.swift */; };
+		5F8C134B296A0B5C007BE2D5 /* EditHistorySheetWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F8C134A296A0B5C007BE2D5 /* EditHistorySheetWindowController.xib */; };
+		5F8C134D296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C134C296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift */; };
+		5F8C134F296A8C89007BE2D5 /* StatusEditCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C134E296A8C89007BE2D5 /* StatusEditCellModel.swift */; };
 		5FC3E1922926FD640086DCEE /* AppearancePreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */; };
 		5FC3E1952927018A0086DCEE /* LoggingOSLog in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC3E1942927018A0086DCEE /* LoggingOSLog */; };
 		5FE72EAE292982F0001C7A6C /* BuildConfig.sh in Resources */ = {isa = PBXBuildFile; fileRef = 5FE72EAD292982F0001C7A6C /* BuildConfig.sh */; };
@@ -977,6 +985,12 @@
 		5F38B52E2930301600FCB9FC /* PullToRefreshInnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullToRefreshInnerView.swift; sourceTree = "<group>"; };
 		5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = CoreAssets.xcassets; sourceTree = "<group>"; };
 		5F5338B22960B23200C1D9AE /* ReplaceCharactersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaceCharactersTests.swift; sourceTree = "<group>"; };
+		5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPrivacyPreferencesView.swift; sourceTree = "<group>"; };
+		5F8C1346296A0661007BE2D5 /* EditedStatusTableCellView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditedStatusTableCellView.xib; sourceTree = "<group>"; };
+		5F8C1348296A06E3007BE2D5 /* EditedStatusTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditedStatusTableCellView.swift; sourceTree = "<group>"; };
+		5F8C134A296A0B5C007BE2D5 /* EditHistorySheetWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditHistorySheetWindowController.xib; sourceTree = "<group>"; };
+		5F8C134C296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditHistorySheetWindowController.swift; sourceTree = "<group>"; };
+		5F8C134E296A8C89007BE2D5 /* StatusEditCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusEditCellModel.swift; sourceTree = "<group>"; };
 		5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+CurrentType.swift"; sourceTree = "<group>"; };
 		5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearancePreferencesView.swift; sourceTree = "<group>"; };
 		5FE72EAD292982F0001C7A6C /* BuildConfig.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = BuildConfig.sh; sourceTree = "<group>"; };
@@ -1028,6 +1042,7 @@
 			files = (
 				1596DB46235F65D300B349B7 /* DirectoryService.framework in Frameworks */,
 				15765563229692C200783FFE /* AVKit.framework in Frameworks */,
+				5F8C133C2969F1D9007BE2D5 /* Sdifft in Frameworks */,
 				154478A6232B0223009C71D4 /* CoreTootin.framework in Frameworks */,
 				8018496C90237DCCDED54D8E /* Pods_Mastonaut.framework in Frameworks */,
 				5FE7A535292E711100F7EB73 /* PullRefreshableScrollView.framework in Frameworks */,
@@ -1211,10 +1226,16 @@
 				15A1CA08221F4BAF00CF51F1 /* AccountTableCellView.xib */,
 				150CCC0221FE42D900FFA89A /* BackgroundTableRowView.swift */,
 				1561C09521FE5AB400476467 /* BackgroundTableRowView.xib */,
+				5F8C1348296A06E3007BE2D5 /* EditedStatusTableCellView.swift */,
+				5F8C1346296A0661007BE2D5 /* EditedStatusTableCellView.xib */,
+				5F8C134C296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift */,
+				5F8C134A296A0B5C007BE2D5 /* EditHistorySheetWindowController.xib */,
 				1504F1E621EBD0B400D91B8E /* ExpanderCellView.swift */,
 				1504F1E321EBD08900D91B8E /* ExpanderCellView.xib */,
 				15A947952495ACB500E413B2 /* FilteredEntryCellView.swift */,
 				15A947942495ACB500E413B2 /* FilteredEntryCellView.xib */,
+				15B25CFE265164B500C90963 /* FilterTableCellView.swift */,
+				15B25D01265164BF00C90963 /* FilterTableCellView.xib */,
 				15DED9C02298B1D1000F11B8 /* FocusedStatusTableCellView.swift */,
 				15DED9C32298B707000F11B8 /* FocusedStatusTableCellView.xib */,
 				150A9F0321FD1BCE00DF42A1 /* FollowCellView.swift */,
@@ -1228,8 +1249,6 @@
 				15053AF02254037B00DEED8F /* ProfileTableCellView.xib */,
 				15C4DD3F21D4280A002AF6DA /* StatusTableCellView.swift */,
 				152DA64321E2C2DB0065CC1B /* StatusTableCellView.xib */,
-				15B25CFE265164B500C90963 /* FilterTableCellView.swift */,
-				15B25D01265164BF00C90963 /* FilterTableCellView.xib */,
 			);
 			path = "Table Cell Views";
 			sourceTree = "<group>";
@@ -1616,6 +1635,7 @@
 				157D266723B25F8600B3A8BE /* StatusCellModel.swift */,
 				1572C55B22A2038100FAA77F /* StringCapableTextAttachment.swift */,
 				15B7B2E12252A2AD00A3222C /* TrackingLayoutConstraint.swift */,
+				5F8C134E296A8C89007BE2D5 /* StatusEditCellModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1795,6 +1815,7 @@
 				5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */,
 				5F043C52293286110095C702 /* NotificationTypeFilterPreferencesView.swift */,
 				5F043C552932872D0095C702 /* NotificationPerAccountPreferencesView.swift */,
+				5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -1949,6 +1970,7 @@
 			);
 			name = Mastonaut;
 			packageProductDependencies = (
+				5F8C133B2969F1D9007BE2D5 /* Sdifft */,
 			);
 			productName = Sengi;
 			productReference = 15C4DD0C21D41EC0002AF6DA /* Mastonaut.app */;
@@ -2027,6 +2049,7 @@
 			mainGroup = 15C4DD0321D41EC0002AF6DA;
 			packageReferences = (
 				5FC3E18B2926EF3F0086DCEE /* XCRemoteSwiftPackageReference "swift-log-oslog" */,
+				5F8C133A2969F1D9007BE2D5 /* XCRemoteSwiftPackageReference "Sdifft" */,
 			);
 			productRefGroup = 15C4DD0D21D41EC0002AF6DA /* Products */;
 			projectDirPath = "";
@@ -2146,12 +2169,14 @@
 				15E7453222372806009A1252 /* AccountAvatarItem.xib in Resources */,
 				15C7836C221CBCB100402C66 /* Timelines.storyboard in Resources */,
 				15DED9C42298B708000F11B8 /* FocusedStatusTableCellView.xib in Resources */,
+				5F8C1347296A0661007BE2D5 /* EditedStatusTableCellView.xib in Resources */,
 				152DA65621E3FE760065CC1B /* MultipleAttachmentView.xib in Resources */,
 				5FE72EAE292982F0001C7A6C /* BuildConfig.sh in Resources */,
 				15E745192236FDBA009A1252 /* welcome.svg in Resources */,
 				1594392C2299917800E47DBB /* InstanceTableCellView.xib in Resources */,
 				15B25D0C2651CBAC00C90963 /* FilterEditorWindowController.xib in Resources */,
 				1538FB2F22184CB7006B5F78 /* error_preview.pdf in Resources */,
+				5F8C134B296A0B5C007BE2D5 /* EditHistorySheetWindowController.xib in Resources */,
 				15E745202236FDF5009A1252 /* WelcomePlaceholderController.xib in Resources */,
 				1561C09621FE5AB400476467 /* BackgroundTableRowView.xib in Resources */,
 				15C4DD1521D41EC0002AF6DA /* Assets.xcassets in Resources */,
@@ -2459,6 +2484,7 @@
 				1573888F25018C5E00DE40F9 /* Selectable.swift in Sources */,
 				157D78C22284D27300DAE4A4 /* StatusListViewController.swift in Sources */,
 				150B1EE1227E33C30048EA22 /* NSView+EmojiSubviews.m in Sources */,
+				5F74B95A294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */,
 				151199CC22BFCF05007F2AEB /* ComposerPollViewController.swift in Sources */,
 				1572C55D22A2038100FAA77F /* StringCapableTextAttachment.swift in Sources */,
 				15B44D5B225D0D9B00EDFDC1 /* AnnotatedURL.m in Sources */,
@@ -2713,6 +2739,7 @@
 				1573888E25018C5E00DE40F9 /* Selectable.swift in Sources */,
 				150B1EE0227E33C30048EA22 /* NSView+EmojiSubviews.m in Sources */,
 				151199CB22BFCF05007F2AEB /* ComposerPollViewController.swift in Sources */,
+				5F8C134F296A8C89007BE2D5 /* StatusEditCellModel.swift in Sources */,
 				1572C55C22A2038100FAA77F /* StringCapableTextAttachment.swift in Sources */,
 				15B44D5A225D0D9B00EDFDC1 /* AnnotatedURL.m in Sources */,
 				1538FB3922188CCA006B5F78 /* PropertyObserver.swift in Sources */,
@@ -2741,6 +2768,7 @@
 				15082D5123109F200075BB1D /* UserNotificationAgent.swift in Sources */,
 				15249AF023401C7D0088B9EE /* NonVibrantPopUpButton.swift in Sources */,
 				15BB378E22A854880094B5A3 /* FileDropImageView.swift in Sources */,
+				5F8C134D296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift in Sources */,
 				15DB809921FFE4B700BEA2F9 /* NSMenu+Additions.swift in Sources */,
 				5F176FAF290EF65200DF043C /* FollowedListsService.swift in Sources */,
 				15F9B63D21DA6462008D95FE /* RelativeDateFormatter.swift in Sources */,
@@ -2796,6 +2824,7 @@
 				15BCDB13221B41CF007BFFAF /* AttachmentGroup.swift in Sources */,
 				15E7452622371DCB009A1252 /* AccountsPlaceholderController.swift in Sources */,
 				152DA64A21E3F9CD0065CC1B /* AttachmentViewController.swift in Sources */,
+				5F8C1349296A06E3007BE2D5 /* EditedStatusTableCellView.swift in Sources */,
 				15B981B6234FE549008391F8 /* FavoritesViewController.swift in Sources */,
 				1538FB3622188978006B5F78 /* ViewingPreferencesController.swift in Sources */,
 				15EE539D22C95854001BEA58 /* SearchResultsPresenter.swift in Sources */,
@@ -2810,6 +2839,7 @@
 				15BC41552262218C00C2A150 /* TagViewController.swift in Sources */,
 				15BC415B2262A65F00C2A150 /* TimelinesWindowRestoration.swift in Sources */,
 				1507924421D6E707009EE4A3 /* InstancePickerWindowController.swift in Sources */,
+				5F74B959294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */,
 				15BC41642262AB1C00C2A150 /* ColumnMode.swift in Sources */,
 				1596DB44235F65A100B349B7 /* GetMACAddress.m in Sources */,
 				1584AA5C24D4CBF00073DC60 /* StatusInteractionPresenter.swift in Sources */,
@@ -3650,6 +3680,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5F8C133A2969F1D9007BE2D5 /* XCRemoteSwiftPackageReference "Sdifft" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/wzxhahaha/Sdifft";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		5FC3E18B2926EF3F0086DCEE /* XCRemoteSwiftPackageReference "swift-log-oslog" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/chrisaljoudi/swift-log-oslog.git";
@@ -3665,6 +3703,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5FC3E18B2926EF3F0086DCEE /* XCRemoteSwiftPackageReference "swift-log-oslog" */;
 			productName = LoggingOSLog;
+		};
+		5F8C133B2969F1D9007BE2D5 /* Sdifft */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5F8C133A2969F1D9007BE2D5 /* XCRemoteSwiftPackageReference "Sdifft" */;
+			productName = Sdifft;
 		};
 		5FC3E1942927018A0086DCEE /* LoggingOSLog */ = {
 			isa = XCSwiftPackageProductDependency;

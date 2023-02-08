@@ -4,7 +4,7 @@ This is a fork of **Mastonaut** by @brunophilipe, whose original marketing page 
 
 ## 👩🏽‍💻 End Users: Install
 
-To use it, you probably want a pre-built release. The current one is 1.4.1 and can be downloaded [here](https://github.com/chucker/Mastonaut/releases/download/app-1.4.1/Mastonaut-1.4.1.zip).
+To use it, you probably want a pre-built release. The current one is 1.5 and can be downloaded [here](https://github.com/chucker/Mastonaut/releases/download/app-1.5.0/Mastonaut-1.5.0.zip).
 
 ## 🗺️ Roadmap
 
@@ -14,9 +14,7 @@ This is purely a hobbyist effort, so I can't really promise anything. We can loo
 
 **August 2022:** this fork's first minor release
 
-**November 2022:** this fork's first _feature_ release
-
-I'm hoping to get another release out in December. Again, no promises!
+**November 2022 through January 2023:** on average one release per month
 
 ## 👩🏻‍🌾 Developers: Build
 

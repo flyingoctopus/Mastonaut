@@ -346,7 +346,8 @@ class AuthController
 
 			switch loginResult
 			{
-			case .success(let loginResult, _):
+			case .success(let response):
+				let loginResult = response.value
 				login = loginResult
 
 			case .failure(let error):
@@ -629,12 +630,13 @@ extension AuthController // Helpers
 
 				switch result
 				{
-				case .success(let instance, _):
+				case .success(let response):
+					let instance = response.value
 					let validInstance = ValidInstance(baseURL: wellFormedUrl, instance: instance)
 					DispatchQueue.main.async { completion(.success(validInstance)) }
 
 				case .failure(let error):
-					if case .unauthorized = error {
+					if case ClientError.unauthorized = error {
 						DispatchQueue.main.async { completion(.success(ValidInstance(baseURL: wellFormedUrl, instance: nil))) }
 					} else {
 						DispatchQueue.main.async { completion(.failure(.clientError(error))) }

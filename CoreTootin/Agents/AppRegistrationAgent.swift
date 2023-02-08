@@ -82,7 +82,8 @@ public class AppRegistrationAgent
 			case .failure(let error):
 				completion(.failure(.restError(error.localizedDescription)))
 
-			case .success(let registration, _):
+			case .success(let response):
+				let registration = response.value
 				completion(.success(registration))
 			}
 		}

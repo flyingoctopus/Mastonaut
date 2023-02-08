@@ -121,8 +121,10 @@ class SearchViewController: NSViewController
 
 						switch result
 						{
-						case .success(let results, _): self.handle(results: results)
-						case .failure(let error): self.handle(error: error)
+						case .success(let response):
+							let results = response.value
+							self.handle(results: results)
+						case .failure(let error): self.handle(error: error as! ClientError)
 						}
 					}
 			}

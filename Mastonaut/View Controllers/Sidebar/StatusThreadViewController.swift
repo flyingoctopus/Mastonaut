@@ -17,9 +17,9 @@
 //  GNU General Public License for more details.
 //
 
+import CoreTootin
 import Foundation
 import MastodonKit
-import CoreTootin
 
 class StatusThreadViewController: StatusListViewController, SidebarPresentable
 {
@@ -28,7 +28,7 @@ class StatusThreadViewController: StatusListViewController, SidebarPresentable
 	{
 		didSet
 		{
-			guard let status = self.status else { return }
+			guard let status = status else { return }
 			prepareNewEntries([status], for: .above, pagination: nil)
 			fetchContextStatuses()
 		}
@@ -68,6 +68,7 @@ class StatusThreadViewController: StatusListViewController, SidebarPresentable
 		self.client = client
 	}
 
+	@available(*, unavailable)
 	required init?(coder: NSCoder)
 	{
 		fatalError("init(coder:) has not been implemented")
@@ -78,12 +79,13 @@ class StatusThreadViewController: StatusListViewController, SidebarPresentable
 		super.registerCells()
 
 		tableView.register(NSNib(nibNamed: "FocusedStatusTableCellView", bundle: .main),
-						   forIdentifier: CellViewIdentifier.focused)
+		                   forIdentifier: CellViewIdentifier.focused)
 	}
 
 	override func cellViewIdentifier(for status: Status) -> NSUserInterfaceItemIdentifier
 	{
-		guard statusURI == status.resolvableURI else
+		guard statusURI == status.resolvableURI
+		else
 		{
 			return super.cellViewIdentifier(for: status)
 		}
@@ -99,12 +101,13 @@ class StatusThreadViewController: StatusListViewController, SidebarPresentable
 		{
 			// This will trigger a re-resolve of the status once a new client is active, since the Status ID changes
 			// between different instances.
-			self.status = nil
+			status = nil
 		}
 
 		/// This dispatch is a fix for an issue where loading cells when the sidebar is animating will cause rows to not
 		/// be sized properly (the cell will be taller than the row view, making the lower components not clickable)
-		DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1)
+		{ [weak self] in
 			guard let self = self else { return }
 
 			if let status = self.status
@@ -121,19 +124,19 @@ class StatusThreadViewController: StatusListViewController, SidebarPresentable
 
 	private func resolveStatus(using client: ClientType, fallbackSearch: Bool)
 	{
-		let uri = self.statusURI
+		let uri = statusURI
 
 		client.run(Search.search(query: uri, limit: 1, resolve: true))
 		{
 			[weak self] result in
 
-			if	case .failure(let error) = result,
-				case .badStatus(statusCode: 404) = error,
-				!fallbackSearch
+			if case .failure(let error) = result,
+			   case ClientError.badStatus(statusCode: 404) = error,
+			   !fallbackSearch
 			{
 				self?.resolveStatus(using: client, fallbackSearch: true)
 			}
-			else if case .success(let searchResults, _) = result, let status = searchResults.statuses.first
+			else if case .success(let response) = result, let status = response.value.statuses.first
 			{
 				DispatchQueue.main.async { self?.status = status }
 			}
@@ -146,29 +149,34 @@ class StatusThreadViewController: StatusListViewController, SidebarPresentable
 
 	private func fetchContextStatuses()
 	{
-		guard let status = self.status, let client = self.client else { return }
+		guard let status = status, let client = client else { return }
 
 		client.run(Statuses.context(id: status.id))
 		{
 			[weak self] result in
 
-			guard case .success(let context, _) = result else {
+			guard case .success(let response) = result
+			else
+			{
 				return
 			}
 
+			let context = response.value
+
 			DispatchQueue.main.async
-				{
-					self?.prepareNewEntries(context.ancestors.sorted(by: { $0.createdAt < $1.createdAt }),
-											for: .above, pagination: nil)
-					self?.prepareNewEntries(context.descendants.sorted(by: { $0.createdAt < $1.createdAt }),
-											for: .below, pagination: nil)
-				}
+			{
+				self?.prepareNewEntries(context.ancestors.sorted(by: { $0.createdAt < $1.createdAt }),
+				                        for: .above, pagination: nil)
+				self?.prepareNewEntries(context.descendants.sorted(by: { $0.createdAt < $1.createdAt }),
+				                        for: .below, pagination: nil)
+			}
 		}
 	}
 
-	override func menuItems(for status: Status) -> [NSMenuItem] {
-
-		if statusURI == status.uri {
+	override func menuItems(for status: Status) -> [NSMenuItem]
+	{
+		if statusURI == status.uri
+		{
 			return StatusMenuItemsController.shared.menuItems(for: status, interactionHandler: self)
 		}
 
@@ -180,8 +188,9 @@ class StatusThreadViewController: StatusListViewController, SidebarPresentable
 		authorizedAccountProvider?.presentInSidebar(SidebarMode.status(uri: status.resolvableURI, status: status))
 	}
 
-	override func applicableFilters() -> [UserFilter] {
-		return super.applicableFilters().filter({ $0.context.contains(.thread) })
+	override func applicableFilters() -> [UserFilter]
+	{
+		return super.applicableFilters().filter { $0.context.contains(.thread) }
 	}
 
 	fileprivate enum CellViewIdentifier

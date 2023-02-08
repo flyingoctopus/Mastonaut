@@ -74,7 +74,7 @@ class MockClient: ClientType
 	@discardableResult
 	func run<Model: Codable>(_ request: Request<Model>,
 							 resumeImmediately: Bool,
-							 completion: @escaping (Result<Model>) -> Void) -> FutureTask?
+							 completion: @escaping (Result<Response<Model>, Error>) -> Void) -> FutureTask?
 	{
 		if mockCalls, let hash = try? JSONEncoder().encode(request).hashValue, let response = responseMap[hash]
 		{
@@ -88,8 +88,8 @@ class MockClient: ClientType
 				completion(.failure(ClientError.invalidModel))
 				return nil
 			}
-
-			completion(.success(model, nil))
+			
+			completion(.success(.init(value: model, pagination: nil)))
 			return nil
 		}
 		else
@@ -97,9 +97,17 @@ class MockClient: ClientType
 			return realClient.run(request, resumeImmediately: resumeImmediately, completion: completion)
 		}
 	}
-
+	
+	func run<Model>(_ request: MastodonKit.Request<Model>) async throws -> MastodonKit.Response<Model> where Model : Decodable, Model : Encodable {
+		try await withCheckedThrowingContinuation { continuation in
+			run(request) { result in
+				continuation.resume(with: result)
+			}
+		}
+	}
+	
 	func runAndAggregateAllPages<Model: Codable>(requestProvider: @escaping (Pagination) -> Request<[Model]>,
-												 completion: @escaping (Result<[Model]>) -> Void)
+												 completion: @escaping (Result<Response<[Model]>, Error>) -> Void)
 	{
 		realClient.runAndAggregateAllPages(requestProvider: requestProvider, completion: completion)
 	}

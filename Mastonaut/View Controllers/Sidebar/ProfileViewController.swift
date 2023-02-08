@@ -95,11 +95,12 @@ class ProfileViewController: TimelineViewController, SidebarPresentable, Account
 
 				DispatchQueue.main.async
 					{
-						guard case .success(let account, _) = result else {
+						guard case .success(let response) = result else {
 							self?.setProfileNotFound()
 							return
 						}
 
+						let account = response.value
 						self?.setRecreatedAccount(account)
 						self?.client = client
 					}
@@ -113,7 +114,7 @@ class ProfileViewController: TimelineViewController, SidebarPresentable, Account
 
 				DispatchQueue.main.async
 					{
-						guard case .success(let accounts, _) = result, let account = accounts.first else {
+						guard case .success(let response) = result, let account = response.value.first else {
 							self?.setProfileNotFound()
 							return
 						}
@@ -177,8 +178,10 @@ class ProfileViewController: TimelineViewController, SidebarPresentable, Account
 			{
 				[weak self] result in
 
-				if case .success(let statuses, _) = result
+				if case .success(let response) = result
 				{
+					let statuses = response.value
+					
 					DispatchQueue.main.async
 						{
 							self?.prepareNewPinnedStatuses(statuses)

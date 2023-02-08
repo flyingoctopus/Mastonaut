@@ -45,7 +45,7 @@ public class MastonautPreferences: PreferencesController
 		{
 			sharedInstance = MastonautPreferences()
 		}
-
+		
 		return sharedInstance
 	}
 
@@ -107,6 +107,12 @@ public class MastonautPreferences: PreferencesController
 	{
 		get { return integerRepresentable(for: #keyPath(defaultStatusAudience), default: .public) }
 		set { defaults.setValue(newValue.rawValue, forKey: #keyPath(defaultStatusAudience)) }
+	}
+
+	@objc public dynamic var defaultReplyAudience: StatusAudience
+	{
+		get { return integerRepresentable(for: #keyPath(defaultReplyAudience), default: .unlisted) }
+		set { defaults.setValue(newValue.rawValue, forKey: #keyPath(defaultReplyAudience)) }
 	}
 
 	@objc public dynamic var markMediaAsSensitive: Bool

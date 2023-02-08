@@ -308,7 +308,9 @@ class AccountsPreferencesController: BaseAccountsPreferencesViewController
 
 					switch result
 					{
-					case .success(let updatedAccount, _):
+					case .success(let response):
+						let updatedAccount = response.value
+						
 						self?.selectedAccount = AccountBindingProxy(account: updatedAccount,
 																	instance: accountProxy.instance,
 																	authorizedAccount: account)

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -38,6 +38,7 @@
                 <outlet property="replyStatusContentsLabel" destination="T1a-as-iZQ" id="vai-hZ-1Fm"/>
                 <outlet property="submitSegmentedControl" destination="Y1e-gF-Lwj" id="orS-HN-Grr"/>
                 <outlet property="submitStatusIndicator" destination="F9e-xX-aiM" id="XY5-H6-Bha"/>
+                <outlet property="submitToolbarItem" destination="J1z-pE-aui" id="xOp-aQ-pic"/>
                 <outlet property="textView" destination="xJy-2A-0H6" id="SZB-jI-ufk"/>
                 <outlet property="visibilitySegmentedControl" destination="Gv5-7N-KPa" id="B9a-8z-WkA"/>
                 <outlet property="window" destination="0jZ-D2-fmk" id="jHc-mb-bDw"/>
