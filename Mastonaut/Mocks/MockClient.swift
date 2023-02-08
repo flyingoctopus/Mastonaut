@@ -97,7 +97,15 @@ class MockClient: ClientType
 			return realClient.run(request, resumeImmediately: resumeImmediately, completion: completion)
 		}
 	}
-
+	
+	func run<Model>(_ request: MastodonKit.Request<Model>) async throws -> MastodonKit.Response<Model> where Model : Decodable, Model : Encodable {
+		try await withCheckedThrowingContinuation { continuation in
+			run(request) { result in
+				continuation.resume(with: result)
+			}
+		}
+	}
+	
 	func runAndAggregateAllPages<Model: Codable>(requestProvider: @escaping (Pagination) -> Request<[Model]>,
 												 completion: @escaping (Result<Response<[Model]>, Error>) -> Void)
 	{
