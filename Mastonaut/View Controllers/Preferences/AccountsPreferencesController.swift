@@ -316,9 +316,6 @@ class AccountsPreferencesController: BaseAccountsPreferencesViewController
 																	authorizedAccount: account)
 
 						account.updateLocalInfo(using: updatedAccount, instance: accountProxy.instance)
-						account.accountPreferences?.managedObjectContext?.perform {
-							account.accountPreferences?.customTootLengthLimit = accountProxy.customTootLengthLimit
-						}
 
 						self?.accounts = accountsService.authorizedAccounts
 						self?.resetAvatarCaches(for: updatedAccount, uuid: self?.selectedAccountUUID)
@@ -931,16 +928,6 @@ class AccountBindingProxy: NSObject
 		self.account = account
 		self.instance = instance
 		self.authorizedAccount = authorizedAccount
-	}
-
-	@objc dynamic var customTootLengthLimit: NSNumber?
-	{
-		get {
-			guard (modifiedValues["lengthLimit"] is NSNull) == false else { return nil }
-			return (modifiedValues["lengthLimit"] as? NSNumber)
-						?? authorizedAccount.accountPreferences?.customTootLengthLimit
-		}
-		set { modifiedValues["lengthLimit"] = newValue ?? NSNull() }
 	}
 
 	@objc dynamic var displayName: String
