@@ -19,19 +19,25 @@
 
 import CoreTootin
 import Foundation
+import Logging
 import MastodonKit
 
 struct MastodonURLResolver {
-	static func resolve(using client: ClientType?, url: URL, knownTags: [Tag]?, source windowController: TimelinesWindowController?)
+	static func resolve(using client: ClientType?, url: URL, knownTags: [Tag]?, source windowController: TimelinesWindowController?) async
 	{
+		let logger = Logger(label: "MastodonURLResolver")
+
 		if let mode = getSidebarModeFromAnnotations(url: url, knownTags: knownTags), let windowController = windowController
 		{
-			windowController.presentInSidebar(mode)
+			logger.info("Resolved \(url); will show in sidebar with mode \(mode)")
+			await windowController.presentInSidebar(mode)
 		}
-		else if let client, let status = fetchStatusFromUrl(using: client, url: url) {
-			windowController?.presentInSidebar(SidebarMode.status(uri: url.absoluteString, status: status))
+		else if let client, let status = try? await fetchStatusFromUrl(using: client, url: url) {
+			logger.info("Resolved \(url); fetched as status as \(status)")
+			await windowController?.presentInSidebar(SidebarMode.status(uri: url.absoluteString, status: status))
 		}
 		else {
+			logger.info("Resolved \(url); will open in OS default app")
 			NSWorkspace.shared.open(url)
 		}
 	}
@@ -69,33 +75,28 @@ struct MastodonURLResolver {
 		 * a status
 		 */
 		
-		var cancel = false
-
 		let uri = url.absoluteString
 		
-		var status: Status?
-		
-		try await withThrowingTaskGroup(of: Status?.self) {
+		var status: Status? = try await withThrowingTaskGroup(of: Status?.self) {
 			group in
 			
 			group.addTask {
-				client.run(Search.search(query: uri, limit: 1, resolve: true)) {
-					result in
+				let result = try await client.run(Search.search(query: uri, limit: 1, resolve: true))
 
-					if case .success(let searchResults, _) = result, let firstResult = searchResults.statuses.first
-					{
-						status = firstResult
-					}
-				}
+				return result.value.statuses.first
 			}
 			
 			group.addTask {
-				try await Task.sleep(nanoseconds: 1 * NSEC_PER_SEC)
+				// we use a short timeout here in case the instance is slow to respond
+				try await Task.sleep(nanoseconds: 3 * NSEC_PER_SEC)
+				
 				return nil
 			}
 			
-			let _ = try await group.next()
+			let result: Status? = try await group.next() ?? nil
 			group.cancelAll()
+			
+			return result
 		}
 		
 		return status
