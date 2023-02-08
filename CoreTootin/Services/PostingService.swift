@@ -91,7 +91,8 @@ public class PostingService: NSObject
 
 					switch result
 					{
-					case .success(let status, _):
+					case .success(let response):
+						let status = response.value
 						completion(.success(status))
 
 					case .failure(let error):
@@ -143,7 +144,8 @@ public class PostingService: NSObject
 
 					switch result
 					{
-					case .success(let status, _):
+					case .success(let response):
+						let status = response.value
 						completion(.success(status))
 
 					case .failure(let error):

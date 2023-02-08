@@ -45,7 +45,8 @@ struct PollService
 			case .failure(let error):
 				completion(.failure(.serverError(info: error.localizedDescription)))
 
-			case .success(let poll, _):
+			case .success(let response):
+				let poll = response.value
 				completion(.success(poll))
 			}
 		}
@@ -65,7 +66,8 @@ struct PollService
 			case .failure(let error):
 				completion(.failure(.serverError(info: error.localizedDescription)))
 
-			case .success(let poll, _):
+			case .success(let response):
+				let poll = response.value
 				completion(.success(poll))
 			}
 		}

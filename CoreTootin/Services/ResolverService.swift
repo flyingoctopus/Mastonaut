@@ -24,7 +24,7 @@ public class ResolverService: NSObject
 {
 	let client: ClientType
 
-	@objc public dynamic private(set) var resolverFuture: FutureTask? = nil
+	@objc public private(set) dynamic var resolverFuture: FutureTask?
 
 	public var isResolving: Bool { return resolverFuture != nil }
 
@@ -39,7 +39,7 @@ public class ResolverService: NSObject
 	}
 
 	public func resolve(account: Account, activeInstance: Instance,
-						completion: @escaping (Swift.Result<Account, AccountRevalidationErrors>) -> Void)
+	                    completion: @escaping (Swift.Result<Account, AccountRevalidationErrors>) -> Void)
 	{
 		let accountURI = account.uri(in: activeInstance)
 		client.run(Accounts.search(query: accountURI, limit: 1))
@@ -48,7 +48,8 @@ public class ResolverService: NSObject
 
 			switch result
 			{
-			case .success(let accounts, _):
+			case .success(let response):
+				let accounts = response.value
 				if let account = accounts.first
 				{
 					completion(.success(account))
@@ -65,8 +66,8 @@ public class ResolverService: NSObject
 	}
 
 	private func resolveStatus(uri: String,
-							   fallbackSearch: Bool,
-							   completion: @escaping (Swift.Result<Status, ResolverError>) -> Void)
+	                           fallbackSearch: Bool,
+	                           completion: @escaping (Swift.Result<Status, ResolverError>) -> Void)
 	{
 		if resolverFuture?.task?.state != .completed { resolverFuture?.task?.cancel() }
 
@@ -85,13 +86,14 @@ public class ResolverService: NSObject
 		{
 			[weak self] result in
 
-			if	case .failure(let error) = result,
-				case .badStatus(statusCode: 404) = error,
-				!fallbackSearch
+			if case .failure(let error) = result,
+			   case ClientError.badStatus(statusCode: 404) = error,
+			   !fallbackSearch
 			{
 				self?.resolveStatus(uri: uri, fallbackSearch: true, completion: completion)
 			}
-			else if case .success(let searchResults, _) = result, let status = searchResults.statuses.first
+			else if case .success(let response) = result,
+			        let status = response.value.statuses.first
 			{
 				self?.resolverFuture = nil
 				completion(.success(status))

@@ -157,7 +157,8 @@ extension StatusInteractionHandling
 
 			switch result
 			{
-			case .success(let statusEdits, _):
+			case .success(let response):
+				let statusEdits = response.value
 				completion?(statusEdits)
 
 			case .failure(let error):
@@ -175,7 +176,8 @@ extension StatusInteractionHandling
 
 			switch result
 			{
-			case .success(let updatedStatus, _):
+			case .success(let response):
+				let updatedStatus = response.value
 				completion?(updatedStatus)
 				DispatchQueue.main.async { self?.handle(updatedStatus: updatedStatus) }
 
