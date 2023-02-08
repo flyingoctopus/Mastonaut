@@ -40,7 +40,7 @@ struct RelationshipsService
 			{
 				result in
 
-				if case .success(let relationships, _) = result, let relationship = relationships.first
+				if case .success(let response) = result, let relationship = response.value.first
 				{
 					DispatchQueue.main.async
 						{
@@ -159,7 +159,9 @@ struct RelationshipsService
 
 			switch result
 			{
-			case .success(let relationship, _):
+			case .success(let response):
+				let relationship = response.value
+				
 				DispatchQueue.main.async {
 					do {
 						let reference = try AccountReference.fetchOrInsert(for: account,
@@ -189,7 +191,8 @@ struct RelationshipsService
 
 			switch result
 			{
-			case .success(let accounts, _):
+			case .success(let response):
+				let accounts = response.value
 				completion(.success(accounts))
 
 			case .failure(let error):

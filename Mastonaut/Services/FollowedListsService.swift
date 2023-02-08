@@ -25,7 +25,8 @@ struct FollowedListsService
 
 			switch result
 			{
-			case .success(let accounts, _):
+			case .success(let response):
+				let accounts = response.value
 				completion(.success(accounts))
 
 			case .failure(let error):

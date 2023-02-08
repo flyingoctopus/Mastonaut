@@ -35,13 +35,13 @@ public class AccountSearchService
 	{
 		client.run(Accounts.search(query: query)) { (result) in
 
-			guard case .success(let accounts, _) = result else
+			guard case .success(let response) = result else
 			{
 				completion([])
 				return
 			}
 
-			completion(accounts)
+			completion(response.value)
 		}
 	}
 }

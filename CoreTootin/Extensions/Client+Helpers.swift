@@ -22,14 +22,14 @@ import MastodonKit
 public extension Client
 {
 	static func create(for account: AuthorizedAccount,
-					   keychainController: KeychainController,
-					   reauthAgent: ReauthorizationAgent,
-					   urlSession: URLSession) -> ClientType?
+	                   keychainController: KeychainController,
+	                   reauthAgent: ReauthorizationAgent,
+	                   urlSession: URLSession) -> ClientType?
 	{
-
 		do
 		{
-			guard let token = try keychainController.query(authorizedAccount: account) else
+			guard let token = try keychainController.query(authorizedAccount: account)
+			else
 			{
 				if account.needsAuthorization == false
 				{
@@ -46,9 +46,9 @@ public extension Client
 			#endif
 
 			let client = FinalClient(baseURL: "https://\(account.baseDomain!)",
-									 accessToken: token.accessToken,
-									 session: urlSession,
-									 delegate: reauthAgent)
+			                         accessToken: token.accessToken,
+			                         session: urlSession,
+			                         delegate: reauthAgent)
 
 			#if MOCK
 			registerMockResponses(for: client)
@@ -77,8 +77,8 @@ public extension ClientType
 	{
 		let dispatchGroup = DispatchGroup()
 		var futures = Set<FutureTask>()
-		var accountResult: Result<Account>? = nil
-		var instanceResult: Result<Instance>? = nil
+		var accountResult: Result<Response<Account>, Error>?
+		var instanceResult: Result<Response<Instance>, Error>?
 
 		dispatchGroup.enter()
 		(run(Accounts.currentUser(), resumeImmediately: true)
@@ -93,7 +93,7 @@ public extension ClientType
 			}
 
 			dispatchGroup.leave()
-		}).map({ _ = futures.insert($0) })
+		}).map { _ = futures.insert($0) }
 
 		dispatchGroup.enter()
 		(run(Instances.current(), resumeImmediately: true)
@@ -108,18 +108,23 @@ public extension ClientType
 			}
 
 			dispatchGroup.leave()
-		}).map({ _ = futures.insert($0) })
+		}).map { _ = futures.insert($0) }
 
 		dispatchGroup.notify(queue: .main)
 		{
 			switch (accountResult, instanceResult)
 			{
-			case (.success(let account, _), .success(let instance, _)):
-				completion(.success((account, instance)))
-
+			case (.success(let accountResponse), .success(let instanceResponse)):
+				completion(.success((accountResponse.value, instanceResponse.value)))
 			default:
-				let error = [accountResult?.error, instanceResult?.error].compactMap({ $0 }).first!
-				completion(.failure(error))
+				if case .failure(let accountError) = accountResult
+				{
+					completion(.failure(accountError as! ClientError))
+				}
+				else if case .failure(let instanceError) = instanceResult
+				{
+					completion(.failure(instanceError as! ClientError))
+				}
 			}
 		}
 

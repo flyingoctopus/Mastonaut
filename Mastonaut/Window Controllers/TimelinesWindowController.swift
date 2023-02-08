@@ -343,7 +343,7 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		composerWindowController.showWindow(nil)
 		composerWindowController.setUpAsRedraft(of: status, using: currentAccount)
 	}
-	
+
 	func edit(status: Status) {
 		let composerWindowController = AppDelegate.shared.statusComposerWindowController
 		composerWindowController.showWindow(nil)
@@ -1027,11 +1027,16 @@ extension TimelinesWindowController: AuthorizedAccountProviding {
 	}
 
 	func handle(linkURL: URL) {
-		MastodonURLResolver.resolve(url: linkURL, knownTags: nil, source: self)
+		// wrapping these in `Task{}` is potentially dangerous, but we're just opening URLs, so it's fire and forget
+		Task {
+			await MastodonURLResolver.resolve(using: client, url: linkURL, knownTags: nil, source: self)
+		}
 	}
 
 	func handle(linkURL: URL, knownTags: [Tag]?) {
-		MastodonURLResolver.resolve(url: linkURL, knownTags: knownTags, source: self)
+		Task {
+			await MastodonURLResolver.resolve(using: client, url: linkURL, knownTags: knownTags, source: self)
+		}
 	}
 }
 
