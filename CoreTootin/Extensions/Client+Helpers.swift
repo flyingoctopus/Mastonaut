@@ -121,8 +121,7 @@ public extension ClientType
 				{
 					completion(.failure(accountError as! ClientError))
 				}
-
-				if case .failure(let instanceError) = instanceResult
+				else if case .failure(let instanceError) = instanceResult
 				{
 					completion(.failure(instanceError as! ClientError))
 				}
