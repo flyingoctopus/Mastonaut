@@ -453,7 +453,7 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 	override func awakeFromNib()
 	{
 		super.awakeFromNib()
-		
+
 		mutateSubmitControlBehavior(newMode: .submitNew)
 
 		window?.registerForDraggedTypes([.fileURL, .png])
@@ -980,14 +980,20 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 			                     replyStatusId: replyStatus?.id,
 			                     poll: poll)
 			{
-			case .success:
-				self.reset()
+				[weak self] result in
 
-			case .failure(let error):
-				self.updateSubmitEnabled()
-				self.window?.windowController?.displayError(NetworkError(error))
+				guard let self = self else { return }
+
+				switch result
+				{
+				case .success:
+					self.reset()
+
+				case .failure(let error):
+					self.updateSubmitEnabled()
+					self.window?.windowController?.displayError(NetworkError(error))
+				}
 			}
-		}
 
 		case .edit:
 			postingService?.edit(existingID: existingStatusID!,
@@ -1032,7 +1038,7 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 				guard let self = self, case .success(let response) = result else { return }
 
 				let emoji = response.value
-				
+
 				self.currentClientEmoji = emoji.cacheable(instance: instance)
 					.sorted()
 					.filter { $0.visibleInPicker }
