@@ -64,6 +64,16 @@ CocoaPods.
 - If you don't know your Team ID, go into _Signing & Capabilities_ in your project and select your team, then your UI will show it under 'App Groups'.
 Then revert the project file so it will use the setting from the `xcconfig` and you don't have a lurking change in your checkout.
 
+### Project Structure
+
+The main application is **Mastonaut**. It should be developed within `Mastonaut.xcworkspace`.
+
+**QuickToot** is a macOS app extension, specifically for sharing.
+
+QuickToot and Mastonaut use **CoreTootin** as a common library. GUI code that's required by both belongs here.
+
+The underlying API client is largely implemented in (a custom fork of) **MastodonKit**, which is referenced as a git submodule.
+
 - If you're using a personal developer ID and get an error like `Personal development teams, including "Your Name Here", do not support the Push
 Notifications capability.`, you may have to go _Signing and Capabilities_ and delete the "Push Notifications" capability by clicking the little
 trash can next to it. **Do not check in this change.**
