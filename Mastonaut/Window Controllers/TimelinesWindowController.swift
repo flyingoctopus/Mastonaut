@@ -1202,18 +1202,25 @@ private extension TimelinesWindowController {
 		let popUpButton = NonVibrantPopUpButton()
 		popUpButton.bezelStyle = .texturedRounded
 		popUpButton.translatesAutoresizingMaskIntoConstraints = false
+		popUpButton.setAccessibilityLabel("Choose account")
 		return popUpButton
 	}
 
 	static func makeNewColumnSegmentedControl() -> NSSegmentedControl {
-		let segmentedControl = NSSegmentedControl(images: [#imageLiteral(resourceName: "add_panel")], trackingMode: .momentary,
+		let image = #imageLiteral(resourceName: "add_panel")
+		image.accessibilityDescription = "Add new column"
+
+		let segmentedControl = NSSegmentedControl(images: [image], trackingMode: .momentary,
 		                                          target: nil, action: #selector(addColumnMode(_:)))
 		segmentedControl.translatesAutoresizingMaskIntoConstraints = false
 		return segmentedControl
 	}
 
 	static func makeStatusComposerSegmentedControl() -> NSSegmentedControl {
-		let segmentedControl = NSSegmentedControl(images: [#imageLiteral(resourceName: "compose")], trackingMode: .momentary,
+		let image = #imageLiteral(resourceName: "compose")
+		image.accessibilityDescription = "Compose new status"
+
+		let segmentedControl = NSSegmentedControl(images: [image], trackingMode: .momentary,
 		                                          target: nil, action: #selector(composeStatus(_:)))
 		segmentedControl.translatesAutoresizingMaskIntoConstraints = false
 		return segmentedControl
