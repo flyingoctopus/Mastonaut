@@ -18,7 +18,7 @@ public class HashtagSearchService {
 
 	public func search(query: String, completion: @escaping ([Tag]) -> Void) {
 		let _query = query.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
-		
+
 		client.run(Search.search(query: _query, type: .hashtags, excludeUnreviewed: false)) { result in
 
 			guard case .success(let response) = result else {
@@ -33,8 +33,8 @@ public class HashtagSearchService {
 
 extension HashtagSearchService: HashtagSuggestionTextViewSuggestionsProvider {
 	public func suggestionTextView(_ textView: SuggestionTextView,
-								   suggestionsForQuery query: String,
-								   completion: @escaping ([HashtagSuggestionProtocol]) -> Void) 
+	                               suggestionsForQuery query: String,
+	                               completion: @escaping ([HashtagSuggestionProtocol]) -> Void)
 	{
 		search(query: query) {
 			hashtags in
@@ -48,14 +48,23 @@ extension HashtagSearchService: HashtagSuggestionTextViewSuggestionsProvider {
 
 @objc public protocol HashtagSuggestionProtocol {
 	var text: String { get }
+
+	var uses: [Int] { get }
 }
 
 private class HashtagSuggestion: HashtagSuggestionProtocol {
+	var uses: [Int]
+
 	let text: String
 
 	init(hashtag: Tag) {
 		text = hashtag.name
 
-		// MAYBE we could add sparklines from .history here
+		if let history = hashtag.history {
+			uses = history.sorted(by: { $0.day > $1.day }).map { $0.uses }
+		}
+		else {
+			uses = [Int]()
+		}
 	}
 }

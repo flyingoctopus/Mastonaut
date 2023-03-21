@@ -529,8 +529,8 @@
 		5F8C134D296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C134C296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift */; };
 		5F8C134F296A8C89007BE2D5 /* StatusEditCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C134E296A8C89007BE2D5 /* StatusEditCellModel.swift */; };
 		5FC21CF629C6820500A582A8 /* HashtagSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC21CF529C6820500A582A8 /* HashtagSearchService.swift */; };
-		5FC21CFF29CA360A00A582A8 /* DSFSparkline in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC21CFE29CA360A00A582A8 /* DSFSparkline */; };
 		5FC21D0129CA55B400A582A8 /* HashtagSuggestionWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5FC21D0029CA511300A582A8 /* HashtagSuggestionWindowController.xib */; };
+		5FC21D0329CA59EF00A582A8 /* DSFSparkline in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC21D0229CA59EF00A582A8 /* DSFSparkline */; };
 		5FC3E1922926FD640086DCEE /* AppearancePreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */; };
 		5FC3E1952927018A0086DCEE /* LoggingOSLog in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC3E1942927018A0086DCEE /* LoggingOSLog */; };
 		5FE72EAE292982F0001C7A6C /* BuildConfig.sh in Resources */ = {isa = PBXBuildFile; fileRef = 5FE72EAD292982F0001C7A6C /* BuildConfig.sh */; };
@@ -1030,6 +1030,7 @@
 			files = (
 				BB0D8382B9BA154D27AFBC63 /* Pods_CoreTootin.framework in Frameworks */,
 				5F1F20D62938E86D0057E585 /* LoggingOSLog in Frameworks */,
+				5FC21D0329CA59EF00A582A8 /* DSFSparkline in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1051,7 +1052,6 @@
 				154478A6232B0223009C71D4 /* CoreTootin.framework in Frameworks */,
 				8018496C90237DCCDED54D8E /* Pods_Mastonaut.framework in Frameworks */,
 				5FE7A535292E711100F7EB73 /* PullRefreshableScrollView.framework in Frameworks */,
-				5FC21CFF29CA360A00A582A8 /* DSFSparkline in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1932,6 +1932,7 @@
 			name = CoreTootin;
 			packageProductDependencies = (
 				5F1F20D52938E86D0057E585 /* LoggingOSLog */,
+				5FC21D0229CA59EF00A582A8 /* DSFSparkline */,
 			);
 			productName = CoreTootin;
 			productReference = 1544789F232B0223009C71D4 /* CoreTootin.framework */;
@@ -1979,7 +1980,6 @@
 			name = Mastonaut;
 			packageProductDependencies = (
 				5F8C133B2969F1D9007BE2D5 /* Sdifft */,
-				5FC21CFE29CA360A00A582A8 /* DSFSparkline */,
 			);
 			productName = Sengi;
 			productReference = 15C4DD0C21D41EC0002AF6DA /* Mastonaut.app */;
@@ -3729,7 +3729,7 @@
 			package = 5F8C133A2969F1D9007BE2D5 /* XCRemoteSwiftPackageReference "Sdifft" */;
 			productName = Sdifft;
 		};
-		5FC21CFE29CA360A00A582A8 /* DSFSparkline */ = {
+		5FC21D0229CA59EF00A582A8 /* DSFSparkline */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5FC21CFD29CA360A00A582A8 /* XCRemoteSwiftPackageReference "DSFSparkline" */;
 			productName = DSFSparkline;

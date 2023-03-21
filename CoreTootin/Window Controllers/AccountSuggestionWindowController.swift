@@ -18,6 +18,8 @@
 //
 
 import Cocoa
+import DSFSparkline
+import MastodonKit
 
 public class HashtagSuggestionWindowController: NSWindowController
 {
@@ -163,6 +165,25 @@ extension HashtagSuggestionWindowController: NSTableViewDelegate
 			{
 			case "name":
 				cellView.textField?.stringValue = suggestion.text
+
+			case "history":
+				guard !suggestion.uses.isEmpty,
+				      let maxUses = suggestion.uses.max() else { break }
+
+				// MAYBE maxUses should be across all search results?
+
+				let source = DSFSparkline.DataSource(values: suggestion.uses.map { CGFloat($0) },
+				                                     range: 0 ... CGFloat(maxUses))
+
+				let bitmap = DSFSparklineSurface.Bitmap()
+				let stack = DSFSparklineOverlay.Bar()
+				stack.dataSource = source
+				bitmap.addOverlay(stack)
+
+				if let attributedString = bitmap.attributedString(size: CGSize(width: 40, height: 18), scale: 2)
+				{
+					cellView.textField?.attributedStringValue = attributedString
+				}
 
 			default:
 				break
