@@ -528,6 +528,7 @@
 		5F8C134B296A0B5C007BE2D5 /* EditHistorySheetWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F8C134A296A0B5C007BE2D5 /* EditHistorySheetWindowController.xib */; };
 		5F8C134D296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C134C296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift */; };
 		5F8C134F296A8C89007BE2D5 /* StatusEditCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C134E296A8C89007BE2D5 /* StatusEditCellModel.swift */; };
+		5FC21CF629C6820500A582A8 /* HashtagSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC21CF529C6820500A582A8 /* HashtagSearchService.swift */; };
 		5FC3E1922926FD640086DCEE /* AppearancePreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */; };
 		5FC3E1952927018A0086DCEE /* LoggingOSLog in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC3E1942927018A0086DCEE /* LoggingOSLog */; };
 		5FE72EAE292982F0001C7A6C /* BuildConfig.sh in Resources */ = {isa = PBXBuildFile; fileRef = 5FE72EAD292982F0001C7A6C /* BuildConfig.sh */; };
@@ -991,6 +992,7 @@
 		5F8C134A296A0B5C007BE2D5 /* EditHistorySheetWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditHistorySheetWindowController.xib; sourceTree = "<group>"; };
 		5F8C134C296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditHistorySheetWindowController.swift; sourceTree = "<group>"; };
 		5F8C134E296A8C89007BE2D5 /* StatusEditCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusEditCellModel.swift; sourceTree = "<group>"; };
+		5FC21CF529C6820500A582A8 /* HashtagSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagSearchService.swift; sourceTree = "<group>"; };
 		5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+CurrentType.swift"; sourceTree = "<group>"; };
 		5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearancePreferencesView.swift; sourceTree = "<group>"; };
 		5FE72EAD292982F0001C7A6C /* BuildConfig.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = BuildConfig.sh; sourceTree = "<group>"; };
@@ -1401,10 +1403,11 @@
 			children = (
 				1530428C22AEDAFA00489F31 /* AccountSearchService.swift */,
 				15186B972279F53900850EF5 /* AccountsService.swift */,
-				1530427422AE83E300489F31 /* PostingService.swift */,
 				15249AEB234012A80088B9EE /* InstanceService.swift */,
+				1530427422AE83E300489F31 /* PostingService.swift */,
 				1530427722AE8F4300489F31 /* ResolverService.swift */,
 				154E9FDB234564F300885966 /* TagBookmarkService.swift */,
+				5FC21CF529C6820500A582A8 /* HashtagSearchService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -2672,6 +2675,7 @@
 				15EE2B0D232EA35000155E16 /* ProposedAttachmentItem.swift in Sources */,
 				15431289232EEE840010854A /* AuthorizedAccount+Helpers.swift in Sources */,
 				1545FC0823357143006CCD2C /* AttachmentDescriptionViewController.swift in Sources */,
+				5FC21CF629C6820500A582A8 /* HashtagSearchService.swift in Sources */,
 				15431290232EF1D70010854A /* UserDescriptionError.swift in Sources */,
 				157CFEA7233044EF0077CE62 /* KeychainController+Internal.swift in Sources */,
 				15431298232EF5530010854A /* AccountAccessToken.swift in Sources */,

@@ -174,7 +174,7 @@ open class SuggestionTextView: NSTextView
 @objc public protocol SuggestionTextViewSuggestionsProvider: AnyObject
 {
 	func suggestionTextView(_ textView: SuggestionTextView,
-							suggestionsForMention: String,
+							suggestionsForQuery: String,
 							completion: @escaping ([Suggestion]) -> Void)
 }
 

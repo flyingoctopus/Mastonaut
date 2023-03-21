@@ -49,12 +49,12 @@ public class AccountSearchService
 extension AccountSearchService: SuggestionTextViewSuggestionsProvider
 {
 	public func suggestionTextView(_ textView: SuggestionTextView,
-								   suggestionsForMention mention: String,
+								   suggestionsForQuery query: String,
 								   completion: @escaping ([Suggestion]) -> Void)
 	{
 		let instance = self.instance
 
-		search(query: mention)
+		search(query: query)
 		{
 			(accounts) in
 
