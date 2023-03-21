@@ -193,11 +193,19 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 		}
 	}
 
-	private var accountSearchService: AccountSearchService?
+//	private var accountSearchService: AccountSearchService?
+//	{
+//		didSet
+//		{
+//			textView.suggestionsProvider = accountSearchService
+//		}
+//	}
+
+	private var hashtagSearchService: HashtagSearchService?
 	{
 		didSet
 		{
-			textView.suggestionsProvider = accountSearchService
+			textView.hashtagSuggestionsProvider = hashtagSearchService
 		}
 	}
 
@@ -231,7 +239,8 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 		{
 			guard let instance = currentInstance, let client = client else { return }
 
-			accountSearchService = AccountSearchService(client: client, activeInstance: instance)
+//			accountSearchService = AccountSearchService(client: client, activeInstance: instance)
+			hashtagSearchService = HashtagSearchService(client: client)
 		}
 	}
 
@@ -243,7 +252,8 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 
 			postingService = client.map { PostingService(client: $0) }
 			resolverService = client.map { ResolverService(client: $0) }
-			accountSearchService = nil
+//			accountSearchService = nil
+			hashtagSearchService = nil
 			currentInstance = nil
 
 			if let account = currentAccount
@@ -482,7 +492,7 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 
 		textView.font = placeholderTextField.font
 		textView.insertDoubleNewLines = Preferences.insertDoubleNewLines
-		textView.imagesProvider = resourcesFetcher
+//		textView.imagesProvider = resourcesFetcher
 
 		if #available(OSX 10.14, *) {}
 		else

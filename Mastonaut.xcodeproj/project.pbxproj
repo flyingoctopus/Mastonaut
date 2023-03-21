@@ -500,8 +500,8 @@
 		15F9B63F21DA7CE7008D95FE /* MastodonKit+Shims.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F9B63E21DA7CE7008D95FE /* MastodonKit+Shims.swift */; };
 		15F9F307232EB8BE00931594 /* BaseComposerTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F9F305232EB8B300931594 /* BaseComposerTextView.swift */; };
 		15F9F309232EB94F00931594 /* SuggestionTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1530429222AEFCC900489F31 /* SuggestionTextView.swift */; };
-		15F9F30B232EB9E400931594 /* SuggestionWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1530428022AEC64E00489F31 /* SuggestionWindowController.swift */; };
-		15F9F30C232EB9E900931594 /* SuggestionWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1530428122AEC64E00489F31 /* SuggestionWindowController.xib */; };
+		15F9F30B232EB9E400931594 /* AccountSuggestionWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1530428022AEC64E00489F31 /* AccountSuggestionWindowController.swift */; };
+		15F9F30C232EB9E900931594 /* AccountSuggestionWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1530428122AEC64E00489F31 /* AccountSuggestionWindowController.xib */; };
 		15FD4C33223870B000D699EF /* TransientWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FD4C32223870B000D699EF /* TransientWindow.swift */; };
 		15FD4C34223870B000D699EF /* TransientWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FD4C32223870B000D699EF /* TransientWindow.swift */; };
 		5F043C53293286110095C702 /* NotificationTypeFilterPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F043C52293286110095C702 /* NotificationTypeFilterPreferencesView.swift */; };
@@ -529,6 +529,8 @@
 		5F8C134D296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C134C296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift */; };
 		5F8C134F296A8C89007BE2D5 /* StatusEditCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C134E296A8C89007BE2D5 /* StatusEditCellModel.swift */; };
 		5FC21CF629C6820500A582A8 /* HashtagSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC21CF529C6820500A582A8 /* HashtagSearchService.swift */; };
+		5FC21CFF29CA360A00A582A8 /* DSFSparkline in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC21CFE29CA360A00A582A8 /* DSFSparkline */; };
+		5FC21D0129CA55B400A582A8 /* HashtagSuggestionWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5FC21D0029CA511300A582A8 /* HashtagSuggestionWindowController.xib */; };
 		5FC3E1922926FD640086DCEE /* AppearancePreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */; };
 		5FC3E1952927018A0086DCEE /* LoggingOSLog in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC3E1942927018A0086DCEE /* LoggingOSLog */; };
 		5FE72EAE292982F0001C7A6C /* BuildConfig.sh in Resources */ = {isa = PBXBuildFile; fileRef = 5FE72EAD292982F0001C7A6C /* BuildConfig.sh */; };
@@ -712,8 +714,8 @@
 		1530427422AE83E300489F31 /* PostingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostingService.swift; sourceTree = "<group>"; };
 		1530427722AE8F4300489F31 /* ResolverService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverService.swift; sourceTree = "<group>"; };
 		1530427A22AE91EA00489F31 /* NSProgressIndicator+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSProgressIndicator+Additions.swift"; sourceTree = "<group>"; };
-		1530428022AEC64E00489F31 /* SuggestionWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionWindowController.swift; sourceTree = "<group>"; };
-		1530428122AEC64E00489F31 /* SuggestionWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SuggestionWindowController.xib; sourceTree = "<group>"; };
+		1530428022AEC64E00489F31 /* AccountSuggestionWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSuggestionWindowController.swift; sourceTree = "<group>"; };
+		1530428122AEC64E00489F31 /* AccountSuggestionWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccountSuggestionWindowController.xib; sourceTree = "<group>"; };
 		1530428C22AEDAFA00489F31 /* AccountSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSearchService.swift; sourceTree = "<group>"; };
 		1530428F22AEF5A100489F31 /* InfoWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWindow.swift; sourceTree = "<group>"; };
 		1530429222AEFCC900489F31 /* SuggestionTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionTextView.swift; sourceTree = "<group>"; };
@@ -993,6 +995,7 @@
 		5F8C134C296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditHistorySheetWindowController.swift; sourceTree = "<group>"; };
 		5F8C134E296A8C89007BE2D5 /* StatusEditCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusEditCellModel.swift; sourceTree = "<group>"; };
 		5FC21CF529C6820500A582A8 /* HashtagSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagSearchService.swift; sourceTree = "<group>"; };
+		5FC21D0029CA511300A582A8 /* HashtagSuggestionWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = HashtagSuggestionWindowController.xib; path = ../Views/HashtagSuggestionWindowController.xib; sourceTree = "<group>"; };
 		5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+CurrentType.swift"; sourceTree = "<group>"; };
 		5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearancePreferencesView.swift; sourceTree = "<group>"; };
 		5FE72EAD292982F0001C7A6C /* BuildConfig.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = BuildConfig.sh; sourceTree = "<group>"; };
@@ -1048,6 +1051,7 @@
 				154478A6232B0223009C71D4 /* CoreTootin.framework in Frameworks */,
 				8018496C90237DCCDED54D8E /* Pods_Mastonaut.framework in Frameworks */,
 				5FE7A535292E711100F7EB73 /* PullRefreshableScrollView.framework in Frameworks */,
+				5FC21CFF29CA360A00A582A8 /* DSFSparkline in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1798,8 +1802,9 @@
 		15F9F30A232EB9D100931594 /* Window Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				1530428022AEC64E00489F31 /* SuggestionWindowController.swift */,
-				1530428122AEC64E00489F31 /* SuggestionWindowController.xib */,
+				5FC21D0029CA511300A582A8 /* HashtagSuggestionWindowController.xib */,
+				1530428022AEC64E00489F31 /* AccountSuggestionWindowController.swift */,
+				1530428122AEC64E00489F31 /* AccountSuggestionWindowController.xib */,
 			);
 			path = "Window Controllers";
 			sourceTree = "<group>";
@@ -1974,6 +1979,7 @@
 			name = Mastonaut;
 			packageProductDependencies = (
 				5F8C133B2969F1D9007BE2D5 /* Sdifft */,
+				5FC21CFE29CA360A00A582A8 /* DSFSparkline */,
 			);
 			productName = Sengi;
 			productReference = 15C4DD0C21D41EC0002AF6DA /* Mastonaut.app */;
@@ -2053,6 +2059,7 @@
 			packageReferences = (
 				5FC3E18B2926EF3F0086DCEE /* XCRemoteSwiftPackageReference "swift-log-oslog" */,
 				5F8C133A2969F1D9007BE2D5 /* XCRemoteSwiftPackageReference "Sdifft" */,
+				5FC21CFD29CA360A00A582A8 /* XCRemoteSwiftPackageReference "DSFSparkline" */,
 			);
 			productRefGroup = 15C4DD0D21D41EC0002AF6DA /* Products */;
 			projectDirPath = "";
@@ -2146,12 +2153,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5FC21D0129CA55B400A582A8 /* HashtagSuggestionWindowController.xib in Resources */,
 				15EE2B0C232EA35000155E16 /* AttachmentItem.xib in Resources */,
 				5F3A17F1291DB26700EA6FEC /* CoreAssets.xcassets in Resources */,
 				1545FC0923357143006CCD2C /* AttachmentDescriptionViewController.xib in Resources */,
 				159C2182232D382200139BD5 /* Localizable.strings in Resources */,
 				15EE2B0E232EA35000155E16 /* ProposedAttachmentItem.xib in Resources */,
-				15F9F30C232EB9E900931594 /* SuggestionWindowController.xib in Resources */,
+				15F9F30C232EB9E900931594 /* AccountSuggestionWindowController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2681,7 +2689,7 @@
 				15431298232EF5530010854A /* AccountAccessToken.swift in Sources */,
 				159C2170232C574B00139BD5 /* NSString+Additions.swift in Sources */,
 				1543127D232EE34A0010854A /* AccountSearchService.swift in Sources */,
-				15F9F30B232EB9E400931594 /* SuggestionWindowController.swift in Sources */,
+				15F9F30B232EB9E400931594 /* AccountSuggestionWindowController.swift in Sources */,
 				15F9F309232EB94F00931594 /* SuggestionTextView.swift in Sources */,
 				1543127F232EE39D0010854A /* Account+Shims.swift in Sources */,
 				15EE2B04232EA1CC00155E16 /* Structs+Additions.swift in Sources */,
@@ -3692,6 +3700,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		5FC21CFD29CA360A00A582A8 /* XCRemoteSwiftPackageReference "DSFSparkline" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dagronf/DSFSparkline";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 		5FC3E18B2926EF3F0086DCEE /* XCRemoteSwiftPackageReference "swift-log-oslog" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/chrisaljoudi/swift-log-oslog.git";
@@ -3712,6 +3728,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5F8C133A2969F1D9007BE2D5 /* XCRemoteSwiftPackageReference "Sdifft" */;
 			productName = Sdifft;
+		};
+		5FC21CFE29CA360A00A582A8 /* DSFSparkline */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5FC21CFD29CA360A00A582A8 /* XCRemoteSwiftPackageReference "DSFSparkline" */;
+			productName = DSFSparkline;
 		};
 		5FC3E1942927018A0086DCEE /* LoggingOSLog */ = {
 			isa = XCSwiftPackageProductDependency;

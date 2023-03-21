@@ -21,15 +21,16 @@ import AppKit
 
 open class SuggestionTextView: NSTextView
 {
-	public weak var suggestionsProvider: SuggestionTextViewSuggestionsProvider? = nil
+//	public weak var accountSuggestionsProvider: AccountSuggestionTextViewSuggestionsProvider? = nil
+	public weak var hashtagSuggestionsProvider: HashtagSuggestionTextViewSuggestionsProvider? = nil
 
-	public weak var imagesProvider: SuggestionWindowImagesProvider?
-	{
-		get { return suggestionWindowController.imagesProvider }
-		set { suggestionWindowController.imagesProvider = newValue }
-	}
+//	public weak var imagesProvider: AccountSuggestionWindowImagesProvider?
+//	{
+//		get { return suggestionWindowController.imagesProvider }
+//		set { suggestionWindowController.imagesProvider = newValue }
+//	}
 
-	public private(set) lazy var suggestionWindowController = SuggestionWindowController()
+	public private(set) lazy var suggestionWindowController = HashtagSuggestionWindowController()
 
 	private var lastSuggestionRequestId: UUID?
 
@@ -110,7 +111,7 @@ open class SuggestionTextView: NSTextView
 
 		guard
 			selection.length == 0,
-			let provider = suggestionsProvider,
+			let provider = hashtagSuggestionsProvider,
 			let (mention, range) = string.mentionUpTo(index: selection.location)
 		else
 		{
@@ -121,7 +122,7 @@ open class SuggestionTextView: NSTextView
 		let requestId = UUID()
 		lastSuggestionRequestId = requestId
 
-		provider.suggestionTextView(self, suggestionsForMention: mention)
+		provider.suggestionTextView(self, suggestionsForQuery: mention)
 		{
 			[weak self] suggestions in
 
@@ -139,7 +140,7 @@ open class SuggestionTextView: NSTextView
 		}
 	}
 
-	private func showSuggestionsWindow(with suggestions: [Suggestion], mentionRange: NSRange)
+	private func showSuggestionsWindow(with suggestions: [HashtagSuggestionProtocol], mentionRange: NSRange)
 	{
 		guard
 			mentionRange.upperBound <= (textStorage?.length ?? 0),
@@ -164,24 +165,25 @@ open class SuggestionTextView: NSTextView
 			{
 				[weak self] suggestion in
 				guard let self = self else { return }
-				self.replaceCharacters(in: mentionRange, with: "\(suggestion.text) ")
+				self.replaceCharacters(in: mentionRange, with: "#\(suggestion.text) ")
 			}
 
 		suggestionWindowController.positionWindow(under: screenRect)
 	}
 }
 
-@objc public protocol SuggestionTextViewSuggestionsProvider: AnyObject
+//@objc public protocol AccountSuggestionTextViewSuggestionsProvider: AnyObject
+//{
+//	func suggestionTextView(_ textView: SuggestionTextView,
+//							suggestionsForQuery: String,
+//							completion: @escaping ([AccountSuggestionProtocol]) -> Void)
+//}
+
+@objc public protocol HashtagSuggestionTextViewSuggestionsProvider: AnyObject
 {
 	func suggestionTextView(_ textView: SuggestionTextView,
 							suggestionsForQuery: String,
-							completion: @escaping ([Suggestion]) -> Void)
-}
-
-@objc public protocol Suggestion {
-	var text: String { get }
-	var imageUrl: URL? { get }
-	var displayName: String { get }
+							completion: @escaping ([HashtagSuggestionProtocol]) -> Void)
 }
 
 private extension NSString
@@ -191,7 +193,7 @@ private extension NSString
 		guard length > 0, index <= length else { return nil }
 
 		var previous＠CharacterIndex: Int? = nil
-		let charset＠ = NSCharacterSet(charactersIn: "@")
+		let charset＠ = NSCharacterSet(charactersIn: "#")
 
 		for charIndex in (0..<index).reversed()
 		{

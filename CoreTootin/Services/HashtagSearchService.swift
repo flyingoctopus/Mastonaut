@@ -17,7 +17,9 @@ public class HashtagSearchService {
 	}
 
 	public func search(query: String, completion: @escaping ([Tag]) -> Void) {
-		client.run(Search.search(query: query, type: .hashtags, excludeUnreviewed: true)) { result in
+		let _query = query.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
+		
+		client.run(Search.search(query: _query, type: .hashtags, excludeUnreviewed: false)) { result in
 
 			guard case .success(let response) = result else {
 				completion([])
@@ -29,27 +31,29 @@ public class HashtagSearchService {
 	}
 }
 
-extension HashtagSearchService: SuggestionTextViewSuggestionsProvider {
+extension HashtagSearchService: HashtagSuggestionTextViewSuggestionsProvider {
 	public func suggestionTextView(_ textView: SuggestionTextView,
 								   suggestionsForQuery query: String,
-								   completion: @escaping ([Suggestion]) -> Void)
+								   completion: @escaping ([HashtagSuggestionProtocol]) -> Void) 
 	{
-		search(query: query)
-		{
-			(hashtags) in
+		search(query: query) {
+			hashtags in
 
-			DispatchQueue.main.async
-				{
-					completion(hashtags.map({ HashtagSuggestion(hashtag: $0)))
-				}
+			DispatchQueue.main.async {
+				completion(hashtags.map { HashtagSuggestion(hashtag: $0) })
+			}
 		}
 	}
 }
 
-private class HashtagSuggestion: Suggestion {
+@objc public protocol HashtagSuggestionProtocol {
+	var text: String { get }
+}
+
+private class HashtagSuggestion: HashtagSuggestionProtocol {
 	let text: String
 
-	init(hashtag: Tag, instance: Instance) {
+	init(hashtag: Tag) {
 		text = hashtag.name
 
 		// MAYBE we could add sparklines from .history here

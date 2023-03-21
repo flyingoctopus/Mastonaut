@@ -19,24 +19,24 @@
 
 import Cocoa
 
-public class SuggestionWindowController: NSWindowController
+public class HashtagSuggestionWindowController: NSWindowController
 {
 	@IBOutlet private(set) unowned var tableView: NSTableView!
 
-	private var suggestions: [Suggestion]? = nil
+	private var hashtagSuggestions: [HashtagSuggestionProtocol]? = nil
 
-	public weak var imagesProvider: SuggestionWindowImagesProvider? = nil
+//	public weak var imagesProvider: AccountSuggestionWindowImagesProvider? = nil
 
 	public var isWindowVisible: Bool
 	{
 		return window?.isVisible ?? false
 	}
 
-	public var insertSuggestionBlock: ((Suggestion) -> Void)? = nil
+	public var insertSuggestionBlock: ((HashtagSuggestionProtocol) -> Void)? = nil
 
 	public convenience init()
 	{
-		self.init(windowNibName: NSNib.Name("SuggestionWindowController"))
+		self.init(windowNibName: NSNib.Name("HashtagSuggestionWindowController"))
 	}
 
 	public override func windowDidLoad()
@@ -49,7 +49,7 @@ public class SuggestionWindowController: NSWindowController
 
 	public func positionWindow(under textRect: NSRect)
 	{
-		if let suggestionsCount = suggestions?.count
+		if let suggestionsCount = hashtagSuggestions?.count, let tableView
 		{
 			let visibleCount = CGFloat(min(suggestionsCount, 8))
 			let bestHeight = visibleCount * (tableView.rowHeight + tableView.intercellSpacing.height)
@@ -59,9 +59,9 @@ public class SuggestionWindowController: NSWindowController
 		window?.setFrameTopLeftPoint(NSPoint(x: textRect.minX - 30, y: textRect.minY))
 	}
 
-	public func set(suggestions: [Suggestion])
+	public func set(suggestions: [HashtagSuggestionProtocol])
 	{
-		self.suggestions = suggestions
+		self.hashtagSuggestions = suggestions
 		tableView?.reloadData()
 		tableView?.selectRowAndScrollToVisible(0)
 	}
@@ -71,7 +71,7 @@ public class SuggestionWindowController: NSWindowController
 		let currentSelection = tableView.selectedRow
 
 		guard
-			let suggestions = self.suggestions,
+			let suggestions = self.hashtagSuggestions,
 			(0..<suggestions.count).contains(currentSelection),
 			let block = insertSuggestionBlock
 		else { return }
@@ -86,7 +86,7 @@ public class SuggestionWindowController: NSWindowController
 
 	@IBAction func selectNext(_ sender: Any?)
 	{
-		guard let suggestions = self.suggestions else { return }
+		guard let suggestions = self.hashtagSuggestions else { return }
 		let currentSelection = tableView.selectedRow
 
 		guard (0..<suggestions.count).contains(currentSelection + 1) else
@@ -100,7 +100,7 @@ public class SuggestionWindowController: NSWindowController
 
 	@IBAction func selectPrevious(_ sender: Any?)
 	{
-		guard let suggestions = self.suggestions else { return }
+		guard let suggestions = self.hashtagSuggestions else { return }
 		let currentSelection = tableView.selectedRow
 
 		guard currentSelection > 0 else
@@ -113,15 +113,15 @@ public class SuggestionWindowController: NSWindowController
 	}
 }
 
-extension SuggestionWindowController: NSTableViewDataSource
+extension HashtagSuggestionWindowController: NSTableViewDataSource
 {
 	public func numberOfRows(in tableView: NSTableView) -> Int
 	{
-		return suggestions?.count ?? 0
+		return hashtagSuggestions?.count ?? 0
 	}
 }
 
-extension SuggestionWindowController: NSTableViewDelegate
+extension HashtagSuggestionWindowController: NSTableViewDelegate
 {
 	public func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView?
 	{
@@ -129,28 +129,40 @@ extension SuggestionWindowController: NSTableViewDelegate
 
 		let view = tableView.makeView(withIdentifier: identifier, owner: nil)
 
-		if let suggestion = suggestions?[row], let cellView = view as? NSTableCellView
+//		if let suggestion = suggestions?[row], let cellView = view as? NSTableCellView
+//		{
+//			switch identifier.rawValue
+//			{
+//			case "avatar":
+//				cellView.imageView?.image = #imageLiteral(resourceName: "missing.png")
+//				guard let imageURL = suggestion.imageUrl else { break }
+//				imagesProvider?.suggestionWindow(self, imageForSuggestionUsingURL: imageURL)
+//					{
+//						[weak self] image in
+//						guard let image = image else { return }
+//						DispatchQueue.main.async
+//							{
+//								self?.updateImage(for: suggestion, originalIndex: row, image: image)
+//							}
+//					}
+//
+//			case "suggestion":
+//				cellView.textField?.stringValue = suggestion.text
+//
+//			case "displayName":
+//				cellView.textField?.stringValue = suggestion.displayName
+//
+//			default:
+//				break
+//			}
+//		}
+		
+		if let suggestion = hashtagSuggestions?[row], let cellView = view as? NSTableCellView
 		{
 			switch identifier.rawValue
 			{
-			case "avatar":
-				cellView.imageView?.image = #imageLiteral(resourceName: "missing.png")
-				guard let imageURL = suggestion.imageUrl else { break }
-				imagesProvider?.suggestionWindow(self, imageForSuggestionUsingURL: imageURL)
-					{
-						[weak self] image in
-						guard let image = image else { return }
-						DispatchQueue.main.async
-							{
-								self?.updateImage(for: suggestion, originalIndex: row, image: image)
-							}
-					}
-
-			case "suggestion":
+			case "name":
 				cellView.textField?.stringValue = suggestion.text
-
-			case "displayName":
-				cellView.textField?.stringValue = suggestion.displayName
 
 			default:
 				break
@@ -160,21 +172,21 @@ extension SuggestionWindowController: NSTableViewDelegate
 		return view
 	}
 
-	private func updateImage(for suggestion: Suggestion, originalIndex: Int, image: NSImage)
-	{
-		guard
-			let suggestions = self.suggestions,
-			originalIndex < suggestions.count,
-			suggestions[originalIndex].imageUrl == suggestion.imageUrl
-		else { return }
-
-		let view = tableView.view(atColumn: 0, row: originalIndex, makeIfNecessary: false)
-
-		if let cellView = view as? NSTableCellView
-		{
-			cellView.imageView?.image = image
-		}
-	}
+//	private func updateImage(for suggestion: AccountSuggestionProtocol, originalIndex: Int, image: NSImage)
+//	{
+//		guard
+//			let suggestions = self.hashtagSuggestions,
+//			originalIndex < suggestions.count,
+//			suggestions[originalIndex].imageUrl == suggestion.imageUrl
+//		else { return }
+//
+//		let view = tableView.view(atColumn: 0, row: originalIndex, makeIfNecessary: false)
+//
+//		if let cellView = view as? NSTableCellView
+//		{
+//			cellView.imageView?.image = image
+//		}
+//	}
 }
 
 private extension NSTableView
@@ -186,9 +198,9 @@ private extension NSTableView
 	}
 }
 
-@objc public protocol SuggestionWindowImagesProvider: AnyObject
-{
-	func suggestionWindow(_ windowController: SuggestionWindowController,
-						  imageForSuggestionUsingURL: URL,
-						  completion: @escaping (NSImage?) -> Void)
-}
+//@objc public protocol AccountSuggestionWindowImagesProvider: AnyObject
+//{
+//	func suggestionWindow(_ windowController: AccountSuggestionWindowController,
+//						  imageForSuggestionUsingURL: URL,
+//						  completion: @escaping (NSImage?) -> Void)
+//}
