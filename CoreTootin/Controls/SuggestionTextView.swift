@@ -112,7 +112,7 @@ open class SuggestionTextView: NSTextView
 		guard
 			selection.length == 0,
 			let provider = hashtagSuggestionsProvider,
-			let (mention, range) = string.mentionUpTo(index: selection.location)
+			let (mode, mention, range) = string.mentionUpTo(index: selection.location)
 		else
 		{
 			dismissSuggestionsWindow()
@@ -133,14 +133,15 @@ open class SuggestionTextView: NSTextView
 			}
 
 			DispatchQueue.main.async
-				{
-					guard self?.lastSuggestionRequestId == requestId else { return }
-					self?.showSuggestionsWindow(with: suggestions, mentionRange: range)
-				}
+			{
+				guard self?.lastSuggestionRequestId == requestId else { return }
+				self?.showSuggestionsWindow(mode: mode, with: suggestions, mentionRange: range)
+			}
 		}
 	}
 
-	private func showSuggestionsWindow(with suggestions: [HashtagSuggestionProtocol], mentionRange: NSRange)
+	private func showSuggestionsWindow(mode: SuggestionMode,
+	                                   with suggestions: [HashtagSuggestionProtocol], mentionRange: NSRange)
 	{
 		guard
 			mentionRange.upperBound <= (textStorage?.length ?? 0),
@@ -186,49 +187,68 @@ open class SuggestionTextView: NSTextView
 							completion: @escaping ([HashtagSuggestionProtocol]) -> Void)
 }
 
+private enum SuggestionMode
+{
+	case mention
+	case hashtag
+}
+
 private extension NSString
 {
-	func mentionUpTo(index: Int) -> (mention: String, range: NSRange)?
+	func mentionUpTo(index: Int) -> (mode: SuggestionMode, mention: String, range: NSRange)?
 	{
 		guard length > 0, index <= length else { return nil }
 
-		var previous＠CharacterIndex: Int? = nil
-		let charset＠ = NSCharacterSet(charactersIn: "#")
+		var previousTokenCharacterIndex: Int?
+		let charsetTokens = NSCharacterSet(charactersIn: "@#")
 
-		for charIndex in (0..<index).reversed()
+		func modeFromCharIndex(_ charIndex: Int) -> SuggestionMode?
+		{
+			switch character(at: charIndex)
+			{
+			case "@".utf16.first:
+				return .mention
+			case "#".utf16.first:
+				return .hashtag
+			default:
+				return nil
+			}
+		}
+
+		for charIndex in (0 ..< index).reversed()
 		{
 			let char = character(at: charIndex)
 
 			if (CharacterSet.whitespacesAndNewlines as NSCharacterSet).characterIsMember(char)
 			{
-				if let ＠CharacterIndex = previous＠CharacterIndex
+				if let tokenCharacterIndex = previousTokenCharacterIndex
 				{
-					let mentionRange = NSMakeRange(＠CharacterIndex, index - ＠CharacterIndex)
+					let mentionRange = NSMakeRange(tokenCharacterIndex, index - tokenCharacterIndex)
 					let mention = substring(with: mentionRange)
-					return (mention, mentionRange)
+					return (modeFromCharIndex(tokenCharacterIndex)!, mention, mentionRange)
 				}
 
-				// Found an empty space character before an `@` character
+				// Found an empty space character before an `@` or `#` character
 				return nil
 			}
-			else if charset＠.characterIsMember(char), index - charIndex > 1
+			else if charsetTokens.characterIsMember(char), index - charIndex > 1
 			{
-				if previous＠CharacterIndex != nil
+				if previousTokenCharacterIndex != nil
 				{
 					let mentionRange = NSMakeRange(charIndex, index - charIndex)
 					let mention = substring(with: mentionRange)
-					return (mention, mentionRange)
+					return (modeFromCharIndex(charIndex)!, mention, mentionRange)
 				}
 
-				previous＠CharacterIndex = charIndex
+				previousTokenCharacterIndex = charIndex
 			}
 		}
 
-		if let ＠CharacterIndex = previous＠CharacterIndex
+		if let tokenCharacterIndex = previousTokenCharacterIndex
 		{
-			let mentionRange = NSMakeRange(＠CharacterIndex, index - ＠CharacterIndex)
+			let mentionRange = NSMakeRange(tokenCharacterIndex, index - tokenCharacterIndex)
 			let mention = substring(with: mentionRange)
-			return (mention, mentionRange)
+			return (modeFromCharIndex(tokenCharacterIndex)!, mention, mentionRange)
 		}
 
 		// We never found an `@` character...
