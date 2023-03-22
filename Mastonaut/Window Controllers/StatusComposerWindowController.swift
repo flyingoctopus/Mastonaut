@@ -1056,8 +1056,10 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 		contentWarningEnabled = false
 		contentWarningSegmentedControl.setSelected(false, forSegment: 0)
 		postingService?.reset()
-
 		pollEnabled = false
+
+		submitControlMode = .submitNew
+		existingStatusID = nil
 
 		// Bug: These controls get disabled when a modal alert is displayed on a sheet, but never get reactivated.
 		// So we re-enable them here just in case.
