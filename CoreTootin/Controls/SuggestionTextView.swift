@@ -21,55 +21,61 @@ import AppKit
 
 open class SuggestionTextView: NSTextView
 {
-	public weak var accountSuggestionsProvider: AccountSuggestionTextViewSuggestionsProvider?
-	public weak var hashtagSuggestionsProvider: HashtagSuggestionTextViewSuggestionsProvider?
+	public weak var accountSuggestionsProvider: SuggestionTextViewSuggestionsProvider?
+	public weak var hashtagSuggestionsProvider: SuggestionTextViewSuggestionsProvider?
 
 	public weak var imagesProvider: AccountSuggestionWindowImagesProvider?
 	{
-		get { return suggestionWindowController.imagesProvider }
-		set { suggestionWindowController.imagesProvider = newValue }
+		get { return accountSuggestionWindowController.imagesProvider }
+		set { accountSuggestionWindowController.imagesProvider = newValue }
 	}
 
-	public private(set) lazy var suggestionWindowController = SuggestionWindowController()
+	public private(set) lazy var accountSuggestionWindowController = SuggestionWindowController(mode: .mention)
+	public private(set) lazy var hashtagSuggestionWindowController = SuggestionWindowController(mode: .hashtag)
+	
+	public var activeSuggestionWindowController : SuggestionWindowController?
 
 	private var lastSuggestionRequestId: UUID?
 
-	public override func moveUp(_ sender: Any?)
+	override public func moveUp(_ sender: Any?)
 	{
-		guard suggestionWindowController.isWindowVisible else
+		guard let activeSuggestionWindowController, activeSuggestionWindowController.isWindowVisible
+		else
 		{
 			super.moveUp(sender)
 			return
 		}
 
-		suggestionWindowController.selectPrevious(sender)
+		activeSuggestionWindowController.selectPrevious(sender)
 	}
 
-	public override func moveDown(_ sender: Any?)
+	override public func moveDown(_ sender: Any?)
 	{
-		guard suggestionWindowController.isWindowVisible else
+		guard let activeSuggestionWindowController, activeSuggestionWindowController.isWindowVisible
+		else
 		{
 			super.moveDown(sender)
 			return
 		}
 
-		suggestionWindowController.selectNext(sender)
+		activeSuggestionWindowController.selectNext(sender)
 	}
 
-	public override func cancelOperation(_ sender: Any?)
+	override public func cancelOperation(_ sender: Any?)
 	{
-		guard suggestionWindowController.isWindowVisible else
+		guard let activeSuggestionWindowController, activeSuggestionWindowController.isWindowVisible
+		else
 		{
 			return
 		}
 
 		dismissSuggestionsWindow()
 	}
-	
+
 	open func textStorage(_ textStorage: NSTextStorage,
-						  didProcessEditing editedMask: NSTextStorageEditActions,
-						  range editedRange: NSRange,
-						  changeInLength delta: Int)
+	                      didProcessEditing editedMask: NSTextStorageEditActions,
+	                      range editedRange: NSRange,
+	                      changeInLength delta: Int)
 	{
 		guard
 			undoManager?.isUndoing != true,
@@ -77,28 +83,28 @@ open class SuggestionTextView: NSTextView
 		else { return }
 
 		DispatchQueue.main.async
-			{
-				self.dispatchSuggestionsFetch()
-			}
+		{
+			self.dispatchSuggestionsFetch()
+		}
 	}
 
 	public func dispatchSuggestionsFetch()
 	{
 		SuggestionTextView.cancelPreviousPerformRequests(withTarget: self,
-														 selector: #selector(reallyDispatchSuggestionsFetch),
-														 object: nil)
+		                                                 selector: #selector(reallyDispatchSuggestionsFetch),
+		                                                 object: nil)
 
 		perform(#selector(reallyDispatchSuggestionsFetch), with: nil, afterDelay: 0.33)
 	}
 
 	public func dismissSuggestionsWindow()
 	{
-		suggestionWindowController.close()
+		activeSuggestionWindowController?.close()
 	}
 
 	public func insertCurrentlySelectedSuggestion()
 	{
-		suggestionWindowController.insertSelectedSuggestion()
+		activeSuggestionWindowController?.insertSelectedSuggestion()
 		dismissSuggestionsWindow()
 	}
 
@@ -123,11 +129,13 @@ open class SuggestionTextView: NSTextView
 
 		if mode == .mention, let provider = accountSuggestionsProvider
 		{
-		provider.suggestionTextView(self, suggestionsForQuery: mention)
-		{
-			[weak self] suggestions in
+			provider.suggestionTextView(self, suggestionsForQuery: mention)
+			{
+				[weak self] result in
 
-				guard !suggestions.isEmpty
+				guard let container = result as? [SuggestionContainer],
+					  !container.isEmpty,
+					  case SuggestionContainer.mention(_) = container[0]
 				else
 				{
 					DispatchQueue.main.async { self?.dismissSuggestionsWindow() }
@@ -137,7 +145,7 @@ open class SuggestionTextView: NSTextView
 				DispatchQueue.main.async
 				{
 					guard self?.lastSuggestionRequestId == requestId else { return }
-//					self?.showSuggestionsWindow(mode: mode, with: suggestions, mentionRange: range)
+					self?.showSuggestionsWindow(mode: mode, with: container, mentionRange: range)
 				}
 			}
 		}
@@ -145,22 +153,24 @@ open class SuggestionTextView: NSTextView
 		{
 			provider.suggestionTextView(self, suggestionsForQuery: mention)
 			{
-				[weak self] suggestions in
+				[weak self] result in
 
-				guard !suggestions.isEmpty
+				guard let container = result as? [SuggestionContainer],
+					  !container.isEmpty,
+					  case SuggestionContainer.hashtag(_) = container[0]
 				else
-			{
-				DispatchQueue.main.async { self?.dismissSuggestionsWindow() }
-				return
-			}
+				{
+					DispatchQueue.main.async { self?.dismissSuggestionsWindow() }
+					return
+				}
 
-			DispatchQueue.main.async
-			{
-				guard self?.lastSuggestionRequestId == requestId else { return }
-				self?.showSuggestionsWindow(mode: mode, with: suggestions, mentionRange: range)
+				DispatchQueue.main.async
+				{
+					guard self?.lastSuggestionRequestId == requestId else { return }
+					self?.showSuggestionsWindow(mode: mode, with: container, mentionRange: range)
+				}
 			}
 		}
-	}
 		else
 		{
 			dismissSuggestionsWindow()
@@ -168,13 +178,13 @@ open class SuggestionTextView: NSTextView
 	}
 
 	private func showSuggestionsWindow(mode: SuggestionMode,
-	                                   with suggestions: [HashtagSuggestionProtocol], mentionRange: NSRange)
+	                                   with suggestions: [SuggestionContainer], mentionRange: NSRange)
 	{
 		guard
 			mentionRange.upperBound <= (textStorage?.length ?? 0),
-			let window = self.window,
-			let layoutManager = self.layoutManager,
-			let textContainer = self.textContainer
+			let window = window,
+			let layoutManager = layoutManager,
+			let textContainer = textContainer
 		else
 		{
 			dismissSuggestionsWindow()
@@ -185,39 +195,54 @@ open class SuggestionTextView: NSTextView
 		let rect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
 		let offsetRect = convert(rect.offsetBy(dx: textContainerInset.width, dy: textContainerInset.height), to: nil)
 		let screenRect = window.convertToScreen(offsetRect)
+		
+		switch mode {
+		case .mention:
+			activeSuggestionWindowController = accountSuggestionWindowController
+		case .hashtag:
+			activeSuggestionWindowController = hashtagSuggestionWindowController
+		}
 
-		suggestionWindowController.set(suggestions: suggestions)
-		suggestionWindowController.showWindow(nil)
+		guard let activeSuggestionWindowController else {return}
+		
+		activeSuggestionWindowController.set(suggestionContainers: suggestions)
+		activeSuggestionWindowController.showWindow(nil)
 
-		suggestionWindowController.insertSuggestionBlock =
+		activeSuggestionWindowController.insertSuggestionBlock =
+		{
+			[weak self] suggestion in
+			guard let self = self else { return }
+
+			switch suggestion
 			{
-				[weak self] suggestion in
-				guard let self = self else { return }
-				self.replaceCharacters(in: mentionRange, with: "#\(suggestion.text) ")
+			case let .mention(account):
+				self.replaceCharacters(in: mentionRange, with: "\(account.text) ")
+			case let .hashtag(hashtag):
+				self.replaceCharacters(in: mentionRange, with: "#\(hashtag.text) ")
 			}
+		}
 
-		suggestionWindowController.positionWindow(under: screenRect)
+		activeSuggestionWindowController.positionWindow(under: screenRect)
 	}
 }
 
-@objc public protocol AccountSuggestionTextViewSuggestionsProvider: AnyObject
+@objc public protocol SuggestionTextViewSuggestionsProvider: AnyObject
 {
 	func suggestionTextView(_ textView: SuggestionTextView,
 	                        suggestionsForQuery: String,
-	                        completion: @escaping ([AccountSuggestionProtocol]) -> Void)
+	                        completion: @escaping (Any) -> Void)
 }
 
-@objc public protocol HashtagSuggestionTextViewSuggestionsProvider: AnyObject
-{
-	func suggestionTextView(_ textView: SuggestionTextView,
-							suggestionsForQuery: String,
-							completion: @escaping ([HashtagSuggestionProtocol]) -> Void)
-}
-
-private enum SuggestionMode
+enum SuggestionMode
 {
 	case mention
 	case hashtag
+}
+
+enum SuggestionContainer
+{
+	case mention(AccountSuggestionProtocol)
+	case hashtag(HashtagSuggestionProtocol)
 }
 
 private extension NSString

@@ -178,23 +178,23 @@ class ResourcesFetcher
 	}
 }
 
-//extension ResourcesFetcher: SuggestionWindowImagesProvider
-//{
-//	func suggestionWindow(_ windowController: SuggestionWindowController,
-//						  imageForSuggestionUsingURL imageURL: URL,
-//						  completion: @escaping (NSImage?) -> Void)
-//	{
-//		fetchImage(with: imageURL)
-//			{
-//				(result) in
-//
-//				guard case .success(let image) = result else
-//				{
-//					completion(nil)
-//					return
-//				}
-//
-//				completion(image)
-//			}
-//	}
-//}
+extension ResourcesFetcher: AccountSuggestionWindowImagesProvider
+{
+	func suggestionWindow(_ windowController: SuggestionWindowController,
+						  imageForSuggestionUsingURL imageURL: URL,
+						  completion: @escaping (NSImage?) -> Void)
+	{
+		fetchImage(with: imageURL)
+			{
+				(result) in
+
+				guard case .success(let image) = result else
+				{
+					completion(nil)
+					return
+				}
+
+				completion(image)
+			}
+	}
+}

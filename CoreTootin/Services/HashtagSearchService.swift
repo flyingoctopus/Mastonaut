@@ -31,16 +31,18 @@ public class HashtagSearchService {
 	}
 }
 
-extension HashtagSearchService: HashtagSuggestionTextViewSuggestionsProvider {
+extension HashtagSearchService: SuggestionTextViewSuggestionsProvider {
 	public func suggestionTextView(_ textView: SuggestionTextView,
 	                               suggestionsForQuery query: String,
-	                               completion: @escaping ([HashtagSuggestionProtocol]) -> Void)
+	                               completion: @escaping (Any) -> Void)
 	{
 		search(query: query) {
 			hashtags in
 
 			DispatchQueue.main.async {
-				completion(hashtags.map { HashtagSuggestion(hashtag: $0) })
+				let result = hashtags.map { SuggestionContainer.hashtag(HashtagSuggestion(hashtag: $0)) }
+
+				completion(result)
 			}
 		}
 	}

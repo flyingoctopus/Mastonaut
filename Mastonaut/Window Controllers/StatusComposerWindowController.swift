@@ -492,7 +492,7 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 
 		textView.font = placeholderTextField.font
 		textView.insertDoubleNewLines = Preferences.insertDoubleNewLines
-//		textView.imagesProvider = resourcesFetcher
+		textView.imagesProvider = resourcesFetcher
 
 		if #available(OSX 10.14, *) {}
 		else

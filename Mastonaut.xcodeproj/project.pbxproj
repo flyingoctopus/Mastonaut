@@ -500,7 +500,7 @@
 		15F9B63F21DA7CE7008D95FE /* MastodonKit+Shims.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F9B63E21DA7CE7008D95FE /* MastodonKit+Shims.swift */; };
 		15F9F307232EB8BE00931594 /* BaseComposerTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F9F305232EB8B300931594 /* BaseComposerTextView.swift */; };
 		15F9F309232EB94F00931594 /* SuggestionTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1530429222AEFCC900489F31 /* SuggestionTextView.swift */; };
-		15F9F30B232EB9E400931594 /* AccountSuggestionWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1530428022AEC64E00489F31 /* AccountSuggestionWindowController.swift */; };
+		15F9F30B232EB9E400931594 /* SuggestionWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1530428022AEC64E00489F31 /* SuggestionWindowController.swift */; };
 		15F9F30C232EB9E900931594 /* AccountSuggestionWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1530428122AEC64E00489F31 /* AccountSuggestionWindowController.xib */; };
 		15FD4C33223870B000D699EF /* TransientWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FD4C32223870B000D699EF /* TransientWindow.swift */; };
 		15FD4C34223870B000D699EF /* TransientWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FD4C32223870B000D699EF /* TransientWindow.swift */; };
@@ -714,7 +714,7 @@
 		1530427422AE83E300489F31 /* PostingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostingService.swift; sourceTree = "<group>"; };
 		1530427722AE8F4300489F31 /* ResolverService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverService.swift; sourceTree = "<group>"; };
 		1530427A22AE91EA00489F31 /* NSProgressIndicator+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSProgressIndicator+Additions.swift"; sourceTree = "<group>"; };
-		1530428022AEC64E00489F31 /* AccountSuggestionWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSuggestionWindowController.swift; sourceTree = "<group>"; };
+		1530428022AEC64E00489F31 /* SuggestionWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionWindowController.swift; sourceTree = "<group>"; };
 		1530428122AEC64E00489F31 /* AccountSuggestionWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccountSuggestionWindowController.xib; sourceTree = "<group>"; };
 		1530428C22AEDAFA00489F31 /* AccountSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSearchService.swift; sourceTree = "<group>"; };
 		1530428F22AEF5A100489F31 /* InfoWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWindow.swift; sourceTree = "<group>"; };
@@ -1802,9 +1802,9 @@
 		15F9F30A232EB9D100931594 /* Window Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				5FC21D0029CA511300A582A8 /* HashtagSuggestionWindowController.xib */,
-				1530428022AEC64E00489F31 /* AccountSuggestionWindowController.swift */,
 				1530428122AEC64E00489F31 /* AccountSuggestionWindowController.xib */,
+				5FC21D0029CA511300A582A8 /* HashtagSuggestionWindowController.xib */,
+				1530428022AEC64E00489F31 /* SuggestionWindowController.swift */,
 			);
 			path = "Window Controllers";
 			sourceTree = "<group>";
@@ -2689,7 +2689,7 @@
 				15431298232EF5530010854A /* AccountAccessToken.swift in Sources */,
 				159C2170232C574B00139BD5 /* NSString+Additions.swift in Sources */,
 				1543127D232EE34A0010854A /* AccountSearchService.swift in Sources */,
-				15F9F30B232EB9E400931594 /* AccountSuggestionWindowController.swift in Sources */,
+				15F9F30B232EB9E400931594 /* SuggestionWindowController.swift in Sources */,
 				15F9F309232EB94F00931594 /* SuggestionTextView.swift in Sources */,
 				1543127F232EE39D0010854A /* Account+Shims.swift in Sources */,
 				15EE2B04232EA1CC00155E16 /* Structs+Additions.swift in Sources */,

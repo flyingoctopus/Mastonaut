@@ -28,21 +28,27 @@ public class SuggestionWindowController: NSWindowController
 	private var accountSuggestions: [AccountSuggestionProtocol]?
 	private var hashtagSuggestions: [HashtagSuggestionProtocol]?
 
-	public weak var imagesProvider: AccountSuggestionWindowImagesProvider? = nil
+	public weak var imagesProvider: AccountSuggestionWindowImagesProvider?
 
 	public var isWindowVisible: Bool
 	{
 		return window?.isVisible ?? false
 	}
 
-	public var insertSuggestionBlock: ((HashtagSuggestionProtocol) -> Void)? = nil
+	var insertSuggestionBlock: ((SuggestionContainer) -> Void)?
 
-	public convenience init()
+	convenience init(mode: SuggestionMode)
 	{
-		self.init(windowNibName: NSNib.Name("HashtagSuggestionWindowController"))
+		switch mode
+		{
+		case .mention:
+			self.init(windowNibName: NSNib.Name("AccountSuggestionWindowController"))
+		case .hashtag:
+			self.init(windowNibName: NSNib.Name("HashtagSuggestionWindowController"))
+		}
 	}
 
-	public override func windowDidLoad()
+	override public func windowDidLoad()
 	{
 		super.windowDidLoad()
 
@@ -52,7 +58,9 @@ public class SuggestionWindowController: NSWindowController
 
 	public func positionWindow(under textRect: NSRect)
 	{
-		if let suggestionsCount = hashtagSuggestions?.count, let tableView
+		var suggestionsCount = accountSuggestions?.count ?? hashtagSuggestions?.count
+
+		if let suggestionsCount, let tableView
 		{
 			let visibleCount = CGFloat(min(suggestionsCount, 8))
 			let bestHeight = visibleCount * (tableView.rowHeight + tableView.intercellSpacing.height)
@@ -62,9 +70,28 @@ public class SuggestionWindowController: NSWindowController
 		window?.setFrameTopLeftPoint(NSPoint(x: textRect.minX - 30, y: textRect.minY))
 	}
 
-	public func set(suggestions: [HashtagSuggestionProtocol])
+	func set(suggestionContainers: [SuggestionContainer])
 	{
-		self.hashtagSuggestions = suggestions
+		guard !suggestionContainers.isEmpty else { return }
+
+		switch suggestionContainers[0]
+		{
+		case .hashtag:
+			accountSuggestions = nil
+			hashtagSuggestions = suggestionContainers.map
+			{ if case let .hashtag(hashtag) = $0
+				{ return hashtag }
+				else { fatalError() }
+			}
+		case .mention:
+			accountSuggestions = suggestionContainers.map
+			{ if case let .mention(mention) = $0
+				{ return mention }
+				else { fatalError() }
+			}
+			hashtagSuggestions = nil
+		}
+
 		tableView?.reloadData()
 		tableView?.selectRowAndScrollToVisible(0)
 	}
@@ -74,12 +101,17 @@ public class SuggestionWindowController: NSWindowController
 		let currentSelection = tableView.selectedRow
 
 		guard
-			let suggestions = self.hashtagSuggestions,
-			(0..<suggestions.count).contains(currentSelection),
 			let block = insertSuggestionBlock
 		else { return }
 
-		block(suggestions[currentSelection])
+		if let suggestions = accountSuggestions, (0..<suggestions.count).contains(currentSelection)
+		{
+			block(SuggestionContainer.mention(suggestions[currentSelection]))
+		}
+		else if let suggestions = hashtagSuggestions, (0..<suggestions.count).contains(currentSelection)
+		{
+			block(SuggestionContainer.hashtag(suggestions[currentSelection]))
+		}
 	}
 
 	@objc func didDoubleClickTableView(_ sender: Any)
@@ -89,10 +121,11 @@ public class SuggestionWindowController: NSWindowController
 
 	@IBAction func selectNext(_ sender: Any?)
 	{
-		guard let suggestions = self.hashtagSuggestions else { return }
+		guard let suggestions = hashtagSuggestions else { return }
 		let currentSelection = tableView.selectedRow
 
-		guard (0..<suggestions.count).contains(currentSelection + 1) else
+		guard (0..<suggestions.count).contains(currentSelection + 1)
+		else
 		{
 			tableView.selectRowAndScrollToVisible(0)
 			return
@@ -103,10 +136,11 @@ public class SuggestionWindowController: NSWindowController
 
 	@IBAction func selectPrevious(_ sender: Any?)
 	{
-		guard let suggestions = self.hashtagSuggestions else { return }
+		guard let suggestions = hashtagSuggestions else { return }
 		let currentSelection = tableView.selectedRow
 
-		guard currentSelection > 0 else
+		guard currentSelection > 0
+		else
 		{
 			tableView.selectRowAndScrollToVisible(suggestions.count - 1)
 			return
@@ -120,7 +154,14 @@ extension SuggestionWindowController: NSTableViewDataSource
 {
 	public func numberOfRows(in tableView: NSTableView) -> Int
 	{
-		return hashtagSuggestions?.count ?? 0
+		if let accountSuggestions {
+			return accountSuggestions.count
+		}
+		else if let hashtagSuggestions {
+			return hashtagSuggestions.count
+		}
+		
+		return 0
 	}
 }
 
@@ -132,34 +173,34 @@ extension SuggestionWindowController: NSTableViewDelegate
 
 		let view = tableView.makeView(withIdentifier: identifier, owner: nil)
 
-//		if let suggestion = suggestions?[row], let cellView = view as? NSTableCellView
-//		{
-//			switch identifier.rawValue
-//			{
-//			case "avatar":
-//				cellView.imageView?.image = #imageLiteral(resourceName: "missing.png")
-//				guard let imageURL = suggestion.imageUrl else { break }
-//				imagesProvider?.suggestionWindow(self, imageForSuggestionUsingURL: imageURL)
-//					{
-//						[weak self] image in
-//						guard let image = image else { return }
-//						DispatchQueue.main.async
-//							{
-//								self?.updateImage(for: suggestion, originalIndex: row, image: image)
-//							}
-//					}
-//
-//			case "suggestion":
-//				cellView.textField?.stringValue = suggestion.text
-//
-//			case "displayName":
-//				cellView.textField?.stringValue = suggestion.displayName
-//
-//			default:
-//				break
-//			}
-//		}
-		
+		if let suggestion = accountSuggestions?[row], let cellView = view as? NSTableCellView
+		{
+			switch identifier.rawValue
+			{
+			case "avatar":
+				cellView.imageView?.image = #imageLiteral(resourceName: "missing.png")
+				guard let imageURL = suggestion.imageUrl else { break }
+				imagesProvider?.suggestionWindow(self, imageForSuggestionUsingURL: imageURL)
+				{
+					[weak self] image in
+					guard let image = image else { return }
+					DispatchQueue.main.async
+					{
+						self?.updateImage(for: suggestion, originalIndex: row, image: image)
+					}
+				}
+
+			case "suggestion":
+				cellView.textField?.stringValue = suggestion.text
+
+			case "displayName":
+				cellView.textField?.stringValue = suggestion.displayName
+
+			default:
+				break
+			}
+		}
+
 		if let suggestion = hashtagSuggestions?[row], let cellView = view as? NSTableCellView
 		{
 			switch identifier.rawValue
@@ -197,7 +238,7 @@ extension SuggestionWindowController: NSTableViewDelegate
 	private func updateImage(for suggestion: AccountSuggestionProtocol, originalIndex: Int, image: NSImage)
 	{
 		guard
-			let suggestions = self.accountSuggestions,
+			let suggestions = accountSuggestions,
 			originalIndex < suggestions.count,
 			suggestions[originalIndex].imageUrl == suggestion.imageUrl
 		else { return }
@@ -220,9 +261,9 @@ private extension NSTableView
 	}
 }
 
- @objc public protocol AccountSuggestionWindowImagesProvider: AnyObject
- {
+@objc public protocol AccountSuggestionWindowImagesProvider: AnyObject
+{
 	func suggestionWindow(_ windowController: SuggestionWindowController,
-						  imageForSuggestionUsingURL: URL,
-						  completion: @escaping (NSImage?) -> Void)
- }
+	                      imageForSuggestionUsingURL: URL,
+	                      completion: @escaping (NSImage?) -> Void)
+}
