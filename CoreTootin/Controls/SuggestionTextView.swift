@@ -21,16 +21,16 @@ import AppKit
 
 open class SuggestionTextView: NSTextView
 {
-//	public weak var accountSuggestionsProvider: AccountSuggestionTextViewSuggestionsProvider? = nil
-	public weak var hashtagSuggestionsProvider: HashtagSuggestionTextViewSuggestionsProvider? = nil
+	public weak var accountSuggestionsProvider: AccountSuggestionTextViewSuggestionsProvider?
+	public weak var hashtagSuggestionsProvider: HashtagSuggestionTextViewSuggestionsProvider?
 
-//	public weak var imagesProvider: AccountSuggestionWindowImagesProvider?
-//	{
-//		get { return suggestionWindowController.imagesProvider }
-//		set { suggestionWindowController.imagesProvider = newValue }
-//	}
+	public weak var imagesProvider: AccountSuggestionWindowImagesProvider?
+	{
+		get { return suggestionWindowController.imagesProvider }
+		set { suggestionWindowController.imagesProvider = newValue }
+	}
 
-	public private(set) lazy var suggestionWindowController = HashtagSuggestionWindowController()
+	public private(set) lazy var suggestionWindowController = SuggestionWindowController()
 
 	private var lastSuggestionRequestId: UUID?
 
@@ -111,7 +111,6 @@ open class SuggestionTextView: NSTextView
 
 		guard
 			selection.length == 0,
-			let provider = hashtagSuggestionsProvider,
 			let (mode, mention, range) = string.mentionUpTo(index: selection.location)
 		else
 		{
@@ -122,11 +121,34 @@ open class SuggestionTextView: NSTextView
 		let requestId = UUID()
 		lastSuggestionRequestId = requestId
 
+		if mode == .mention, let provider = accountSuggestionsProvider
+		{
 		provider.suggestionTextView(self, suggestionsForQuery: mention)
 		{
 			[weak self] suggestions in
 
-			guard !suggestions.isEmpty else
+				guard !suggestions.isEmpty
+				else
+				{
+					DispatchQueue.main.async { self?.dismissSuggestionsWindow() }
+					return
+				}
+
+				DispatchQueue.main.async
+				{
+					guard self?.lastSuggestionRequestId == requestId else { return }
+//					self?.showSuggestionsWindow(mode: mode, with: suggestions, mentionRange: range)
+				}
+			}
+		}
+		else if mode == .hashtag, let provider = hashtagSuggestionsProvider
+		{
+			provider.suggestionTextView(self, suggestionsForQuery: mention)
+			{
+				[weak self] suggestions in
+
+				guard !suggestions.isEmpty
+				else
 			{
 				DispatchQueue.main.async { self?.dismissSuggestionsWindow() }
 				return
@@ -137,6 +159,11 @@ open class SuggestionTextView: NSTextView
 				guard self?.lastSuggestionRequestId == requestId else { return }
 				self?.showSuggestionsWindow(mode: mode, with: suggestions, mentionRange: range)
 			}
+		}
+	}
+		else
+		{
+			dismissSuggestionsWindow()
 		}
 	}
 
@@ -173,12 +200,12 @@ open class SuggestionTextView: NSTextView
 	}
 }
 
-//@objc public protocol AccountSuggestionTextViewSuggestionsProvider: AnyObject
-//{
-//	func suggestionTextView(_ textView: SuggestionTextView,
-//							suggestionsForQuery: String,
-//							completion: @escaping ([AccountSuggestionProtocol]) -> Void)
-//}
+@objc public protocol AccountSuggestionTextViewSuggestionsProvider: AnyObject
+{
+	func suggestionTextView(_ textView: SuggestionTextView,
+	                        suggestionsForQuery: String,
+	                        completion: @escaping ([AccountSuggestionProtocol]) -> Void)
+}
 
 @objc public protocol HashtagSuggestionTextViewSuggestionsProvider: AnyObject
 {
