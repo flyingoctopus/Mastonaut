@@ -733,6 +733,8 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 
 		currentAccount = account
 
+		replyStatus = nil
+
 		attachmentsSubcontroller.reset()
 		textView.string = existingStatus.fullAttributedContent.replacingMentionsWithURIs(mentions: existingStatus.mentions)
 		postingService?.set(status: existingStatus.fullAttributedContent.string)
