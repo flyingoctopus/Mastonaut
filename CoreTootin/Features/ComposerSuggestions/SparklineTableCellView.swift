@@ -21,7 +21,7 @@ public class SparklineTableCellView: NSTableCellView {
 		let stack = DSFSparklineOverlay.Bar()
 		stack.dataSource = dataSource
 
-		if !isSelected {
+		if !isSelected && effectiveAppearance != NSAppearance(named: .darkAqua) {
 			stack.primaryStrokeColor = NSColor.textColor.cgColor
 		}
 		else {
