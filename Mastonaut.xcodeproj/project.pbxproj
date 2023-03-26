@@ -518,6 +518,7 @@
 		5F3A17EF291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
 		5F3A17F0291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
 		5F3A17F1291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
+		5F3BC8B229D0B44000CEBD7F /* SparklineTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BC8B129D0B44000CEBD7F /* SparklineTableCellView.swift */; };
 		5F5338B32960B23200C1D9AE /* ReplaceCharactersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5338B22960B23200C1D9AE /* ReplaceCharactersTests.swift */; };
 		5F74B959294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */; };
 		5F74B95A294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */; };
@@ -533,6 +534,7 @@
 		5FC3E1922926FD640086DCEE /* AppearancePreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */; };
 		5FC3E1952927018A0086DCEE /* LoggingOSLog in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC3E1942927018A0086DCEE /* LoggingOSLog */; };
 		5FD008EB29CBA8C700EC4A29 /* AccountSuggestionWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5FD008EA29CBA8C700EC4A29 /* AccountSuggestionWindowController.xib */; };
+		5FD008EF29CBAB7000EC4A29 /* RedrawsOnSelectTableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD008EE29CBAB7000EC4A29 /* RedrawsOnSelectTableRowView.swift */; };
 		5FE72EAE292982F0001C7A6C /* BuildConfig.sh in Resources */ = {isa = PBXBuildFile; fileRef = 5FE72EAD292982F0001C7A6C /* BuildConfig.sh */; };
 		5FE72EAF292982F0001C7A6C /* BuildConfig.sh in Resources */ = {isa = PBXBuildFile; fileRef = 5FE72EAD292982F0001C7A6C /* BuildConfig.sh */; };
 		5FE72EB529298A37001C7A6C /* BuildConfig.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE72EB429298A37001C7A6C /* BuildConfig.generated.swift */; };
@@ -986,6 +988,7 @@
 		5F38B52B29302F0C00FCB9FC /* AppKitSwiftUIIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppKitSwiftUIIntegration.swift; sourceTree = "<group>"; };
 		5F38B52E2930301600FCB9FC /* PullToRefreshInnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullToRefreshInnerView.swift; sourceTree = "<group>"; };
 		5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = CoreAssets.xcassets; sourceTree = "<group>"; };
+		5F3BC8B129D0B44000CEBD7F /* SparklineTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparklineTableCellView.swift; sourceTree = "<group>"; };
 		5F5338B22960B23200C1D9AE /* ReplaceCharactersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaceCharactersTests.swift; sourceTree = "<group>"; };
 		5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPrivacyPreferencesView.swift; sourceTree = "<group>"; };
 		5F8C1346296A0661007BE2D5 /* EditedStatusTableCellView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditedStatusTableCellView.xib; sourceTree = "<group>"; };
@@ -998,6 +1001,7 @@
 		5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+CurrentType.swift"; sourceTree = "<group>"; };
 		5FC3E1912926FD640086DCEE /* AppearancePreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearancePreferencesView.swift; sourceTree = "<group>"; };
 		5FD008EA29CBA8C700EC4A29 /* AccountSuggestionWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AccountSuggestionWindowController.xib; sourceTree = "<group>"; };
+		5FD008EE29CBAB7000EC4A29 /* RedrawsOnSelectTableRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedrawsOnSelectTableRowView.swift; sourceTree = "<group>"; };
 		5FE72EAD292982F0001C7A6C /* BuildConfig.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = BuildConfig.sh; sourceTree = "<group>"; };
 		5FE72EB429298A37001C7A6C /* BuildConfig.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildConfig.generated.swift; sourceTree = "<group>"; };
 		5FE7A52D292E704D00F7EB73 /* PullRefreshableScrollView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PullRefreshableScrollView.xcodeproj; path = Dependencies/PullRefreshableScrollView/PullRefreshableScrollView.xcodeproj; sourceTree = "<group>"; };
@@ -1807,10 +1811,12 @@
 		5F30992F29CBA5C800E27292 /* ComposerSuggestions */ = {
 			isa = PBXGroup;
 			children = (
-				5FD008EC29CBA8DC00EC4A29 /* Windows */,
 				1530428C22AEDAFA00489F31 /* AccountSearchService.swift */,
 				5FC21CF529C6820500A582A8 /* HashtagSearchService.swift */,
+				5FD008EE29CBAB7000EC4A29 /* RedrawsOnSelectTableRowView.swift */,
+				5F3BC8B129D0B44000CEBD7F /* SparklineTableCellView.swift */,
 				1530429222AEFCC900489F31 /* SuggestionTextView.swift */,
+				5FD008EC29CBA8DC00EC4A29 /* Windows */,
 			);
 			path = ComposerSuggestions;
 			sourceTree = "<group>";
@@ -2680,6 +2686,7 @@
 				15EE2B10232EA3EF00155E16 /* BorderView.swift in Sources */,
 				15F9F307232EB8BE00931594 /* BaseComposerTextView.swift in Sources */,
 				154478AF232B03A0009C71D4 /* MastonautPersistentContainer.swift in Sources */,
+				5F3BC8B229D0B44000CEBD7F /* SparklineTableCellView.swift in Sources */,
 				1574DE1E233C030A00AB1036 /* NetworkError.swift in Sources */,
 				159C216D232C56E100139BD5 /* Promise.swift in Sources */,
 				15E0DD2624D376AF002CE87B /* CGImage+Additions.swift in Sources */,
@@ -2707,6 +2714,7 @@
 				1543127D232EE34A0010854A /* AccountSearchService.swift in Sources */,
 				15F9F30B232EB9E400931594 /* SuggestionWindowController.swift in Sources */,
 				15F9F309232EB94F00931594 /* SuggestionTextView.swift in Sources */,
+				5FD008EF29CBAB7000EC4A29 /* RedrawsOnSelectTableRowView.swift in Sources */,
 				1543127F232EE39D0010854A /* Account+Shims.swift in Sources */,
 				15EE2B04232EA1CC00155E16 /* Structs+Additions.swift in Sources */,
 				1543128B232EEFD00010854A /* Client+Helpers.swift in Sources */,

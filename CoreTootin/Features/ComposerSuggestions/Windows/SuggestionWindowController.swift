@@ -52,6 +52,7 @@ public class SuggestionWindowController: NSWindowController
 	{
 		super.windowDidLoad()
 
+//		tableView.selectionHighlightStyle = .none
 		tableView.target = self
 		tableView.doubleAction = #selector(didDoubleClickTableView(_:))
 	}
@@ -154,21 +155,41 @@ extension SuggestionWindowController: NSTableViewDataSource
 {
 	public func numberOfRows(in tableView: NSTableView) -> Int
 	{
-		if let accountSuggestions {
+		if let accountSuggestions
+		{
 			return accountSuggestions.count
 		}
-		else if let hashtagSuggestions {
+		else if let hashtagSuggestions
+		{
 			return hashtagSuggestions.count
 		}
-		
+
 		return 0
 	}
 }
 
 extension SuggestionWindowController: NSTableViewDelegate
 {
+	public func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView?
+	{
+		let identifier = NSUserInterfaceItemIdentifier("RedrawsOnSelectTableRowView")
+
+		guard let rowView = tableView.makeView(withIdentifier: identifier, owner: nil) as! RedrawsOnSelectTableRowView?
+		else
+		{
+			let rowView = RedrawsOnSelectTableRowView()
+			rowView.identifier = identifier
+			rowView.tableView = tableView
+			return rowView
+		}
+
+		return rowView
+	}
+
 	public func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView?
 	{
+//		print("hello \(row) 1")
+
 		guard let identifier = tableColumn?.identifier else { return nil }
 
 		let view = tableView.makeView(withIdentifier: identifier, owner: nil)
@@ -208,28 +229,29 @@ extension SuggestionWindowController: NSTableViewDelegate
 			case "name":
 				cellView.textField?.stringValue = suggestion.text
 
-			case "history":
-				guard !suggestion.uses.isEmpty,
-				      let maxUses = suggestion.uses.max() else { break }
-
-				// MAYBE maxUses should be across all search results?
-
-				let source = DSFSparkline.DataSource(values: suggestion.uses.map { CGFloat($0) },
-				                                     range: 0 ... CGFloat(maxUses))
-
-				let bitmap = DSFSparklineSurface.Bitmap()
-				let stack = DSFSparklineOverlay.Bar()
-				stack.dataSource = source
-				bitmap.addOverlay(stack)
-
-				if let attributedString = bitmap.attributedString(size: CGSize(width: 40, height: 18), scale: 2)
-				{
-					cellView.textField?.attributedStringValue = attributedString
-				}
-
 			default:
 				break
 			}
+		}
+
+		if let suggestion = hashtagSuggestions?[row],
+		   identifier.rawValue == "history",
+		   let cellView = view as? SparklineTableCellView
+		{
+			if cellView.dataSource == nil || cellView.maxUses == nil
+			{
+				guard !suggestion.uses.isEmpty,
+				      let maxUses = suggestion.uses.max() else { return view }
+
+				// MAYBE maxUses should be across all search results?
+
+				cellView.maxUses = maxUses
+
+				cellView.dataSource = DSFSparkline.DataSource(values: suggestion.uses.map { CGFloat($0) },
+				                                              range: 0 ... CGFloat(maxUses))
+			}
+
+			cellView.redraw(isSelected: tableView.selectedRow == row)
 		}
 
 		return view
