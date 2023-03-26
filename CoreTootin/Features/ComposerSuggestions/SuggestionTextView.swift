@@ -220,6 +220,11 @@ open class SuggestionTextView: NSTextView
 			case let .hashtag(hashtag):
 				self.replaceCharacters(in: mentionRange, with: "#\(hashtag.text) ")
 			}
+
+			// make sure 
+			self.delegate?.textDidChange?(Notification(name: NSControl.textDidChangeNotification, object: self))
+
+			// (unsure why `NotificationCenter.default.post` doesn't work)
 		}
 
 		activeSuggestionWindowController.positionWindow(under: screenRect)
