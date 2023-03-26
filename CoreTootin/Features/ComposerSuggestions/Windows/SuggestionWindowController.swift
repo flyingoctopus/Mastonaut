@@ -52,14 +52,13 @@ public class SuggestionWindowController: NSWindowController
 	{
 		super.windowDidLoad()
 
-//		tableView.selectionHighlightStyle = .none
 		tableView.target = self
 		tableView.doubleAction = #selector(didDoubleClickTableView(_:))
 	}
 
 	public func positionWindow(under textRect: NSRect)
 	{
-		var suggestionsCount = accountSuggestions?.count ?? hashtagSuggestions?.count
+		let suggestionsCount = accountSuggestions?.count ?? hashtagSuggestions?.count
 
 		if let suggestionsCount, let tableView
 		{
@@ -188,8 +187,6 @@ extension SuggestionWindowController: NSTableViewDelegate
 
 	public func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView?
 	{
-//		print("hello \(row) 1")
-
 		guard let identifier = tableColumn?.identifier else { return nil }
 
 		let view = tableView.makeView(withIdentifier: identifier, owner: nil)

@@ -32,8 +32,8 @@ open class SuggestionTextView: NSTextView
 
 	public private(set) lazy var accountSuggestionWindowController = SuggestionWindowController(mode: .mention)
 	public private(set) lazy var hashtagSuggestionWindowController = SuggestionWindowController(mode: .hashtag)
-	
-	public var activeSuggestionWindowController : SuggestionWindowController?
+
+	public var activeSuggestionWindowController: SuggestionWindowController?
 
 	private var lastSuggestionRequestId: UUID?
 
@@ -134,8 +134,8 @@ open class SuggestionTextView: NSTextView
 				[weak self] result in
 
 				guard let container = result as? [SuggestionContainer],
-					  !container.isEmpty,
-					  case SuggestionContainer.mention(_) = container[0]
+				      !container.isEmpty,
+				      case SuggestionContainer.mention = container[0]
 				else
 				{
 					DispatchQueue.main.async { self?.dismissSuggestionsWindow() }
@@ -156,8 +156,8 @@ open class SuggestionTextView: NSTextView
 				[weak self] result in
 
 				guard let container = result as? [SuggestionContainer],
-					  !container.isEmpty,
-					  case SuggestionContainer.hashtag(_) = container[0]
+				      !container.isEmpty,
+				      case SuggestionContainer.hashtag = container[0]
 				else
 				{
 					DispatchQueue.main.async { self?.dismissSuggestionsWindow() }
@@ -195,16 +195,17 @@ open class SuggestionTextView: NSTextView
 		let rect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
 		let offsetRect = convert(rect.offsetBy(dx: textContainerInset.width, dy: textContainerInset.height), to: nil)
 		let screenRect = window.convertToScreen(offsetRect)
-		
-		switch mode {
+
+		switch mode
+		{
 		case .mention:
 			activeSuggestionWindowController = accountSuggestionWindowController
 		case .hashtag:
 			activeSuggestionWindowController = hashtagSuggestionWindowController
 		}
 
-		guard let activeSuggestionWindowController else {return}
-		
+		guard let activeSuggestionWindowController else { return }
+
 		activeSuggestionWindowController.set(suggestionContainers: suggestions)
 		activeSuggestionWindowController.showWindow(nil)
 
@@ -221,7 +222,7 @@ open class SuggestionTextView: NSTextView
 				self.replaceCharacters(in: mentionRange, with: "#\(hashtag.text) ")
 			}
 
-			// make sure 
+			// make sure
 			self.delegate?.textDidChange?(Notification(name: NSControl.textDidChangeNotification, object: self))
 
 			// (unsure why `NotificationCenter.default.post` doesn't work)
