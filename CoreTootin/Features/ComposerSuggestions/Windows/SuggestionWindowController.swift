@@ -121,7 +121,7 @@ public class SuggestionWindowController: NSWindowController
 
 	@IBAction func selectNext(_ sender: Any?)
 	{
-		guard let suggestions = hashtagSuggestions else { return }
+		guard let suggestions: [Any] = accountSuggestions ?? hashtagSuggestions else { return }
 		let currentSelection = tableView.selectedRow
 
 		guard (0..<suggestions.count).contains(currentSelection + 1)
@@ -136,8 +136,10 @@ public class SuggestionWindowController: NSWindowController
 
 	@IBAction func selectPrevious(_ sender: Any?)
 	{
-		guard let suggestions = hashtagSuggestions else { return }
+		guard let suggestions: [Any] = accountSuggestions ?? hashtagSuggestions else { return }
 		let currentSelection = tableView.selectedRow
+		
+		print("suggestions: \(suggestions.count) acc: \(accountSuggestions?.count ?? 0) has: \(hashtagSuggestions?.count ?? 0)")
 
 		guard currentSelection > 0
 		else
