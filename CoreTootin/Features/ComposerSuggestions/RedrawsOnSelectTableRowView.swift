@@ -14,8 +14,14 @@ public class RedrawsOnSelectTableRowView: NSTableRowView {
 		willSet(newValue) {
 			super.isSelected = newValue
 
-			if subviews.count >= 2, let tableView, tableView.numberOfRows > 0 {
-				let column = tableView.tableColumns[tableView.column(withIdentifier: NSUserInterfaceItemIdentifier("history"))]
+			if subviews.count >= 2,
+			   let tableView,
+			   tableView.numberOfRows > 0
+			{
+				// technically, this is somewhat redundant since we check the view type further down
+				let columnIndex = tableView.column(withIdentifier: NSUserInterfaceItemIdentifier("history"))
+
+				guard columnIndex > 0 else { return }
 
 				for row in 0 ..< tableView.numberOfRows {
 					let rowView = tableView.rowView(atRow: row, makeIfNecessary: false)
