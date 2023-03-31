@@ -64,7 +64,20 @@ public class SuggestionWindowController: NSWindowController
 		{
 			let visibleCount = CGFloat(min(suggestionsCount, 8))
 			let bestHeight = visibleCount * (tableView.rowHeight + tableView.intercellSpacing.height)
-			window?.setContentSize(NSSize(width: 482, height: bestHeight))
+
+			var width: Double
+
+			switch windowNibName
+			{
+			case "AccountSuggestionWindowController":
+				width = 482
+			case "HashtagSuggestionWindowController":
+				width = 272
+			default:
+				return
+			}
+
+			window?.setContentSize(NSSize(width: width, height: bestHeight))
 		}
 
 		window?.setFrameTopLeftPoint(NSPoint(x: textRect.minX - 30, y: textRect.minY))
@@ -138,7 +151,7 @@ public class SuggestionWindowController: NSWindowController
 	{
 		guard let suggestions: [Any] = accountSuggestions ?? hashtagSuggestions else { return }
 		let currentSelection = tableView.selectedRow
-		
+
 		print("suggestions: \(suggestions.count) acc: \(accountSuggestions?.count ?? 0) has: \(hashtagSuggestions?.count ?? 0)")
 
 		guard currentSelection > 0
