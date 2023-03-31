@@ -197,7 +197,15 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 	{
 		didSet
 		{
-			textView.suggestionsProvider = accountSearchService
+			textView.accountSuggestionsProvider = accountSearchService
+		}
+	}
+
+	private var hashtagSearchService: HashtagSearchService?
+	{
+		didSet
+		{
+			textView.hashtagSuggestionsProvider = hashtagSearchService
 		}
 	}
 
@@ -232,6 +240,7 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 			guard let instance = currentInstance, let client = client else { return }
 
 			accountSearchService = AccountSearchService(client: client, activeInstance: instance)
+			hashtagSearchService = HashtagSearchService(client: client)
 		}
 	}
 
@@ -244,6 +253,7 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 			postingService = client.map { PostingService(client: $0) }
 			resolverService = client.map { ResolverService(client: $0) }
 			accountSearchService = nil
+			hashtagSearchService = nil
 			currentInstance = nil
 
 			if let account = currentAccount
