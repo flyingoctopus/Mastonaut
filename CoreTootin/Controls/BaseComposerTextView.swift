@@ -33,7 +33,7 @@ open class BaseComposerTextView: SuggestionTextView
 
 	public override func insertNewline(_ sender: Any?)
 	{
-		guard let activeSuggestionWindowController, activeSuggestionWindowController.isWindowVisible == false else
+		if activeSuggestionWindowController?.isWindowVisible == true
 		{
 			insertCurrentlySelectedSuggestion()
 			return
