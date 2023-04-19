@@ -25,11 +25,11 @@ class FocusedStatusTableCellView: StatusTableCellView
 	@IBOutlet private unowned var appNameConatiner: NSView!
 	@IBOutlet private unowned var appNameLabel: NSButton!
 
-	private var sourceApplication: Application? = nil
 	@IBOutlet var replyCount: NSTextField!
 	@IBOutlet var reblogCount: NSTextField!
 	@IBOutlet var favoriteCount: NSTextField!
 
+	private var sourceApplication: Application?
 
 	private static let _authorLabelAttributes: [NSAttributedString.Key: AnyObject] = [
 		.foregroundColor: NSColor.labelColor, .font: NSFont.systemFont(ofSize: 15, weight: .semibold)
@@ -47,32 +47,32 @@ class FocusedStatusTableCellView: StatusTableCellView
 		.underlineStyle: NSNumber(value: 1)
 	]
 
-	internal override func authorLabelAttributes() -> [NSAttributedString.Key: AnyObject]
+	override internal func authorLabelAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
 		return FocusedStatusTableCellView._authorLabelAttributes
 	}
 
-	internal override func statusLabelAttributes() -> [NSAttributedString.Key: AnyObject]
+	override internal func statusLabelAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
 		return FocusedStatusTableCellView._statusLabelAttributes
 	}
 
-	internal override func statusLabelLinkAttributes() -> [NSAttributedString.Key: AnyObject]
+	override internal func statusLabelLinkAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
 		return FocusedStatusTableCellView._statusLabelLinkAttributes
 	}
 
 	override func set(displayedStatus status: Status,
-					  poll: Poll?,
-					  attachmentPresenter: AttachmentPresenting,
-					  interactionHandler: StatusInteractionHandling,
-					  activeInstance: Instance)
+	                  poll: Poll?,
+	                  attachmentPresenter: AttachmentPresenting,
+	                  interactionHandler: StatusInteractionHandling,
+	                  activeInstance: Instance)
 	{
 		super.set(displayedStatus: status,
-				  poll: poll,
-				  attachmentPresenter: attachmentPresenter,
-				  interactionHandler: interactionHandler,
-				  activeInstance: activeInstance)
+		          poll: poll,
+		          attachmentPresenter: attachmentPresenter,
+		          interactionHandler: interactionHandler,
+		          activeInstance: activeInstance)
 
 		setContentLabelsSelectable(true)
 
@@ -107,7 +107,8 @@ class FocusedStatusTableCellView: StatusTableCellView
 
 	@IBAction func showStatusApp(_ sender: Any?)
 	{
-		guard let applicationWebsite = sourceApplication?.website, let url = URL(string: applicationWebsite) else
+		guard let applicationWebsite = sourceApplication?.website, let url = URL(string: applicationWebsite)
+		else
 		{
 			return
 		}
