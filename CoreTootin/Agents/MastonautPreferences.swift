@@ -83,6 +83,55 @@ public class MastonautPreferences: PreferencesController
 
 	// Viewing preferences
 
+	private func getFont(familyKey: String, sizeKey: String) -> NSFont?
+	{
+		NSFont(name: defaults.string(forKey: familyKey) ?? "",
+		       size: CGFloat(defaults.float(forKey: sizeKey)))
+	}
+
+	private func setFont(newValue: NSFont, familyKey: String, sizeKey: String)
+	{
+		defaults.setValue(newValue.familyName, forKey: familyKey)
+		defaults.setValue(newValue.pointSize, forKey: sizeKey)
+	}
+	
+	// FIXME: I can probably use key paths here?
+
+	public static let defaultTimelineFont = NSFont.systemFont(ofSize: 13)
+	public static let defaultFocusedFont = NSFont.systemFont(ofSize: 16)
+
+	public let timelineFontFamilyKey = "timelineFontFamily"
+	public let timelineFontSizeKey = "timelineFontSize"
+
+	@objc public dynamic var timelineFont: NSFont
+	{
+		get
+		{
+			return getFont(familyKey: timelineFontFamilyKey, sizeKey: timelineFontSizeKey) ??
+				MastonautPreferences.defaultTimelineFont
+		}
+		set
+		{
+			setFont(newValue: newValue, familyKey: timelineFontFamilyKey, sizeKey: timelineFontSizeKey)
+		}
+	}
+	
+	public let focusedFontFamilyKey = "focusedFontFamily"
+	public let focusedFontSizeKey = "focusedFontSize"
+
+	@objc public dynamic var focusedFont: NSFont
+	{
+		get
+		{
+			return getFont(familyKey: focusedFontFamilyKey, sizeKey: focusedFontSizeKey) ??
+				MastonautPreferences.defaultFocusedFont
+		}
+		set
+		{
+			setFont(newValue: newValue, familyKey: focusedFontFamilyKey, sizeKey: focusedFontSizeKey)
+		}
+	}
+
 	@objc public dynamic var mediaDisplayMode: MediaDisplayMode
 	{
 		get { return integerRepresentable(for: #keyPath(mediaDisplayMode), default: .hideSensitiveMedia) }
