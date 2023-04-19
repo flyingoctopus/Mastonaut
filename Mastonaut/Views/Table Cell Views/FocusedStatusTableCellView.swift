@@ -17,6 +17,7 @@
 //  GNU General Public License for more details.
 //
 
+import CoreTootin
 import Foundation
 import MastodonKit
 
@@ -25,7 +26,26 @@ class FocusedStatusTableCellView: StatusTableCellView
 	@IBOutlet private unowned var appNameConatiner: NSView!
 	@IBOutlet private unowned var appNameLabel: NSButton!
 
-	private var sourceApplication: Application? = nil
+	override func awakeFromNib()
+	{
+		super.awakeFromNib()
+
+		MastonautPreferences.instance.addObserver(self, forKeyPath: "threadFontSize")
+	}
+
+	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?)
+	{
+		switch keyPath
+		{
+		case "threadFontSize":
+//			statusLabel.font = MastonautPreferences.instance.timelineFont
+			break
+		default:
+			break
+		}
+	}
+
+	private var sourceApplication: Application?
 
 	private static let _authorLabelAttributes: [NSAttributedString.Key: AnyObject] = [
 		.foregroundColor: NSColor.labelColor, .font: NSFont.systemFont(ofSize: 15, weight: .semibold)
@@ -59,16 +79,16 @@ class FocusedStatusTableCellView: StatusTableCellView
 	}
 
 	override func set(displayedStatus status: Status,
-					  poll: Poll?,
-					  attachmentPresenter: AttachmentPresenting,
-					  interactionHandler: StatusInteractionHandling,
-					  activeInstance: Instance)
+	                  poll: Poll?,
+	                  attachmentPresenter: AttachmentPresenting,
+	                  interactionHandler: StatusInteractionHandling,
+	                  activeInstance: Instance)
 	{
 		super.set(displayedStatus: status,
-				  poll: poll,
-				  attachmentPresenter: attachmentPresenter,
-				  interactionHandler: interactionHandler,
-				  activeInstance: activeInstance)
+		          poll: poll,
+		          attachmentPresenter: attachmentPresenter,
+		          interactionHandler: interactionHandler,
+		          activeInstance: activeInstance)
 
 		setContentLabelsSelectable(true)
 
