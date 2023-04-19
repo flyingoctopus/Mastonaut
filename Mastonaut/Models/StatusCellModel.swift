@@ -17,9 +17,9 @@
 //  GNU General Public License for more details.
 //
 
+import CoreTootin
 import Foundation
 import MastodonKit
-import CoreTootin
 
 class StatusCellModel: NSObject
 {
@@ -27,20 +27,20 @@ class StatusCellModel: NSObject
 
 	unowned let interactionHandler: StatusInteractionHandling
 
-	@objc dynamic
-	private(set) var isFavorited: Bool
+	@objc private(set) dynamic
+	var isFavorited: Bool
 
-	@objc dynamic
-	private(set) var isReblogged: Bool
+	@objc private(set) dynamic
+	var isReblogged: Bool
 
-	@objc dynamic
-	private(set) var authorAvatar: NSImage
+	@objc private(set) dynamic
+	var authorAvatar: NSImage
 
-	@objc dynamic
-	private(set) var agentAvatar: NSImage? = nil
+	@objc private(set) dynamic
+	var agentAvatar: NSImage?
 
-	@objc dynamic
-	private(set) var contextIcon: NSImage? = nil
+	@objc private(set) dynamic
+	var contextIcon: NSImage?
 
 	var visibleStatus: Status
 	{
@@ -65,7 +65,7 @@ class StatusCellModel: NSObject
 		self.isFavorited = status.favourited == true
 		self.isReblogged = status.reblogged == true
 
-		authorAvatar = #imageLiteral(resourceName: "missing")
+		self.authorAvatar = #imageLiteral(resourceName: "missing")
 
 		super.init()
 
@@ -182,8 +182,10 @@ class StatusCellModel: NSObject
 
 	func loadAccountAvatar(for status: Status, completion: @escaping (NSImage) -> Void)
 	{
-		AppDelegate.shared.avatarImageCache.fetchImage(account: status.account) { result in
-			switch result {
+		AppDelegate.shared.avatarImageCache.fetchImage(account: status.account)
+		{ result in
+			switch result
+			{
 			case .inCache(let avatarImage):
 				assert(Thread.isMainThread)
 				completion(avatarImage)
@@ -231,8 +233,8 @@ extension StatusCellModel: PollViewControllerDelegate
 
 		interactionHandler.voteOn(poll: poll,
 								  statusID: visibleStatus.id,
-								  options: optionIndexSet) { [weak self] result in
-
+		                          options: optionIndexSet)
+		{ [weak self] result in
 			switch result
 			{
 			case .success(let updatedPoll):
@@ -240,7 +242,8 @@ extension StatusCellModel: PollViewControllerDelegate
 
 			case .failure(let error):
 				completion(nil)
-				DispatchQueue.main.async {
+				DispatchQueue.main.async
+				{
 					self?.interactionHandler.handle(interactionError: UserLocalizedDescriptionError(error))
 				}
 			}

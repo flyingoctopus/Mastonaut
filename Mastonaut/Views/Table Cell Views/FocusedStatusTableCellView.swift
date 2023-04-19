@@ -43,17 +43,17 @@ class FocusedStatusTableCellView: StatusTableCellView
 		.underlineStyle: NSNumber(value: 1)
 	]
 
-	internal override func authorLabelAttributes() -> [NSAttributedString.Key: AnyObject]
+	override internal func authorLabelAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
 		return FocusedStatusTableCellView._authorLabelAttributes
 	}
 
-	internal override func statusLabelAttributes() -> [NSAttributedString.Key: AnyObject]
+	override internal func statusLabelAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
 		return FocusedStatusTableCellView._statusLabelAttributes
 	}
 
-	internal override func statusLabelLinkAttributes() -> [NSAttributedString.Key: AnyObject]
+	override internal func statusLabelLinkAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
 		return FocusedStatusTableCellView._statusLabelLinkAttributes
 	}
@@ -95,7 +95,8 @@ class FocusedStatusTableCellView: StatusTableCellView
 
 	@IBAction func showStatusApp(_ sender: Any?)
 	{
-		guard let applicationWebsite = sourceApplication?.website, let url = URL(string: applicationWebsite) else
+		guard let applicationWebsite = sourceApplication?.website, let url = URL(string: applicationWebsite)
+		else
 		{
 			return
 		}

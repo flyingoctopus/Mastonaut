@@ -23,7 +23,7 @@ public let Preferences = MastonautPreferences.instance
 
 public class MastonautPreferences: PreferencesController
 {
-	private static var sharedInstance: MastonautPreferences! = nil
+	private static var sharedInstance: MastonautPreferences!
 
 	override var suiteName: String?
 	{
@@ -31,7 +31,7 @@ public class MastonautPreferences: PreferencesController
 	}
 
 	/// Initializer declared as private to avoid accidental creation of new instances.
-	private override init()
+	override private init()
 	{
 		super.init()
 
@@ -45,7 +45,7 @@ public class MastonautPreferences: PreferencesController
 		{
 			sharedInstance = MastonautPreferences()
 		}
-		
+
 		return sharedInstance
 	}
 
@@ -74,7 +74,7 @@ public class MastonautPreferences: PreferencesController
 		get { return bool(forKey: #keyPath(didMigrateToSharedLocalKeychain)) ?? false }
 		set { defaults.setValue(newValue, forKey: #keyPath(didMigrateToSharedLocalKeychain)) }
 	}
-	
+
 	@objc public dynamic var appearance: Appearance
 	{
 		get { return integerRepresentable(for: #keyPath(appearance), default: .auto) }
@@ -186,7 +186,8 @@ public class MastonautPreferences: PreferencesController
 
 	public func storedFrame(forTimelineWindowIndex index: Int) -> NSRect?
 	{
-		guard let frames: [String: String] = object(forKey: "MastonautPreferences.preservedWindowFrames") else
+		guard let frames: [String: String] = object(forKey: "MastonautPreferences.preservedWindowFrames")
+		else
 		{
 			return nil
 		}
@@ -200,22 +201,24 @@ public class MastonautPreferences: PreferencesController
 		frames["\(index)"] = NSStringFromRect(frame)
 		defaults.setValue(frames, forKey: "MastonautPreferences.preservedWindowFrames")
 	}
-	
+
 	// KVO
-	
-	public func addObserver(_ observer: NSObject, forKeyPath keyPath: String) {
+
+	public func addObserver(_ observer: NSObject, forKeyPath keyPath: String)
+	{
 		defaults.addObserver(observer, forKeyPath: keyPath, context: nil)
 	}
 }
 
 public extension MastonautPreferences
 {
-	@objc enum Appearance : Int {
-	    case auto = 1
-	    case light
-	    case dark
-    }
-	
+	@objc enum Appearance: Int
+	{
+		case auto = 1
+		case light
+		case dark
+	}
+
 	@objc enum MediaDisplayMode: Int
 	{
 		case alwaysHide = 1
@@ -248,9 +251,9 @@ public extension MastonautPreferences
 		{
 			switch self
 			{
-			case .public:	return 🔠("Public")
-			case .unlisted:	return 🔠("Unlisted")
-			case .private:	return 🔠("Private")
+			case .public: return 🔠("Public")
+			case .unlisted: return 🔠("Unlisted")
+			case .private: return 🔠("Private")
 			}
 		}
 
@@ -258,9 +261,9 @@ public extension MastonautPreferences
 		{
 			switch self
 			{
-			case .public:	return NSImage(named: "globe")
-			case .unlisted:	return NSImage(named: "padlock_open")
-			case .private:	return NSImage(named: "padlock")
+			case .public: return NSImage(named: "globe")
+			case .unlisted: return NSImage(named: "padlock_open")
+			case .private: return NSImage(named: "padlock")
 			}
 		}
 	}
