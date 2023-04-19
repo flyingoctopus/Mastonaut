@@ -26,6 +26,10 @@ class FocusedStatusTableCellView: StatusTableCellView
 	@IBOutlet private unowned var appNameLabel: NSButton!
 
 	private var sourceApplication: Application? = nil
+	@IBOutlet var replyCount: NSTextField!
+	@IBOutlet var reblogCount: NSTextField!
+	@IBOutlet var favoriteCount: NSTextField!
+
 
 	private static let _authorLabelAttributes: [NSAttributedString.Key: AnyObject] = [
 		.foregroundColor: NSColor.labelColor, .font: NSFont.systemFont(ofSize: 15, weight: .semibold)
@@ -84,6 +88,14 @@ class FocusedStatusTableCellView: StatusTableCellView
 			appNameLabel.title = ""
 			appNameConatiner.isHidden = true
 		}
+
+		reblogCount.intValue = Int32(status.reblogsCount)
+		favoriteCount.intValue = Int32(status.favouritesCount)
+	}
+
+	func set(context: Context)
+	{
+		replyCount.intValue = Int32(context.descendants.count)
 	}
 
 	override func prepareForReuse()
