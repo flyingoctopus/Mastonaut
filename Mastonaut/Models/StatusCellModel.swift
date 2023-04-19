@@ -25,7 +25,11 @@ class StatusCellModel: NSObject
 {
 	let status: Status
 
+	let poll: Poll?
+
+	unowned let attachmentPresenter: AttachmentPresenting
 	unowned let interactionHandler: StatusInteractionHandling
+	unowned let activeInstance: Instance
 
 	@objc private(set) dynamic
 	var isFavorited: Bool
@@ -57,10 +61,19 @@ class StatusCellModel: NSObject
 		return status.account
 	}
 
-	init(status: Status, interactionHandler: StatusInteractionHandling)
+	init(status: Status,
+	     poll: Poll?,
+	     attachmentPresenter: AttachmentPresenting,
+	     interactionHandler: StatusInteractionHandling,
+	     activeInstance: Instance)
 	{
 		self.status = status
+
+		self.poll = poll
+
+		self.attachmentPresenter = attachmentPresenter
 		self.interactionHandler = interactionHandler
+		self.activeInstance = activeInstance
 
 		self.isFavorited = status.favourited == true
 		self.isReblogged = status.reblogged == true
@@ -99,8 +112,8 @@ class StatusCellModel: NSObject
 		{
 			contextIcon = #imageLiteral(resourceName: "retooted")
 			button.set(stringValue: 🔠("status.context.boost", agent.bestDisplayName),
-					   applyingAttributes: attributes,
-					   applyingEmojis: agent.cacheableEmojis)
+			           applyingAttributes: attributes,
+			           applyingEmojis: agent.cacheableEmojis)
 			button.isEnabled = true
 		}
 		else if status.inReplyToAccountID == status.account.id
@@ -226,13 +239,13 @@ class StatusCellModel: NSObject
 extension StatusCellModel: PollViewControllerDelegate
 {
 	func pollViewController(_ viewController: PollViewController,
-							userDidVote optionIndexSet: IndexSet,
-							completion: @escaping (Poll?) -> Void)
+	                        userDidVote optionIndexSet: IndexSet,
+	                        completion: @escaping (Poll?) -> Void)
 	{
 		guard let poll = viewController.poll else { return }
 
 		interactionHandler.voteOn(poll: poll,
-								  statusID: visibleStatus.id,
+		                          statusID: visibleStatus.id,
 		                          options: optionIndexSet)
 		{ [weak self] result in
 			switch result

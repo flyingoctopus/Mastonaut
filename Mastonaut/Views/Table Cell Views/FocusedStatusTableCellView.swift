@@ -30,16 +30,17 @@ class FocusedStatusTableCellView: StatusTableCellView
 	{
 		super.awakeFromNib()
 
-		MastonautPreferences.instance.addObserver(self, forKeyPath: "threadFontSize")
+		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.focusedFontFamilyKey)
+		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.focusedFontSizeKey)
 	}
 
 	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?)
 	{
 		switch keyPath
 		{
-		case "threadFontSize":
-//			statusLabel.font = MastonautPreferences.instance.timelineFont
-			break
+		case MastonautPreferences.focusedFontFamilyKey,
+		     MastonautPreferences.focusedFontSizeKey:
+			redraw()
 		default:
 			break
 		}
@@ -51,11 +52,11 @@ class FocusedStatusTableCellView: StatusTableCellView
 		.foregroundColor: NSColor.labelColor, .font: NSFont.systemFont(ofSize: 15, weight: .semibold)
 	]
 
-	private static let _statusLabelAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.labelColor, .font: NSFont.labelFont(ofSize: 16),
-		.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
-		// vertically when clicked.
-	]
+//	private static let _statusLabelAttributes: [NSAttributedString.Key: AnyObject] = [
+//		.foregroundColor: NSColor.labelColor, .font: NSFont.labelFont(ofSize: 16),
+//		.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
+//		// vertically when clicked.
+//	]
 
 	private static let _statusLabelLinkAttributes: [NSAttributedString.Key: AnyObject] = [
 		.foregroundColor: NSColor.safeControlTintColor,
@@ -70,7 +71,12 @@ class FocusedStatusTableCellView: StatusTableCellView
 
 	override internal func statusLabelAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
-		return FocusedStatusTableCellView._statusLabelAttributes
+		return [
+			.foregroundColor: NSColor.labelColor,
+			.font: MastonautPreferences.instance.focusedFont,
+			.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
+			// vertically when clicked.
+		]
 	}
 
 	override internal func statusLabelLinkAttributes() -> [NSAttributedString.Key: AnyObject]

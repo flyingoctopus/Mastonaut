@@ -94,11 +94,11 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		.foregroundColor: NSColor.labelColor, .font: NSFont.systemFont(ofSize: 14, weight: .semibold)
 	]
 
-	private static let _statusLabelAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.labelColor, .font: NSFont.labelFont(ofSize: 14),
-		.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
-		// vertically when clicked.
-	]
+//	private static let _statusLabelAttributes: [NSAttributedString.Key: AnyObject] = [
+//		.foregroundColor: NSColor.labelColor, .font: NSFont.labelFont(ofSize: 14),
+//		.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
+//		// vertically when clicked.
+//	]
 
 	private static let _statusLabelLinkAttributes: [NSAttributedString.Key: AnyObject] = [
 		.foregroundColor: NSColor.safeControlTintColor,
@@ -117,7 +117,12 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 
 	internal func statusLabelAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
-		return StatusTableCellView._statusLabelAttributes
+		return [
+			.foregroundColor: NSColor.labelColor,
+			.font: MastonautPreferences.instance.timelineFont,
+			.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
+			// vertically when clicked.
+		]
 	}
 
 	internal func statusLabelLinkAttributes() -> [NSAttributedString.Key: AnyObject]
@@ -138,6 +143,25 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		statusLabel.linkTextAttributes = statusLabelLinkAttributes()
 
 		cardContainerView.clickHandler = { [weak self] in self?.cellModel?.openCardLink() }
+
+		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.timelineFontFamilyKey)
+		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.timelineFontSizeKey)
+	}
+
+	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?)
+	{
+		switch keyPath
+		{
+		case MastonautPreferences.timelineFontFamilyKey,
+		     MastonautPreferences.timelineFontSizeKey:
+			// focused views have different font sizes
+			if type(of: self) != FocusedStatusTableCellView.self
+			{
+				redraw()
+			}
+		default:
+			break
+		}
 	}
 
 	override var backgroundStyle: NSView.BackgroundStyle
@@ -167,8 +191,22 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 	         interactionHandler: StatusInteractionHandling,
 	         activeInstance: Instance)
 	{
-		let cellModel = StatusCellModel(status: status, interactionHandler: interactionHandler)
+		let cellModel = StatusCellModel(status: status,
+		                                poll: poll,
+		                                attachmentPresenter: attachmentPresenter,
+		                                interactionHandler: interactionHandler,
+		                                activeInstance: activeInstance)
 		self.cellModel = cellModel
+
+		redraw()
+	}
+
+	func redraw()
+	{
+		guard let cellModel
+		else { return }
+
+		let status = cellModel.status
 
 		statusLabel.linkHandler = cellModel
 		contentWarningLabel.linkHandler = cellModel
@@ -179,7 +217,7 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 
 		contextButton.map { cellModel.setupContextButton($0, attributes: contextLabelAttributes()) }
 
-		authorAccountLabel.stringValue = cellModel.visibleStatus.account.uri(in: activeInstance)
+		authorAccountLabel.stringValue = cellModel.visibleStatus.account.uri(in: cellModel.activeInstance)
 		timeLabel.objectValue = cellModel.visibleStatus.createdAt
 		timeLabel.toolTip = DateFormatter.longDateFormatter.string(from: cellModel.visibleStatus.createdAt)
 
@@ -254,7 +292,9 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 
 		setUpInteractions(status: cellModel.visibleStatus)
 
-		setupAttachmentsContainerView(for: cellModel.visibleStatus, poll: poll, attachmentPresenter: attachmentPresenter)
+		setupAttachmentsContainerView(for: cellModel.visibleStatus,
+		                              poll: cellModel.poll,
+		                              attachmentPresenter: cellModel.attachmentPresenter)
 		hasMedia = attachmentViewController != nil
 		hasSensitiveMedia = attachmentViewController?.sensitiveMedia == true
 	}

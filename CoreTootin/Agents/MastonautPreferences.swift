@@ -94,41 +94,41 @@ public class MastonautPreferences: PreferencesController
 		defaults.setValue(newValue.familyName, forKey: familyKey)
 		defaults.setValue(newValue.pointSize, forKey: sizeKey)
 	}
-	
+
 	// FIXME: I can probably use key paths here?
 
 	public static let defaultTimelineFont = NSFont.systemFont(ofSize: 13)
 	public static let defaultFocusedFont = NSFont.systemFont(ofSize: 16)
 
-	public let timelineFontFamilyKey = "timelineFontFamily"
-	public let timelineFontSizeKey = "timelineFontSize"
+	public static let timelineFontFamilyKey = "timelineFontFamily"
+	public static let timelineFontSizeKey = "timelineFontSize"
 
 	@objc public dynamic var timelineFont: NSFont
 	{
 		get
 		{
-			return getFont(familyKey: timelineFontFamilyKey, sizeKey: timelineFontSizeKey) ??
+			return getFont(familyKey: MastonautPreferences.timelineFontFamilyKey, sizeKey: MastonautPreferences.timelineFontSizeKey) ??
 				MastonautPreferences.defaultTimelineFont
 		}
 		set
 		{
-			setFont(newValue: newValue, familyKey: timelineFontFamilyKey, sizeKey: timelineFontSizeKey)
+			setFont(newValue: newValue, familyKey: MastonautPreferences.timelineFontFamilyKey, sizeKey: MastonautPreferences.timelineFontSizeKey)
 		}
 	}
-	
-	public let focusedFontFamilyKey = "focusedFontFamily"
-	public let focusedFontSizeKey = "focusedFontSize"
+
+	public static let focusedFontFamilyKey = "focusedFontFamily"
+	public static let focusedFontSizeKey = "focusedFontSize"
 
 	@objc public dynamic var focusedFont: NSFont
 	{
 		get
 		{
-			return getFont(familyKey: focusedFontFamilyKey, sizeKey: focusedFontSizeKey) ??
+			return getFont(familyKey: MastonautPreferences.focusedFontFamilyKey, sizeKey: MastonautPreferences.focusedFontSizeKey) ??
 				MastonautPreferences.defaultFocusedFont
 		}
 		set
 		{
-			setFont(newValue: newValue, familyKey: focusedFontFamilyKey, sizeKey: focusedFontSizeKey)
+			setFont(newValue: newValue, familyKey: MastonautPreferences.focusedFontFamilyKey, sizeKey: MastonautPreferences.focusedFontSizeKey)
 		}
 	}
 
