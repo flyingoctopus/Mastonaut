@@ -366,10 +366,10 @@
                     <rect key="frame" x="80" y="144" width="34" height="64"/>
                     <subviews>
                         <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zu3-GV-dyI">
-                            <rect key="frame" x="0.0" y="48" width="33" height="16"/>
+                            <rect key="frame" x="0.0" y="48" width="34" height="16"/>
                             <subviews>
                                 <button toolTip="Reply to this toot" ambiguous="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rbD-x0-4Qd">
-                                    <rect key="frame" x="0.0" y="1" width="16" height="15"/>
+                                    <rect key="frame" x="0.0" y="1" width="17" height="15"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="15" id="Wxy-Zk-B9m"/>
                                     </constraints>
@@ -382,7 +382,7 @@
                                     </connections>
                                 </button>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eyQ-0V-BqE" userLabel="Reply Count">
-                                    <rect key="frame" x="22" y="0.0" width="13" height="16"/>
+                                    <rect key="frame" x="23" y="0.0" width="13" height="16"/>
                                     <textFieldCell key="cell" lineBreakMode="clipping" title="0" id="E5O-PK-o38">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -440,10 +440,10 @@
                             </customSpacing>
                         </stackView>
                         <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XZs-XH-U0E">
-                            <rect key="frame" x="0.0" y="0.0" width="32" height="16"/>
+                            <rect key="frame" x="0.0" y="0.0" width="34" height="16"/>
                             <subviews>
                                 <button toolTip="Favorite this toot" ambiguous="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bah-Xt-rKH">
-                                    <rect key="frame" x="0.0" y="1" width="15" height="15"/>
+                                    <rect key="frame" x="0.0" y="1" width="17" height="15"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="star" imagePosition="overlaps" alignment="center" alternateImage="star_active" inset="2" id="U0O-6r-i82">
                                         <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="message" size="11"/>
@@ -462,7 +462,7 @@
                                     </connections>
                                 </button>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yyj-bi-MwR" userLabel="Favorite Count">
-                                    <rect key="frame" x="21" y="0.0" width="13" height="16"/>
+                                    <rect key="frame" x="23" y="0.0" width="13" height="16"/>
                                     <textFieldCell key="cell" lineBreakMode="clipping" title="0" id="g1H-4z-Gy2">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -494,13 +494,18 @@
             </subviews>
             <constraints>
                 <constraint firstItem="e90-GJ-Pog" firstAttribute="top" secondItem="Mr1-Dk-o1f" secondAttribute="bottom" constant="3" id="0wX-3I-dQf"/>
+                <constraint firstItem="FGE-RI-Pae" firstAttribute="centerX" secondItem="ifk-GB-BIa" secondAttribute="centerX" id="2Fo-Sb-NHr"/>
+                <constraint firstItem="ONC-cp-Fem" firstAttribute="leading" secondItem="OfF-ox-q52" secondAttribute="leading" id="4ta-qq-ydn"/>
+                <constraint firstItem="yyj-bi-MwR" firstAttribute="leading" secondItem="OfF-ox-q52" secondAttribute="leading" id="5tU-nD-lYj"/>
                 <constraint firstItem="GG8-p3-OIJ" firstAttribute="leading" secondItem="NiZ-P1-sSE" secondAttribute="leading" id="7Y3-1g-fG4"/>
                 <constraint firstItem="e90-GJ-Pog" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="NiZ-P1-sSE" secondAttribute="trailing" constant="2" id="BxG-qR-lJY"/>
                 <constraint firstItem="ZOF-P9-3K0" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="12" id="GSL-VH-if0"/>
+                <constraint firstItem="eyQ-0V-BqE" firstAttribute="leading" secondItem="OfF-ox-q52" secondAttribute="leading" id="IgS-N6-ltU"/>
                 <constraint firstItem="JEU-le-JUg" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="eK9-ym-EXK" secondAttribute="trailing" constant="12" id="L9d-Wm-GpW"/>
                 <constraint firstItem="GG8-p3-OIJ" firstAttribute="top" secondItem="eK9-ym-EXK" secondAttribute="bottom" constant="12" id="Mol-06-4oe"/>
                 <constraint firstItem="Mr1-Dk-o1f" firstAttribute="leading" secondItem="e90-GJ-Pog" secondAttribute="leading" constant="-2" id="O2m-uJ-sSm"/>
                 <constraint firstAttribute="trailing" secondItem="NiZ-P1-sSE" secondAttribute="trailing" constant="12" id="Tgx-MQ-ZmQ"/>
+                <constraint firstItem="rbD-x0-4Qd" firstAttribute="centerX" secondItem="ifk-GB-BIa" secondAttribute="centerX" id="VA8-qC-CEy"/>
                 <constraint firstItem="Mr1-Dk-o1f" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="12" id="WFz-2i-y3h"/>
                 <constraint firstItem="JEU-le-JUg" firstAttribute="centerY" secondItem="eK9-ym-EXK" secondAttribute="centerY" id="X4I-5W-Ec4"/>
                 <constraint firstItem="NiZ-P1-sSE" firstAttribute="leading" secondItem="e90-GJ-Pog" secondAttribute="leading" id="YxL-yC-9if"/>
@@ -509,6 +514,7 @@
                 <constraint firstItem="eK9-ym-EXK" firstAttribute="leading" secondItem="NiZ-P1-sSE" secondAttribute="leading" id="kYh-ee-jeW"/>
                 <constraint firstItem="NiZ-P1-sSE" firstAttribute="top" secondItem="e90-GJ-Pog" secondAttribute="bottom" constant="6" id="mh9-LZ-Pij"/>
                 <constraint firstItem="eK9-ym-EXK" firstAttribute="top" secondItem="NiZ-P1-sSE" secondAttribute="bottom" constant="12" id="nJF-Td-02i"/>
+                <constraint firstItem="Bah-Xt-rKH" firstAttribute="centerX" secondItem="ifk-GB-BIa" secondAttribute="centerX" id="sFO-R2-FRe"/>
                 <constraint firstAttribute="bottom" secondItem="GG8-p3-OIJ" secondAttribute="bottom" constant="12" id="sOh-Hs-nD3"/>
                 <constraint firstItem="JEU-le-JUg" firstAttribute="trailing" secondItem="NiZ-P1-sSE" secondAttribute="trailing" id="t3q-Zx-VY0"/>
                 <constraint firstItem="Mr1-Dk-o1f" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="NiZ-P1-sSE" secondAttribute="trailing" constant="2" id="xkP-X0-LFC"/>
