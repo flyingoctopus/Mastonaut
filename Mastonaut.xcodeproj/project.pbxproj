@@ -508,7 +508,6 @@
 		5F043C562932872D0095C702 /* NotificationPerAccountPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F043C552932872D0095C702 /* NotificationPerAccountPreferencesView.swift */; };
 		5F043C572932872D0095C702 /* NotificationPerAccountPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F043C552932872D0095C702 /* NotificationPerAccountPreferencesView.swift */; };
 		5F053A8229F0795E00E2FC8F /* AppearancePreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F053A8129F078BE00E2FC8F /* AppearancePreferencesView.swift */; };
-		5F053A8529F07B3200E2FC8F /* FontPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 5F053A8429F07B3200E2FC8F /* FontPicker */; };
 		5F176FAC290EF03900DF043C /* FollowedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F176FAB290EF03900DF043C /* FollowedList.swift */; };
 		5F176FAF290EF65200DF043C /* FollowedListsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F176FAE290EF65200DF043C /* FollowedListsService.swift */; };
 		5F1F20D62938E86D0057E585 /* LoggingOSLog in Frameworks */ = {isa = PBXBuildFile; productRef = 5F1F20D52938E86D0057E585 /* LoggingOSLog */; };
@@ -521,6 +520,7 @@
 		5F3A17F0291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
 		5F3A17F1291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
 		5F3BC8B229D0B44000CEBD7F /* SparklineTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BC8B129D0B44000CEBD7F /* SparklineTableCellView.swift */; };
+		5F4DAAAC29FDA15E009FA0AE /* FontPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 5F4DAAAB29FDA15E009FA0AE /* FontPicker */; };
 		5F5338B32960B23200C1D9AE /* ReplaceCharactersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5338B22960B23200C1D9AE /* ReplaceCharactersTests.swift */; };
 		5F74B959294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */; };
 		5F74B95A294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */; };
@@ -1056,7 +1056,7 @@
 				1596DB46235F65D300B349B7 /* DirectoryService.framework in Frameworks */,
 				15765563229692C200783FFE /* AVKit.framework in Frameworks */,
 				5F8C133C2969F1D9007BE2D5 /* Sdifft in Frameworks */,
-				5F053A8529F07B3200E2FC8F /* FontPicker in Frameworks */,
+				5F4DAAAC29FDA15E009FA0AE /* FontPicker in Frameworks */,
 				154478A6232B0223009C71D4 /* CoreTootin.framework in Frameworks */,
 				8018496C90237DCCDED54D8E /* Pods_Mastonaut.framework in Frameworks */,
 				5FE7A535292E711100F7EB73 /* PullRefreshableScrollView.framework in Frameworks */,
@@ -2007,7 +2007,7 @@
 			name = Mastonaut;
 			packageProductDependencies = (
 				5F8C133B2969F1D9007BE2D5 /* Sdifft */,
-				5F053A8429F07B3200E2FC8F /* FontPicker */,
+				5F4DAAAB29FDA15E009FA0AE /* FontPicker */,
 			);
 			productName = Sengi;
 			productReference = 15C4DD0C21D41EC0002AF6DA /* Mastonaut.app */;
@@ -2088,7 +2088,7 @@
 				5FC3E18B2926EF3F0086DCEE /* XCRemoteSwiftPackageReference "swift-log-oslog" */,
 				5F8C133A2969F1D9007BE2D5 /* XCRemoteSwiftPackageReference "Sdifft" */,
 				5FC21CFD29CA360A00A582A8 /* XCRemoteSwiftPackageReference "DSFSparkline" */,
-				5F053A8329F07B3200E2FC8F /* XCRemoteSwiftPackageReference "FontPicker" */,
+				5F4DAAAA29FDA15E009FA0AE /* XCRemoteSwiftPackageReference "FontPicker" */,
 			);
 			productRefGroup = 15C4DD0D21D41EC0002AF6DA /* Products */;
 			projectDirPath = "";
@@ -3724,12 +3724,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		5F053A8329F07B3200E2FC8F /* XCRemoteSwiftPackageReference "FontPicker" */ = {
+		5F4DAAAA29FDA15E009FA0AE /* XCRemoteSwiftPackageReference "FontPicker" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/tyagishi/FontPicker.git";
+			repositoryURL = "https://github.com/chucker/FontPicker.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				branch = main;
+				kind = branch;
 			};
 		};
 		5F8C133A2969F1D9007BE2D5 /* XCRemoteSwiftPackageReference "Sdifft" */ = {
@@ -3759,15 +3759,15 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		5F053A8429F07B3200E2FC8F /* FontPicker */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5F053A8329F07B3200E2FC8F /* XCRemoteSwiftPackageReference "FontPicker" */;
-			productName = FontPicker;
-		};
 		5F1F20D52938E86D0057E585 /* LoggingOSLog */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5FC3E18B2926EF3F0086DCEE /* XCRemoteSwiftPackageReference "swift-log-oslog" */;
 			productName = LoggingOSLog;
+		};
+		5F4DAAAB29FDA15E009FA0AE /* FontPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5F4DAAAA29FDA15E009FA0AE /* XCRemoteSwiftPackageReference "FontPicker" */;
+			productName = FontPicker;
 		};
 		5F8C133B2969F1D9007BE2D5 /* Sdifft */ = {
 			isa = XCSwiftPackageProductDependency;

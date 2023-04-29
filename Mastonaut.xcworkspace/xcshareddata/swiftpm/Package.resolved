@@ -12,10 +12,10 @@
     {
       "identity" : "fontpicker",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/tyagishi/FontPicker.git",
+      "location" : "https://github.com/chucker/FontPicker.git",
       "state" : {
-        "revision" : "2ed54bec5fbd3c7284ced388c63b80b8950473f3",
-        "version" : "1.0.0"
+        "branch" : "main",
+        "revision" : "c3d15a549a9436b406466cfa552540db95888ffe"
       }
     },
     {
