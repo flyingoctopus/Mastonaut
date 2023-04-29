@@ -119,7 +119,7 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 	{
 		return [
 			.foregroundColor: NSColor.labelColor,
-			.font: MastonautPreferences.instance.timelineFont,
+			.font: MastonautPreferences.instance.statusFont,
 			.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
 			// vertically when clicked.
 		]
@@ -144,16 +144,16 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 
 		cardContainerView.clickHandler = { [weak self] in self?.cellModel?.openCardLink() }
 
-		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.timelineFontFamilyKey)
-		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.timelineFontSizeKey)
+		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.statusFontFamilyKey)
+		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.statusFontSizeKey)
 	}
 
 	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?)
 	{
 		switch keyPath
 		{
-		case MastonautPreferences.timelineFontFamilyKey,
-		     MastonautPreferences.timelineFontSizeKey:
+		case MastonautPreferences.statusFontFamilyKey,
+		     MastonautPreferences.statusFontSizeKey:
 			// focused views have different font sizes
 			if type(of: self) != FocusedStatusTableCellView.self
 			{

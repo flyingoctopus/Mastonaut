@@ -97,38 +97,38 @@ public class MastonautPreferences: PreferencesController
 
 	// FIXME: I can probably use key paths here?
 
-	public static let defaultTimelineFont = NSFont.systemFont(ofSize: 13)
-	public static let defaultFocusedFont = NSFont.systemFont(ofSize: 16)
+	public static let defaultStatusFont = NSFont.systemFont(ofSize: 13)
+	public static let defaultFocusedStatusFont = NSFont.systemFont(ofSize: 16)
 
-	public static let timelineFontFamilyKey = "timelineFontFamily"
-	public static let timelineFontSizeKey = "timelineFontSize"
+	public static let statusFontFamilyKey = "statusFontFamily"
+	public static let statusFontSizeKey = "statusFontSize"
 
-	@objc public dynamic var timelineFont: NSFont
+	@objc public dynamic var statusFont: NSFont
 	{
 		get
 		{
-			return getFont(familyKey: MastonautPreferences.timelineFontFamilyKey, sizeKey: MastonautPreferences.timelineFontSizeKey) ??
-				MastonautPreferences.defaultTimelineFont
+			return getFont(familyKey: MastonautPreferences.statusFontFamilyKey, sizeKey: MastonautPreferences.statusFontSizeKey) ??
+				MastonautPreferences.defaultStatusFont
 		}
 		set
 		{
-			setFont(newValue: newValue, familyKey: MastonautPreferences.timelineFontFamilyKey, sizeKey: MastonautPreferences.timelineFontSizeKey)
+			setFont(newValue: newValue, familyKey: MastonautPreferences.statusFontFamilyKey, sizeKey: MastonautPreferences.statusFontSizeKey)
 		}
 	}
 
-	public static let focusedFontFamilyKey = "focusedFontFamily"
-	public static let focusedFontSizeKey = "focusedFontSize"
+	public static let focusedStatusFontFamilyKey = "focusedStatusFontFamily"
+	public static let focusedStatusFontSizeKey = "focusedStatusFontSize"
 
-	@objc public dynamic var focusedFont: NSFont
+	@objc public dynamic var focusedStatusFont: NSFont
 	{
 		get
 		{
-			return getFont(familyKey: MastonautPreferences.focusedFontFamilyKey, sizeKey: MastonautPreferences.focusedFontSizeKey) ??
-				MastonautPreferences.defaultFocusedFont
+			return getFont(familyKey: MastonautPreferences.focusedStatusFontFamilyKey, sizeKey: MastonautPreferences.focusedStatusFontSizeKey) ??
+				MastonautPreferences.defaultFocusedStatusFont
 		}
 		set
 		{
-			setFont(newValue: newValue, familyKey: MastonautPreferences.focusedFontFamilyKey, sizeKey: MastonautPreferences.focusedFontSizeKey)
+			setFont(newValue: newValue, familyKey: MastonautPreferences.focusedStatusFontFamilyKey, sizeKey: MastonautPreferences.focusedStatusFontSizeKey)
 		}
 	}
 

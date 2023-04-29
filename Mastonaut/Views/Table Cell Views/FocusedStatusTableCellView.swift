@@ -30,16 +30,16 @@ class FocusedStatusTableCellView: StatusTableCellView
 	{
 		super.awakeFromNib()
 
-		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.focusedFontFamilyKey)
-		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.focusedFontSizeKey)
+		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.focusedStatusFontFamilyKey)
+		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.focusedStatusFontSizeKey)
 	}
 
 	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?)
 	{
 		switch keyPath
 		{
-		case MastonautPreferences.focusedFontFamilyKey,
-		     MastonautPreferences.focusedFontSizeKey:
+		case MastonautPreferences.focusedStatusFontFamilyKey,
+		     MastonautPreferences.focusedStatusFontSizeKey:
 			redraw()
 		default:
 			break
@@ -73,7 +73,7 @@ class FocusedStatusTableCellView: StatusTableCellView
 	{
 		return [
 			.foregroundColor: NSColor.labelColor,
-			.font: MastonautPreferences.instance.focusedFont,
+			.font: MastonautPreferences.instance.focusedStatusFont,
 			.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
 			// vertically when clicked.
 		]

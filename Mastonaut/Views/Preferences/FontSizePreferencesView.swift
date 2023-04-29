@@ -11,8 +11,8 @@ import FontPicker
 import SwiftUI
 
 struct FontSizePreferencesView: View {
-	@State private var timelineFont: NSFont = MastonautPreferences.instance.timelineFont
-	@State private var focusedFont: NSFont = MastonautPreferences.instance.focusedFont
+	@State private var statusFont: NSFont = MastonautPreferences.instance.statusFont
+	@State private var focusedStatusFont: NSFont = MastonautPreferences.instance.focusedStatusFont
 
 	let columns = [
 		GridItem(.fixed(260), alignment: .trailing),
@@ -21,35 +21,37 @@ struct FontSizePreferencesView: View {
 
 	var body: some View {
 		LazyVGrid(columns: columns) {
-			Text("Timeline status font size:")
+			Text("Status font size:")
 
 			HStack {
-				FontPicker("", selection: $timelineFont)
+				FontPicker("", selection: $statusFont)
 					.padding(.leading, -7) // FontPicker shows its own label, which we don't want
 
 				Button("Reset") {
-					timelineFont = MastonautPreferences.defaultTimelineFont
+					statusFont = MastonautPreferences.defaultStatusFont
 				}
 
-				Text("\(timelineFont.displayName ?? "(no font)") \(timelineFont.pointSize, specifier: "%.0f")")
+				Text("\(statusFont.displayName ?? "(no font)") \(statusFont.pointSize, specifier: "%.0f")")
 			}
 			
-			Text("Conversation status font size:")
+			Text("Focused status font size:")
 
 			HStack {
-				FontPicker("", selection: $focusedFont)
+				FontPicker("", selection: $focusedStatusFont)
 					.padding(.leading, -7) // FontPicker shows its own label, which we don't want
 
-				Button("Reset") {}
+				Button("Reset") {
+					focusedStatusFont = MastonautPreferences.defaultFocusedStatusFont
+				}
 
-				Text("\(focusedFont.displayName ?? "(no font)") \(focusedFont.pointSize, specifier: "%.0f")")
+				Text("\(focusedStatusFont.displayName ?? "(no font)") \(focusedStatusFont.pointSize, specifier: "%.0f")")
 			}
 		}
-		.onChange(of: timelineFont) { newValue in
-			MastonautPreferences.instance.timelineFont = newValue
+		.onChange(of: statusFont) { newValue in
+			MastonautPreferences.instance.statusFont = newValue
 		}
-		.onChange(of: focusedFont) { newValue in
-			MastonautPreferences.instance.focusedFont = newValue
+		.onChange(of: focusedStatusFont) { newValue in
+			MastonautPreferences.instance.focusedStatusFont = newValue
 		}
 		// AppKit layout hacks
 		.padding(.trailing, 15)
