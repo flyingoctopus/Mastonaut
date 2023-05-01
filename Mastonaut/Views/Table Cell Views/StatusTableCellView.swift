@@ -90,6 +90,8 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		return coverView
 	}()
 
+	// this is exempt from #83 (custom font) for now, because it's mostly UI
+	// chrome, not content
 	private static let _contextLabelAttributes: [NSAttributedString.Key: AnyObject] = [
 		.foregroundColor: NSColor.secondaryLabelColor, .font: NSFont.systemFont(ofSize: 12, weight: .medium)
 	]
