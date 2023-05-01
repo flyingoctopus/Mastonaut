@@ -168,4 +168,35 @@ public extension AuthorizedAccount
 		fetchRequest.predicate = NSPredicate(format: "account = %@ AND name = %@", self, name)
 		return try! managedObjectContext!.fetch(fetchRequest).first
 	}
+	
+	func hasFollowedTag(_ tagName: String, client: ClientType) -> Bool
+	{
+		return followedTag(with: tagName, client: client) != nil
+	}
+
+	func followTag(_ tagName: String, client: ClientType)
+	{
+//		guard !isDeleted, hasFollowedTag(tagName) == false else { return }
+//		let tag = FollowedTag(context: managedObjectContext!)
+//		tag.name = tagName
+//		addToFollowedTags(tag)
+	}
+
+	func unfollowTag(_ tagName: String, client: ClientType)
+	{
+//		guard !isDeleted, let tag = followedTag(with: tagName) else { return }
+//		removeFromFollowedTags(tag)
+	}
+
+	private func followedTag(with name: String, client: ClientType) -> FollowedTag?
+	{
+		return nil
+//		let fetchRequest: NSFetchRequest<FollowedTag> = FollowedTag.fetchRequest()
+//		fetchRequest.predicate = NSPredicate(format: "account = %@ AND name = %@", self, name)
+//		return try! managedObjectContext!.fetch(fetchRequest).first
+	}
+}
+
+struct FollowedTag {
+	
 }
