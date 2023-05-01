@@ -144,24 +144,24 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 
 		cardContainerView.clickHandler = { [weak self] in self?.cellModel?.openCardLink() }
 
-		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.statusFontFamilyKey)
-		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.statusFontSizeKey)
+		fontObserver = MastonautPreferences.instance.observe(\.statusFont, options: .new)
+		{
+			[weak self] _, _ in
+			self?.updateFont()
+		}
 	}
 
-	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?)
+	private var fontObserver: NSKeyValueObservation?
+
+	deinit
 	{
-		switch keyPath
-		{
-		case MastonautPreferences.statusFontFamilyKey,
-		     MastonautPreferences.statusFontSizeKey:
-			// focused views have different font sizes
-			if type(of: self) != FocusedStatusTableCellView.self
-			{
-				redraw()
-			}
-		default:
-			break
-		}
+		fontObserver?.invalidate()
+	}
+
+	func updateFont()
+	{
+
+		redraw()
 	}
 
 	override var backgroundStyle: NSView.BackgroundStyle

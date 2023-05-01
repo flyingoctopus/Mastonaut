@@ -29,21 +29,25 @@ class FocusedStatusTableCellView: StatusTableCellView
 	override func awakeFromNib()
 	{
 		super.awakeFromNib()
+		
+		fontObserver = MastonautPreferences.instance.observe(\.focusedStatusFont, options: .new)
+		{
+			[weak self] _, _ in
+			self?.updateFont()
+		}
+	}
+	
+	private var fontObserver: NSKeyValueObservation?
 
-		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.focusedStatusFontFamilyKey)
-		MastonautPreferences.instance.addObserver(self, forKeyPath: MastonautPreferences.focusedStatusFontSizeKey)
+	deinit
+	{
+		fontObserver?.invalidate()
 	}
 
-	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?)
+	override func updateFont()
 	{
-		switch keyPath
-		{
-		case MastonautPreferences.focusedStatusFontFamilyKey,
-		     MastonautPreferences.focusedStatusFontSizeKey:
-			redraw()
-		default:
-			break
-		}
+
+		redraw()
 	}
 
 	private var sourceApplication: Application?
