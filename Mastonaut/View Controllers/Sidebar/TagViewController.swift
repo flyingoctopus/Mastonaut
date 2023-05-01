@@ -95,10 +95,17 @@ private class TagButtonsStateBindable: SidebarTitleButtonsStateBindable
 
 	private func updateFollowButton()
 	{
-		let isFollowed = tagFollowService.isTagFollowed(tag)
-		secondAccessibilityLabel = isFollowed ? 🔠("Unfollow Tag on Timeline") : 🔠("Follow Tag on Timeline")
-		secondIcon = NSImage(systemSymbolName: isFollowed ? "text.badge.xmark" : "text.badge.checkmark",
-		                     accessibilityDescription: secondAccessibilityLabel)
+		Task
+		{
+			let isFollowed = await tagFollowService.isTagFollowed(tag)
+
+			await MainActor.run
+			{
+				secondAccessibilityLabel = isFollowed ? 🔠("Unfollow Tag on Timeline") : 🔠("Follow Tag on Timeline")
+				secondIcon = NSImage(systemSymbolName: isFollowed ? "rectangle.fill.badge.xmark": "rectangle",
+				                     accessibilityDescription: secondAccessibilityLabel)
+			}
+		}
 	}
 
 	override func didClickFirstButton(_ sender: Any?)
@@ -109,7 +116,11 @@ private class TagButtonsStateBindable: SidebarTitleButtonsStateBindable
 
 	override func didClickSecondButton(_ sender: Any?)
 	{
-		tagFollowService.toggleFollowedState(for: tag)
-		updateFollowButton()
+		Task
+		{
+			await tagFollowService.toggleFollowedState(for: tag)
+
+			updateFollowButton()
+		}
 	}
 }

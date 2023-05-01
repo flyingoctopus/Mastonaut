@@ -24,30 +24,30 @@ public class TagFollowService
 		self.client = client
 	}
 
-	public func isTagFollowed(_ tag: String) -> Bool
+	public func isTagFollowed(_ tag: String) async -> Bool
 	{
-		return account.hasFollowedTag(tag, client: client)
+		return await account.hasFollowedTag(tag, client: client)
 	}
 
-	public func followTag(_ tag: String)
+	public func followTag(_ tag: String) async
 	{
-		account.followTag(tag, client: client)
+		await account.followTag(tag, client: client)
 	}
 
-	public func unfollowTag(_ tag: String)
+	public func unfollowTag(_ tag: String) async
 	{
-		account.unfollowTag(tag, client: client)
+		await account.unfollowTag(tag, client: client)
 	}
 
-	public func toggleFollowedState(for tag: String)
+	public func toggleFollowedState(for tag: String) async
 	{
-		if account.hasFollowedTag(tag, client: client)
+		if await account.hasFollowedTag(tag, client: client)
 		{
-			unfollowTag(tag)
+			await unfollowTag(tag)
 		}
 		else
 		{
-			followTag(tag)
+			await followTag(tag)
 		}
 	}
 }
