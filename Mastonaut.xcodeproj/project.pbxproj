@@ -524,6 +524,7 @@
 		5F4DAAAE29FEEDE4009FA0AE /* NSFont+withWeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4DAAAD29FEEDE4009FA0AE /* NSFont+withWeight.swift */; };
 		5F5338B32960B23200C1D9AE /* ReplaceCharactersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5338B22960B23200C1D9AE /* ReplaceCharactersTests.swift */; };
 		5F6F8F602A0033DF00FB3414 /* FontService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6F8F5F2A0033DF00FB3414 /* FontService.swift */; };
+		5F6F8F6A2A0051BF00FB3414 /* TagFollowService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6F8F692A0051BF00FB3414 /* TagFollowService.swift */; };
 		5F74B959294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */; };
 		5F74B95A294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */; };
 		5F8C133C2969F1D9007BE2D5 /* Sdifft in Frameworks */ = {isa = PBXBuildFile; productRef = 5F8C133B2969F1D9007BE2D5 /* Sdifft */; };
@@ -997,6 +998,7 @@
 		5F4DAAAD29FEEDE4009FA0AE /* NSFont+withWeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSFont+withWeight.swift"; sourceTree = "<group>"; };
 		5F5338B22960B23200C1D9AE /* ReplaceCharactersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaceCharactersTests.swift; sourceTree = "<group>"; };
 		5F6F8F5F2A0033DF00FB3414 /* FontService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontService.swift; sourceTree = "<group>"; };
+		5F6F8F692A0051BF00FB3414 /* TagFollowService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFollowService.swift; sourceTree = "<group>"; };
 		5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPrivacyPreferencesView.swift; sourceTree = "<group>"; };
 		5F8C1346296A0661007BE2D5 /* EditedStatusTableCellView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditedStatusTableCellView.xib; sourceTree = "<group>"; };
 		5F8C1348296A06E3007BE2D5 /* EditedStatusTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditedStatusTableCellView.swift; sourceTree = "<group>"; };
@@ -1423,6 +1425,7 @@
 				1530427422AE83E300489F31 /* PostingService.swift */,
 				1530427722AE8F4300489F31 /* ResolverService.swift */,
 				154E9FDB234564F300885966 /* TagBookmarkService.swift */,
+				5F6F8F692A0051BF00FB3414 /* TagFollowService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -2698,6 +2701,7 @@
 				15EE2B02232EA0CB00155E16 /* ImageRestrainer.swift in Sources */,
 				15EE2B10232EA3EF00155E16 /* BorderView.swift in Sources */,
 				15F9F307232EB8BE00931594 /* BaseComposerTextView.swift in Sources */,
+				5F6F8F6A2A0051BF00FB3414 /* TagFollowService.swift in Sources */,
 				154478AF232B03A0009C71D4 /* MastonautPersistentContainer.swift in Sources */,
 				5F3BC8B229D0B44000CEBD7F /* SparklineTableCellView.swift in Sources */,
 				1574DE1E233C030A00AB1036 /* NetworkError.swift in Sources */,
