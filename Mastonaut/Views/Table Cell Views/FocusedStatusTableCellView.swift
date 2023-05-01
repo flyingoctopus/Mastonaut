@@ -53,13 +53,12 @@ class FocusedStatusTableCellView: StatusTableCellView
 
 	private var sourceApplication: Application?
 
-	private static let _authorLabelAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.labelColor, .font: NSFont.systemFont(ofSize: 15, weight: .semibold)
-	]
-
 	override internal func authorLabelAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
-		return FocusedStatusTableCellView._authorLabelAttributes
+		return [
+			.foregroundColor: NSColor.labelColor,
+			.font: MastonautPreferences.instance.focusedStatusFont.withWeight(weight: .semibold)!
+		]
 	}
 
 	override internal func statusLabelAttributes() -> [NSAttributedString.Key: AnyObject]

@@ -90,17 +90,16 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		return coverView
 	}()
 
-	private static let _authorLabelAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.labelColor, .font: NSFont.systemFont(ofSize: 14, weight: .semibold)
-	]
-
 	private static let _contextLabelAttributes: [NSAttributedString.Key: AnyObject] = [
 		.foregroundColor: NSColor.secondaryLabelColor, .font: NSFont.systemFont(ofSize: 12, weight: .medium)
 	]
 
 	internal func authorLabelAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
-		return StatusTableCellView._authorLabelAttributes
+		return [
+			.foregroundColor: NSColor.labelColor,
+			.font: MastonautPreferences.instance.statusFont.withWeight(weight: .semibold)!
+		]
 	}
 
 	internal func statusLabelAttributes() -> [NSAttributedString.Key: AnyObject]
