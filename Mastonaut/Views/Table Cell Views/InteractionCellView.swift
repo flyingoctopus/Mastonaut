@@ -40,6 +40,10 @@ class InteractionCellView: MastonautTableCellView, NotificationDisplaying
 	@IBOutlet private unowned var reblogButton: NSButton!
 	@IBOutlet private unowned var favoriteButton: NSButton!
 	@IBOutlet private unowned var timeLabel: NSTextField!
+	
+	private func fontService() -> FontService {
+		return FontService(font: MastonautPreferences.instance.statusFont)
+	}
 
 	var displayedNotificationId: String? = nil
 
@@ -55,43 +59,12 @@ class InteractionCellView: MastonautTableCellView, NotificationDisplaying
 
 	private unowned var interactionHandler: NotificationInteractionHandling? = nil
 
-	private static let reblogLabelAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.statusReblogged,
-		.font: NSFont.systemFont(ofSize: 14, weight: .medium)
-	]
-
-	private static let favoriteLabelAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.statusFavorited,
-		.font: NSFont.systemFont(ofSize: 14, weight: .medium)
-	]
-
-	private static let interactionLabelAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.labelColor,
-		.font: NSFont.systemFont(ofSize: 14, weight: .medium)
-	]
-
-	private static let authorLabelAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.labelColor,
-		.font: NSFont.systemFont(ofSize: 13, weight: .semibold)
-	]
-
-	private static let statusLabelAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.labelColor,
-		.font: NSFont.labelFont(ofSize: 13)
-	]
-
-	private static let statusLabelLinkAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.safeControlTintColor,
-		.font: NSFont.systemFont(ofSize: 13, weight: .medium),
-		.underlineStyle: NSNumber(value: 1)
-	]
-
 	override func awakeFromNib()
 	{
 		super.awakeFromNib()
 
 		timeLabel.formatter = RelativeDateFormatter.shared
-		statusLabel.linkTextAttributes = InteractionCellView.statusLabelLinkAttributes
+		statusLabel.linkTextAttributes = fontService().statusLinkAttributes()
 	}
 	
 	override var backgroundStyle: NSView.BackgroundStyle
@@ -169,19 +142,19 @@ class InteractionCellView: MastonautTableCellView, NotificationDisplaying
 		case .reblog:
 			interactionIcon.image = #imageLiteral(resourceName: "retooted_active")
 			interactionMessage = 🔠("%@ boosted", notification.authorName)
-			messageAttributes = InteractionCellView.reblogLabelAttributes
+			messageAttributes = fontService().reblogAttributes()
 			set(status: status, activeInstance: activeInstance)
 
 		case .favourite:
 			interactionIcon.image = #imageLiteral(resourceName: "favorited_active")
 			interactionMessage = 🔠("%@ favorited", notification.authorName)
-			messageAttributes = InteractionCellView.favoriteLabelAttributes
+			messageAttributes = fontService().favoriteAttributes()
 			set(status: status, activeInstance: activeInstance)
 
 		case .poll:
 			interactionIcon.image = #imageLiteral(resourceName: "poll")
 			interactionMessage = 🔠("A poll has ended")
-			messageAttributes = InteractionCellView.interactionLabelAttributes
+			messageAttributes = fontService().interactionAttributes()
 			set(status: status, activeInstance: activeInstance)
 
 		case .follow:
@@ -281,7 +254,7 @@ class InteractionCellView: MastonautTableCellView, NotificationDisplaying
 	private func set(authorName: String, account: String, emojis: [CacheableEmoji])
 	{
 		authorNameLabel.set(stringValue: authorName,
-							applyingAttributes: InteractionCellView.authorLabelAttributes,
+							applyingAttributes: fontService().authorAttributes(),
 							applyingEmojis: emojis)
 
 		authorAccountLabel.stringValue = account
@@ -310,7 +283,7 @@ class InteractionCellView: MastonautTableCellView, NotificationDisplaying
 		{
 			contentWarningContainerView.isHidden = false
 			contentWarningLabel.set(attributedStringValue: status.attributedSpoiler,
-									applyingAttributes: InteractionCellView.statusLabelAttributes,
+									applyingAttributes: fontService().statusAttributes(),
 									applyingEmojis: status.cacheableEmojis)
 		}
 
@@ -321,7 +294,7 @@ class InteractionCellView: MastonautTableCellView, NotificationDisplaying
 		} else {
 			statusLabel.isHidden = false
 			statusLabel.set(attributedStringValue: attributedStatusContent,
-							applyingAttributes: InteractionCellView.statusLabelAttributes,
+							applyingAttributes: fontService().statusAttributes(),
 							applyingEmojis: status.cacheableEmojis)
 		}
 

@@ -39,28 +39,16 @@ class FollowCellView: MastonautTableCellView, NotificationDisplaying
 
 	// This cell never displays statuses
 	let displayedStatusId: String? = nil
-
-	private static let followLabelAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.labelColor, .font: NSFont.systemFont(ofSize: 14, weight: .medium)
-	]
-
-	private static let userBioLabelAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.labelColor, .font: NSFont.labelFont(ofSize: 13),
-		.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
-											// vertically when clicked.
-	]
-
-	private static let bioLabelLinkAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.safeControlTintColor,
-		.font: NSFont.systemFont(ofSize: 13, weight: .medium),
-		.underlineStyle: NSNumber(value: 1)
-	]
+	
+	private func fontService() -> FontService {
+		return FontService(font: MastonautPreferences.instance.statusFont)
+	}
 
 	override func awakeFromNib() {
 		super.awakeFromNib()
 
 		timeLabel.formatter = RelativeDateFormatter.shared
-		userBioLabel.linkTextAttributes = FollowCellView.bioLabelLinkAttributes
+		userBioLabel.linkTextAttributes = fontService().userBioLinkAttributes()
 	}
 
 	override var backgroundStyle: NSView.BackgroundStyle
@@ -94,11 +82,11 @@ class FollowCellView: MastonautTableCellView, NotificationDisplaying
 		userBioLabel.linkHandler = self
 
 		interactionLabel.set(stringValue: 🔠("%@ followed you", notification.authorName),
-							 applyingAttributes: FollowCellView.followLabelAttributes,
+							 applyingAttributes: fontService().followAttributes(),
 							 applyingEmojis: accountEmojis)
 
 		userBioLabel.set(attributedStringValue: notification.account.attributedNote,
-						 applyingAttributes: FollowCellView.userBioLabelAttributes,
+						 applyingAttributes: fontService().userBioAttributes(),
 						 applyingEmojis: accountEmojis)
 
 		userBioLabel.isHidden = userBioLabel.attributedStringValue.length == 0
