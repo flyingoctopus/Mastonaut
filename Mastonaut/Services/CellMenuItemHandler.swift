@@ -112,7 +112,8 @@ class CellMenuItemHandler {
 			  let menuItem = sender as? NSMenuItem
 		else { return }
 		
-		let representedObject = status.attributedContent.string as NSString
+		let representedObject = (status.reblog?.attributedContent.string ?? status.attributedContent.string)
+								as NSString
 		menuItem.representedObject = representedObject
 		
 		StatusMenuItemsController.shared.copyRepresentedObject(menuItem)
