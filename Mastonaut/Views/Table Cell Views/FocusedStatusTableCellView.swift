@@ -31,6 +31,12 @@ class FocusedStatusTableCellView: StatusTableCellView
 		return FontService(font: MastonautPreferences.instance.focusedStatusFont)
 	}
 
+	@IBOutlet var replyCount: NSTextField!
+	@IBOutlet var reblogCount: NSTextField!
+	@IBOutlet var favoriteCount: NSTextField!
+
+	private var sourceApplication: Application?
+
 	override func awakeFromNib()
 	{
 		super.awakeFromNib()
@@ -55,8 +61,6 @@ class FocusedStatusTableCellView: StatusTableCellView
 
 		redraw()
 	}
-
-	private var sourceApplication: Application?
 
 	override internal func authorLabelAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
@@ -99,6 +103,14 @@ class FocusedStatusTableCellView: StatusTableCellView
 			appNameLabel.title = ""
 			appNameConatiner.isHidden = true
 		}
+
+		reblogCount.intValue = Int32(status.reblogsCount)
+		favoriteCount.intValue = Int32(status.favouritesCount)
+	}
+
+	func set(context: Context)
+	{
+		replyCount.intValue = Int32(context.descendants.count)
 	}
 
 	override func prepareForReuse()
