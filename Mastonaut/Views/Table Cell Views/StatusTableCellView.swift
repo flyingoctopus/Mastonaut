@@ -60,6 +60,10 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 	private(set) var hasMedia: Bool = false
 	private(set) var hasSensitiveMedia: Bool = false
 	private(set) var hasSpoiler: Bool = false
+	
+	private func fontService() -> FontService {
+		return FontService(font: MastonautPreferences.instance.statusFont)
+	}
 
 	var isContentHidden: Bool
 	{
@@ -98,29 +102,17 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 
 	internal func authorLabelAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
-		return [
-			.foregroundColor: NSColor.labelColor,
-			.font: MastonautPreferences.instance.statusFont.withWeight(weight: .semibold)!
-		]
+		return fontService().authorAttributes()
 	}
 
 	internal func statusLabelAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
-		return [
-			.foregroundColor: NSColor.labelColor,
-			.font: MastonautPreferences.instance.statusFont,
-			.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
-			// vertically when clicked.
-		]
+		return fontService().statusAttributes()
 	}
 
 	internal func statusLabelLinkAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
-		return [
-			.foregroundColor: NSColor.safeControlTintColor,
-			.font: MastonautPreferences.instance.statusFont.withWeight(weight: .medium)!,
-			.underlineStyle: NSNumber(value: 1)
-		]
+		return fontService().statusLinkAttributes()
 	}
 
 	internal func contextLabelAttributes() -> [NSAttributedString.Key: AnyObject]
@@ -206,7 +198,7 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		contentWarningLabel.linkHandler = cellModel
 
 		authorNameButton.set(stringValue: cellModel.visibleStatus.authorName,
-		                     applyingAttributes: authorLabelAttributes(),
+							 applyingAttributes: fontService().authorAttributes(),
 		                     applyingEmojis: cellModel.visibleStatus.account.cacheableEmojis)
 
 		contextButton.map { cellModel.setupContextButton($0, attributes: contextLabelAttributes()) }

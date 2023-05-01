@@ -26,6 +26,11 @@ class FocusedStatusTableCellView: StatusTableCellView
 	@IBOutlet private unowned var appNameConatiner: NSView!
 	@IBOutlet private unowned var appNameLabel: NSButton!
 
+	private func fontService() -> FontService
+	{
+		return FontService(font: MastonautPreferences.instance.focusedStatusFont)
+	}
+
 	override func awakeFromNib()
 	{
 		super.awakeFromNib()
@@ -55,29 +60,17 @@ class FocusedStatusTableCellView: StatusTableCellView
 
 	override internal func authorLabelAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
-		return [
-			.foregroundColor: NSColor.labelColor,
-			.font: MastonautPreferences.instance.focusedStatusFont.withWeight(weight: .semibold)!
-		]
+		return fontService().authorAttributes()
 	}
 
 	override internal func statusLabelAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
-		return [
-			.foregroundColor: NSColor.labelColor,
-			.font: MastonautPreferences.instance.focusedStatusFont,
-			.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
-			// vertically when clicked.
-		]
+		return fontService().statusAttributes()
 	}
 
 	override internal func statusLabelLinkAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
-		return [
-			.foregroundColor: NSColor.safeControlTintColor,
-			.font: MastonautPreferences.instance.focusedStatusFont.withWeight(weight: .medium)!,
-			.underlineStyle: NSNumber(value: 1)
-		]
+		return fontService().statusLinkAttributes()
 	}
 
 	override func set(displayedStatus status: Status,

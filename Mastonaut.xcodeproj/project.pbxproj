@@ -523,6 +523,7 @@
 		5F4DAAAC29FDA15E009FA0AE /* FontPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 5F4DAAAB29FDA15E009FA0AE /* FontPicker */; };
 		5F4DAAAE29FEEDE4009FA0AE /* NSFont+withWeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4DAAAD29FEEDE4009FA0AE /* NSFont+withWeight.swift */; };
 		5F5338B32960B23200C1D9AE /* ReplaceCharactersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5338B22960B23200C1D9AE /* ReplaceCharactersTests.swift */; };
+		5F6F8F602A0033DF00FB3414 /* FontService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6F8F5F2A0033DF00FB3414 /* FontService.swift */; };
 		5F74B959294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */; };
 		5F74B95A294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */; };
 		5F8C133C2969F1D9007BE2D5 /* Sdifft in Frameworks */ = {isa = PBXBuildFile; productRef = 5F8C133B2969F1D9007BE2D5 /* Sdifft */; };
@@ -995,6 +996,7 @@
 		5F3BC8B129D0B44000CEBD7F /* SparklineTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparklineTableCellView.swift; sourceTree = "<group>"; };
 		5F4DAAAD29FEEDE4009FA0AE /* NSFont+withWeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSFont+withWeight.swift"; sourceTree = "<group>"; };
 		5F5338B22960B23200C1D9AE /* ReplaceCharactersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaceCharactersTests.swift; sourceTree = "<group>"; };
+		5F6F8F5F2A0033DF00FB3414 /* FontService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontService.swift; sourceTree = "<group>"; };
 		5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPrivacyPreferencesView.swift; sourceTree = "<group>"; };
 		5F8C1346296A0661007BE2D5 /* EditedStatusTableCellView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditedStatusTableCellView.xib; sourceTree = "<group>"; };
 		5F8C1348296A06E3007BE2D5 /* EditedStatusTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditedStatusTableCellView.swift; sourceTree = "<group>"; };
@@ -1717,6 +1719,7 @@
 				5F176FAE290EF65200DF043C /* FollowedListsService.swift */,
 				15769BB622B83C8300E93712 /* PollService.swift */,
 				15E973C4225A6B44009CE4DF /* RelationshipsService.swift */,
+				5F6F8F5F2A0033DF00FB3414 /* FontService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -2846,6 +2849,7 @@
 				15B25D0A2651CBAC00C90963 /* FilterEditorWindowController.swift in Sources */,
 				152DA64721E3F46B0065CC1B /* ResourcesFetcher.swift in Sources */,
 				15E7452922372001009A1252 /* SVGKImage+Helpers.swift in Sources */,
+				5F6F8F602A0033DF00FB3414 /* FontService.swift in Sources */,
 				157D266823B25F8600B3A8BE /* StatusCellModel.swift in Sources */,
 				15E7453022372806009A1252 /* AccountAvatarItem.swift in Sources */,
 				153B23912345763F00A317A2 /* MenuItemFactory.swift in Sources */,
