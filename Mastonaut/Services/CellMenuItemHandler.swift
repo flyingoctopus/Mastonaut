@@ -41,7 +41,7 @@ class CellMenuItemHandler {
 		}
 
 		switch menuItem.action {
-		case #selector(copyTootLink(_:)):
+		case #selector(copy(_:)):
 			return true
 				
 		case #selector(copyTootText(_:)):
@@ -94,7 +94,7 @@ class CellMenuItemHandler {
 		return selectedCellView()?.cellModel
 	}
 	
-	@IBAction func copyTootLink(_ sender: Any?) {
+	@IBAction func copy(_ sender: Any?) {
 		guard let status = selectedCellViewModel()?.status,
 			  let menuItem = sender as? NSMenuItem
 		else { return }
