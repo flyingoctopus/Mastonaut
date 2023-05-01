@@ -27,7 +27,7 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 {
 	@IBOutlet private unowned var authorNameButton: NSButton!
 	@IBOutlet private unowned var authorAccountLabel: NSTextField!
-	@IBOutlet private unowned var statusLabel: AttributedLabel!
+	@IBOutlet unowned var statusLabel: AttributedLabel!
 	@IBOutlet private unowned var fullContentDisclosureView: NSView?
 	@IBOutlet private unowned var timeLabel: NSTextField!
 	@IBOutlet private unowned var editInfoContainer: NSStackView!
@@ -94,18 +94,6 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		.foregroundColor: NSColor.labelColor, .font: NSFont.systemFont(ofSize: 14, weight: .semibold)
 	]
 
-//	private static let _statusLabelAttributes: [NSAttributedString.Key: AnyObject] = [
-//		.foregroundColor: NSColor.labelColor, .font: NSFont.labelFont(ofSize: 14),
-//		.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
-//		// vertically when clicked.
-//	]
-
-	private static let _statusLabelLinkAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.safeControlTintColor,
-		.font: NSFont.systemFont(ofSize: 14, weight: .medium),
-		.underlineStyle: NSNumber(value: 1)
-	]
-
 	private static let _contextLabelAttributes: [NSAttributedString.Key: AnyObject] = [
 		.foregroundColor: NSColor.secondaryLabelColor, .font: NSFont.systemFont(ofSize: 12, weight: .medium)
 	]
@@ -127,7 +115,11 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 
 	internal func statusLabelLinkAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
-		return StatusTableCellView._statusLabelLinkAttributes
+		return [
+			.foregroundColor: NSColor.safeControlTintColor,
+			.font: MastonautPreferences.instance.statusFont.withWeight(weight: .medium)!,
+			.underlineStyle: NSNumber(value: 1)
+		]
 	}
 
 	internal func contextLabelAttributes() -> [NSAttributedString.Key: AnyObject]
@@ -160,6 +152,7 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 
 	func updateFont()
 	{
+		statusLabel.linkTextAttributes = statusLabelLinkAttributes()
 
 		redraw()
 	}

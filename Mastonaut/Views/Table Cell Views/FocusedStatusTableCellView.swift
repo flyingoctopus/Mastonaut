@@ -29,14 +29,14 @@ class FocusedStatusTableCellView: StatusTableCellView
 	override func awakeFromNib()
 	{
 		super.awakeFromNib()
-		
+
 		fontObserver = MastonautPreferences.instance.observe(\.focusedStatusFont, options: .new)
 		{
 			[weak self] _, _ in
 			self?.updateFont()
 		}
 	}
-	
+
 	private var fontObserver: NSKeyValueObservation?
 
 	deinit
@@ -46,6 +46,7 @@ class FocusedStatusTableCellView: StatusTableCellView
 
 	override func updateFont()
 	{
+		statusLabel.linkTextAttributes = statusLabelLinkAttributes()
 
 		redraw()
 	}
@@ -54,18 +55,6 @@ class FocusedStatusTableCellView: StatusTableCellView
 
 	private static let _authorLabelAttributes: [NSAttributedString.Key: AnyObject] = [
 		.foregroundColor: NSColor.labelColor, .font: NSFont.systemFont(ofSize: 15, weight: .semibold)
-	]
-
-//	private static let _statusLabelAttributes: [NSAttributedString.Key: AnyObject] = [
-//		.foregroundColor: NSColor.labelColor, .font: NSFont.labelFont(ofSize: 16),
-//		.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
-//		// vertically when clicked.
-//	]
-
-	private static let _statusLabelLinkAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.safeControlTintColor,
-		.font: NSFont.systemFont(ofSize: 16, weight: .medium),
-		.underlineStyle: NSNumber(value: 1)
 	]
 
 	override internal func authorLabelAttributes() -> [NSAttributedString.Key: AnyObject]
@@ -85,7 +74,11 @@ class FocusedStatusTableCellView: StatusTableCellView
 
 	override internal func statusLabelLinkAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
-		return FocusedStatusTableCellView._statusLabelLinkAttributes
+		return [
+			.foregroundColor: NSColor.safeControlTintColor,
+			.font: MastonautPreferences.instance.focusedStatusFont.withWeight(weight: .medium)!,
+			.underlineStyle: NSNumber(value: 1)
+		]
 	}
 
 	override func set(displayedStatus status: Status,

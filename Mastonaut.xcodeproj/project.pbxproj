@@ -521,6 +521,7 @@
 		5F3A17F1291DB26700EA6FEC /* CoreAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */; };
 		5F3BC8B229D0B44000CEBD7F /* SparklineTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BC8B129D0B44000CEBD7F /* SparklineTableCellView.swift */; };
 		5F4DAAAC29FDA15E009FA0AE /* FontPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 5F4DAAAB29FDA15E009FA0AE /* FontPicker */; };
+		5F4DAAAE29FEEDE4009FA0AE /* NSFont+withWeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4DAAAD29FEEDE4009FA0AE /* NSFont+withWeight.swift */; };
 		5F5338B32960B23200C1D9AE /* ReplaceCharactersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5338B22960B23200C1D9AE /* ReplaceCharactersTests.swift */; };
 		5F74B959294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */; };
 		5F74B95A294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */; };
@@ -992,6 +993,7 @@
 		5F38B52E2930301600FCB9FC /* PullToRefreshInnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullToRefreshInnerView.swift; sourceTree = "<group>"; };
 		5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = CoreAssets.xcassets; sourceTree = "<group>"; };
 		5F3BC8B129D0B44000CEBD7F /* SparklineTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparklineTableCellView.swift; sourceTree = "<group>"; };
+		5F4DAAAD29FEEDE4009FA0AE /* NSFont+withWeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSFont+withWeight.swift"; sourceTree = "<group>"; };
 		5F5338B22960B23200C1D9AE /* ReplaceCharactersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaceCharactersTests.swift; sourceTree = "<group>"; };
 		5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPrivacyPreferencesView.swift; sourceTree = "<group>"; };
 		5F8C1346296A0661007BE2D5 /* EditedStatusTableCellView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditedStatusTableCellView.xib; sourceTree = "<group>"; };
@@ -1200,6 +1202,7 @@
 				15E7452822372001009A1252 /* SVGKImage+Helpers.swift */,
 				15431283232EEB960010854A /* UserPopUpButtonController+Helper.swift */,
 				5F38B52B29302F0C00FCB9FC /* AppKitSwiftUIIntegration.swift */,
+				5F4DAAAD29FEEDE4009FA0AE /* NSFont+withWeight.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2847,6 +2850,7 @@
 				15E7453022372806009A1252 /* AccountAvatarItem.swift in Sources */,
 				153B23912345763F00A317A2 /* MenuItemFactory.swift in Sources */,
 				15077EE22231DB9700965651 /* RemoteEventsListener.swift in Sources */,
+				5F4DAAAE29FEEDE4009FA0AE /* NSFont+withWeight.swift in Sources */,
 				1594392F229991F200E47DBB /* InstanceTableCellView.swift in Sources */,
 				5F043C562932872D0095C702 /* NotificationPerAccountPreferencesView.swift in Sources */,
 				15ECEECE22E8EEAB00A37CC0 /* LazyEvaluationAdapter.swift in Sources */,
