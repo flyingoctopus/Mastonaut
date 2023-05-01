@@ -97,7 +97,7 @@ public class MastonautPreferences: PreferencesController
 
 	// FIXME: I can probably use key paths here?
 
-	public static let defaultStatusFont = NSFont.systemFont(ofSize: 13)
+	public static let defaultStatusFont = NSFont.systemFont(ofSize: 14)
 	public static let defaultFocusedStatusFont = NSFont.systemFont(ofSize: 16)
 
 	public static let statusFontFamilyKey = "statusFontFamily"
