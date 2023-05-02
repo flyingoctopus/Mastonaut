@@ -18,6 +18,7 @@
 //
 
 import Cocoa
+import CoreTootin
 import MastodonKit
 
 class TimelineViewController: StatusListViewController
@@ -34,6 +35,7 @@ class TimelineViewController: StatusListViewController
 		updateAccessibilityAttributes()
 	}
 
+	@available(*, unavailable)
 	required init?(coder: NSCoder)
 	{
 		fatalError("init(coder:) has not been implemented")
@@ -48,7 +50,8 @@ class TimelineViewController: StatusListViewController
 	{
 		super.clientDidChange(client, oldClient: oldClient)
 
-		guard let source = self.source else
+		guard let source = source
+		else
 		{
 			return
 		}
@@ -64,20 +67,23 @@ class TimelineViewController: StatusListViewController
 		case .publicTimeline:
 			setClientEventStream(.public)
 
+		case .list(let list):
+			setClientEventStream(.list(list))
+
 		case .tag(let name):
 			setClientEventStream(.hashtag(name))
 
-		case .userStatuses, .userMediaStatuses, .userStatusesAndReplies, .favorites:
+		case .userStatuses, .userMediaStatuses, .userStatusesAndReplies, .favorites, .bookmarks:
 			#if DEBUG
 			DispatchQueue.main.async { self.showStatusIndicator(state: .off) }
 			#endif
-			break
 		}
 	}
 
 	override internal func fetchEntries(for insertion: InsertionPoint)
 	{
-		guard let source = self.source else
+		guard let source = source
+		else
 		{
 			return
 		}
@@ -101,6 +107,10 @@ class TimelineViewController: StatusListViewController
 			let range = lastPaginationResult?.next ?? rangeForEntryFetch(for: insertion)
 			request = Favourites.all(range: range)
 
+		case .bookmarks:
+			let range = lastPaginationResult?.next ?? rangeForEntryFetch(for: insertion)
+			request = Bookmarks.all(range: range)
+
 		case .userStatuses(let account):
 			request = Accounts.statuses(id: account, excludeReplies: true, range: rangeForEntryFetch(for: insertion))
 
@@ -109,6 +119,9 @@ class TimelineViewController: StatusListViewController
 
 		case .userMediaStatuses(let account):
 			request = Accounts.statuses(id: account, mediaOnly: true, range: rangeForEntryFetch(for: insertion))
+
+		case .list(let listId):
+			request = Timelines.list(listId.id!, range: rangeForEntryFetch(for: insertion))
 
 		case .tag(let tagName):
 			request = Timelines.tag(tagName, range: rangeForEntryFetch(for: insertion))
@@ -123,20 +136,20 @@ class TimelineViewController: StatusListViewController
 		{
 		case .update(let status):
 			DispatchQueue.main.async
+			{
+				[weak self] in
+
+				guard let self = self else { return }
+
+				if self.entryMap[status.key] != nil
 				{
-					[weak self] in
-
-					guard let self = self else { return }
-
-					if self.entryMap[status.key] != nil
-					{
-						self.handle(updatedEntry: status)
-					}
-					else
-					{
-						self.prepareNewEntries([status], for: .above, pagination: nil)
-					}
+					self.handle(updatedEntry: status)
 				}
+				else
+				{
+					self.prepareNewEntries([status], for: .above, pagination: nil)
+				}
+			}
 
 		case .delete(let statusID):
 			DispatchQueue.main.async { [weak self] in self?.handle(deletedEntry: statusID) }
@@ -149,18 +162,23 @@ class TimelineViewController: StatusListViewController
 		}
 	}
 
-	override func viewDidLoad() {
+	override func viewDidLoad()
+	{
 		super.viewDidLoad()
 		updateAccessibilityAttributes()
 	}
 
-	private func updateAccessibilityAttributes() {
-		guard isViewLoaded, let source = source else {
+	private func updateAccessibilityAttributes()
+	{
+		guard isViewLoaded, let source = source
+		else
+		{
 			tableView?.setAccessibilityLabel(nil)
 			return
 		}
 
-		switch source {
+		switch source
+		{
 		case .timeline:
 			tableView.setAccessibilityLabel("Home Timeline")
 		case .localTimeline:
@@ -169,6 +187,8 @@ class TimelineViewController: StatusListViewController
 			tableView.setAccessibilityLabel("Public Timeline")
 		case .favorites:
 			tableView.setAccessibilityLabel("Favorites Timeline")
+		case .list(let name):
+			tableView.setAccessibilityLabel("Timelinen for list \(name)")
 		case .tag(let name):
 			tableView.setAccessibilityLabel("Timeline for tag \(name)")
 		default:
@@ -176,17 +196,25 @@ class TimelineViewController: StatusListViewController
 		}
 	}
 
-	override func applicableFilters() -> [UserFilter] {
-		guard let source = source else {
+	override func applicableFilters() -> [UserFilter]
+	{
+		guard let source = source
+		else
+		{
 			return super.applicableFilters()
 		}
 
 		let currentContext: Filter.Context
 
-		switch source {
-		case .favorites: currentContext = .home
+		switch source
+		{
 		case .localTimeline: currentContext = .public
 		case .publicTimeline: currentContext = .public
+
+		case .favorites: currentContext = .home
+		case .bookmarks: currentContext = .home
+			
+		case .list: currentContext = .home
 		case .tag: currentContext = .home
 		case .timeline: currentContext = .home
 		case .userMediaStatuses: currentContext = .account
@@ -194,7 +222,7 @@ class TimelineViewController: StatusListViewController
 		case .userStatusesAndReplies: currentContext = .account
 		}
 
-		return super.applicableFilters().filter({ $0.context.contains(currentContext) })
+		return super.applicableFilters().filter { $0.context.contains(currentContext) }
 	}
 
 	enum Source: Equatable
@@ -202,35 +230,47 @@ class TimelineViewController: StatusListViewController
 		case timeline
 		case localTimeline
 		case publicTimeline
+
 		case favorites
+		case bookmarks
+
 		case userStatuses(id: String)
 		case userStatusesAndReplies(id: String)
 		case userMediaStatuses(id: String)
+
+		case list(list: FollowedList)
 		case tag(name: String)
 	}
 }
 
 extension TimelineViewController: ColumnPresentable
 {
-	var mainResponder: NSResponder {
+	var mainResponder: NSResponder
+	{
 		return tableView
 	}
 
 	var modelRepresentation: ColumnModel?
 	{
-		guard let source = self.source else
+		guard let source = source
+		else
 		{
 			return nil
 		}
 
 		switch source
 		{
-		case .timeline:			return ColumnMode.timeline
-		case .localTimeline:	return ColumnMode.localTimeline
-		case .publicTimeline:	return ColumnMode.publicTimeline
-		case .tag(let name):	return ColumnMode.tag(name: name)
+		case .timeline: return ColumnMode.timeline
+		case .localTimeline: return ColumnMode.localTimeline
+		case .publicTimeline: return ColumnMode.publicTimeline
 
-		case .userStatuses, .userMediaStatuses, .userStatusesAndReplies, .favorites:
+		case .favorites: return ColumnMode.favorites
+		case .bookmarks: return ColumnMode.bookmarks
+
+		case .list(let name): return ColumnMode.list(list: name)
+		case .tag(let name): return ColumnMode.tag(name: name)
+
+		case .userStatuses, .userMediaStatuses, .userStatusesAndReplies:
 			return nil
 		}
 	}

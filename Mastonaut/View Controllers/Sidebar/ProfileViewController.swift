@@ -55,11 +55,6 @@ class ProfileViewController: TimelineViewController, SidebarPresentable, Account
 		return SidebarMode.profile(uri: accountURI)
 	}
 
-	override var needsLoadingIndicator: Bool
-	{
-		return entryMap.isEmpty
-	}
-
 	var titleMode: SidebarTitleMode
 	{
 		if let account = self.account
@@ -100,11 +95,12 @@ class ProfileViewController: TimelineViewController, SidebarPresentable, Account
 
 				DispatchQueue.main.async
 					{
-						guard case .success(let account, _) = result else {
+						guard case .success(let response) = result else {
 							self?.setProfileNotFound()
 							return
 						}
 
+						let account = response.value
 						self?.setRecreatedAccount(account)
 						self?.client = client
 					}
@@ -118,7 +114,7 @@ class ProfileViewController: TimelineViewController, SidebarPresentable, Account
 
 				DispatchQueue.main.async
 					{
-						guard case .success(let accounts, _) = result, let account = accounts.first else {
+						guard case .success(let response) = result, let account = response.value.first else {
 							self?.setProfileNotFound()
 							return
 						}
@@ -138,6 +134,9 @@ class ProfileViewController: TimelineViewController, SidebarPresentable, Account
 	override func viewDidLoad()
 	{
 		super.viewDidLoad()
+		
+		needsLoadingIndicator = true
+		
 		topConstraint.constant = -1
 		view.widthAnchor.constraint(greaterThanOrEqualToConstant: 320).isActive = true
 		updateAccessibilityAttributes()
@@ -161,6 +160,8 @@ class ProfileViewController: TimelineViewController, SidebarPresentable, Account
 
 	override func sourceDidChange(source: TimelineViewController.Source?)
 	{
+		needsLoadingIndicator = true
+		
 		reloadList()
 
 		if case .some(.userStatuses) = source
@@ -177,8 +178,10 @@ class ProfileViewController: TimelineViewController, SidebarPresentable, Account
 			{
 				[weak self] result in
 
-				if case .success(let statuses, _) = result
+				if case .success(let response) = result
 				{
+					let statuses = response.value
+					
 					DispatchQueue.main.async
 						{
 							self?.prepareNewPinnedStatuses(statuses)
@@ -225,6 +228,8 @@ class ProfileViewController: TimelineViewController, SidebarPresentable, Account
 	{
 		let filteredStatuses = statuses.filter({ pinnedStatusMap[$0.id] == nil })
 		handleNewPinnedStatuses(filteredStatuses)
+		
+		needsLoadingIndicator = false
 	}
 
 	private func handleNewPinnedStatuses(_ statuses: [Status])

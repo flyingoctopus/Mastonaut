@@ -18,6 +18,7 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
 
 public extension URL
 {

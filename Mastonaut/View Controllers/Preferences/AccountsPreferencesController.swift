@@ -308,15 +308,14 @@ class AccountsPreferencesController: BaseAccountsPreferencesViewController
 
 					switch result
 					{
-					case .success(let updatedAccount, _):
+					case .success(let response):
+						let updatedAccount = response.value
+						
 						self?.selectedAccount = AccountBindingProxy(account: updatedAccount,
 																	instance: accountProxy.instance,
 																	authorizedAccount: account)
 
 						account.updateLocalInfo(using: updatedAccount, instance: accountProxy.instance)
-						account.accountPreferences?.managedObjectContext?.perform {
-							account.accountPreferences?.customTootLengthLimit = accountProxy.customTootLengthLimit
-						}
 
 						self?.accounts = accountsService.authorizedAccounts
 						self?.resetAvatarCaches(for: updatedAccount, uuid: self?.selectedAccountUUID)
@@ -898,7 +897,7 @@ extension AccountsPreferencesController
 
 private extension NSPasteboard.PasteboardType
 {
-	static let accountTableViewDragAndDropType = NSPasteboard.PasteboardType(rawValue: "app.mastonaut.mac.account.d&d")
+	static let accountTableViewDragAndDropType = NSPasteboard.PasteboardType(rawValue: "\(BuildConfig.MASTONAUT_BUNDLE_ID_BASE).account.d&d")
 }
 
 /// Class that translates the Account struct into an Objective-C class that Cocoa bindings can be attached to.
@@ -929,16 +928,6 @@ class AccountBindingProxy: NSObject
 		self.account = account
 		self.instance = instance
 		self.authorizedAccount = authorizedAccount
-	}
-
-	@objc dynamic var customTootLengthLimit: NSNumber?
-	{
-		get {
-			guard (modifiedValues["lengthLimit"] is NSNull) == false else { return nil }
-			return (modifiedValues["lengthLimit"] as? NSNumber)
-						?? authorizedAccount.accountPreferences?.customTootLengthLimit
-		}
-		set { modifiedValues["lengthLimit"] = newValue ?? NSNull() }
 	}
 
 	@objc dynamic var displayName: String

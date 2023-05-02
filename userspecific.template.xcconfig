@@ -1,0 +1,12 @@
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+// Rename this file to `userspecific.xcconfig` and adjust the values below.
+
+#include "Pods/Target Support Files/Pods-Mastonaut (Mock)/Pods-Mastonaut (Mock).debug.xcconfig"
+
+DEVELOPMENT_TEAM = xxxxxxxxxx
+
+MASTONAUT_BUNDLE_ID_BASE = app.mastonaut
+
+CODE_SIGN_IDENTITY = Apple Development

@@ -200,6 +200,7 @@ class AuthController
 
 			authorizedAccount.updateLocalInfo(using: details.account, instance: details.instance)
 			self.delegate?.authController(self, didUpdate: details.account, uuid: authorizedAccount.uuid)
+			self.updateLists(for: authorizedAccount, using: client)
 			self.updateBlocksAndMutes(for: details.account,
 									 authorizedAccount: authorizedAccount,
 									 using: client,
@@ -226,6 +227,25 @@ class AuthController
 		}
 	}
 
+	private func updateLists(for authorizedAccount: AuthorizedAccount,
+							 using client: ClientType)
+	{
+		let service = FollowedListsService(client: client, authorizedAccount: authorizedAccount)
+		
+		service.loadFollowedLists(completion: {
+			result in
+			
+			DispatchQueue.main.async
+			{
+				if case .success(let allLists) = result
+				{
+					do { try authorizedAccount.setLists(allLists) }
+					catch { print("Could not update lists: \(error)") }
+				}
+			}
+		})
+	}
+	
 	private func updateBlocksAndMutes(for account: Account,
 									  authorizedAccount: AuthorizedAccount,
 									  using client: ClientType,
@@ -326,7 +346,8 @@ class AuthController
 
 			switch loginResult
 			{
-			case .success(let loginResult, _):
+			case .success(let response):
+				let loginResult = response.value
 				login = loginResult
 
 			case .failure(let error):
@@ -609,12 +630,13 @@ extension AuthController // Helpers
 
 				switch result
 				{
-				case .success(let instance, _):
+				case .success(let response):
+					let instance = response.value
 					let validInstance = ValidInstance(baseURL: wellFormedUrl, instance: instance)
 					DispatchQueue.main.async { completion(.success(validInstance)) }
 
 				case .failure(let error):
-					if case .unauthorized = error {
+					if case ClientError.unauthorized = error {
 						DispatchQueue.main.async { completion(.success(ValidInstance(baseURL: wellFormedUrl, instance: nil))) }
 					} else {
 						DispatchQueue.main.async { completion(.failure(.clientError(error))) }

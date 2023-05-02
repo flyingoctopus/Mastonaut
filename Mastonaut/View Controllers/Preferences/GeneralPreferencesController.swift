@@ -19,6 +19,7 @@
 
 import Foundation
 import CoreTootin
+import SwiftUI
 
 class GeneralPreferencesController: NSViewController
 {
@@ -27,12 +28,19 @@ class GeneralPreferencesController: NSViewController
 
 	@IBOutlet private weak var newWindowAccountModeAskButton: NSButton!
 	@IBOutlet private weak var newWindowAccountModePickFirstOneButton: NSButton!
+	
+	@IBOutlet private weak var appearancePreferencesView: NSView!
 
 	private var preferenceObservers: [AnyObject] = []
 
 	override func viewDidLoad()
 	{
 		super.viewDidLoad()
+		
+		let appearance = Preferences.appearance
+		let view = AppearancePreferencesView(appearance: appearance)
+
+		AppKitSwiftUIIntegration.hostSwiftUIView(view, inView: appearancePreferencesView)
 
 		let timelinesResizeModeButtonMap: [MastonautPreferences.TimelinesResizeMode: NSButton] = [
 			.expandWindowFirst: timelinesResizeExpandFirstButton,

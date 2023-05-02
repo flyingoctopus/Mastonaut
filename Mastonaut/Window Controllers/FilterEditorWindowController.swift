@@ -133,8 +133,8 @@ class FilterEditorWindowController: NSWindowController {
 	}
 
 	private func selectActionPopUpButtonItem(identifier: String) {
-		if let item = expirationDatePopUpButton.itemArray.first(where: { $0.identifier?.rawValue == identifier }) {
-			expirationDatePopUpButton.select(item)
+		if let item = actionPopUpButton.itemArray.first(where: { $0.identifier?.rawValue == identifier }) {
+			actionPopUpButton.select(item)
 		}
 	}
 
@@ -173,8 +173,8 @@ class FilterEditorWindowController: NSWindowController {
 		else if expirationIdentifier == "custom" {
 			expiration = expirationDatePicker.dateValue
 		}
-		else if let minutes = Double(expirationIdentifier), "\(minutes)" == expirationIdentifier {
-			expiration = Date(timeIntervalSinceNow: minutes * 60)
+		else if let minutes = Int(expirationIdentifier), "\(minutes)" == expirationIdentifier {
+			expiration = Date(timeIntervalSinceNow: Double(minutes) * 60)
 		}
 		else {
 			// Fallback

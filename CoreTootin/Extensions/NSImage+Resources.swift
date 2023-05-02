@@ -21,10 +21,13 @@ import AppKit
 
 public extension NSImage
 {
+	/// Assets from `CoreAssets`
 	enum CoreTootin
 	{
 		public static var globe: NSImage
 		{
+			/// when called from Mastonaut, this bundle will be Mastonaut's, _not_
+			/// CoreTootin's, because the code is included directly rather than referenced
 			return Bundle(for: Persistence.self).image(forResource: "globe")!
 		}
 		

@@ -95,7 +95,7 @@ class SearchViewController: NSViewController
 
 		if searchTerm.isEmpty
 		{
-			handle(results: EmptyReults())
+			handle(results: EmptyResults())
 		}
 		else
 		{
@@ -121,7 +121,9 @@ class SearchViewController: NSViewController
 
 						switch result
 						{
-						case .success(let results, _): self.handle(results: results)
+						case .success(let response):
+							let results = response.value
+							self.handle(results: results)
 						case .failure(let error): self.handle(error: error)
 						}
 					}
@@ -146,9 +148,9 @@ class SearchViewController: NSViewController
 		}
 	}
 
-	private func handle(error: ClientError)
+	private func handle(error: Error)
 	{
-		handle(results: EmptyReults())
+		handle(results: EmptyResults())
 	}
 
 	@IBAction func cancel(_ sender: Any?)
@@ -200,7 +202,7 @@ protocol ResultsType
 	var hashtags: [Tag] { get }
 }
 
-struct EmptyReults: ResultsType
+struct EmptyResults: ResultsType
 {
 	var accounts: [Account] { return [] }
 	var statuses: [Status] { return [] }

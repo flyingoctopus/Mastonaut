@@ -18,15 +18,17 @@
 //
 
 import Cocoa
-import MastodonKit
 import CoreTootin
+import MastodonKit
 
 class NotificationListViewController: ListViewController<MastodonNotification>, NotificationInteractionHandling, StatusInteractionHandling, PollVotingCapable, FilterServiceObserver
 {
 	private var statusIdNotificationIdMap: [String: String] = [:]
 	private var observations: [NSKeyValueObservation] = []
-	private var reduceMotionNotificationObserver: NSObjectProtocol? = nil
+	private var reduceMotionNotificationObserver: NSObjectProtocol?
 	private var filterService: FilterService?
+
+	private var accountNotificationPreferences: AccountNotificationPreferences?
 
 	internal var updatedPolls: [String: Poll] = [:]
 	internal var pollRefreshTimers: [String: Timer] = [:]
@@ -53,19 +55,19 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 		super.awakeFromNib()
 
 		observations.observePreference(\MastonautPreferences.mediaDisplayMode)
-			{
-				[unowned self] (preferences, change) in self.refreshVisibleCellViews()
-			}
+		{
+			[unowned self] _, _ in self.refreshVisibleCellViews()
+		}
 
 		observations.observePreference(\MastonautPreferences.spoilerDisplayMode)
-			{
-				[unowned self] (preferences, change) in self.refreshVisibleCellViews()
-			}
+		{
+			[unowned self] _, _ in self.refreshVisibleCellViews()
+		}
 
-		reduceMotionNotificationObserver = NSAccessibility.observeReduceMotionPreference()
-			{
-				[unowned self] in self.refreshVisibleCellViews()
-			}
+		reduceMotionNotificationObserver = NSAccessibility.observeReduceMotionPreference
+		{
+			[unowned self] in self.refreshVisibleCellViews()
+		}
 	}
 
 	override func registerCells()
@@ -73,14 +75,15 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 		super.registerCells()
 
 		tableView.register(NSNib(nibNamed: "StatusTableCellView", bundle: .main),
-						   forIdentifier: CellViewIdentifier.status)
+		                   forIdentifier: CellViewIdentifier.status)
 		tableView.register(NSNib(nibNamed: "InteractionCellView", bundle: .main),
-						   forIdentifier: CellViewIdentifier.interaction)
+		                   forIdentifier: CellViewIdentifier.interaction)
 		tableView.register(NSNib(nibNamed: "FollowCellView", bundle: .main),
-						   forIdentifier: CellViewIdentifier.follow)
+		                   forIdentifier: CellViewIdentifier.follow)
 	}
 
-	override func viewDidLoad() {
+	override func viewDidLoad()
+	{
 		super.viewDidLoad()
 
 		tableView.setAccessibilityLabel("Notifications")
@@ -96,6 +99,8 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 
 		filterService = FilterService.service(for: account)
 		filterService?.register(observer: self)
+
+		accountNotificationPreferences = account.notificationPreferences(context: AppDelegate.shared.managedObjectContext)
 	}
 
 	func handle(updatedStatus: Status)
@@ -148,10 +153,10 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 	func handle<T: UserDescriptionError>(interactionError error: T)
 	{
 		DispatchQueue.main.async
-			{
-				[weak self] in self?.view.window?.windowController?.displayError(error,
-																				 title: 🔠("interaction.notification"))
-			}
+		{
+			[weak self] in self?.view.window?.windowController?.displayError(error,
+			                                                                 title: 🔠("interaction.notification"))
+		}
 	}
 
 	func reply(to statusID: String)
@@ -183,8 +188,12 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 	{
 		authorizedAccountProvider?.presentInSidebar(SidebarMode.tag(tag.name))
 	}
-
-	func canDelete(status: Status) -> Bool
+	
+	func showStatusEdits(status: MastodonKit.Status, edits: [StatusEdit]) {
+		authorizedAccountProvider?.presentInSidebar(SidebarMode.edits(status: status, edits: edits))
+	}
+	
+	func canDeleteOrEdit(status: Status) -> Bool
 	{
 		return currentUserIsAuthor(of: status)
 	}
@@ -199,21 +208,26 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 		let message: String = isRedrafting ? "The contents of this toot will be copied over to the composer, and you'll be able to make changes to it before re-submitting it." : "This action can not be undone."
 
 		let dialogMode: DialogMode = isRedrafting ? .custom(proceed: "Delete and Redraft", dismiss: "Cancel")
-												  : .custom(proceed: "Delete Toot", dismiss: "Cancel")
+			: .custom(proceed: "Delete Toot", dismiss: "Cancel")
 
 		view.window?.windowController?.showAlert(style: .informational,
-												 title: "Are you sure you want to delete this toot?",
-												 message: message,
-												 dialogMode: dialogMode)
-			{
-				response in
-				completion(response == .alertFirstButtonReturn)
-			}
+		                                         title: "Are you sure you want to delete this toot?",
+		                                         message: message,
+		                                         dialogMode: dialogMode)
+		{
+			response in
+			completion(response == .alertFirstButtonReturn)
+		}
 	}
 
 	func redraft(status: Status)
 	{
 		authorizedAccountProvider?.redraft(status: status)
+	}
+	
+	func edit(status: Status)
+	{
+		authorizedAccountProvider?.edit(status: status)
 	}
 
 	override func menuItems(for entryReference: EntryReference) -> [NSMenuItem]
@@ -234,11 +248,15 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 		}
 	}
 
-	func menuItems(for status: Status) -> [NSMenuItem] {
+	func menuItems(for status: Status) -> [NSMenuItem]
+	{
 		if let notification = statusIdNotificationIdMap[status.id].flatMap({ entryMap[$0] }),
-			entryMatchesAnyFilter(notification) {
+		   entryMatchesAnyFilter(notification)
+		{
 			return StatusMenuItemsController.shared.menuItems(forFilteredStatus: status, interactionHandler: self)
-		} else {
+		}
+		else
+		{
 			return StatusMenuItemsController.shared.menuItems(for: status, interactionHandler: self)
 		}
 	}
@@ -251,10 +269,10 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 	}
 
 	override func prepareNewEntries(_ notifications: [MastodonNotification],
-									for insertion: ListViewController<MastodonNotification>.InsertionPoint,
-									pagination: Pagination?)
+	                                for insertion: ListViewController<MastodonNotification>.InsertionPoint,
+	                                pagination: Pagination?)
 	{
-		let filteredNotifications = notifications.filter({ $0.isOfKnownType })
+		var filteredNotifications = notifications.filter { $0.isOfKnownType }
 
 		for notification in filteredNotifications
 		{
@@ -263,6 +281,8 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 				statusIdNotificationIdMap[statusID] = notification.id
 			}
 		}
+
+		filteredNotifications = filteredNotifications.filter { UserNotificationAgent.shouldShowNotification($0, accountNotificationPreferences: accountNotificationPreferences) }
 
 		super.prepareNewEntries(filteredNotifications, for: insertion, pagination: pagination)
 	}
@@ -280,7 +300,8 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 		case .follow:
 			return NotificationListViewController.CellViewIdentifier.follow
 
-		case .other:
+		default:
+			return NSUserInterfaceItemIdentifier("")
 			fatalError("Unknown notification types should be filtered!")
 		}
 	}
@@ -289,8 +310,9 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 	{
 		guard
 			let attachmentPresenter = authorizedAccountProvider?.attachmentPresenter,
-			let instance = authorizedAccountProvider?.currentInstance
-			else
+			let instance = authorizedAccountProvider?.currentInstance,
+			let accountNotificationPreferences
+		else
 		{
 			return
 		}
@@ -298,7 +320,8 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 		switch notification.type
 		{
 		case .mention:
-			guard let status = notification.status, let statusCell = cell as? StatusDisplaying else
+			guard let status = notification.status, let statusCell = cell as? StatusDisplaying
+			else
 			{
 				return
 			}
@@ -309,23 +332,24 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 			}
 
 			statusCell.set(displayedStatus: status,
-						   poll: status.poll.flatMap { updatedPolls[$0.id] },
-						   attachmentPresenter: attachmentPresenter,
-						   interactionHandler: self,
-						   activeInstance: instance)
+			               poll: status.poll.flatMap { updatedPolls[$0.id] },
+			               attachmentPresenter: attachmentPresenter,
+			               interactionHandler: self,
+			               activeInstance: instance)
 
 		case .favourite, .follow, .reblog, .poll:
-			guard let notificationCell = cell as? NotificationDisplaying else
+			guard let notificationCell = cell as? NotificationDisplaying
+			else
 			{
 				return
 			}
 
 			notificationCell.set(displayedNotification: notification,
-								 attachmentPresenter: attachmentPresenter,
-								 interactionHandler: self,
-								 activeInstance: instance)
+			                     attachmentPresenter: attachmentPresenter,
+			                     interactionHandler: self,
+			                     activeInstance: instance)
 
-		case .other:
+		default:
 			break
 		}
 	}
@@ -333,6 +357,14 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 	override func prepareToDisplay(cellView: NSTableCellView, at row: Int)
 	{
 		super.prepareToDisplay(cellView: cellView, at: row)
+
+		if let interactionCellView = cellView as? InteractionCellView
+		{
+			if interactionCellView.displayedNotificationId == nil
+			{
+				return
+			}
+		}
 
 		if let window = view.window, let statusCellView = cellView as? StatusTableCellView
 		{
@@ -349,23 +381,23 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 		{
 		case .notification(let notification):
 			DispatchQueue.main.async
-				{
-					[weak self] in
+			{
+				[weak self] in
 
-					self?.prepareNewEntries([notification], for: .above, pagination: nil)
-					self?.postNotificationIfAppropriate(notification)
-				}
+				self?.prepareNewEntries([notification], for: .above, pagination: nil)
+				self?.postNotificationIfAppropriate(notification)
+			}
 
 		case .delete(let statusID):
 			DispatchQueue.main.async
-				{
-					[weak self] in
+			{
+				[weak self] in
 
-					if let notificationId = self?.statusIdNotificationIdMap[statusID]
-					{
-						self?.handle(deletedEntry: notificationId)
-					}
+				if let notificationId = self?.statusIdNotificationIdMap[statusID]
+				{
+					self?.handle(deletedEntry: notificationId)
 				}
+			}
 
 		case .update:
 			break
@@ -391,7 +423,8 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 	{
 		guard
 			let account = authorizedAccountProvider?.currentAccount,
-			account.preferences(context: context).notificationDisplayMode == .whenActive
+			account.preferences(context: context).notificationDisplayMode == .whenActive,
+			UserNotificationAgent.shouldShowNotification(notification, accountNotificationPreferences: accountNotificationPreferences)
 		else
 		{
 			return
@@ -400,9 +433,9 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 		let notificationTool = AppDelegate.shared.notificationAgent.notificationTool
 
 		notificationTool.postNotification(mastodonEvent: notification,
-										  receiverName: account.uri!,
-										  userAccount: account.uuid,
-										  detailMode: account.preferences(context: context).notificationDetailMode)
+		                                  receiverName: account.uri!,
+		                                  userAccount: account.uuid,
+		                                  detailMode: account.preferences(context: context).notificationDetailMode)
 	}
 
 	private func currentUserIsAuthor(of status: Status) -> Bool
@@ -413,23 +446,29 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 
 	// MARK: - Filtering
 
-	override func applicableFilters() -> [UserFilter] {
-		return (filterService?.filters ?? []).filter({ $0.context.contains(.notifications) })
+	override func applicableFilters() -> [UserFilter]
+	{
+		return (filterService?.filters ?? []).filter { $0.context.contains(.notifications) }
 	}
 
-	override func checkEntry(_ notification: MastodonNotification, matchesFilter filter: UserFilter) -> Bool {
+	override func checkEntry(_ notification: MastodonNotification, matchesFilter filter: UserFilter) -> Bool
+	{
 		return filter.checkMatch(notification: notification)
 	}
 
-	func filterServiceDidUpdateFilters(_ service: FilterService) {
+	func filterServiceDidUpdateFilters(_ service: FilterService)
+	{
 		validFiltersDidChange()
 	}
 
 	// MARK: - Keyboard Navigation
 
-	override func showPreview(for notification: MastodonKit.Notification, atRow row: Int) {
+	override func showPreview(for notification: MastodonKit.Notification, atRow row: Int)
+	{
 		guard let cellView = tableView.rowView(atRow: row, makeIfNecessary: false)?.view(atColumn: 0),
-			  let mediaPresenterCell = cellView as? MediaPresenting else {
+		      let mediaPresenterCell = cellView as? MediaPresenting
+		else
+		{
 			return
 		}
 
@@ -438,7 +477,7 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 
 	// MARK: - Reuse Identifiers
 
-	fileprivate struct CellViewIdentifier
+	fileprivate enum CellViewIdentifier
 	{
 		static let status = NSUserInterfaceItemIdentifier("status")
 		static let interaction = NSUserInterfaceItemIdentifier("interaction")
@@ -446,37 +485,56 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 	}
 }
 
-extension NotificationListViewController: NSMenuItemValidation {
-
-	func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+extension NotificationListViewController: NSMenuItemValidation
+{
+	func validateMenuItem(_ menuItem: NSMenuItem) -> Bool
+	{
 		return cellMenuItemHandler.validateMenuItem(menuItem)
 	}
 
-	@IBAction func favoriteSelectedStatus(_ sender: Any?) {
+	// not possible until validateMenuItem allows for different view types
+//	@IBAction func copyTootLink(_ sender: Any?)
+//	{
+//		cellMenuItemHandler.copyTootLink(sender)
+//	}
+//
+//	@IBAction func copyTootText(_ sender: Any?)
+//	{
+//		cellMenuItemHandler.copyTootText(sender)
+//	}
+
+	@IBAction func favoriteSelectedStatus(_ sender: Any?)
+	{
 		cellMenuItemHandler.favoriteSelectedStatus(sender)
 	}
 
-	@IBAction func reblogSelectedStatus(_ sender: Any?) {
+	@IBAction func reblogSelectedStatus(_ sender: Any?)
+	{
 		cellMenuItemHandler.reblogSelectedStatus(sender)
 	}
 
-	@IBAction func replyToSelectedStatus(_ sender: Any?) {
+	@IBAction func replyToSelectedStatus(_ sender: Any?)
+	{
 		cellMenuItemHandler.replyToSelectedStatus(sender)
 	}
 
-	@IBAction func toggleMediaVisibilityOfSelectedStatus(_ sender: Any?) {
+	@IBAction func toggleMediaVisibilityOfSelectedStatus(_ sender: Any?)
+	{
 		cellMenuItemHandler.toggleMediaVisibilityOfSelectedStatus(sender)
 	}
 
-	@IBAction func toggleContentVisibilityOfSelectedStatus(_ sender: Any?) {
+	@IBAction func toggleContentVisibilityOfSelectedStatus(_ sender: Any?)
+	{
 		cellMenuItemHandler.toggleContentVisibilityOfSelectedStatus(sender)
 	}
 
-	@IBAction func showDetailsOfSelectedStatus(_ sender: Any?) {
+	@IBAction func showDetailsOfSelectedStatus(_ sender: Any?)
+	{
 		cellMenuItemHandler.showDetailsOfSelectedStatus(sender)
 	}
 
-	@IBAction func togglePresentableMediaVisible(_ sender: Any?) {
+	@IBAction func togglePresentableMediaVisible(_ sender: Any?)
+	{
 		cellMenuItemHandler.togglePresentableMediaVisible(sender)
 	}
 }
@@ -503,6 +561,15 @@ extension MastodonNotification: ListViewPresentable
 
 	var isOfKnownType: Bool
 	{
+		// these are known, but not currently supported
+		switch type
+		{
+		case .status, .follow_request, .update, .admin_sign_up, .admin_report:
+			return false
+		default:
+			break
+		}
+
 		if case .other = type
 		{
 			return false

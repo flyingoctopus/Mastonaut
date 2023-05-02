@@ -21,10 +21,10 @@ import Foundation
 
 public class Keychain
 {
-	static let appGroup = "R85D3K8ATT.app.mastonaut.mac"
+	static let appGroup = "\(BuildConfig.DEVELOPMENT_TEAM).\(BuildConfig.MASTONAUT_BUNDLE_ID_BASE)"
 
 	public private(set) lazy var keychainController: KeychainController = {
-		let controller = KeychainController(service: "app.mastonaut.mac.keychain")
+		let controller = KeychainController(service: "\(Keychain.appGroup).keychain")
 		controller.keychainGroupIdentifier = Keychain.appGroup
 		return controller
 	}()

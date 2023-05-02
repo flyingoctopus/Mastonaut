@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :macos, '10.12'
+platform :macos, '12.0'
 
 target 'Mastonaut' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
@@ -11,6 +11,8 @@ target 'Mastonaut' do
   pod 'MastodonKit', :path => 'Dependencies/MastodonKit'
   pod 'Starscream', '~> 3.1.0'
   pod 'SVGKit'
+
+  plugin 'cocoapods-acknowledgements'
 
   target 'MastonautTests' do
     inherit! :search_paths

@@ -28,20 +28,21 @@ public class AccountSearchService
 	public init(client: ClientType, activeInstance: Instance)
 	{
 		self.client = client
-		self.instance = activeInstance
+		instance = activeInstance
 	}
 
 	public func search(query: String, completion: @escaping ([Account]) -> Void)
 	{
-		client.run(Accounts.search(query: query)) { (result) in
-
-			guard case .success(let accounts, _) = result else
+		client.run(Accounts.search(query: query))
+		{ result in
+			guard case .success(let response) = result
+			else
 			{
 				completion([])
 				return
 			}
 
-			completion(accounts)
+			completion(response.value)
 		}
 	}
 }
@@ -49,29 +50,40 @@ public class AccountSearchService
 extension AccountSearchService: SuggestionTextViewSuggestionsProvider
 {
 	public func suggestionTextView(_ textView: SuggestionTextView,
-								   suggestionsForMention mention: String,
-								   completion: @escaping ([Suggestion]) -> Void)
+	                               suggestionsForQuery query: String,
+	                               completion: @escaping (Any) -> Void)
 	{
 		let instance = self.instance
 
-		search(query: mention)
+		search(query: query)
 		{
-			(accounts) in
+			accounts in
 
 			DispatchQueue.main.async
-				{
-					completion(accounts.map({ AccountSuggestion(account: $0, instance: instance) }))
-				}
+			{
+				let result = accounts.map { SuggestionContainer.mention(AccountSuggestion(account: $0, instance: instance)) }
+
+				completion(result)
+			}
 		}
 	}
 }
 
-private class AccountSuggestion: Suggestion {
+@objc public protocol AccountSuggestionProtocol
+{
+	var text: String { get }
+	var imageUrl: URL? { get }
+	var displayName: String { get }
+}
+
+private class AccountSuggestion: AccountSuggestionProtocol
+{
 	let text: String
 	let imageUrl: URL?
 	let displayName: String
 
-	init(account: Account, instance: Instance) {
+	init(account: Account, instance: Instance)
+	{
 		text = account.uri(in: instance)
 		imageUrl = account.avatarURL
 		displayName = account.bestDisplayName

@@ -71,7 +71,8 @@ public class ReauthorizationAgent: ClientDelegate
 
 				switch result
 				{
-				case .success(let login, _):
+				case .success(let response):
+					let login = response.value
 					DispatchQueue.main.async {
 						client.accessToken = login.accessToken
 
@@ -82,7 +83,7 @@ public class ReauthorizationAgent: ClientDelegate
 					}
 
 				case .failure(let error):
-					if case .unauthorized = error
+					if case ClientError.unauthorized = error
 					{
 						DispatchQueue.main.async { self?.invalidateCurentToken(client: &client) }
 					}

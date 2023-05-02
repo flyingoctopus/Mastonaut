@@ -17,12 +17,11 @@
 //  GNU General Public License for more details.
 //
 
+import CoreTootin
 import Foundation
 import MastodonKit
-import CoreTootin
 
-protocol AuthorizedAccountProviding: AttributedLabelLinkHandler
-{
+protocol AuthorizedAccountProviding: AttributedLabelLinkHandler {
 	var currentAccount: AuthorizedAccount? { get }
 	var currentInstance: Instance? { get }
 	var attachmentPresenter: AttachmentPresenting { get }
@@ -30,6 +29,7 @@ protocol AuthorizedAccountProviding: AttributedLabelLinkHandler
 	func composeReply(for status: Status, sender: Any?)
 	func composeMention(userHandle: String, directMessage: Bool)
 	func redraft(status: Status)
+	func edit(status: Status)
 
 	func handle(linkURL: URL, knownTags: [Tag]?)
 

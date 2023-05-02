@@ -51,6 +51,10 @@ public struct FileMetadataGenerator
 
 		if fileUrl.fileConforms(toUTI: kUTTypeMovie)
 		{
+			/* TODO: AVAsset.duration has been deprecated, and we're supposed to use
+			 * an async call to asset.load(.duration) to fetch metadata and then do stuff with it.
+			 * That introduces async/await into the mix, which is fine, but is out of the scope
+			 * of the current work. */
 			let duration = AVURLAsset(url: fileUrl).duration.seconds
 			return .movie(duration: duration)
 		}

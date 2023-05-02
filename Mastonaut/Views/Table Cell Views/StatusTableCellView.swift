@@ -18,17 +18,20 @@
 //
 
 import Cocoa
-import MastodonKit
 import CoreTootin
+import MastodonKit
+import Sdifft
 
 @IBDesignable
 class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInteractionPresenter
 {
 	@IBOutlet private unowned var authorNameButton: NSButton!
 	@IBOutlet private unowned var authorAccountLabel: NSTextField!
-	@IBOutlet private unowned var statusLabel: AttributedLabel!
+	@IBOutlet unowned var statusLabel: AttributedLabel!
 	@IBOutlet private unowned var fullContentDisclosureView: NSView?
 	@IBOutlet private unowned var timeLabel: NSTextField!
+	@IBOutlet private unowned var editInfoContainer: NSStackView!
+	@IBOutlet private unowned var editedTimeLabel: NSTextField!
 	@IBOutlet private unowned var mainContentStackView: NSStackView!
 
 	@IBOutlet private unowned var contentWarningContainer: BorderView!
@@ -42,7 +45,7 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 
 	@IBOutlet private unowned var contextButton: NSButton?
 	@IBOutlet private unowned var contextImageView: NSImageView?
-	
+
 	@IBOutlet private unowned var mediaContainerView: NSView!
 
 	@IBOutlet private unowned var cardContainerView: CardView!
@@ -50,70 +53,66 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 	@IBOutlet private unowned var cardTitleLabel: NSTextField!
 	@IBOutlet private unowned var cardUrlLabel: NSTextField!
 
-	private var attachmentViewController: AttachmentViewController? = nil
+	private var attachmentViewController: AttachmentViewController?
 
-	private var pollViewController: PollViewController? = nil
+	private var pollViewController: PollViewController?
 
 	private(set) var hasMedia: Bool = false
 	private(set) var hasSensitiveMedia: Bool = false
 	private(set) var hasSpoiler: Bool = false
 	
-	var isContentHidden: Bool {
+	private func fontService() -> FontService {
+		return FontService(font: MastonautPreferences.instance.statusFont)
+	}
+
+	var isContentHidden: Bool
+	{
 		return warningButton.state == .off
 	}
-	
-	var isMediaHidden: Bool {
+
+	var isMediaHidden: Bool
+	{
 		return sensitiveContentButton.state == .off
 	}
 
 	private var userDidInteractWithVisibilityControls = false
 
-	private weak var tableViewWidthConstraint: NSLayoutConstraint? = nil
+	private weak var tableViewWidthConstraint: NSLayoutConstraint?
 
-	@objc dynamic
-	internal private(set) var cellModel: StatusCellModel? = nil {
+	@objc internal private(set) dynamic
+	var cellModel: StatusCellModel?
+	{
 		didSet { updateAccessibilityAttributes() }
 	}
 
 	private lazy var spoilerCoverView: NSView =
-		{
-			return CoverView(backgroundColor: NSColor(named: "SpoilerCoverBackground")!,
-							 message: 🔠("Content Hidden: Click warning button below to toggle display."))
-		}()
+	{
+		let coverView = CoverView(backgroundColor: NSColor(named: "SpoilerCoverBackground")!,
+		                          message: 🔠("Content Hidden: Click warning button below to toggle display."))
+		coverView.target = self
+		coverView.action = #selector(toggleContentVisibility)
+		return coverView
+	}()
 
-	private static let _authorLabelAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.labelColor, .font: NSFont.systemFont(ofSize: 14, weight: .semibold)
-	]
-
-	private static let _statusLabelAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.labelColor, .font: NSFont.labelFont(ofSize: 14),
-		.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
-											// vertically when clicked.
-	]
-
-	private static let _statusLabelLinkAttributes: [NSAttributedString.Key: AnyObject] = [
-		.foregroundColor: NSColor.safeControlTintColor,
-		.font: NSFont.systemFont(ofSize: 14, weight: .medium),
-		.underlineStyle: NSNumber(value: 1)
-	]
-
+	// this is exempt from #83 (custom font) for now, because it's mostly UI
+	// chrome, not content
 	private static let _contextLabelAttributes: [NSAttributedString.Key: AnyObject] = [
 		.foregroundColor: NSColor.secondaryLabelColor, .font: NSFont.systemFont(ofSize: 12, weight: .medium)
 	]
 
 	internal func authorLabelAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
-		return StatusTableCellView._authorLabelAttributes
+		return fontService().authorAttributes()
 	}
 
 	internal func statusLabelAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
-		return StatusTableCellView._statusLabelAttributes
+		return fontService().statusAttributes()
 	}
 
 	internal func statusLabelLinkAttributes() -> [NSAttributedString.Key: AnyObject]
 	{
-		return StatusTableCellView._statusLabelLinkAttributes
+		return fontService().statusLinkAttributes()
 	}
 
 	internal func contextLabelAttributes() -> [NSAttributedString.Key: AnyObject]
@@ -129,6 +128,26 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		statusLabel.linkTextAttributes = statusLabelLinkAttributes()
 
 		cardContainerView.clickHandler = { [weak self] in self?.cellModel?.openCardLink() }
+
+		fontObserver = MastonautPreferences.instance.observe(\.statusFont, options: .new)
+		{
+			[weak self] _, _ in
+			self?.updateFont()
+		}
+	}
+
+	private var fontObserver: NSKeyValueObservation?
+
+	deinit
+	{
+		fontObserver?.invalidate()
+	}
+
+	func updateFont()
+	{
+		statusLabel.linkTextAttributes = statusLabelLinkAttributes()
+
+		redraw()
 	}
 
 	override var backgroundStyle: NSView.BackgroundStyle
@@ -151,28 +170,53 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 			}
 		}
 	}
-	
+
 	func set(displayedStatus status: Status,
-			 poll: Poll?,
-			 attachmentPresenter: AttachmentPresenting,
-			 interactionHandler: StatusInteractionHandling,
-			 activeInstance: Instance)
+	         poll: Poll?,
+	         attachmentPresenter: AttachmentPresenting,
+	         interactionHandler: StatusInteractionHandling,
+	         activeInstance: Instance)
 	{
-		let cellModel = StatusCellModel(status: status, interactionHandler: interactionHandler)
+		let cellModel = StatusCellModel(status: status,
+		                                poll: poll,
+		                                attachmentPresenter: attachmentPresenter,
+		                                interactionHandler: interactionHandler,
+		                                activeInstance: activeInstance)
 		self.cellModel = cellModel
+
+		redraw()
+	}
+
+	func redraw()
+	{
+		guard let cellModel
+		else { return }
+
+		let status = cellModel.status
 
 		statusLabel.linkHandler = cellModel
 		contentWarningLabel.linkHandler = cellModel
 
 		authorNameButton.set(stringValue: cellModel.visibleStatus.authorName,
-							 applyingAttributes: authorLabelAttributes(),
-							 applyingEmojis: cellModel.visibleStatus.account.cacheableEmojis)
+							 applyingAttributes: fontService().authorAttributes(),
+		                     applyingEmojis: cellModel.visibleStatus.account.cacheableEmojis)
 
 		contextButton.map { cellModel.setupContextButton($0, attributes: contextLabelAttributes()) }
 
-		authorAccountLabel.stringValue = cellModel.visibleStatus.account.uri(in: activeInstance)
+		authorAccountLabel.stringValue = cellModel.visibleStatus.account.uri(in: cellModel.activeInstance)
 		timeLabel.objectValue = cellModel.visibleStatus.createdAt
 		timeLabel.toolTip = DateFormatter.longDateFormatter.string(from: cellModel.visibleStatus.createdAt)
+
+		if let editedAt = cellModel.visibleStatus.editedAt
+		{
+			editInfoContainer.isHidden = false
+			editedTimeLabel.objectValue = "Edited \(RelativeDateFormatter.shared.string(from: editedAt))"
+			editedTimeLabel.toolTip = DateFormatter.longDateFormatter.string(from: editedAt)
+		}
+		else
+		{
+			editInfoContainer.isHidden = true
+		}
 
 		let attributedStatus = cellModel.visibleStatus.attributedContent
 
@@ -193,16 +237,16 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 			statusLabel.isHidden = false
 			fullContentDisclosureView?.isHidden = false
 			statusLabel.set(attributedStringValue: truncatedString,
-							applyingAttributes: statusLabelAttributes(),
-							applyingEmojis: cellModel.visibleStatus.cacheableEmojis)
+			                applyingAttributes: statusLabelAttributes(),
+			                applyingEmojis: cellModel.visibleStatus.cacheableEmojis)
 		}
 		else
 		{
 			statusLabel.isHidden = false
 			fullContentDisclosureView?.isHidden = true
 			statusLabel.set(attributedStringValue: attributedStatus,
-							applyingAttributes: statusLabelAttributes(),
-							applyingEmojis: cellModel.visibleStatus.cacheableEmojis)
+			                applyingAttributes: statusLabelAttributes(),
+			                applyingEmojis: cellModel.visibleStatus.cacheableEmojis)
 		}
 
 		statusLabel.isEnabled = true
@@ -225,8 +269,8 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 			hasSpoiler = true
 
 			contentWarningLabel.set(attributedStringValue: cellModel.visibleStatus.attributedSpoiler,
-									applyingAttributes: statusLabelAttributes(),
-									applyingEmojis: cellModel.visibleStatus.cacheableEmojis)
+			                        applyingAttributes: statusLabelAttributes(),
+			                        applyingEmojis: cellModel.visibleStatus.cacheableEmojis)
 
 			installSpoilerCover()
 			contentWarningContainer.isHidden = false
@@ -234,14 +278,18 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 
 		setUpInteractions(status: cellModel.visibleStatus)
 
-		setupAttachmentsContainerView(for: cellModel.visibleStatus, poll: poll, attachmentPresenter: attachmentPresenter)
+		setupAttachmentsContainerView(for: cellModel.visibleStatus,
+		                              poll: cellModel.poll,
+		                              attachmentPresenter: cellModel.attachmentPresenter)
 		hasMedia = attachmentViewController != nil
 		hasSensitiveMedia = attachmentViewController?.sensitiveMedia == true
 	}
 
 	func updateAccessibilityAttributes()
 	{
-		guard let model = cellModel else {
+		guard let model = cellModel
+		else
+		{
 			setAccessibilityLabel("")
 			return
 		}
@@ -253,7 +301,8 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		components.append(RelativeDateFormatter.shared.string(from: model.visibleStatus.createdAt))
 		components.append(model.visibleStatus.authorAccount)
 
-		if model.visibleStatus.id != model.status.id {
+		if model.visibleStatus.id != model.status.id
+		{
 			let rebloggedAt = RelativeDateFormatter.shared.string(from: model.status.createdAt)
 			components.append("retooted by \(model.status.authorName) \(rebloggedAt)")
 			components.append(model.status.authorAccount)
@@ -312,18 +361,18 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 	}
 
 	private func setupAttachmentsContainerView(for status: Status, poll: Poll?,
-											   attachmentPresenter: AttachmentPresenting)
+	                                           attachmentPresenter: AttachmentPresenting)
 	{
-		mediaContainerView.subviews.forEach({ $0.removeFromSuperview() })
+		mediaContainerView.subviews.forEach { $0.removeFromSuperview() }
 
 		if status.mediaAttachments.count > 0
 		{
 			mediaContainerView.isHidden = false
 
 			let attachmentViewController = AttachmentViewController(attachments: status.mediaAttachments,
-																	attachmentPresenter: attachmentPresenter,
-																	sensitiveMedia: status.sensitive == true,
-																	mediaHidden: self.attachmentViewController?.isMediaHidden)
+			                                                        attachmentPresenter: attachmentPresenter,
+			                                                        sensitiveMedia: status.sensitive == true,
+			                                                        mediaHidden: self.attachmentViewController?.isMediaHidden)
 
 			let attachmentView = attachmentViewController.view
 			mediaContainerView.addSubview(attachmentView)
@@ -355,13 +404,14 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		else
 		{
 			mediaContainerView.isHidden = true
-			self.attachmentViewController = nil
+			attachmentViewController = nil
 		}
 	}
 
 	internal func set(displayedCard card: Card?)
 	{
-		guard let card = card else
+		guard let card = card
+		else
 		{
 			cardContainerView.isHidden = true
 			return
@@ -373,7 +423,8 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		cardTitleLabel.stringValue = card.title
 		cardUrlLabel.stringValue = cardUrl.host ?? ""
 
-		guard card.imageUrl != nil, let currentlyDisplayedStatusId = cellModel?.status.id else
+		guard card.imageUrl != nil, let currentlyDisplayedStatusId = cellModel?.status.id
+		else
 		{
 			cardImageView.image = nil
 			return
@@ -382,19 +433,20 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		cardImageView.image = #imageLiteral(resourceName: "missing")
 
 		card.fetchImage
+		{
+			[weak self] image in
+
+			DispatchQueue.main.async
 			{
-				[weak self] image in
+				guard self?.cellModel?.status.id == currentlyDisplayedStatusId
+				else
+				{
+					return
+				}
 
-				DispatchQueue.main.async
-					{
-						guard self?.cellModel?.status.id == currentlyDisplayedStatusId else
-						{
-							return
-						}
-
-						self?.cardImageView.image = image
-					}
+				self?.cardImageView.image = image
 			}
+		}
 	}
 
 	func setContentLabelsSelectable(_ selectable: Bool)
@@ -402,7 +454,7 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		contentWarningLabel.selectableAfterFirstClick = selectable
 		statusLabel.selectableAfterFirstClick = selectable
 	}
-	
+
 	override func prepareForReuse()
 	{
 		super.prepareForReuse()
@@ -416,7 +468,26 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 
 		removeSpoilerCover()
 	}
-	
+
+	@IBAction func viewHistoryClicked(_ sender: NSButton)
+	{
+		guard let status = cellModel?.visibleStatus,
+		      let interactionHandler = cellModel?.interactionHandler
+		else { return }
+
+		let handler = cellModel?.interactionHandler
+
+		interactionHandler.fetchEditHistory(for: status.id)
+		{
+			success in DispatchQueue.main.async
+			{
+				guard let edits = success else { return }
+
+				interactionHandler.showStatusEdits(status: status, edits: edits)
+			}
+		}
+	}
+
 	@IBAction private func interactionButtonClicked(_ sender: NSButton)
 	{
 		switch (sender, sender.state)
@@ -439,7 +510,8 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		case (warningButton, .on):
 			userDidInteractWithVisibilityControls = true
 			setContentHidden(false)
-			
+			setMediaHidden(false)
+
 		case (warningButton, .off):
 			userDidInteractWithVisibilityControls = true
 			setContentHidden(true)
@@ -456,20 +528,26 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 		default: break
 		}
 	}
-	
-	func toggleContentVisibility() {
+
+	@objc func toggleContentVisibility()
+	{
 		guard hasSpoiler else { return }
-		
+
 		setContentHidden(!isContentHidden)
-		
+		if isMediaHidden && !isContentHidden
+		{
+			setMediaHidden(isContentHidden)
+		}
+
 		userDidInteractWithVisibilityControls = true
 	}
-	
-	func toggleMediaVisibility() {
+
+	func toggleMediaVisibility()
+	{
 		guard hasMedia else { return }
-		
+
 		setMediaHidden(!isMediaHidden)
-		
+
 		userDidInteractWithVisibilityControls = true
 	}
 
@@ -523,16 +601,16 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 	{
 		removeSpoilerCover()
 
-		let spolierCover = spoilerCoverView
-		addSubview(spolierCover)
+		let spoilerCover = spoilerCoverView
+		addSubview(spoilerCover)
 
 		let spacing = mainContentStackView.spacing
 
 		NSLayoutConstraint.activate([
-			spolierCover.topAnchor.constraint(equalTo: contentWarningContainer.bottomAnchor, constant: spacing),
-			spolierCover.bottomAnchor.constraint(equalTo: mainContentStackView.bottomAnchor, constant: 2),
-			spolierCover.leftAnchor.constraint(equalTo: mainContentStackView.leftAnchor),
-			spolierCover.rightAnchor.constraint(equalTo: mainContentStackView.rightAnchor)
+			spoilerCover.topAnchor.constraint(equalTo: contentWarningContainer.bottomAnchor, constant: spacing),
+			spoilerCover.bottomAnchor.constraint(equalTo: mainContentStackView.bottomAnchor, constant: 2),
+			spoilerCover.leftAnchor.constraint(equalTo: mainContentStackView.leftAnchor),
+			spoilerCover.rightAnchor.constraint(equalTo: mainContentStackView.rightAnchor)
 		])
 	}
 
@@ -542,9 +620,10 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 	}
 }
 
-extension StatusTableCellView: MediaPresenting {
-
-	func makePresentableMediaVisible() {
+extension StatusTableCellView: MediaPresenting
+{
+	func makePresentableMediaVisible()
+	{
 		attachmentViewController?.presentAttachment(nil)
 	}
 }
@@ -553,9 +632,9 @@ extension StatusTableCellView: RichTextCapable
 {
 	func set(shouldDisplayAnimatedContents animates: Bool)
 	{
-		authorNameButton.animatedEmojiImageViews?.forEach({ $0.animates = animates })
-		contextButton?.animatedEmojiImageViews?.forEach({ $0.animates = animates })
-		statusLabel.animatedEmojiImageViews?.forEach({ $0.animates = animates })
-		contentWarningLabel.animatedEmojiImageViews?.forEach({ $0.animates = animates })
+		authorNameButton.animatedEmojiImageViews?.forEach { $0.animates = animates }
+		contextButton?.animatedEmojiImageViews?.forEach { $0.animates = animates }
+		statusLabel.animatedEmojiImageViews?.forEach { $0.animates = animates }
+		contentWarningLabel.animatedEmojiImageViews?.forEach { $0.animates = animates }
 	}
 }
