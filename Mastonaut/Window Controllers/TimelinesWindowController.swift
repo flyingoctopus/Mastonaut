@@ -346,7 +346,8 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 	}
 
 	func edit(status: Status) {
-		let composerWindowController = AppDelegate.shared.statusComposerWindowController
+		AppDelegate.shared.composeStatus(self)
+		guard let composerWindowController = AppDelegate.shared.statusComposerWindowControllers.last else { return }
 		composerWindowController.showWindow(nil)
 		composerWindowController.setUpAsEdit(of: status, using: currentAccount)
 	}
