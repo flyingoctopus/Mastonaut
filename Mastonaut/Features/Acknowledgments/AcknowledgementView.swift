@@ -16,8 +16,17 @@ struct AcknowledgementView: View {
 			VStack {
 				Text(viewModel.title)
 					.font(.title2)
-					.padding(.bottom, 10)
-				Text(viewModel.text)
+					.padding(.bottom, 5)
+
+				if let url = viewModel.url {
+					Link("Website",
+					     destination: URL(string: url)!)
+						.padding(.bottom, 10)
+				}
+
+				if let text = viewModel.text {
+					Text(text)
+				}
 			}.padding(10)
 		}
 	}
@@ -25,6 +34,10 @@ struct AcknowledgementView: View {
 
 struct AcknowledgmentView_Previews: PreviewProvider {
 	static var previews: some View {
-		AcknowledgementView(viewModel: Acknowledgement(title: "Hello", text: "Goodbye"))
+		let viewModel = Acknowledgement(title: "Hello",
+		                                text: "Goodbye",
+		                                url: "http://example.com")
+
+		AcknowledgementView(viewModel: viewModel)
 	}
 }

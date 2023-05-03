@@ -32,12 +32,21 @@ final class AcknowledgementsViewModel: ObservableObject
 		{
 			for entry in cocoapodAcknowledgements.entries
 			{
-				entries.append(Acknowledgement(title: entry.title, text: entry.text))
+				entries.append(Acknowledgement(title: entry.title,
+											   text: entry.text,
+											   url: nil))
 			}
 		}
-		
-		entries.append(AdditionalAcknowledgements.pullRefreshableScrollView)
-		entries.append(AdditionalAcknowledgements.loggingOSLog)
+
+		for acknowledgement in AdditionalAcknowledgements.entries
+		{
+			entries.append(acknowledgement)
+		}
+
+		for acknowledgement in SwiftPMAcknowledgements.entries
+		{
+			entries.append(acknowledgement)
+		}
 
 		entries = entries
 			.filter { !$0.title.isEmpty }
@@ -50,5 +59,7 @@ struct Acknowledgement: Identifiable
 {
 	let id = UUID().uuidString
 	let title: String
-	let text: String
+	let text: String?
+	
+	let url: String?
 }
