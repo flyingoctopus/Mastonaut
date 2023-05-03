@@ -105,9 +105,12 @@ struct RelationshipsService
 	func follow(account: Account, completion: @escaping (Swift.Result<AccountReference, Errors>) -> Void)
 	{
 		setRelationship(with: account,
-						request: Accounts.follow(id: account.id),
-						persistenceSetter: { $0.isFollowing = $1.following },
-						completion: completion)
+		                request: Accounts.follow(id: account.id),
+		                persistenceSetter: {
+		                	$0.isFollowing = $1.following
+		                	$0.isFollowingRequested = $1.requested
+		                },
+		                completion: completion)
 	}
 
 	func unfollow(account: Account, completion: @escaping (Swift.Result<AccountReference, Errors>) -> Void)

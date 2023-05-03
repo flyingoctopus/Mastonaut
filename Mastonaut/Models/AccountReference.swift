@@ -82,6 +82,7 @@ extension AccountReference
 
 		if isMastonautAuthor { relationship.formUnion(.isAuthor) }
 		if isFollowing { relationship.formUnion(.following) }
+		if isFollowingRequested { relationship.formUnion(.followingRequested) }
 		if isFollower { relationship.formUnion(.follower) }
 		if isBlocked { relationship.formUnion(.blocked) }
 		if isMuted { relationship.formUnion(.muted) }

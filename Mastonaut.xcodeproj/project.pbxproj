@@ -995,6 +995,7 @@
 		5F38B52E2930301600FCB9FC /* PullToRefreshInnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullToRefreshInnerView.swift; sourceTree = "<group>"; };
 		5F3A17EE291DB26700EA6FEC /* CoreAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = CoreAssets.xcassets; sourceTree = "<group>"; };
 		5F3BC8B129D0B44000CEBD7F /* SparklineTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparklineTableCellView.swift; sourceTree = "<group>"; };
+		5F4581912A030E1200D5D240 /* Mastonaut 11.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mastonaut 11.xcdatamodel"; sourceTree = "<group>"; };
 		5F4DAAAD29FEEDE4009FA0AE /* NSFont+withWeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSFont+withWeight.swift"; sourceTree = "<group>"; };
 		5F5338B22960B23200C1D9AE /* ReplaceCharactersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaceCharactersTests.swift; sourceTree = "<group>"; };
 		5F6F8F5F2A0033DF00FB3414 /* FontService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontService.swift; sourceTree = "<group>"; };
@@ -3844,6 +3845,7 @@
 		152DA63421E1B3140065CC1B /* Mastonaut.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				5F4581912A030E1200D5D240 /* Mastonaut 11.xcdatamodel */,
 				5F043C582933A8D30095C702 /* Mastonaut 10.xcdatamodel */,
 				5F176FB0290F00FB00DF043C /* Mastonaut 9.xcdatamodel */,
 				5F176FAD290EF4AD00DF043C /* Mastonaut 8.xcdatamodel */,
@@ -3855,7 +3857,7 @@
 				1531084922B0EDA7002FA1E7 /* Mastonaut 2.xcdatamodel */,
 				152DA63521E1B3140065CC1B /* Mastonaut.xcdatamodel */,
 			);
-			currentVersion = 5F043C582933A8D30095C702 /* Mastonaut 10.xcdatamodel */;
+			currentVersion = 5F4581912A030E1200D5D240 /* Mastonaut 11.xcdatamodel */;
 			path = Mastonaut.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
