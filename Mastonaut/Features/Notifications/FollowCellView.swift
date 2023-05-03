@@ -202,10 +202,30 @@ class FollowCellView: MastonautTableCellView, NotificationDisplaying
 	}
 
 	@IBAction func acceptRequest(_ sender: Any)
-	{}
+	{
+		guard let agentAccount else { return }
+
+		respondToFollowRequest(apiRequest: FollowRequests.authorize(id: agentAccount.id))
+	}
 
 	@IBAction func declineRequest(_ sender: Any)
-	{}
+	{
+		guard let agentAccount else { return }
+
+		respondToFollowRequest(apiRequest: FollowRequests.reject(id: agentAccount.id))
+	}
+
+	func respondToFollowRequest(apiRequest: Request<Empty>)
+	{
+		guard let client = interactionHandler?.client
+		else
+		{ return }
+
+		client.run(apiRequest)
+		{
+			_ in
+		}
+	}
 }
 
 extension FollowCellView: AttributedLabelLinkHandler
