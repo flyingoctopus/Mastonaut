@@ -29,6 +29,7 @@ class FollowCellView: MastonautTableCellView, NotificationDisplaying
 	@IBOutlet private unowned var userAccountLabel: NSTextField!
 	@IBOutlet private unowned var userBioLabel: AttributedLabel!
 	@IBOutlet private unowned var timeLabel: NSTextField!
+	@IBOutlet var followRequestResponsesStackView: NSStackView!
 
 	private unowned var interactionHandler: NotificationInteractionHandling?
 
@@ -105,6 +106,16 @@ class FollowCellView: MastonautTableCellView, NotificationDisplaying
 
 		userBioLabel.linkHandler = self
 
+		switch notification.type
+		{
+		case .follow:
+			followRequestResponsesStackView.isHidden = true
+		case .follow_request:
+			followRequestResponsesStackView.isHidden = false
+		default:
+			break
+		}
+
 		redraw()
 
 		userBioLabel.isHidden = userBioLabel.attributedStringValue.length == 0
@@ -136,7 +147,19 @@ class FollowCellView: MastonautTableCellView, NotificationDisplaying
 
 		let accountEmojis = notification.account.cacheableEmojis
 
-		interactionLabel.set(stringValue: 🔠("%@ followed you", notification.authorName),
+		var interactionLabelText: String
+
+		switch notification.type
+		{
+		case .follow:
+			interactionLabelText = 🔠("%@ followed you", notification.authorName)
+		case .follow_request:
+			interactionLabelText = 🔠("%@ requested to follow you", notification.authorName)
+		default:
+			return
+		}
+
+		interactionLabel.set(stringValue: interactionLabelText,
 		                     applyingAttributes: fontService().followAttributes(),
 		                     applyingEmojis: accountEmojis)
 
@@ -177,6 +200,12 @@ class FollowCellView: MastonautTableCellView, NotificationDisplaying
 	{
 		agentAccount.map { interactionHandler?.show(account: $0) }
 	}
+
+	@IBAction func acceptRequest(_ sender: Any)
+	{}
+
+	@IBAction func declineRequest(_ sender: Any)
+	{}
 }
 
 extension FollowCellView: AttributedLabelLinkHandler

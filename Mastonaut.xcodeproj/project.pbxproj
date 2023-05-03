@@ -1262,8 +1262,6 @@
 				15B25D01265164BF00C90963 /* FilterTableCellView.xib */,
 				15DED9C02298B1D1000F11B8 /* FocusedStatusTableCellView.swift */,
 				15DED9C32298B707000F11B8 /* FocusedStatusTableCellView.xib */,
-				150A9F0321FD1BCE00DF42A1 /* FollowCellView.swift */,
-				150A9F0021FD1B1500DF42A1 /* FollowCellView.xib */,
 				1594392E229991F200E47DBB /* InstanceTableCellView.swift */,
 				1594392B2299917800E47DBB /* InstanceTableCellView.xib */,
 				150CEA3A21FCC17600F815A9 /* InteractionCellView.swift */,
@@ -1845,10 +1843,20 @@
 			path = "List View";
 			sourceTree = "<group>";
 		};
+		5F4581902A02F8BD00D5D240 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				150A9F0321FD1BCE00DF42A1 /* FollowCellView.swift */,
+				150A9F0021FD1B1500DF42A1 /* FollowCellView.xib */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
 		5F6F8F862A02406B00FB3414 /* Features */ = {
 			isa = PBXGroup;
 			children = (
 				5F6F8F872A02407100FB3414 /* Acknowledgments */,
+				5F4581902A02F8BD00D5D240 /* Notifications */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -1856,10 +1864,10 @@
 		5F6F8F872A02407100FB3414 /* Acknowledgments */ = {
 			isa = PBXGroup;
 			children = (
-				5F6F8F8D2A025B9B00FB3414 /* Data Sources */,
 				5F6F8F842A023F9100FB3414 /* AcknowledgementsView.swift */,
 				153A6FA3220E2F0A004245E0 /* AcknowledgementsViewModel.swift */,
 				5F6F8F892A02422F00FB3414 /* AcknowledgementView.swift */,
+				5F6F8F8D2A025B9B00FB3414 /* Data Sources */,
 			);
 			path = Acknowledgments;
 			sourceTree = "<group>";
@@ -1867,8 +1875,8 @@
 		5F6F8F8D2A025B9B00FB3414 /* Data Sources */ = {
 			isa = PBXGroup;
 			children = (
-				5F6F8F8B2A024A7700FB3414 /* CocoapodAcknowledgements.swift */,
 				5F6F8F8E2A025BAA00FB3414 /* AdditionalAcknowledgements.swift */,
+				5F6F8F8B2A024A7700FB3414 /* CocoapodAcknowledgements.swift */,
 				5FCD67612A02B9350083EDB2 /* SwiftPMAcknowledgements.swift */,
 			);
 			path = "Data Sources";
