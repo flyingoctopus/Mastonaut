@@ -66,7 +66,6 @@ extension AuthorizedAccount
 		{
 			var accountReference = try AccountReference.fetchOrInsert(for: account, authorizedAccount: self)
 			accountReference[keyPath: keyPath] = true
-			accountReference.authorizedAccount = self
 		}
 	}
 
