@@ -69,7 +69,9 @@ struct RelationshipsService
 			reference.isMuted = relationship.muting
 			reference.isFollower = relationship.followedBy
 			reference.isFollowing = relationship.following
+			reference.isFollowingRequested = relationship.requested
 			reference.isBlocked = relationship.blocking
+			
 			try? reference.managedObjectContext?.save()
 
 			return reference
