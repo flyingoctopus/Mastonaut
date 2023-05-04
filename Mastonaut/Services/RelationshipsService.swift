@@ -26,11 +26,11 @@ struct RelationshipsService
 	let client: ClientType
 	let authorizedAccount: AuthorizedAccount
 
-	func relationship(with account: Account, completion: @escaping (RelationshipSet) -> Void)
+	func relationship(with account: Account, forceRefresh: Bool = false, completion: @escaping (RelationshipSet) -> Void)
 	{
 		let isSameUser = authorizedAccount.isSameUser(as: account)
 
-		if let accountReference = try? AccountReference.fetch(account: account, authorizedAccount: authorizedAccount)
+		if !forceRefresh, let accountReference = try? AccountReference.fetch(account: account, authorizedAccount: authorizedAccount)
 		{
 			completion(accountReference.relationshipSet(with: account, isSelf: isSameUser))
 		}
