@@ -173,7 +173,7 @@ public extension AuthorizedAccount
 	{
 		let followedTags = try? await client.run(Tags.followed())
 
-		let filtered = followedTags?.value.filter { $0.name == tagName }
+		let filtered = followedTags?.value.filter { $0.name.caseInsensitiveCompare(tagName) == .orderedSame }
 
 		return filtered?.count ?? 0 > 0
 	}
