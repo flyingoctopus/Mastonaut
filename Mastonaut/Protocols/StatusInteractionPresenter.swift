@@ -41,7 +41,20 @@ extension StatusInteractionPresenter where Self: MastonautTableCellView {
 		favoriteButton?.toolTip = favoriteToolTip(status)
 		favoriteButton?.state = status.favourited == true ? .on : .off
 
-		sensitiveContentButton?.isHidden = status.mediaAttachments.count == 0
+		if let sensitiveContentButton, status.mediaAttachments.count == 0 {
+			sensitiveContentButton.isHidden = true
+		} else {
+			sensitiveContentButton.isHidden = false
+
+			// align reply/reblog/favorite buttons with sensitive content button, but only if it's visible
+			if self is FocusedStatusTableCellView,
+			   let replyButton, let reblogButton, let favoriteButton
+			{
+				NSLayoutConstraint.activate([replyButton, reblogButton, favoriteButton].map { $0.leadingAnchor.constraint(equalTo: sensitiveContentButton.leadingAnchor) }
+				)
+			}
+		}
+
 		sensitiveContentButton?.state = status.sensitive == true ? .on : .off
 
 		let buttons = [replyButton, reblogButton, favoriteButton, warningButton, sensitiveContentButton]

@@ -495,12 +495,9 @@
             <constraints>
                 <constraint firstItem="e90-GJ-Pog" firstAttribute="top" secondItem="Mr1-Dk-o1f" secondAttribute="bottom" constant="3" id="0wX-3I-dQf"/>
                 <constraint firstItem="FGE-RI-Pae" firstAttribute="centerX" secondItem="ifk-GB-BIa" secondAttribute="centerX" id="2Fo-Sb-NHr"/>
-                <constraint firstItem="ONC-cp-Fem" firstAttribute="leading" secondItem="OfF-ox-q52" secondAttribute="leading" id="4ta-qq-ydn"/>
-                <constraint firstItem="yyj-bi-MwR" firstAttribute="leading" secondItem="OfF-ox-q52" secondAttribute="leading" id="5tU-nD-lYj"/>
                 <constraint firstItem="GG8-p3-OIJ" firstAttribute="leading" secondItem="NiZ-P1-sSE" secondAttribute="leading" id="7Y3-1g-fG4"/>
                 <constraint firstItem="e90-GJ-Pog" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="NiZ-P1-sSE" secondAttribute="trailing" constant="2" id="BxG-qR-lJY"/>
                 <constraint firstItem="ZOF-P9-3K0" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="12" id="GSL-VH-if0"/>
-                <constraint firstItem="eyQ-0V-BqE" firstAttribute="leading" secondItem="OfF-ox-q52" secondAttribute="leading" id="IgS-N6-ltU"/>
                 <constraint firstItem="JEU-le-JUg" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="eK9-ym-EXK" secondAttribute="trailing" constant="12" id="L9d-Wm-GpW"/>
                 <constraint firstItem="GG8-p3-OIJ" firstAttribute="top" secondItem="eK9-ym-EXK" secondAttribute="bottom" constant="12" id="Mol-06-4oe"/>
                 <constraint firstItem="Mr1-Dk-o1f" firstAttribute="leading" secondItem="e90-GJ-Pog" secondAttribute="leading" constant="-2" id="O2m-uJ-sSm"/>
