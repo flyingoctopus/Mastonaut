@@ -4,10 +4,11 @@ This is a fork of **Mastonaut** by @brunophilipe, whose original marketing page 
 
 ### Some features since 1.3.9
 
-(As of 1.6.0.)
+(As of 1.7.0.)
 
 #### Accessibility
 
+* The font size of statuses can be increased.
 * Assorted accessibility improvements
 
 #### Composing
@@ -28,14 +29,17 @@ This is a fork of **Mastonaut** by @brunophilipe, whose original marketing page 
 * Pull to refresh
 * View a list as a column
 * View your favorites or bookmarks as a column
+* Follow hashtags in the Home timeline
 
 #### Viewing
 
 * See if a toot has been edited, and view previous versions
+* The font face and size can be customized.
+* Interaction statistics (how many replies, boosts, favorites) can be seen
 
 ## 👩🏽‍💻 End Users: Install
 
-To use it, you just want to [download 1.6 here](https://github.com/chucker/Mastonaut/releases/download/app-1.6.0/Mastonaut-1.6.0.zip).
+To use it, you just want to [download 1.7 here](https://github.com/chucker/Mastonaut/releases/download/app-1.7.0/Mastonaut-1.7.0.zip).
 
 ## 🗺️ Roadmap
 
@@ -45,7 +49,7 @@ This is purely a hobbyist effort, so I can't really promise anything. I try to d
 
 These are instructions for if you want to tinker with the code.
 
-The following instructions assume Xcode 14.1 on macOS 13.0.1.
+The following instructions assume Xcode 14.2 on macOS 13.4. (Note that [it may not currently build in Xcode 14.3.x.](https://github.com/chucker/Mastonaut/issues/123))
 
 ### Setup
 
