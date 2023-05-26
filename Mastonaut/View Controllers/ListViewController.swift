@@ -818,6 +818,60 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 		false
 	}
 
+	@MainActor
+	func tableView(_ tableView: NSTableView,
+	               rowActionsForRow row: Int,
+	               edge: NSTableView.RowActionEdge) -> [NSTableViewRowAction]
+	{
+		guard let view = tableView.view(atColumn: 0, row: row, makeIfNecessary: false) as? StatusTableCellView
+		else
+		{
+			return []
+		}
+
+		switch edge
+		{
+		case .leading:
+			let boostAction = NSTableViewRowAction(style: .regular, title: "Boost")
+			{
+				_, _ in
+			}
+
+			boostAction.image = NSImage(named: "retoot")
+			boostAction.backgroundColor = .systemGreen
+
+			let replyAction = NSTableViewRowAction(style: .regular, title: "Reply")
+			{
+				_, _ in
+			}
+
+			replyAction.image = NSImage(named: "reply")
+			replyAction.backgroundColor = .systemOrange
+
+			return [replyAction, boostAction]
+		case .trailing:
+			let favoriteAction = NSTableViewRowAction(style: .regular, title: "Favorite")
+			{
+				_, _ in
+			}
+
+			favoriteAction.image = NSImage(named: "star")
+			favoriteAction.backgroundColor = .systemYellow
+
+			let bookmarkAction = NSTableViewRowAction(style: .regular, title: "Bookmark")
+			{
+				_, _ in
+			}
+
+			bookmarkAction.image = NSImage(systemSymbolName: "bookmark", accessibilityDescription: "Bookmark")
+			bookmarkAction.backgroundColor = .systemRed
+
+			return [favoriteAction, bookmarkAction]
+		default:
+			return []
+		}
+	}
+
 	func tableViewSelectionDidChange(_ notification: Foundation.Notification)
 	{
 		let selectedRow = tableView.selectedRow
