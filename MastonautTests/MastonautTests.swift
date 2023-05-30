@@ -17,13 +17,12 @@
 //  GNU General Public License for more details.
 //
 
-import XCTest
 import CoreTootin
 import MastodonKit
 @testable import Mastonaut
+import XCTest
 
 class MastonautTests: XCTestCase {
-
 	override func setUp() {
 		// Put setup code here. This method is called before the invocation of each test method in the class.
 	}
@@ -41,15 +40,28 @@ class MastonautTests: XCTestCase {
 	}
 
 	func testAddressSanitization() {
-		XCTAssertEqual("https://www.apple.com", NSURL(bySanitizingAddress: "https://www.apple.com")?.absoluteString)
-		XCTAssertEqual("https://whatever/article/this-is-not-so-c%C3%B6l", NSURL(bySanitizingAddress: "https://whatever/article/this-is-not-so-cöl")?.absoluteString)
-		XCTAssertEqual("https://www.dw.com/en/germany-settle-for-a-draw-despite-second-half-leroy-san%C3%A9-show/a-47993172?maca=en-rss-en-all-1573-rdf", NSURL(bySanitizingAddress: "https://www.dw.com/en/germany-settle-for-a-draw-despite-second-half-leroy-sané-show/a-47993172?maca=en-rss-en-all-1573-rdf")?.absoluteString)
-		XCTAssertEqual("https://www.apple.com:443", NSURL(bySanitizingAddress: "https://www.apple.com:443")?.absoluteString)
+		var input = "https://www.apple.com"
+		var expectedOutput = input
+		XCTAssertEqual(expectedOutput, NSURL(bySanitizingAddress: input)?.absoluteString)
 
+		input = "https://whatever/article/this-is-not-so-cöl"
+		expectedOutput = "https://whatever/article/this-is-not-so-c%C3%B6l"
+		XCTAssertEqual(expectedOutput, NSURL(bySanitizingAddress: input)?.absoluteString)
+
+		input = "https://www.dw.com/en/germany-settle-for-a-draw-despite-second-half-leroy-sané-show/a-47993172?maca=en-rss-en-all-1573-rdf"
+		expectedOutput = "https://www.dw.com/en/germany-settle-for-a-draw-despite-second-half-leroy-san%C3%A9-show/a-47993172?maca=en-rss-en-all-1573-rdf"
+		XCTAssertEqual(expectedOutput, NSURL(bySanitizingAddress: input)?.absoluteString)
+
+		input = "https://www.apple.com:443"
+		expectedOutput = input
+		XCTAssertEqual(expectedOutput, NSURL(bySanitizingAddress: input)?.absoluteString)
+
+		input = "https://web.archive.org/web/20190213201804/http://shirky.com/writings/situated_software.html"
+		expectedOutput = input
+		XCTAssertEqual(expectedOutput, NSURL(bySanitizingAddress: input)?.absoluteString)
 	}
 
 	func testStrippingEmojiAttachments() {
-
 		let emojiURL = URL(string: "https://aaaa.com")!
 		let emoji = Emoji(shortcode: "emoji", staticURL: emojiURL, url: emojiURL, visibleInPicker: true)
 		let shortcodeString = "This string has an :emoji:!" as NSMutableString
@@ -60,7 +72,6 @@ class MastonautTests: XCTestCase {
 	}
 
 	func testStrippingMultipleEmojiAttachments() {
-
 		let emojiURL = URL(string: "https://aaaa.com")!
 		let emoji1 = Emoji(shortcode: "emoji", staticURL: emojiURL, url: emojiURL, visibleInPicker: true)
 		let emoji2 = Emoji(shortcode: "another_emoji", staticURL: emojiURL, url: emojiURL, visibleInPicker: true)
@@ -74,7 +85,6 @@ class MastonautTests: XCTestCase {
 	}
 
 	func testStrippingMultipleEmojiAttachmentsInSequence() {
-
 		let emojiURL = URL(string: "https://aaaa.com")!
 		let emoji1 = Emoji(shortcode: "emoji", staticURL: emojiURL, url: emojiURL, visibleInPicker: true)
 		let emoji2 = Emoji(shortcode: "another_emoji", staticURL: emojiURL, url: emojiURL, visibleInPicker: true)
@@ -88,7 +98,6 @@ class MastonautTests: XCTestCase {
 	}
 
 	func testStrippingMultipleEmojiAttachmentsInSequenceWithZWJ() {
-
 		let emojiURL = URL(string: "https://aaaa.com")!
 		let emoji1 = Emoji(shortcode: "emoji", staticURL: emojiURL, url: emojiURL, visibleInPicker: true)
 		let emoji2 = Emoji(shortcode: "another_emoji", staticURL: emojiURL, url: emojiURL, visibleInPicker: true)
