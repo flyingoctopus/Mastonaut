@@ -1,0 +1,36 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>Mastonaut</title>
+
+        <item>
+            <title>1.7.0</title>
+            <pubDate>2023-xx-xx</pubDate>
+            <sparkle:minimumSystemVersion>10.13</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/chucker/Mastonaut/releases/download/app-1.7.0-highsierra/Mastonaut-1.7.0-highsierra.zip"
+                sparkle:version="xx" sparkle:shortVersionString="1.7.0" length="xx"
+                type="application/octet-stream" />
+            <description>
+                <![CDATA[
+<p>(If you're on 1.4.1 or older, auto-updating won't work. Please manually download a newer version <a href="https://github.com/chucker/Mastonaut/releases">from here</a>.)</p>
+
+<p><strong>1.7.0</strong> is out!</p>
+
+<div class="comment-body markdown-body js-preview-body" style="min-height: 288px;"><h2>Features</h2>
+<ul>
+<li>You can now <strong>customize the font face and size</strong> in Preferences. (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1516956248" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/83" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/83/hovercard" href="https://github.com/chucker/Mastonaut/issues/83">#83</a>) By default, the font of a focused status is a bit larger than others, so you can set both separately.</li>
+<li>For the focused status, you can see interaction statistics (how many replies, boosts, and favorites did it receive).</li>
+<li>In addition to letting you <em>bookmark</em> a hashtag as before, you can now <strong>follow a hashtag</strong>. Posts mentioning the tag&nbsp;will then appear in your regular home timeline (not just in Mastonaut, but any client), just like <em>users</em> you're following.</li>
+</ul>
+<h2>Fixes</h2>
+<ul>
+<li>In 1.6.0, you couldn't hit return when composing to insert a line break. (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1663228456" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/103" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/103/hovercard" href="https://github.com/chucker/Mastonaut/issues/103">#103</a>)</li>
+<li>Since 1.5.0, the <kbd>cmd</kbd>-<kbd>c</kbd> wouldn't copy text any more. (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1474168333" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/62" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/62/hovercard" href="https://github.com/chucker/Mastonaut/issues/62">#62</a>)</li>
+<li>1.6.0 could crash when typing in the search box. (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1670142861" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/108" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/108/hovercard" href="https://github.com/chucker/Mastonaut/issues/108">#108</a>)</li>
+<li>There's been a crash when loading the time line, due to pull-to-refresh. This is hopefully fixed now. (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1474183130" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/63" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/63/hovercard" href="https://github.com/chucker/Mastonaut/issues/63">#63</a>, <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1579652852" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/95" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/95/hovercard" href="https://github.com/chucker/Mastonaut/issues/95">#95</a>)</li>
+</ul></div>
+                ]]>
+            </description>
+        </item>
+    </channel>
+</rss>
