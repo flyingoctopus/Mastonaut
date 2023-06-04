@@ -5,29 +5,37 @@
 
         <item>
             <title>1.7.0</title>
-            <pubDate>2023-xx-xx</pubDate>
+            <pubDate>2023-06-04</pubDate>
             <sparkle:minimumSystemVersion>10.13</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/chucker/Mastonaut/releases/download/app-1.7.0-highsierra/Mastonaut-1.7.0-highsierra.zip"
-                sparkle:version="xx" sparkle:shortVersionString="1.7.0" length="xx"
+            <enclosure url="https://github.com/chucker/Mastonaut/releases/download/app-1.7.0-hse/Mastonaut-1.7.0-hse.app.zip"
+                sparkle:version="142" sparkle:shortVersionString="1.7.0" length="22827143"
                 type="application/octet-stream" />
             <description>
                 <![CDATA[
-<p>(If you're on 1.4.1 or older, auto-updating won't work. Please manually download a newer version <a href="https://github.com/chucker/Mastonaut/releases">from here</a>.)</p>
-
-<p><strong>1.7.0</strong> is out!</p>
-
-<div class="comment-body markdown-body js-preview-body" style="min-height: 288px;"><h2>Features</h2>
+<p>(If you have macOS 12.0 Monterey or newer, you want <a href="https://github.com/chucker/Mastonaut/releases/tag/app-1.7.0">1.7.0</a> instead!)</p>
+<p>Compared to the App Store release, this version adds the following:</p>
+<h3>Accessibility</h3>
 <ul>
-<li>You can now <strong>customize the font face and size</strong> in Preferences. (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1516956248" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/83" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/83/hovercard" href="https://github.com/chucker/Mastonaut/issues/83">#83</a>) By default, the font of a focused status is a bit larger than others, so you can set both separately.</li>
-<li>For the focused status, you can see interaction statistics (how many replies, boosts, and favorites did it receive).</li>
-<li>In addition to letting you <em>bookmark</em> a hashtag as before, you can now <strong>follow a hashtag</strong>. Posts mentioning the tag&nbsp;will then appear in your regular home timeline (not just in Mastonaut, but any client), just like <em>users</em> you're following.</li>
+<li>Assorted accessibility improvements</li>
 </ul>
-<h2>Fixes</h2>
+<h3>Composing</h3>
 <ul>
-<li>In 1.6.0, you couldn't hit return when composing to insert a line break. (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1663228456" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/103" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/103/hovercard" href="https://github.com/chucker/Mastonaut/issues/103">#103</a>)</li>
-<li>Since 1.5.0, the <kbd>cmd</kbd>-<kbd>c</kbd> wouldn't copy text any more. (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1474168333" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/62" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/62/hovercard" href="https://github.com/chucker/Mastonaut/issues/62">#62</a>)</li>
-<li>1.6.0 could crash when typing in the search box. (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1670142861" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/108" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/108/hovercard" href="https://github.com/chucker/Mastonaut/issues/108">#108</a>)</li>
-<li>There's been a crash when loading the time line, due to pull-to-refresh. This is hopefully fixed now. (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1474183130" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/63" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/63/hovercard" href="https://github.com/chucker/Mastonaut/issues/63">#63</a>, <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1579652852" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/95" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/95/hovercard" href="https://github.com/chucker/Mastonaut/issues/95">#95</a>)</li>
+<li>Edit your toots</li>
+</ul>
+<h3>Search</h3>
+<ul>
+<li>Search for (already known) toots by text or their URL</li>
+</ul>
+<h3>Timeline</h3>
+<ul>
+<li>Pull to refresh</li>
+<li>View a list as a column</li>
+<li>View your favorites or bookmarks as a column</li>
+</ul>
+<h3>Viewing</h3>
+<ul>
+<li>See if a toot has been edited, and view previous versions</li>
+<li>Interaction statistics (how many replies, boosts, favorites) can be seen</li>
 </ul></div>
                 ]]>
             </description>
