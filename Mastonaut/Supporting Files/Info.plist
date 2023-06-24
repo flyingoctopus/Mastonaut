@@ -6,6 +6,10 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleHelpBookFolder</key>
+	<string>$(PROJECT_NAME)Help.help</string>
+	<key>CFBundleHelpBookName</key>
+	<string>$(MASTONAUT_BUNDLE_ID_BASE).$(PROJECT_NAME:rfc1034identifier)Help</string>
 	<key>CFBundleIconFile</key>
 	<string>$(APP_ICON_NAME)</string>
 	<key>CFBundleIdentifier</key>
