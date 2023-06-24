@@ -2002,8 +2002,8 @@
 		5F986F802A478579007FD0FC /* Sidebars */ = {
 			isa = PBXGroup;
 			children = (
-				5F986EFD2A47804E007FD0FC /* Hashtag.md */,
 				5F986EF92A47804E007FD0FC /* Sidebars.md */,
+				5F986EFD2A47804E007FD0FC /* Hashtag.md */,
 				5F986F012A47804E007FD0FC /* Status.md */,
 				5F986F092A47804E007FD0FC /* StatusEdits.md */,
 				5F986F072A47804E007FD0FC /* UserProfile.md */,
