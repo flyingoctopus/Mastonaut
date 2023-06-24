@@ -535,33 +535,10 @@
 		5F8C134B296A0B5C007BE2D5 /* EditHistorySheetWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F8C134A296A0B5C007BE2D5 /* EditHistorySheetWindowController.xib */; };
 		5F8C134D296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C134C296A0BF2007BE2D5 /* EditHistorySheetWindowController.swift */; };
 		5F8C134F296A8C89007BE2D5 /* StatusEditCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C134E296A8C89007BE2D5 /* StatusEditCellModel.swift */; };
-		5F986F4C2A47804E007FD0FC /* head.html in Resources */ = {isa = PBXBuildFile; fileRef = 5F986EEF2A47804E007FD0FC /* head.html */; };
-		5F986F4D2A47804E007FD0FC /* footer.html in Resources */ = {isa = PBXBuildFile; fileRef = 5F986EF02A47804E007FD0FC /* footer.html */; };
-		5F986F4E2A47804E007FD0FC /* header.html in Resources */ = {isa = PBXBuildFile; fileRef = 5F986EF12A47804E007FD0FC /* header.html */; };
-		5F986F4F2A47804E007FD0FC /* main.scss in Resources */ = {isa = PBXBuildFile; fileRef = 5F986EF32A47804E007FD0FC /* main.scss */; };
-		5F986F502A47804E007FD0FC /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 5F986EF42A47804E007FD0FC /* Makefile */; };
-		5F986F512A47804E007FD0FC /* default.html in Resources */ = {isa = PBXBuildFile; fileRef = 5F986EF62A47804E007FD0FC /* default.html */; };
-		5F986F522A47804E007FD0FC /* help-page.html in Resources */ = {isa = PBXBuildFile; fileRef = 5F986EF72A47804E007FD0FC /* help-page.html */; };
-		5F986F532A47804E007FD0FC /* title-page.html in Resources */ = {isa = PBXBuildFile; fileRef = 5F986EF82A47804E007FD0FC /* title-page.html */; };
-		5F986F542A47804E007FD0FC /* Sidebars.md in Resources */ = {isa = PBXBuildFile; fileRef = 5F986EF92A47804E007FD0FC /* Sidebars.md */; };
-		5F986F552A47804E007FD0FC /* overview.md in Resources */ = {isa = PBXBuildFile; fileRef = 5F986EFB2A47804E007FD0FC /* overview.md */; };
-		5F986F562A47804E007FD0FC /* Hashtag.md in Resources */ = {isa = PBXBuildFile; fileRef = 5F986EFD2A47804E007FD0FC /* Hashtag.md */; };
-		5F986F572A47804E007FD0FC /* keyboard.md in Resources */ = {isa = PBXBuildFile; fileRef = 5F986EFF2A47804E007FD0FC /* keyboard.md */; };
-		5F986F582A47804E007FD0FC /* Status.md in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F012A47804E007FD0FC /* Status.md */; };
 		5F986F592A47804E007FD0FC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F032A47804E007FD0FC /* InfoPlist.strings */; };
-		5F986F5A2A47804E007FD0FC /* index.md in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F052A47804E007FD0FC /* index.md */; };
-		5F986F5B2A47804E007FD0FC /* UserProfile.md in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F072A47804E007FD0FC /* UserProfile.md */; };
-		5F986F5C2A47804E007FD0FC /* StatusEdits.md in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F092A47804E007FD0FC /* StatusEdits.md */; };
-		5F986F6C2A47804E007FD0FC /* page-rel-root.rb in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F292A47804E007FD0FC /* page-rel-root.rb */; };
-		5F986F6D2A47804E007FD0FC /* help-filters.rb in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F2A2A47804E007FD0FC /* help-filters.rb */; };
-		5F986F6E2A47804E007FD0FC /* _config.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F2B2A47804E007FD0FC /* _config.yml */; };
-		5F986F6F2A47804E007FD0FC /* jekyll-server.command in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F2C2A47804E007FD0FC /* jekyll-server.command */; };
-		5F986F702A47804E007FD0FC /* _syntax-highlighting.scss in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F2E2A47804E007FD0FC /* _syntax-highlighting.scss */; };
-		5F986F712A47804E007FD0FC /* _apple-help.scss in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F2F2A47804E007FD0FC /* _apple-help.scss */; };
-		5F986F722A47804E007FD0FC /* _base.scss in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F302A47804E007FD0FC /* _base.scss */; };
-		5F986F7D2A47804E007FD0FC /* nav.js in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F492A47804E007FD0FC /* nav.js */; };
 		5F986F7E2A47804E007FD0FC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F4A2A47804E007FD0FC /* Info.plist */; };
-		5F986F7F2A47804E007FD0FC /* book-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F4B2A47804E007FD0FC /* book-icon.png */; };
+		5F986F842A478723007FD0FC /* nav.js in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F492A47804E007FD0FC /* nav.js */; };
+		5F986F852A478727007FD0FC /* book-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F986F4B2A47804E007FD0FC /* book-icon.png */; };
 		5FC21CF629C6820500A582A8 /* HashtagSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC21CF529C6820500A582A8 /* HashtagSearchService.swift */; };
 		5FC21D0129CA55B400A582A8 /* HashtagSuggestionWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5FC21D0029CA511300A582A8 /* HashtagSuggestionWindowController.xib */; };
 		5FC21D0329CA59EF00A582A8 /* DSFSparkline in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC21D0229CA59EF00A582A8 /* DSFSparkline */; };
@@ -1958,6 +1935,7 @@
 		5F986EED2A47804E007FD0FC /* MastonautHelp */ = {
 			isa = PBXGroup;
 			children = (
+				5F986F812A478587007FD0FC /* Content */,
 				5F986F2B2A47804E007FD0FC /* _config.yml */,
 				5F986EEE2A47804E007FD0FC /* _includes */,
 				5F986EF52A47804E007FD0FC /* _layouts */,
@@ -1965,19 +1943,11 @@
 				5F986F2D2A47804E007FD0FC /* _sass */,
 				5F986F4B2A47804E007FD0FC /* book-icon.png */,
 				5F986EF22A47804E007FD0FC /* css */,
-				5F986EFD2A47804E007FD0FC /* Hashtag.md */,
-				5F986F052A47804E007FD0FC /* index.md */,
 				5F986F4A2A47804E007FD0FC /* Info.plist */,
 				5F986F032A47804E007FD0FC /* InfoPlist.strings */,
 				5F986F2C2A47804E007FD0FC /* jekyll-server.command */,
-				5F986EFF2A47804E007FD0FC /* keyboard.md */,
 				5F986EF42A47804E007FD0FC /* Makefile */,
 				5F986F492A47804E007FD0FC /* nav.js */,
-				5F986EFB2A47804E007FD0FC /* overview.md */,
-				5F986EF92A47804E007FD0FC /* Sidebars.md */,
-				5F986F012A47804E007FD0FC /* Status.md */,
-				5F986F092A47804E007FD0FC /* StatusEdits.md */,
-				5F986F072A47804E007FD0FC /* UserProfile.md */,
 			);
 			path = MastonautHelp;
 			sourceTree = "<group>";
@@ -2027,6 +1997,29 @@
 				5F986F302A47804E007FD0FC /* _base.scss */,
 			);
 			path = _sass;
+			sourceTree = "<group>";
+		};
+		5F986F802A478579007FD0FC /* Sidebars */ = {
+			isa = PBXGroup;
+			children = (
+				5F986EFD2A47804E007FD0FC /* Hashtag.md */,
+				5F986EF92A47804E007FD0FC /* Sidebars.md */,
+				5F986F012A47804E007FD0FC /* Status.md */,
+				5F986F092A47804E007FD0FC /* StatusEdits.md */,
+				5F986F072A47804E007FD0FC /* UserProfile.md */,
+			);
+			name = Sidebars;
+			sourceTree = "<group>";
+		};
+		5F986F812A478587007FD0FC /* Content */ = {
+			isa = PBXGroup;
+			children = (
+				5F986F052A47804E007FD0FC /* index.md */,
+				5F986EFF2A47804E007FD0FC /* keyboard.md */,
+				5F986EFB2A47804E007FD0FC /* overview.md */,
+				5F986F802A478579007FD0FC /* Sidebars */,
+			);
+			name = Content;
 			sourceTree = "<group>";
 		};
 		5FC3E1902926FD520086DCEE /* Preferences */ = {
@@ -2492,31 +2485,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5F986F522A47804E007FD0FC /* help-page.html in Resources */,
-				5F986F512A47804E007FD0FC /* default.html in Resources */,
-				5F986F4F2A47804E007FD0FC /* main.scss in Resources */,
-				5F986F7F2A47804E007FD0FC /* book-icon.png in Resources */,
 				5F986F592A47804E007FD0FC /* InfoPlist.strings in Resources */,
-				5F986F6D2A47804E007FD0FC /* help-filters.rb in Resources */,
-				5F986F712A47804E007FD0FC /* _apple-help.scss in Resources */,
-				5F986F722A47804E007FD0FC /* _base.scss in Resources */,
-				5F986F7D2A47804E007FD0FC /* nav.js in Resources */,
-				5F986F702A47804E007FD0FC /* _syntax-highlighting.scss in Resources */,
-				5F986F4C2A47804E007FD0FC /* head.html in Resources */,
-				5F986F532A47804E007FD0FC /* title-page.html in Resources */,
-				5F986F6F2A47804E007FD0FC /* jekyll-server.command in Resources */,
-				5F986F562A47804E007FD0FC /* Hashtag.md in Resources */,
-				5F986F4D2A47804E007FD0FC /* footer.html in Resources */,
-				5F986F6C2A47804E007FD0FC /* page-rel-root.rb in Resources */,
-				5F986F6E2A47804E007FD0FC /* _config.yml in Resources */,
-				5F986F572A47804E007FD0FC /* keyboard.md in Resources */,
-				5F986F5B2A47804E007FD0FC /* UserProfile.md in Resources */,
-				5F986F5C2A47804E007FD0FC /* StatusEdits.md in Resources */,
-				5F986F582A47804E007FD0FC /* Status.md in Resources */,
-				5F986F552A47804E007FD0FC /* overview.md in Resources */,
-				5F986F5A2A47804E007FD0FC /* index.md in Resources */,
-				5F986F4E2A47804E007FD0FC /* header.html in Resources */,
-				5F986F542A47804E007FD0FC /* Sidebars.md in Resources */,
+				5F986F852A478727007FD0FC /* book-icon.png in Resources */,
+				5F986F842A478723007FD0FC /* nav.js in Resources */,
 				5F986F7E2A47804E007FD0FC /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3242,7 +3213,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5F986F502A47804E007FD0FC /* Makefile in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
