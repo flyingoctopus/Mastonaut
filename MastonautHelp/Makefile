@@ -10,6 +10,12 @@ $(HELP) : * **/*
 	[[ -s "$(HOME)/.rvm/environments/default" ]] && source "$(HOME)/.rvm/environments/default" ; \
 	(which -s jekyll || (echo "error: Jekyll not found - check setup requirements" ; false )) \
 	&& jekyll build --destination "$(HELP)"
+	
+	echo "Destination: $(HELP)"
+
+	# check for things like broken links
+	htmlproofer --allow-missing-href "$(HELP)"
+	
 	for LPROJ in "$(HELP)"/*.lproj ; do \
 		LOCALE=$$(basename "$$LPROJ" .lproj) ; \
 		echo "Indexing: $$LPROJ" ; \
