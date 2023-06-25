@@ -1031,15 +1031,10 @@
 		5F986EF62A47804E007FD0FC /* default.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = default.html; sourceTree = "<group>"; };
 		5F986EF72A47804E007FD0FC /* help-page.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "help-page.html"; sourceTree = "<group>"; };
 		5F986EF82A47804E007FD0FC /* title-page.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "title-page.html"; sourceTree = "<group>"; };
-		5F986EFA2A47804E007FD0FC /* _English */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = _English; path = _English.lproj/Sidebars.md; sourceTree = "<group>"; };
 		5F986EFC2A47804E007FD0FC /* _English */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = _English; path = _English.lproj/overview.md; sourceTree = "<group>"; };
-		5F986EFE2A47804E007FD0FC /* _English */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = _English; path = _English.lproj/Hashtag.md; sourceTree = "<group>"; };
 		5F986F002A47804E007FD0FC /* _English */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = _English; path = _English.lproj/keyboard.md; sourceTree = "<group>"; };
-		5F986F022A47804E007FD0FC /* _English */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = _English; path = _English.lproj/Status.md; sourceTree = "<group>"; };
 		5F986F042A47804E007FD0FC /* _English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = _English; path = _English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5F986F062A47804E007FD0FC /* _English */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = _English; path = _English.lproj/index.md; sourceTree = "<group>"; };
-		5F986F082A47804E007FD0FC /* _English */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = _English; path = _English.lproj/UserProfile.md; sourceTree = "<group>"; };
-		5F986F0A2A47804E007FD0FC /* _English */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = _English; path = _English.lproj/StatusEdits.md; sourceTree = "<group>"; };
 		5F986F292A47804E007FD0FC /* page-rel-root.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = "page-rel-root.rb"; sourceTree = "<group>"; };
 		5F986F2A2A47804E007FD0FC /* help-filters.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = "help-filters.rb"; sourceTree = "<group>"; };
 		5F986F2B2A47804E007FD0FC /* _config.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = _config.yml; sourceTree = "<group>"; };
@@ -1050,6 +1045,11 @@
 		5F986F492A47804E007FD0FC /* nav.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = nav.js; sourceTree = "<group>"; };
 		5F986F4A2A47804E007FD0FC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5F986F4B2A47804E007FD0FC /* book-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "book-icon.png"; sourceTree = "<group>"; };
+		5F986FB12A484A1E007FD0FC /* Sidebars.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Sidebars.md; sourceTree = "<group>"; };
+		5F986FB22A484A1E007FD0FC /* Hashtag.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Hashtag.md; sourceTree = "<group>"; };
+		5F986FB32A484A1E007FD0FC /* Status.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Status.md; sourceTree = "<group>"; };
+		5F986FB42A484A1E007FD0FC /* UserProfile.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = UserProfile.md; sourceTree = "<group>"; };
+		5F986FB52A484A1E007FD0FC /* StatusEdits.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = StatusEdits.md; sourceTree = "<group>"; };
 		5FC21CF529C6820500A582A8 /* HashtagSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagSearchService.swift; sourceTree = "<group>"; };
 		5FC21D0029CA511300A582A8 /* HashtagSuggestionWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HashtagSuggestionWindowController.xib; sourceTree = "<group>"; };
 		5FC3E18E2926F0E80086DCEE /* Logger+CurrentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+CurrentType.swift"; sourceTree = "<group>"; };
@@ -1999,27 +1999,28 @@
 			path = _sass;
 			sourceTree = "<group>";
 		};
-		5F986F802A478579007FD0FC /* Sidebars */ = {
-			isa = PBXGroup;
-			children = (
-				5F986EF92A47804E007FD0FC /* Sidebars.md */,
-				5F986EFD2A47804E007FD0FC /* Hashtag.md */,
-				5F986F012A47804E007FD0FC /* Status.md */,
-				5F986F092A47804E007FD0FC /* StatusEdits.md */,
-				5F986F072A47804E007FD0FC /* UserProfile.md */,
-			);
-			name = Sidebars;
-			sourceTree = "<group>";
-		};
 		5F986F812A478587007FD0FC /* Content */ = {
 			isa = PBXGroup;
 			children = (
+				5F986FB02A484A1E007FD0FC /* Sidebars */,
 				5F986F052A47804E007FD0FC /* index.md */,
 				5F986EFF2A47804E007FD0FC /* keyboard.md */,
 				5F986EFB2A47804E007FD0FC /* overview.md */,
-				5F986F802A478579007FD0FC /* Sidebars */,
 			);
 			name = Content;
+			sourceTree = "<group>";
+		};
+		5F986FB02A484A1E007FD0FC /* Sidebars */ = {
+			isa = PBXGroup;
+			children = (
+				5F986FB12A484A1E007FD0FC /* Sidebars.md */,
+				5F986FB22A484A1E007FD0FC /* Hashtag.md */,
+				5F986FB32A484A1E007FD0FC /* Status.md */,
+				5F986FB42A484A1E007FD0FC /* UserProfile.md */,
+				5F986FB52A484A1E007FD0FC /* StatusEdits.md */,
+			);
+			name = Sidebars;
+			path = _English.lproj/Sidebars;
 			sourceTree = "<group>";
 		};
 		5FC3E1902926FD520086DCEE /* Preferences */ = {
@@ -3294,14 +3295,6 @@
 			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
-		5F986EF92A47804E007FD0FC /* Sidebars.md */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5F986EFA2A47804E007FD0FC /* _English */,
-			);
-			name = Sidebars.md;
-			sourceTree = "<group>";
-		};
 		5F986EFB2A47804E007FD0FC /* overview.md */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -3310,28 +3303,12 @@
 			name = overview.md;
 			sourceTree = "<group>";
 		};
-		5F986EFD2A47804E007FD0FC /* Hashtag.md */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5F986EFE2A47804E007FD0FC /* _English */,
-			);
-			name = Hashtag.md;
-			sourceTree = "<group>";
-		};
 		5F986EFF2A47804E007FD0FC /* keyboard.md */ = {
 			isa = PBXVariantGroup;
 			children = (
 				5F986F002A47804E007FD0FC /* _English */,
 			);
 			name = keyboard.md;
-			sourceTree = "<group>";
-		};
-		5F986F012A47804E007FD0FC /* Status.md */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5F986F022A47804E007FD0FC /* _English */,
-			);
-			name = Status.md;
 			sourceTree = "<group>";
 		};
 		5F986F032A47804E007FD0FC /* InfoPlist.strings */ = {
@@ -3348,22 +3325,6 @@
 				5F986F062A47804E007FD0FC /* _English */,
 			);
 			name = index.md;
-			sourceTree = "<group>";
-		};
-		5F986F072A47804E007FD0FC /* UserProfile.md */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5F986F082A47804E007FD0FC /* _English */,
-			);
-			name = UserProfile.md;
-			sourceTree = "<group>";
-		};
-		5F986F092A47804E007FD0FC /* StatusEdits.md */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5F986F0A2A47804E007FD0FC /* _English */,
-			);
-			name = StatusEdits.md;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
