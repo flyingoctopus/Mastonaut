@@ -142,7 +142,8 @@ class StatusResultTableCellView: NSTableCellView
 
 		var statusString: NSAttributedString
 
-		if status.attributedContent.length > 500
+		if case MastonautPreferences.LongTootCutoffMode.enabled(let cutoffValue) = MastonautPreferences.instance.longTootCutoffMode,
+		   status.attributedContent.length > cutoffValue
 		{
 			let truncatedString = status.attributedContent.attributedSubstring(from: NSMakeRange(0, 100)).mutableCopy() as! NSMutableAttributedString
 			truncatedString.append(NSAttributedString(string: "…"))

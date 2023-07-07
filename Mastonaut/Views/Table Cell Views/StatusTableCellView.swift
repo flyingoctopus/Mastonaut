@@ -229,9 +229,11 @@ class StatusTableCellView: MastonautTableCellView, StatusDisplaying, StatusInter
 			statusLabel.isHidden = true
 			fullContentDisclosureView?.isHidden = true
 		}
-		else if fullContentDisclosureView != nil, attributedStatus.length > 500
+		else if fullContentDisclosureView != nil,
+		        case let MastonautPreferences.LongTootCutoffMode.enabled(cutoffValue) = MastonautPreferences.instance.longTootCutoffMode,
+		        attributedStatus.length > cutoffValue
 		{
-			let truncatedString = attributedStatus.attributedSubstring(from: NSMakeRange(0, 500)).mutableCopy() as! NSMutableAttributedString
+			let truncatedString = attributedStatus.attributedSubstring(from: NSMakeRange(0, cutoffValue)).mutableCopy() as! NSMutableAttributedString
 			truncatedString.append(NSAttributedString(string: "…"))
 
 			statusLabel.isHidden = false
