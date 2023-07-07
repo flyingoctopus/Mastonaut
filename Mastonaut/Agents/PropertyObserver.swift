@@ -17,8 +17,8 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
 import CoreTootin
+import Foundation
 
 class PropertyObserver<Root: NSObject, Value>
 {
@@ -30,7 +30,7 @@ class PropertyObserver<Root: NSObject, Value>
 
 		observation = object.observe(keyPath)
 		{
-			(preferences, change) in
+			preferences, _ in
 
 			selfPromise.value?.changed(value: preferences[keyPath: keyPath])
 		}
@@ -41,6 +41,29 @@ class PropertyObserver<Root: NSObject, Value>
 	internal func changed(value: Value)
 	{
 		// To be overriden
+	}
+}
+
+class PreferencesSliderObserver: PropertyObserver<MastonautPreferences, Double>
+{
+	private let keyPath: ReferenceWritableKeyPath<MastonautPreferences, Double>
+	private let slider: NSSlider
+
+	init(preference keyPath: ReferenceWritableKeyPath<MastonautPreferences, Double>, slider: NSSlider)
+	{
+		self.keyPath = keyPath
+		self.slider = slider
+		super.init(object: Preferences, keyPath: keyPath)
+
+		slider.doubleValue = Preferences[keyPath: keyPath]
+		slider.target = self
+		slider.action = #selector(PreferencesSliderObserver.changedValue(_:))
+	}
+
+	@objc private func changedValue(_ sender: NSSlider)
+	{
+		let preferences = Preferences
+		preferences[keyPath: keyPath] = slider.doubleValue
 	}
 }
 
@@ -93,7 +116,7 @@ class PropertyEnumPopUpObserver<Root: NSObject, Value: PopUpOptionCapable>: Prop
 			item.target = self
 			item.action = #selector(PropertyEnumPopUpObserver.selectedMenuItem(_:))
 			item.representedObject = value.rawValue
-			
+
 			menuItems.append(item)
 		}
 
@@ -105,7 +128,7 @@ class PropertyEnumPopUpObserver<Root: NSObject, Value: PopUpOptionCapable>: Prop
 
 	@objc private func selectedMenuItem(_ sender: NSMenuItem)
 	{
-		if let rawValue = sender.representedObject as? Value.RawValue, let newValue = Value.init(rawValue: rawValue)
+		if let rawValue = sender.representedObject as? Value.RawValue, let newValue = Value(rawValue: rawValue)
 		{
 			object?[keyPath: keyPath] = newValue
 		}
@@ -143,7 +166,7 @@ class PropertyEnumRadioObserver<Root: NSObject, Value: Hashable>: PropertyObserv
 		self.valueMap = valueMap
 
 		super.init(object: object, keyPath: keyPath)
-		self.updateAllButtons()
+		updateAllButtons()
 
 		for (_, button) in buttonMap
 		{

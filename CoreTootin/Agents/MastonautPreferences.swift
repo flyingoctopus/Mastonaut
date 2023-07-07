@@ -150,6 +150,40 @@ public class MastonautPreferences: PreferencesController
 		set { defaults.setValue(newValue, forKey: #keyPath(autoplayVideos)) }
 	}
 
+	@objc public dynamic var longTootCutoff: Double
+	{
+		get { return number(forKey: #keyPath(longTootCutoff))?.doubleValue ?? 3 }
+		set { defaults.setValue(newValue, forKey: #keyPath(longTootCutoff)) }
+	}
+
+	public enum LongTootCutoffMode
+	{
+		case enabled(value: Int)
+
+		case disabled
+	}
+
+	public var longTootCutoffMode: LongTootCutoffMode
+	{
+		switch longTootCutoff
+		{
+		case 1:
+			return .enabled(value: 140)
+		case 2:
+			return .enabled(value: 280)
+		case 3:
+			return .enabled(value: 500)
+		case 4:
+			return .enabled(value: 1000)
+
+		case 5:
+			return .disabled
+
+		default:
+			return .enabled(value: 500)
+		}
+	}
+
 	// Composing preferences
 
 	@objc public dynamic var defaultStatusAudience: StatusAudience

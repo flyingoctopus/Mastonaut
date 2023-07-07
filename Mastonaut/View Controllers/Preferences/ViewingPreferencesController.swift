@@ -34,6 +34,8 @@ class ViewingPreferencesController: NSViewController
 
 	@IBOutlet private weak var autoplayVideosButton: NSButton!
 
+	@IBOutlet weak var longTootCutoffSlider: NSSlider!
+
 	private var preferenceObservers: [AnyObject] = []
 
 	override func viewDidLoad()
@@ -63,5 +65,7 @@ class ViewingPreferencesController: NSViewController
 
 		preferenceObservers.append(PreferenceCheckboxObserver(preference: \.autoplayVideos,
 															  checkbox: autoplayVideosButton))
+		
+		preferenceObservers.append(PreferencesSliderObserver(preference: \.longTootCutoff, slider: longTootCutoffSlider))
 	}
 }
