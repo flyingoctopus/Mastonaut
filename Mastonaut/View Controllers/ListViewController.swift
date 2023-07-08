@@ -858,6 +858,13 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 		return view.cellModel
 	}
 
+	/// Only for row actions that undo an action, e.g. un-boost.
+	lazy var rowActionSymbolConfiguration = {
+		// FIXME: unclear what the proper semantic color would be here
+		// (SF Symbols calls it "Primary")
+		NSImage.SymbolConfiguration(hierarchicalColor: NSColor.white)
+	}()
+
 	lazy var boostTableViewRowAction = {
 		let title = "Boost"
 		let image = NSImage(named: "retoot")
@@ -881,7 +888,8 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 
 	lazy var unboostTableViewRowAction = {
 		let title = "Unboost"
-		let image = NSImage(named: "boost.slash")
+		let image = NSImage(named: "boost.slash")?
+			.withSymbolConfiguration(rowActionSymbolConfiguration)
 
 		let action = NSTableViewRowAction(style: .regular, title: title)
 		{
@@ -944,7 +952,8 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 
 	lazy var unfavoriteTableViewRowAction = {
 		let title = "Unfavorite"
-		let image = NSImage(systemSymbolName: "star.slash.fill", accessibilityDescription: title)
+		let image = NSImage(systemSymbolName: "star.slash.fill", accessibilityDescription: title)?
+			.withSymbolConfiguration(rowActionSymbolConfiguration)
 
 		let action = NSTableViewRowAction(style: .regular, title: title)
 		{
@@ -986,7 +995,8 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 
 	lazy var unbookmarkTableViewRowAction = {
 		let title = "Unbookmark"
-		let image = NSImage(systemSymbolName: "bookmark.slash", accessibilityDescription: title)
+		let image = NSImage(systemSymbolName: "bookmark.slash", accessibilityDescription: title)?
+			.withSymbolConfiguration(rowActionSymbolConfiguration)
 
 		let action = NSTableViewRowAction(style: .regular, title: title)
 		{
@@ -1020,13 +1030,13 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 		switch edge
 		{
 		case .leading:
-			let boosted = !(status.reblogged ?? false)
+			let boosted = status.reblogged ?? false
 
 			return [replyTableViewRowAction,
 			        boosted ? unboostTableViewRowAction : boostTableViewRowAction]
 		case .trailing:
-			let favorited = !(status.favourited ?? false)
-			let bookmarked = !(status.bookmarked ?? false)
+			let favorited = status.favourited ?? false
+			let bookmarked = status.bookmarked ?? false
 
 			return [favorited ? unfavoriteTableViewRowAction : favoriteTableViewRowAction,
 			        bookmarked ? unbookmarkTableViewRowAction : bookmarkTableViewRowAction]
