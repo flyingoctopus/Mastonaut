@@ -832,12 +832,27 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 		switch edge
 		{
 		case .leading:
-			let boostAction = NSTableViewRowAction(style: .regular, title: "Boost")
+			var title: String
+			var image: NSImage?
+
+			if !(view.cellModel?.status.reblogged ?? false)
+			{
+				title = "Boost"
+				image = NSImage(named: "retoot")
+			}
+			else
+			{
+				title = "Unboost"
+				
+				image = NSImage(named: "boost.slash")
+			}
+
+			let boostAction = NSTableViewRowAction(style: .regular, title: title)
 			{
 				_, _ in
 			}
 
-			boostAction.image = NSImage(named: "retoot")
+			boostAction.image = image
 			boostAction.backgroundColor = .systemGreen
 
 			let replyAction = NSTableViewRowAction(style: .regular, title: "Reply")
