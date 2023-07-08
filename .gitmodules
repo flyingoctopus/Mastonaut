@@ -4,3 +4,6 @@
 [submodule "Dependencies/PullRefreshableScrollView"]
 	path = Dependencies/PullRefreshableScrollView
 	url = https://github.com/chucker/PullRefreshableScrollView
+[submodule "Dependencies/jekyll-apple-help"]
+	path = Dependencies/jekyll-apple-help
+	url = https://github.com/chuckhoupt/jekyll-apple-help.git
