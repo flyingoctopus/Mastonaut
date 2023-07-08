@@ -1020,13 +1020,13 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 		switch edge
 		{
 		case .leading:
-			let boosted = !(status.reblogged ?? false)
+			let boosted = status.reblogged ?? false
 
 			return [replyTableViewRowAction,
 			        boosted ? unboostTableViewRowAction : boostTableViewRowAction]
 		case .trailing:
-			let favorited = !(status.favourited ?? false)
-			let bookmarked = !(status.bookmarked ?? false)
+			let favorited = status.favourited ?? false
+			let bookmarked = status.bookmarked ?? false
 
 			return [favorited ? unfavoriteTableViewRowAction : favoriteTableViewRowAction,
 			        bookmarked ? unbookmarkTableViewRowAction : bookmarkTableViewRowAction]
