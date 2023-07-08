@@ -848,92 +848,138 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 		false
 	}
 
+	// MARK: - Row Actions (Swipe Gestures)
+
+	lazy var boostTableViewRowAction = {
+		let title = "Boost"
+		let image = NSImage(named: "retoot")
+
+		let action = NSTableViewRowAction(style: .regular, title: title)
+		{
+			_, _ in
+		}
+
+		action.image = image
+		action.backgroundColor = .systemGreen
+
+		return action
+	}()
+
+	lazy var unboostTableViewRowAction = {
+		let title = "Unboost"
+		let image = NSImage(named: "boost.slash")
+
+		let action = NSTableViewRowAction(style: .regular, title: title)
+		{
+			_, _ in
+		}
+
+		action.image = image
+		action.backgroundColor = .systemGreen
+
+		return action
+	}()
+
+	lazy var replyTableViewRowAction = {
+		let title = "Reply"
+		let image = NSImage(named: "reply")
+
+		let action = NSTableViewRowAction(style: .regular, title: title)
+		{
+			_, _ in
+		}
+
+		action.image = image
+		action.backgroundColor = .systemOrange
+
+		return action
+	}()
+
+	lazy var favoriteTableViewRowAction = {
+		let title = "Favorite"
+		let image = NSImage(named: "star")
+
+		let action = NSTableViewRowAction(style: .regular, title: title)
+		{
+			_, _ in
+		}
+
+		action.image = image
+		action.backgroundColor = .systemYellow
+
+		return action
+	}()
+
+	lazy var unfavoriteTableViewRowAction = {
+		let title = "Unfavorite"
+		let image = NSImage(systemSymbolName: "star.slash.fill", accessibilityDescription: title)
+
+		let action = NSTableViewRowAction(style: .regular, title: title)
+		{
+			_, _ in
+		}
+
+		action.image = image
+		action.backgroundColor = .systemYellow
+
+		return action
+	}()
+
+	lazy var bookmarkTableViewRowAction = {
+		let title = "Bookmark"
+		let image = NSImage(systemSymbolName: "bookmark", accessibilityDescription: title)
+
+		let action = NSTableViewRowAction(style: .regular, title: title)
+		{
+			_, _ in
+		}
+
+		action.image = image
+		action.backgroundColor = .systemRed
+
+		return action
+	}()
+
+	lazy var unbookmarkTableViewRowAction = {
+		let title = "Unbookmark"
+		let image = NSImage(systemSymbolName: "bookmark.slash", accessibilityDescription: title)
+
+		let action = NSTableViewRowAction(style: .regular, title: title)
+		{
+			_, _ in
+		}
+
+		action.image = image
+		action.backgroundColor = .systemRed
+
+		return action
+	}()
+
 	@MainActor
 	func tableView(_ tableView: NSTableView,
 	               rowActionsForRow row: Int,
 	               edge: NSTableView.RowActionEdge) -> [NSTableViewRowAction]
 	{
-		guard let view = tableView.view(atColumn: 0, row: row, makeIfNecessary: false) as? StatusTableCellView
+		guard let view = tableView.view(atColumn: 0, row: row, makeIfNecessary: false) as? StatusTableCellView,
+		      let status = view.cellModel?.status
 		else
 		{
 			return []
 		}
 
-		var title: String
-		var image: NSImage?
-
 		switch edge
 		{
 		case .leading:
-			if !(view.cellModel?.status.reblogged ?? false)
-			{
-				title = "Boost"
-				image = NSImage(named: "retoot")
-			}
-			else
-			{
-				title = "Unboost"
+			let boosted = !(status.reblogged ?? false)
 
-				image = NSImage(named: "boost.slash")
-			}
-
-			let boostAction = NSTableViewRowAction(style: .regular, title: title)
-			{
-				_, _ in
-			}
-
-			boostAction.image = image
-			boostAction.backgroundColor = .systemGreen
-
-			let replyAction = NSTableViewRowAction(style: .regular, title: "Reply")
-			{
-				_, _ in
-			}
-
-			replyAction.image = NSImage(named: "reply")
-			replyAction.backgroundColor = .systemOrange
-
-			return [replyAction, boostAction]
+			return [replyTableViewRowAction,
+			        boosted ? unboostTableViewRowAction : boostTableViewRowAction]
 		case .trailing:
-			if !(view.cellModel?.status.favourited ?? false)
-			{
-				title = "Favorite"
-				image = NSImage(named: "star")
-			}
-			else
-			{
-				title = "Unfavorite"
-				image = NSImage(systemSymbolName: "star.slash.fill", accessibilityDescription: title)
-			}
+			let favorited = !(status.favourited ?? false)
+			let bookmarked = !(status.bookmarked ?? false)
 
-			let favoriteAction = NSTableViewRowAction(style: .regular, title: title)
-			{
-				_, _ in
-			}
-
-			favoriteAction.image = image
-			favoriteAction.backgroundColor = .systemYellow
-
-			if !(view.cellModel?.status.bookmarked ?? false)
-			{
-				title = "Bookmark"
-				image = NSImage(systemSymbolName: "bookmark", accessibilityDescription: title)
-			}
-			else
-			{
-				title = "Unbookmark"
-				image = NSImage(systemSymbolName: "bookmark.slash", accessibilityDescription: title)
-			}
-
-			let bookmarkAction = NSTableViewRowAction(style: .regular, title: "Bookmark")
-			{
-				_, _ in
-			}
-
-			bookmarkAction.image = image
-			bookmarkAction.backgroundColor = .systemRed
-
-			return [favoriteAction, bookmarkAction]
+			return [favorited ? unfavoriteTableViewRowAction : favoriteTableViewRowAction,
+			        bookmarked ? unbookmarkTableViewRowAction : bookmarkTableViewRowAction]
 		default:
 			return []
 		}
