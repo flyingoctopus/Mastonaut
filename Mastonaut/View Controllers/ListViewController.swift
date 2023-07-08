@@ -829,12 +829,12 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 			return []
 		}
 
-		switch edge
-		{
-		case .leading:
 			var title: String
 			var image: NSImage?
 
+		switch edge
+		{
+		case .leading:
 			if !(view.cellModel?.status.reblogged ?? false)
 			{
 				title = "Boost"
@@ -865,20 +865,42 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 
 			return [replyAction, boostAction]
 		case .trailing:
-			let favoriteAction = NSTableViewRowAction(style: .regular, title: "Favorite")
+			if !(view.cellModel?.status.favourited ?? false)
+			{
+				title = "Favorite"
+				image = NSImage(named: "star")
+			}
+			else
+			{
+				title = "Unfavorite"
+				image = NSImage(systemSymbolName: "star.slash.fill", accessibilityDescription: title)
+			}
+
+			let favoriteAction = NSTableViewRowAction(style: .regular, title: title)
 			{
 				_, _ in
 			}
 
-			favoriteAction.image = NSImage(named: "star")
+			favoriteAction.image = image
 			favoriteAction.backgroundColor = .systemYellow
+
+			if !(view.cellModel?.status.bookmarked ?? false)
+			{
+				title = "Bookmark"
+				image = NSImage(systemSymbolName: "bookmark", accessibilityDescription: title)
+			}
+			else
+			{
+				title = "Unbookmark"
+				image = NSImage(systemSymbolName: "bookmark.slash", accessibilityDescription: title)
+			}
 
 			let bookmarkAction = NSTableViewRowAction(style: .regular, title: "Bookmark")
 			{
 				_, _ in
 			}
 
-			bookmarkAction.image = NSImage(systemSymbolName: "bookmark", accessibilityDescription: "Bookmark")
+			bookmarkAction.image = image
 			bookmarkAction.backgroundColor = .systemRed
 
 			return [favoriteAction, bookmarkAction]
