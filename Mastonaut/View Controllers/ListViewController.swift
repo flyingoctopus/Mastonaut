@@ -850,13 +850,27 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 
 	// MARK: - Row Actions (Swipe Gestures)
 
+	func getStatusCellModel(forRow row: Int) -> StatusCellModel?
+	{
+		guard let view = tableView.view(atColumn: 0, row: row, makeIfNecessary: false) as? StatusTableCellView
+		else { return nil }
+
+		return view.cellModel
+	}
+
 	lazy var boostTableViewRowAction = {
 		let title = "Boost"
 		let image = NSImage(named: "retoot")
 
 		let action = NSTableViewRowAction(style: .regular, title: title)
 		{
-			_, _ in
+			[self]
+			_, row in
+
+			guard let cellModel = getStatusCellModel(forRow: row)
+			else { return }
+
+			cellModel.interactionHandler.reblogStatus(with: cellModel.status.id) { _ in }
 		}
 
 		action.image = image
@@ -871,7 +885,13 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 
 		let action = NSTableViewRowAction(style: .regular, title: title)
 		{
-			_, _ in
+			[self]
+			_, row in
+
+			guard let cellModel = getStatusCellModel(forRow: row)
+			else { return }
+
+			cellModel.interactionHandler.unreblogStatus(with: cellModel.status.id) { _ in }
 		}
 
 		action.image = image
@@ -886,7 +906,13 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 
 		let action = NSTableViewRowAction(style: .regular, title: title)
 		{
-			_, _ in
+			[self]
+			_, row in
+
+			guard let cellModel = getStatusCellModel(forRow: row)
+			else { return }
+
+			cellModel.interactionHandler.reply(to: cellModel.status.id)
 		}
 
 		action.image = image
@@ -901,7 +927,13 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 
 		let action = NSTableViewRowAction(style: .regular, title: title)
 		{
-			_, _ in
+			[self]
+			_, row in
+
+			guard let cellModel = getStatusCellModel(forRow: row)
+			else { return }
+
+			cellModel.interactionHandler.favoriteStatus(with: cellModel.status.id) { _ in }
 		}
 
 		action.image = image
@@ -916,7 +948,13 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 
 		let action = NSTableViewRowAction(style: .regular, title: title)
 		{
-			_, _ in
+			[self]
+			_, row in
+
+			guard let cellModel = getStatusCellModel(forRow: row)
+			else { return }
+
+			cellModel.interactionHandler.unfavoriteStatus(with: cellModel.status.id) { _ in }
 		}
 
 		action.image = image
@@ -931,7 +969,13 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 
 		let action = NSTableViewRowAction(style: .regular, title: title)
 		{
-			_, _ in
+			[self]
+			_, row in
+
+			guard let cellModel = getStatusCellModel(forRow: row)
+			else { return }
+
+			cellModel.interactionHandler.bookmarkStatus(with: cellModel.status.id) { _ in }
 		}
 
 		action.image = image
@@ -946,7 +990,13 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 
 		let action = NSTableViewRowAction(style: .regular, title: title)
 		{
-			_, _ in
+			[self]
+			_, row in
+
+			guard let cellModel = getStatusCellModel(forRow: row)
+			else { return }
+
+			cellModel.interactionHandler.unbookmarkStatus(with: cellModel.status.id) { _ in }
 		}
 
 		action.image = image
