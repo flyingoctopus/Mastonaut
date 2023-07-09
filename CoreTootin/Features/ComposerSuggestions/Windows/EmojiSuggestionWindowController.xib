@@ -49,7 +49,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
-                                                <tableCellView identifier="avatar" misplaced="YES" id="Utw-WG-G6g">
+                                                <tableCellView identifier="image" misplaced="YES" id="Utw-WG-G6g">
                                                     <rect key="frame" x="1" y="1" width="29" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
@@ -100,7 +100,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
-                                                <tableCellView identifier="suggestion" id="fci-j3-YWX">
+                                                <tableCellView identifier="shortcode" id="fci-j3-YWX">
                                                     <rect key="frame" x="33" y="1" width="254" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
