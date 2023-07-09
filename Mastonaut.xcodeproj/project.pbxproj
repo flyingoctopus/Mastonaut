@@ -529,6 +529,9 @@
 		5F74B959294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */; };
 		5F74B95A294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */; };
 		5F795CFA2A463DB900F02B3D /* MastonautHelp.help in Resources */ = {isa = PBXBuildFile; fileRef = 5F795CF22A463CF100F02B3D /* MastonautHelp.help */; };
+		5F7AFE962A5AFDBB00C2FDE7 /* EmojiSuggestionWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F7AFE942A5AFA7300C2FDE7 /* EmojiSuggestionWindowController.xib */; };
+		5F7AFE972A5B019D00C2FDE7 /* EmojiSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7AFE922A5AD4E700C2FDE7 /* EmojiSearchService.swift */; };
+		5F7AFE992A5B027300C2FDE7 /* EmojiSuggestionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7AFE982A5B027300C2FDE7 /* EmojiSuggestionProtocol.swift */; };
 		5F8C133C2969F1D9007BE2D5 /* Sdifft in Frameworks */ = {isa = PBXBuildFile; productRef = 5F8C133B2969F1D9007BE2D5 /* Sdifft */; };
 		5F8C1347296A0661007BE2D5 /* EditedStatusTableCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F8C1346296A0661007BE2D5 /* EditedStatusTableCellView.xib */; };
 		5F8C1349296A06E3007BE2D5 /* EditedStatusTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C1348296A06E3007BE2D5 /* EditedStatusTableCellView.swift */; };
@@ -1018,6 +1021,9 @@
 		5F6F8F8E2A025BAA00FB3414 /* AdditionalAcknowledgements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalAcknowledgements.swift; sourceTree = "<group>"; };
 		5F74B958294F5DD900DE1909 /* StatusPrivacyPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPrivacyPreferencesView.swift; sourceTree = "<group>"; };
 		5F795CF22A463CF100F02B3D /* MastonautHelp.help */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MastonautHelp.help; sourceTree = BUILT_PRODUCTS_DIR; };
+		5F7AFE922A5AD4E700C2FDE7 /* EmojiSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiSearchService.swift; sourceTree = "<group>"; };
+		5F7AFE942A5AFA7300C2FDE7 /* EmojiSuggestionWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmojiSuggestionWindowController.xib; sourceTree = "<group>"; };
+		5F7AFE982A5B027300C2FDE7 /* EmojiSuggestionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiSuggestionProtocol.swift; sourceTree = "<group>"; };
 		5F8C1346296A0661007BE2D5 /* EditedStatusTableCellView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditedStatusTableCellView.xib; sourceTree = "<group>"; };
 		5F8C1348296A06E3007BE2D5 /* EditedStatusTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditedStatusTableCellView.swift; sourceTree = "<group>"; };
 		5F8C134A296A0B5C007BE2D5 /* EditHistorySheetWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditHistorySheetWindowController.xib; sourceTree = "<group>"; };
@@ -1875,12 +1881,12 @@
 		5F30992F29CBA5C800E27292 /* ComposerSuggestions */ = {
 			isa = PBXGroup;
 			children = (
-				1530428C22AEDAFA00489F31 /* AccountSearchService.swift */,
-				5FC21CF529C6820500A582A8 /* HashtagSearchService.swift */,
 				5FD008EE29CBAB7000EC4A29 /* RedrawsOnSelectTableRowView.swift */,
+				5F7AFE952A5AFD6A00C2FDE7 /* Search Services */,
 				5F3BC8B129D0B44000CEBD7F /* SparklineTableCellView.swift */,
 				1530429222AEFCC900489F31 /* SuggestionTextView.swift */,
 				5FD008EC29CBA8DC00EC4A29 /* Windows */,
+				5F7AFE982A5B027300C2FDE7 /* EmojiSuggestionProtocol.swift */,
 			);
 			path = ComposerSuggestions;
 			sourceTree = "<group>";
@@ -1930,6 +1936,16 @@
 				5FCD67612A02B9350083EDB2 /* SwiftPMAcknowledgements.swift */,
 			);
 			path = "Data Sources";
+			sourceTree = "<group>";
+		};
+		5F7AFE952A5AFD6A00C2FDE7 /* Search Services */ = {
+			isa = PBXGroup;
+			children = (
+				1530428C22AEDAFA00489F31 /* AccountSearchService.swift */,
+				5F7AFE922A5AD4E700C2FDE7 /* EmojiSearchService.swift */,
+				5FC21CF529C6820500A582A8 /* HashtagSearchService.swift */,
+			);
+			path = "Search Services";
 			sourceTree = "<group>";
 		};
 		5F986EED2A47804E007FD0FC /* MastonautHelp */ = {
@@ -2039,6 +2055,7 @@
 			isa = PBXGroup;
 			children = (
 				5FD008EA29CBA8C700EC4A29 /* AccountSuggestionWindowController.xib */,
+				5F7AFE942A5AFA7300C2FDE7 /* EmojiSuggestionWindowController.xib */,
 				5FC21D0029CA511300A582A8 /* HashtagSuggestionWindowController.xib */,
 				1530428022AEC64E00489F31 /* SuggestionWindowController.swift */,
 			);
@@ -2401,6 +2418,7 @@
 				15EE2B0C232EA35000155E16 /* AttachmentItem.xib in Resources */,
 				5F3A17F1291DB26700EA6FEC /* CoreAssets.xcassets in Resources */,
 				1545FC0923357143006CCD2C /* AttachmentDescriptionViewController.xib in Resources */,
+				5F7AFE962A5AFDBB00C2FDE7 /* EmojiSuggestionWindowController.xib in Resources */,
 				159C2182232D382200139BD5 /* Localizable.strings in Resources */,
 				5FD008EB29CBA8C700EC4A29 /* AccountSuggestionWindowController.xib in Resources */,
 				15EE2B0E232EA35000155E16 /* ProposedAttachmentItem.xib in Resources */,
@@ -2975,6 +2993,7 @@
 				15EE2B05232EA21900155E16 /* String+Additions.swift in Sources */,
 				1574DE22233C038E00AB1036 /* NSAlert+Dialog.swift in Sources */,
 				1574DE23233C03EE00AB1036 /* NSAlert+Additions.swift in Sources */,
+				5F7AFE992A5B027300C2FDE7 /* EmojiSuggestionProtocol.swift in Sources */,
 				159C2181232D37A200139BD5 /* LocalizationTool.swift in Sources */,
 				15EE2B06232EA26100155E16 /* NSImage+Additions.swift in Sources */,
 				15431281232EE6580010854A /* NSProgressIndicator+Additions.swift in Sources */,
@@ -3153,6 +3172,7 @@
 				15BC415E2262A8CA00C2A150 /* SidebarSubcontroller.swift in Sources */,
 				155B9389237A23E5006EBF3C /* AnyObject+Helpers.swift in Sources */,
 				15BB378C22A854880094B5A3 /* EmphasizedTextField.m in Sources */,
+				5F7AFE972A5B019D00C2FDE7 /* EmojiSearchService.swift in Sources */,
 				5F1F20D92938E9140057E585 /* Logger+CurrentType.swift in Sources */,
 				5FC3E1922926FD640086DCEE /* FontSizePreferencesView.swift in Sources */,
 				15D3B9C824A298CB00DC3B10 /* BPAnimatedImageLayer.swift in Sources */,
