@@ -298,16 +298,19 @@ extension SuggestionWindowController: NSTableViewDelegate
 			case "image":
 				suggestion.fetchImage
 				{
-					imageData in
+					image in
 
-					if let imageData
+					if let image
 					{
-						cellView.imageView?.image = NSImage(data: imageData)
+						DispatchQueue.main.async
+						{
+							cellView.imageView?.image = image
+						}
 					}
 				}
 
 			case "shortcode":
-				cellView.textField?.stringValue = suggestion.shortcode
+				cellView.textField?.stringValue = suggestion.text
 
 			default:
 				break

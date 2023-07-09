@@ -248,7 +248,7 @@ open class SuggestionTextView: NSTextView
 			case let .hashtag(hashtag):
 				self.replaceCharacters(in: mentionRange, with: "#\(hashtag.text) ")
 			case let .emoji(emoji):
-				self.replaceCharacters(in: mentionRange, with: ":\(emoji.shortcode): ")
+				self.replaceCharacters(in: mentionRange, with: ":\(emoji.text): ")
 			}
 
 			// make sure

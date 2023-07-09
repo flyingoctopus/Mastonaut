@@ -7,10 +7,10 @@
 //
 
 import Foundation
+import AppKit
 
 @objc public protocol EmojiSuggestionProtocol {
-	var imageUrl: URL? { get }
-	var shortcode: String { get }
+	var text: String { get }
 	
-	func fetchImage(completion: @escaping (Data?) -> Void)
+	func fetchImage(completion: @escaping (NSImage?) -> Void)
 }
