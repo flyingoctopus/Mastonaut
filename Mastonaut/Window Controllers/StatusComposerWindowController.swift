@@ -160,6 +160,11 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 		{
 			didChangeValue(for: \.hasLoadedClientEmoji)
 			currentClientEmoji.map { emojiPickerPanelController.setEmoji($0) }
+
+			if let currentClientEmoji, let currentInstance
+			{
+				emojiSearchService = EmojiSearchService(customEmoji: currentClientEmoji)
+			}
 		}
 	}
 
@@ -197,6 +202,14 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 		didSet
 		{
 			textView.hashtagSuggestionsProvider = hashtagSearchService
+		}
+	}
+
+	private var emojiSearchService: EmojiSearchService?
+	{
+		didSet
+		{
+			textView.emojiSuggestionsProvider = emojiSearchService
 		}
 	}
 
@@ -245,6 +258,7 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 			resolverService = client.map { ResolverService(client: $0) }
 			accountSearchService = nil
 			hashtagSearchService = nil
+			emojiSearchService = nil
 			currentInstance = nil
 
 			if let account = currentAccount
@@ -1158,7 +1172,7 @@ extension StatusComposerWindowController: NSWindowDelegate
 
 		return true
 	}
-	
+
 	func windowWillClose(_ notification: Foundation.Notification) {
 		AppDelegate.shared.removeStatusComposerWindowController(self)
 	}
@@ -1285,7 +1299,7 @@ extension StatusComposerWindowController
 		guard let newComposerWindow = AppDelegate.shared.statusComposerWindowControllers.last else { return }
 		newComposerWindow.currentAccount = self.currentAccount
 	}
-	
+
 	@IBAction func sendStatus(_ sender: Any?)
 	{
 		validateAndSendStatus()
