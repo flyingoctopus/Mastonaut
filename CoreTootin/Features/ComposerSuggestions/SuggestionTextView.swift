@@ -180,8 +180,8 @@ open class SuggestionTextView: NSTextView
 				[weak self] result in
 
 				guard let container = result as? [SuggestionContainer],
-					  !container.isEmpty,
-					  case SuggestionContainer.emoji = container[0]
+				      !container.isEmpty,
+				      case SuggestionContainer.emoji = container[0]
 				else
 				{
 					DispatchQueue.main.async { self?.dismissSuggestionsWindow() }
@@ -248,7 +248,7 @@ open class SuggestionTextView: NSTextView
 			case let .hashtag(hashtag):
 				self.replaceCharacters(in: mentionRange, with: "#\(hashtag.text) ")
 			case let .emoji(emoji):
-				self.replaceCharacters(in: mentionRange, with: "#\(emoji.text) ")
+				self.replaceCharacters(in: mentionRange, with: ":\(emoji.shortcode): ")
 			}
 
 			// make sure
@@ -275,7 +275,7 @@ enum SuggestionMode
 	case emoji
 }
 
-enum SuggestionContainer
+public enum SuggestionContainer
 {
 	case mention(AccountSuggestionProtocol)
 	case hashtag(HashtagSuggestionProtocol)

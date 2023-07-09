@@ -160,6 +160,11 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 		{
 			didChangeValue(for: \.hasLoadedClientEmoji)
 			currentClientEmoji.map { emojiPickerPanelController.setEmoji($0) }
+
+			if let currentClientEmoji, let currentInstance
+			{
+				emojiSearchService = EmojiSearchService(customEmoji: currentClientEmoji)
+			}
 		}
 	}
 
@@ -240,7 +245,6 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 
 			accountSearchService = AccountSearchService(client: client, activeInstance: instance)
 			hashtagSearchService = HashtagSearchService(client: client)
-			emojiSearchService = EmojiSearchService(activeInstance: instance)
 		}
 	}
 

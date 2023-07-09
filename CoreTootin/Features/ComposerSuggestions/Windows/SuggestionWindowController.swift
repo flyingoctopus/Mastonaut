@@ -47,7 +47,7 @@ public class SuggestionWindowController: NSWindowController
 		case .hashtag:
 			self.init(windowNibName: NSNib.Name("HashtagSuggestionWindowController"))
 		case .emoji:
-			self.init(windowNibName: NSNib.Name("CustomEmojiSuggestionWindowController"))
+			self.init(windowNibName: NSNib.Name("EmojiSuggestionWindowController"))
 		}
 	}
 
@@ -78,8 +78,8 @@ public class SuggestionWindowController: NSWindowController
 				width = 482
 			case "HashtagSuggestionWindowController":
 				width = 272
-			case "CustomEmojiSuggestionWindowController":
-				width = 272
+			case "EmojiSuggestionWindowController":
+				width = 320
 			default:
 				return
 			}
@@ -290,13 +290,24 @@ extension SuggestionWindowController: NSTableViewDelegate
 
 			cellView.redraw(isSelected: tableView.selectedRow == row)
 		}
-		
+
 		if let suggestion = emojiSuggestions?[row], let cellView = view as? NSTableCellView
 		{
 			switch identifier.rawValue
 			{
-			case "name":
-				cellView.textField?.stringValue = suggestion.text
+			case "image":
+				suggestion.fetchImage
+				{
+					imageData in
+
+					if let imageData
+					{
+						cellView.imageView?.image = NSImage(data: imageData)
+					}
+				}
+
+			case "shortcode":
+				cellView.textField?.stringValue = suggestion.shortcode
 
 			default:
 				break
