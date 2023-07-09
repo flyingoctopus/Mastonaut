@@ -6,11 +6,12 @@
 //  Copyright © 2023 Bruno Philipe. All rights reserved.
 //
 
-import Foundation
 import AppKit
+import Foundation
 
 @objc public protocol EmojiSuggestionProtocol {
 	var text: String { get }
-	
+
 	func fetchImage(completion: @escaping (NSImage?) -> Void)
+	func getReplacement() -> String
 }

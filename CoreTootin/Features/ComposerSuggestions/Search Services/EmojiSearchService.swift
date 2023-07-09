@@ -24,7 +24,7 @@ class EmojiSearchService {
 			0x1F600...0x1F64F, // Emoticons
 			0x1F300...0x1F5FF, // Misc Symbols and Pictographs
 			0x1F680...0x1F6FF, // Transport and Map
-			
+
 			// not useful without grapheme cluster support
 			// 0x1F1E6...0x1F1FF, // Regional country flags
 
@@ -86,6 +86,10 @@ extension EmojiSearchService: SuggestionTextViewSuggestionsProvider {
 }
 
 private class UnicodeEmojiSuggestion: EmojiSuggestionProtocol {
+	func getReplacement() -> String {
+		return "\(emoji) "
+	}
+
 	let scalar: UnicodeScalar
 	var text: String
 	var emoji: String {
@@ -136,5 +140,9 @@ private class CustomEmojiSuggestion: EmojiSuggestionProtocol {
 				}
 			}
 		}
+	}
+
+	func getReplacement() -> String {
+		return ":\(text): "
 	}
 }
