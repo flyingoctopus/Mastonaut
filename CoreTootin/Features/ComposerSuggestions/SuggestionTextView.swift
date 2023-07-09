@@ -23,6 +23,7 @@ open class SuggestionTextView: NSTextView
 {
 	public weak var accountSuggestionsProvider: SuggestionTextViewSuggestionsProvider?
 	public weak var hashtagSuggestionsProvider: SuggestionTextViewSuggestionsProvider?
+	public weak var emojiSuggestionsProvider: SuggestionTextViewSuggestionsProvider?
 
 	public weak var imagesProvider: AccountSuggestionWindowImagesProvider?
 	{
@@ -32,6 +33,7 @@ open class SuggestionTextView: NSTextView
 
 	public private(set) lazy var accountSuggestionWindowController = SuggestionWindowController(mode: .mention)
 	public private(set) lazy var hashtagSuggestionWindowController = SuggestionWindowController(mode: .hashtag)
+	public private(set) lazy var emojiSuggestionWindowController = SuggestionWindowController(mode: .emoji)
 
 	public var activeSuggestionWindowController: SuggestionWindowController?
 
@@ -171,6 +173,28 @@ open class SuggestionTextView: NSTextView
 				}
 			}
 		}
+		else if mode == .emoji, let provider = emojiSuggestionsProvider
+		{
+			provider.suggestionTextView(self, suggestionsForQuery: mention)
+			{
+				[weak self] result in
+
+				guard let container = result as? [SuggestionContainer],
+					  !container.isEmpty,
+					  case SuggestionContainer.emoji = container[0]
+				else
+				{
+					DispatchQueue.main.async { self?.dismissSuggestionsWindow() }
+					return
+				}
+
+				DispatchQueue.main.async
+				{
+					guard self?.lastSuggestionRequestId == requestId else { return }
+					self?.showSuggestionsWindow(mode: mode, with: container, mentionRange: range)
+				}
+			}
+		}
 		else
 		{
 			dismissSuggestionsWindow()
@@ -202,6 +226,9 @@ open class SuggestionTextView: NSTextView
 			activeSuggestionWindowController = accountSuggestionWindowController
 		case .hashtag:
 			activeSuggestionWindowController = hashtagSuggestionWindowController
+		case .emoji:
+			activeSuggestionWindowController =
+				emojiSuggestionWindowController
 		}
 
 		guard let activeSuggestionWindowController else { return }
@@ -220,6 +247,8 @@ open class SuggestionTextView: NSTextView
 				self.replaceCharacters(in: mentionRange, with: "\(account.text) ")
 			case let .hashtag(hashtag):
 				self.replaceCharacters(in: mentionRange, with: "#\(hashtag.text) ")
+			case let .emoji(emoji):
+				self.replaceCharacters(in: mentionRange, with: "#\(emoji.text) ")
 			}
 
 			// make sure
@@ -243,12 +272,14 @@ enum SuggestionMode
 {
 	case mention
 	case hashtag
+	case emoji
 }
 
 enum SuggestionContainer
 {
 	case mention(AccountSuggestionProtocol)
 	case hashtag(HashtagSuggestionProtocol)
+	case emoji(EmojiSuggestionProtocol)
 }
 
 private extension NSString
@@ -258,7 +289,7 @@ private extension NSString
 		guard length > 0, index <= length else { return nil }
 
 		var previousTokenCharacterIndex: Int?
-		let charsetTokens = NSCharacterSet(charactersIn: "@#")
+		let charsetTokens = NSCharacterSet(charactersIn: "@#:")
 
 		func modeFromCharIndex(_ charIndex: Int) -> SuggestionMode?
 		{
@@ -268,6 +299,8 @@ private extension NSString
 				return .mention
 			case "#".utf16.first:
 				return .hashtag
+			case ":".utf16.first:
+				return .emoji
 			default:
 				return nil
 			}

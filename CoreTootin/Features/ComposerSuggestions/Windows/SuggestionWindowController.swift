@@ -27,6 +27,7 @@ public class SuggestionWindowController: NSWindowController
 
 	private var accountSuggestions: [AccountSuggestionProtocol]?
 	private var hashtagSuggestions: [HashtagSuggestionProtocol]?
+	private var emojiSuggestions: [EmojiSuggestionProtocol]?
 
 	public weak var imagesProvider: AccountSuggestionWindowImagesProvider?
 
@@ -45,6 +46,8 @@ public class SuggestionWindowController: NSWindowController
 			self.init(windowNibName: NSNib.Name("AccountSuggestionWindowController"))
 		case .hashtag:
 			self.init(windowNibName: NSNib.Name("HashtagSuggestionWindowController"))
+		case .emoji:
+			self.init(windowNibName: NSNib.Name("CustomEmojiSuggestionWindowController"))
 		}
 	}
 
@@ -58,7 +61,9 @@ public class SuggestionWindowController: NSWindowController
 
 	public func positionWindow(under textRect: NSRect)
 	{
-		let suggestionsCount = accountSuggestions?.count ?? hashtagSuggestions?.count
+		let suggestionsCount = accountSuggestions?.count ??
+			hashtagSuggestions?.count ??
+			emojiSuggestions?.count
 
 		if let suggestionsCount, let tableView
 		{
@@ -72,6 +77,8 @@ public class SuggestionWindowController: NSWindowController
 			case "AccountSuggestionWindowController":
 				width = 482
 			case "HashtagSuggestionWindowController":
+				width = 272
+			case "CustomEmojiSuggestionWindowController":
 				width = 272
 			default:
 				return
@@ -89,13 +96,6 @@ public class SuggestionWindowController: NSWindowController
 
 		switch suggestionContainers[0]
 		{
-		case .hashtag:
-			accountSuggestions = nil
-			hashtagSuggestions = suggestionContainers.map
-			{ if case let .hashtag(hashtag) = $0
-				{ return hashtag }
-				else { fatalError() }
-			}
 		case .mention:
 			accountSuggestions = suggestionContainers.map
 			{ if case let .mention(mention) = $0
@@ -103,6 +103,23 @@ public class SuggestionWindowController: NSWindowController
 				else { fatalError() }
 			}
 			hashtagSuggestions = nil
+			emojiSuggestions = nil
+		case .hashtag:
+			accountSuggestions = nil
+			hashtagSuggestions = suggestionContainers.map
+			{ if case let .hashtag(hashtag) = $0
+				{ return hashtag }
+				else { fatalError() }
+			}
+			emojiSuggestions = nil
+		case .emoji:
+			accountSuggestions = nil
+			hashtagSuggestions = nil
+			emojiSuggestions = suggestionContainers.map
+			{ if case let .emoji(name) = $0
+				{ return name }
+				else { fatalError() }
+			}
 		}
 
 		tableView?.reloadData()
@@ -125,6 +142,10 @@ public class SuggestionWindowController: NSWindowController
 		{
 			block(SuggestionContainer.hashtag(suggestions[currentSelection]))
 		}
+		else if let suggestions = emojiSuggestions, (0..<suggestions.count).contains(currentSelection)
+		{
+			block(SuggestionContainer.emoji(suggestions[currentSelection]))
+		}
 	}
 
 	@objc func didDoubleClickTableView(_ sender: Any)
@@ -134,7 +155,7 @@ public class SuggestionWindowController: NSWindowController
 
 	@IBAction func selectNext(_ sender: Any?)
 	{
-		guard let suggestions: [Any] = accountSuggestions ?? hashtagSuggestions else { return }
+		guard let suggestions: [Any] = accountSuggestions ?? hashtagSuggestions ?? hashtagSuggestions else { return }
 		let currentSelection = tableView.selectedRow
 
 		guard (0..<suggestions.count).contains(currentSelection + 1)
@@ -149,10 +170,10 @@ public class SuggestionWindowController: NSWindowController
 
 	@IBAction func selectPrevious(_ sender: Any?)
 	{
-		guard let suggestions: [Any] = accountSuggestions ?? hashtagSuggestions else { return }
+		guard let suggestions: [Any] = accountSuggestions ?? hashtagSuggestions ?? hashtagSuggestions else { return }
 		let currentSelection = tableView.selectedRow
 
-		print("suggestions: \(suggestions.count) acc: \(accountSuggestions?.count ?? 0) has: \(hashtagSuggestions?.count ?? 0)")
+		print("suggestions: \(suggestions.count) acc: \(accountSuggestions?.count ?? 0) has: \(hashtagSuggestions?.count ?? 0) emo: \(emojiSuggestions?.count ?? 0)")
 
 		guard currentSelection > 0
 		else
@@ -176,6 +197,10 @@ extension SuggestionWindowController: NSTableViewDataSource
 		else if let hashtagSuggestions
 		{
 			return hashtagSuggestions.count
+		}
+		else if let emojiSuggestions
+		{
+			return emojiSuggestions.count
 		}
 
 		return 0
@@ -264,6 +289,18 @@ extension SuggestionWindowController: NSTableViewDelegate
 			}
 
 			cellView.redraw(isSelected: tableView.selectedRow == row)
+		}
+		
+		if let suggestion = emojiSuggestions?[row], let cellView = view as? NSTableCellView
+		{
+			switch identifier.rawValue
+			{
+			case "name":
+				cellView.textField?.stringValue = suggestion.text
+
+			default:
+				break
+			}
 		}
 
 		return view
