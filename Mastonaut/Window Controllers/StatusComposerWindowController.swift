@@ -365,7 +365,7 @@ class StatusComposerWindowController: NSWindowController, UserPopUpButtonDisplay
 			{
 				let accountUUID = currentAccount.uuid
 				client = Client.create(for: currentAccount)
-				authorAvatarView.image = #imageLiteral(resourceName: "missing.png")
+				authorAvatarView.image = #imageLiteral(resourceName: "missing")
 
 				statusCharacterLimit = currentInstance?.configuration?.statuses?.maxCharacters ?? 500
 				updateRemainingCountLabel()
