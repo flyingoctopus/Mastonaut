@@ -236,7 +236,7 @@ extension SuggestionWindowController: NSTableViewDelegate
 			switch identifier.rawValue
 			{
 			case "avatar":
-				cellView.imageView?.image = #imageLiteral(resourceName: "missing.png")
+				cellView.imageView?.image = #imageLiteral(resourceName: "missing")
 				guard let imageURL = suggestion.imageUrl else { break }
 				imagesProvider?.suggestionWindow(self, imageForSuggestionUsingURL: imageURL)
 				{

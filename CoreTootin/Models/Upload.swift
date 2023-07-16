@@ -98,7 +98,7 @@ public class Upload
 		fileName = nil
 		mimeType = attachment.bestUrl.preferredMimeType ?? "image/png"
 		dataLoader = { throw UploadError.remoteAttachment }
-		thumbnailProvider = { return #imageLiteral(resourceName: "missing.png") }
+		thumbnailProvider = { return #imageLiteral(resourceName: "missing") }
 		metadataProvider =
 			{
 				switch attachment.type
