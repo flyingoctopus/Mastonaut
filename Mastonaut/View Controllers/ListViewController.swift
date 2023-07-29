@@ -878,6 +878,8 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 			else { return }
 
 			cellModel.interactionHandler.reblogStatus(with: cellModel.status.id) { _ in }
+			
+			tableView.rowActionsVisible = false
 		}
 
 		action.image = image
@@ -900,6 +902,8 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 			else { return }
 
 			cellModel.interactionHandler.unreblogStatus(with: cellModel.status.id) { _ in }
+			
+			tableView.rowActionsVisible = false
 		}
 
 		action.image = image
@@ -921,6 +925,8 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 			else { return }
 
 			cellModel.interactionHandler.reply(to: cellModel.status.id)
+			
+			tableView.rowActionsVisible = false
 		}
 
 		action.image = image
@@ -942,6 +948,8 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 			else { return }
 
 			cellModel.interactionHandler.favoriteStatus(with: cellModel.status.id) { _ in }
+			
+			tableView.rowActionsVisible = false
 		}
 
 		action.image = image
@@ -964,6 +972,8 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 			else { return }
 
 			cellModel.interactionHandler.unfavoriteStatus(with: cellModel.status.id) { _ in }
+			
+			tableView.rowActionsVisible = false
 		}
 
 		action.image = image
@@ -985,6 +995,8 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 			else { return }
 
 			cellModel.interactionHandler.bookmarkStatus(with: cellModel.status.id) { _ in }
+			
+			tableView.rowActionsVisible = false
 		}
 
 		action.image = image
@@ -1007,6 +1019,8 @@ class ListViewController<Entry: ListViewPresentable & Codable>: NSViewController
 			else { return }
 
 			cellModel.interactionHandler.unbookmarkStatus(with: cellModel.status.id) { _ in }
+			
+			tableView.rowActionsVisible = false
 		}
 
 		action.image = image
