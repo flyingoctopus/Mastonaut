@@ -16,7 +16,7 @@ $(DESTINATION) : * **/*
 	# check for things like broken links
 	htmlproofer --allow-missing-href _site
 	
-	cp -R _site $(DESTINATION)
+	cp -R _site "$(DESTINATION)"
 	
 	for LPROJ in "$(DESTINATION)"/*.lproj ; do \
 		LOCALE=$$(basename "$$LPROJ" .lproj) ; \
