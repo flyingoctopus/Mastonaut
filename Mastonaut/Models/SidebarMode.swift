@@ -30,6 +30,7 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 	case status(uri: String, status: Status?)
 	case favorites
 	case edits(status: Status?, edits: [StatusEdit]?)
+	// FIXME: make this case more abstract
 	case profiles(title: String, profileURIs: [String])
 
 	var rawValue: String
@@ -151,7 +152,7 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 
 		case .edits(let status, let edits):
 			return EditHistoryViewController(status: status, edits: edits)
-			
+
 		case .profiles(let title, let profileURIs):
 			return ProfilesSidebarViewController(title: title, profiles: profileURIs)
 		}

@@ -1882,10 +1882,10 @@
 		5F0AA8A32A7EF49700E284ED /* ProfilesSidebar */ = {
 			isa = PBXGroup;
 			children = (
-				5F0AA8A42A7EF4C300E284ED /* ProfilesSidebarViewController.xib */,
-				5F0AA8A62A7EF60800E284ED /* ProfilesSidebarCellView.xib */,
 				5F0AA8A82A7EF65000E284ED /* ProfilesSidebarCellView.swift */,
+				5F0AA8A62A7EF60800E284ED /* ProfilesSidebarCellView.xib */,
 				5F0AA8AA2A7EF71800E284ED /* ProfilesSidebarViewController.swift */,
+				5F0AA8A42A7EF4C300E284ED /* ProfilesSidebarViewController.xib */,
 			);
 			path = ProfilesSidebar;
 			sourceTree = "<group>";

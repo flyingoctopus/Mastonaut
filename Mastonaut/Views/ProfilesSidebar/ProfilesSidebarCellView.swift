@@ -8,7 +8,17 @@
 
 import Foundation
 
-class ProfilesSidebarCellView : NSTableCellView
+class ProfilesSidebarCellView: NSTableCellView
 {
-	
+	override func awakeFromNib()
+	{
+		super.awakeFromNib()
+	}
+
+	@IBOutlet var bioLabel: AttributedLabel!
+
+	func set(title: String)
+	{
+		bioLabel.stringValue = title
+	}
 }
