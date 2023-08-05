@@ -4,6 +4,36 @@
         <title>Mastonaut</title>
 
         <item>
+            <title>1.8.0</title>
+            <pubDate>2023-08-05</pubDate>
+            <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/chucker/Mastonaut/releases/download/app-1.8.0/Mastonaut-1.8.0.zip"
+                sparkle:version="142" sparkle:shortVersionString="1.8.0" length="9951572"
+                type="application/octet-stream" />-->
+            <description>
+                <![CDATA[
+<p>(If you're on 1.4.1 or older, auto-updating won't work. Please manually download a newer version <a href="https://github.com/chucker/Mastonaut/releases">from here</a>.)</p>
+
+<h2>Features</h2>
+<ul>
+<li>You can now <strong>swipe left or right on a toot</strong> to quickly interact with it: reply, boost, favorite, bookmark. If you prefer, you can turn this off in Preferences.</li>
+<li><strong>Emoji autocomplete:</strong> both built-in Unicode emoji, and your instance's custom emoji now autocomplete in the status composer. Try typing <code>:cat</code>! 🐱</li>
+<li>Mastonaut now has a few features documented in the <strong>macOS Help</strong>.</li>
+<li>You can now open <strong>multiple compose windows at once</strong>. This is useful if, say, you were busy writing a reply to someone, and want to fire off a quick toot on something different in the meantime. (Contributed by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/uliwitness/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/uliwitness">@uliwitness</a>)</li>
+<li>Previously, statuses would always cut off after 500 characters, then show a Show Entire Contents link underneath. You can now set a <strong>custom cut off</strong> in Preferences —&nbsp;a shorter one like 140 characters, or even no limit at all. (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1762316147" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/138" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/138/hovercard" href="https://github.com/chucker/Mastonaut/issues/138">#138</a>)</li>
+<li>This release offers preliminary support for macOS 14 Sonoma.</li>
+</ul>
+<h2>Fixes</h2>
+<ul>
+<li>Whether you followed a tag wasn't checked reliably in 1.7.0.</li>
+<li>If a focused toot had an attachment (such as an image), the interaction buttons didn't appear correctly in 1.7.0.</li>
+<li><a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1731083046" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/130" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/130/hovercard" href="https://github.com/chucker/Mastonaut/issues/130">#130</a>: clicking some links (e.g. those on the Internet Archive's Wayback Machine) didn't work.</li>
+</ul></div>
+                ]]>
+            </description>
+        </item>
+
+        <item>
             <title>1.7.0</title>
             <pubDate>2023-05-19</pubDate>
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
