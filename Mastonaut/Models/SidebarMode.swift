@@ -17,9 +17,9 @@
 //  GNU General Public License for more details.
 //
 
+import CoreTootin
 import Foundation
 import MastodonKit
-import CoreTootin
 
 enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 {
@@ -30,6 +30,7 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 	case status(uri: String, status: Status?)
 	case favorites
 	case edits(status: Status?, edits: [StatusEdit]?)
+	case profiles(title: String, profileURIs: [String])
 
 	var rawValue: String
 	{
@@ -46,9 +47,21 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 
 		case .favorites:
 			return "favorites"
-			
+
 		case .edits(let status, _):
 			return "edits\n\(status?.id ?? "")"
+
+		case .profiles(let title, let profileURIs):
+			do
+			{
+				let encodedProfileURIs = try JSONEncoder().encode(profileURIs)
+
+				return "profiles\n\(title)\n" + String(data: encodedProfileURIs, encoding: .utf8)!
+			}
+			catch
+			{
+				return ""
+			}
 		}
 	}
 
@@ -88,6 +101,21 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 		{
 			self = .favorites
 		}
+		else if components.count == 3, components.first == "profiles"
+		{
+			let title = components[1]
+
+			do
+			{
+				let profileURIs = try JSONDecoder().decode([String].self, from: Data(components[2].utf8))
+
+				self = .profiles(title: String(title), profileURIs: profileURIs)
+			}
+			catch
+			{
+				return nil
+			}
+		}
 		else
 		{
 			return nil
@@ -95,8 +123,8 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 	}
 
 	func makeViewController(client: ClientType,
-							currentAccount: AuthorizedAccount?,
-							currentInstance: Instance) -> SidebarViewController
+	                        currentAccount: AuthorizedAccount?,
+	                        currentInstance: Instance) -> SidebarViewController
 	{
 		switch self
 		{
@@ -109,7 +137,7 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 		case .tag(let tag):
 			let bookmarkService = currentAccount.map { TagBookmarkService(account: $0) }
 			let followService = currentAccount.map { TagFollowService(account: $0, client: client) }
-			
+
 			return TagViewController(tag: tag, tagBookmarkService: bookmarkService, tagFollowService: followService)
 
 		case .status(let uri, nil):
@@ -120,9 +148,12 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 
 		case .favorites:
 			return FavoritesViewController()
-			
+
 		case .edits(let status, let edits):
 			return EditHistoryViewController(status: status, edits: edits)
+			
+		case .profiles(let title, let profileURIs):
+			return ProfilesSidebarViewController(title: title, profiles: profileURIs)
 		}
 	}
 
