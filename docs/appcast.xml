@@ -21,6 +21,7 @@
 <li>Mastonaut now has a few features documented in the <strong>macOS Help</strong>.</li>
 <li>You can now open <strong>multiple compose windows at once</strong>. This is useful if, say, you were busy writing a reply to someone, and want to fire off a quick toot on something different in the meantime. (Contributed by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/uliwitness/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/uliwitness">@uliwitness</a>)</li>
 <li>Previously, statuses would always cut off after 500 characters, then show a Show Entire Contents link underneath. You can now set a <strong>custom cut off</strong> in Preferences —&nbsp;a shorter one like 140 characters, or even no limit at all. (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1762316147" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/138" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/138/hovercard" href="https://github.com/chucker/Mastonaut/issues/138">#138</a>)</li>
+<li>Support for notifying of, and responding to, <strong>follow requests</strong>. (#99)</li>
 <li>This release offers preliminary support for macOS 14 Sonoma.</li>
 </ul>
 <h2>Fixes</h2>
