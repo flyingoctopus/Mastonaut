@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="oGO-El-xlr">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22146" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="oGO-El-xlr">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22146"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -81,7 +81,7 @@
                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="KKi-kh-gF6">
                                                 <rect key="frame" x="0.0" y="212" width="630" height="74"/>
                                                 <subviews>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="N6l-oL-SAR">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="N6l-oL-SAR">
                                                         <rect key="frame" x="-2" y="57" width="244" height="16"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="240" id="3ct-KK-GHS"/>
@@ -109,7 +109,7 @@
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="zyO-g9-M3W">
+                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="zyO-g9-M3W">
                                                                 <rect key="frame" x="-2" y="1" width="382" height="28"/>
                                                                 <textFieldCell key="cell" title="This preference does not apply when Mastonaut is running in full-screen mode." id="Na1-v9-jcZ">
                                                                     <font key="font" metaFont="message" size="11"/>
@@ -147,7 +147,7 @@
                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="kxH-QQ-rBJ">
                                                 <rect key="frame" x="0.0" y="116" width="630" height="76"/>
                                                 <subviews>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gph-7V-AQt">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gph-7V-AQt">
                                                         <rect key="frame" x="-2" y="59" width="244" height="16"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="240" id="ZwL-bG-gtH"/>
@@ -190,7 +190,7 @@
                                                             <real value="3.4028234663852886e+38"/>
                                                         </customSpacing>
                                                     </stackView>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="sAG-Wk-u6C">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="sAG-Wk-u6C">
                                                         <rect key="frame" x="250" y="0.0" width="382" height="28"/>
                                                         <textFieldCell key="cell" title="You can rearrange the order of accounts in the Accounts tab by dragging the items in the list." id="coL-5b-sHf">
                                                             <font key="font" metaFont="message" size="11"/>
@@ -274,7 +274,7 @@
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="0wY-1I-Ecj">
                                         <rect key="frame" x="0.0" y="288" width="630" height="98"/>
                                         <subviews>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="9p2-Um-lyN">
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="9p2-Um-lyN">
                                                 <rect key="frame" x="250" y="0.0" width="382" height="28"/>
                                                 <textFieldCell key="cell" title="You can always toggle displaying media by clicking the media visibility button." id="rVB-GE-Aag">
                                                     <font key="font" metaFont="message" size="11"/>
@@ -282,7 +282,7 @@
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Awt-EY-bLT">
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Awt-EY-bLT">
                                                 <rect key="frame" x="-2" y="65" width="244" height="32"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="240" id="iei-Kj-Ja2"/>
@@ -358,7 +358,7 @@
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="d68-O5-ffQ">
                                         <rect key="frame" x="0.0" y="170" width="630" height="98"/>
                                         <subviews>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jg6-5B-hdP">
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jg6-5B-hdP">
                                                 <rect key="frame" x="-2" y="81" width="244" height="16"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="240" id="XsJ-15-QZq"/>
@@ -415,7 +415,7 @@
                                                     <real value="3.4028234663852886e+38"/>
                                                 </customSpacing>
                                             </stackView>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="PAZ-xZ-B7K">
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="PAZ-xZ-B7K">
                                                 <rect key="frame" x="250" y="0.0" width="382" height="28"/>
                                                 <textFieldCell key="cell" title="You can always toggle displaying the contents of toots with content warnings by clicking the warning button." id="weg-sv-ahM">
                                                     <font key="font" metaFont="message" size="11"/>
@@ -451,7 +451,7 @@
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
                                                     </button>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="NDq-0v-H0w">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="NDq-0v-H0w">
                                                         <rect key="frame" x="-2" y="0.0" width="382" height="28"/>
                                                         <textFieldCell key="cell" title="If enabled, videos and animated gifs will start playing automatically once they are opened in the attachment viewer window." id="MiD-kI-0Rz">
                                                             <font key="font" metaFont="message" size="11"/>
@@ -488,7 +488,7 @@
                                                 <rect key="frame" x="256" y="55" width="246" height="28"/>
                                                 <sliderCell key="cell" state="on" alignment="left" minValue="1" maxValue="5" doubleValue="3" tickMarkPosition="above" numberOfTickMarks="5" allowsTickMarkValuesOnly="YES" sliderType="linear" id="mOf-kJ-fSz"/>
                                             </slider>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gtm-Xl-4DL">
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gtm-Xl-4DL">
                                                 <rect key="frame" x="85" y="64" width="157" height="16"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Cut off toots longer than:" id="K5I-TQ-4bS">
                                                     <font key="font" metaFont="system"/>
@@ -496,16 +496,15 @@
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dnw-qY-tUF">
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dnw-qY-tUF">
                                                 <rect key="frame" x="506" y="64" width="69" height="16"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="characters" id="cGc-po-5wQ">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dws-Bj-yE1">
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dws-Bj-yE1">
                                                 <rect key="frame" x="244" y="44" width="24" height="14"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="140" id="YSL-SE-Aba">
                                                     <font key="font" metaFont="smallSystem"/>
@@ -513,41 +512,41 @@
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C3r-kp-0Ws">
-                                                <rect key="frame" x="367" y="44" width="25" height="14"/>
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C3r-kp-0Ws">
+                                                <rect key="frame" x="362" y="44" width="25" height="14"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="500" id="OQj-9L-d2i">
                                                     <font key="font" metaFont="smallSystem"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gxp-5O-i7z">
-                                                <rect key="frame" x="423" y="44" width="31" height="14"/>
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gxp-5O-i7z">
+                                                <rect key="frame" x="418" y="44" width="31" height="14"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="1000" id="31T-xK-qqa">
                                                     <font key="font" metaFont="smallSystem"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SPF-sJ-lTP">
-                                                <rect key="frame" x="307" y="42" width="29" height="16"/>
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SPF-sJ-lTP">
+                                                <rect key="frame" x="303" y="44" width="29" height="14"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="280" id="0dg-eT-ihA">
                                                     <font key="font" metaFont="smallSystem"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eU6-2R-YMo">
-                                                <rect key="frame" x="480" y="44" width="35" height="14"/>
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eU6-2R-YMo">
+                                                <rect key="frame" x="475" y="44" width="35" height="14"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Never" id="pPX-pz-KBz">
                                                     <font key="font" metaFont="smallSystem"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FwH-I1-11j">
-                                                <rect key="frame" x="250" y="6" width="362" height="28"/>
-                                                <textFieldCell key="cell" title="Longer toots will have a ‘Show Entire Contents’ button, unless this is set to ‘Never’." id="rmj-3A-hZY">
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FwH-I1-11j">
+                                                <rect key="frame" x="250" y="0.0" width="349" height="34"/>
+                                                <textFieldCell key="cell" title="Longer toots will have a ‘Show Entire Contents’ button." id="rmj-3A-hZY">
                                                     <font key="font" metaFont="message" size="11"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -555,11 +554,16 @@
                                             </textField>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="gtm-Xl-4DL" firstAttribute="top" secondItem="kzd-G1-m6z" secondAttribute="top" id="0fX-vx-EC6"/>
+                                            <constraint firstItem="Wf0-yo-Fg7" firstAttribute="top" secondItem="kzd-G1-m6z" secondAttribute="top" constant="-1" id="Iky-FI-TnN"/>
                                             <constraint firstItem="SPF-sJ-lTP" firstAttribute="firstBaseline" secondItem="Wf0-yo-Fg7" secondAttribute="baseline" constant="20" id="aNE-9k-KnJ"/>
                                             <constraint firstItem="eU6-2R-YMo" firstAttribute="firstBaseline" secondItem="Wf0-yo-Fg7" secondAttribute="baseline" constant="20" id="cT0-uM-ILQ"/>
+                                            <constraint firstItem="gtm-Xl-4DL" firstAttribute="baseline" secondItem="dnw-qY-tUF" secondAttribute="baseline" id="da3-Gt-1Mr"/>
                                             <constraint firstItem="gxp-5O-i7z" firstAttribute="firstBaseline" secondItem="Wf0-yo-Fg7" secondAttribute="baseline" constant="20" id="e8o-4h-9fr"/>
                                             <constraint firstItem="Dws-Bj-yE1" firstAttribute="firstBaseline" secondItem="Wf0-yo-Fg7" secondAttribute="baseline" constant="20" id="mkj-VV-vww"/>
+                                            <constraint firstAttribute="bottom" secondItem="FwH-I1-11j" secondAttribute="bottom" id="sJQ-qD-oUa"/>
                                             <constraint firstItem="C3r-kp-0Ws" firstAttribute="firstBaseline" secondItem="Wf0-yo-Fg7" secondAttribute="baseline" constant="20" id="sQ4-uS-UiO"/>
+                                            <constraint firstItem="FwH-I1-11j" firstAttribute="top" secondItem="kzd-G1-m6z" secondAttribute="top" constant="46" id="sfp-NK-ksJ"/>
                                         </constraints>
                                     </customView>
                                 </subviews>
@@ -567,7 +571,6 @@
                                     <constraint firstAttribute="width" constant="630" id="3vj-Hj-Pt9"/>
                                     <constraint firstItem="Wf0-yo-Fg7" firstAttribute="leading" secondItem="K31-xF-mvG" secondAttribute="leading" id="aPR-7I-NXP"/>
                                     <constraint firstAttribute="bottom" secondItem="kzd-G1-m6z" secondAttribute="bottom" id="dG5-EN-PkZ"/>
-                                    <constraint firstItem="kzd-G1-m6z" firstAttribute="top" secondItem="dnI-9D-en5" secondAttribute="top" constant="458" id="h5Q-e5-Yvi"/>
                                     <constraint firstItem="gtm-Xl-4DL" firstAttribute="trailing" secondItem="jg6-5B-hdP" secondAttribute="trailing" id="piL-ck-qMH"/>
                                     <constraint firstItem="FwH-I1-11j" firstAttribute="leading" secondItem="NDq-0v-H0w" secondAttribute="leading" id="zSI-Io-gAr"/>
                                 </constraints>
@@ -645,7 +648,7 @@
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
                                                     </button>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="LvY-FM-81x">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="LvY-FM-81x">
                                                         <rect key="frame" x="-2" y="0.0" width="382" height="28"/>
                                                         <textFieldCell key="cell" title="Double lines create a better visual separation between sentences, akin to paragraphs on formatted text." id="Ttw-Jv-nE5">
                                                             <font key="font" metaFont="message" size="11"/>
@@ -690,7 +693,7 @@
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
                                                     </button>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="EdU-Bh-JpZ">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="EdU-Bh-JpZ">
                                                         <rect key="frame" x="-2" y="0.0" width="382" height="70"/>
                                                         <textFieldCell key="cell" id="zMe-5l-x3I">
                                                             <font key="font" metaFont="message" size="11"/>
@@ -811,14 +814,14 @@
                                 <subviews>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="u6O-4K-75Z">
                                         <rect key="frame" x="22" y="3" width="22.5" height="17"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="22" id="UQT-eZ-LNR"/>
-                                            <constraint firstAttribute="height" constant="22" id="uwR-hM-OuR"/>
-                                        </constraints>
                                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="uN4-Rq-4kg">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="22" id="UQT-eZ-LNR"/>
+                                            <constraint firstAttribute="height" constant="22" id="uwR-hM-OuR"/>
+                                        </constraints>
                                         <accessibility description="Remove Account"/>
                                         <connections>
                                             <action selector="removeAccount:" target="3t8-w7-ug2" id="pFd-RI-HyW"/>
@@ -827,14 +830,14 @@
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mjp-hd-2rz">
                                         <rect key="frame" x="0.0" y="-1.5" width="22.5" height="26"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="22" id="0Z2-IH-SOa"/>
-                                            <constraint firstAttribute="width" constant="22" id="NnL-eJ-2q3"/>
-                                        </constraints>
                                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="zfj-jE-Uwq">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="22" id="0Z2-IH-SOa"/>
+                                            <constraint firstAttribute="width" constant="22" id="NnL-eJ-2q3"/>
+                                        </constraints>
                                         <accessibility description="Add Account"/>
                                         <connections>
                                             <action selector="newAuthorization:" target="5Xc-dh-wga" id="ZsW-kk-T1d"/>
@@ -929,7 +932,7 @@
                                                 <stackView distribution="fill" orientation="vertical" alignment="centerX" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yjp-jK-tRK">
                                                     <rect key="frame" x="20" y="20" width="77" height="44"/>
                                                     <subviews>
-                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0cK-Iv-ebj">
+                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0cK-Iv-ebj">
                                                             <rect key="frame" x="11" y="28" width="54" height="16"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" id="4hy-xb-0b9">
                                                                 <font key="font" usesAppearanceFont="YES"/>
@@ -1010,7 +1013,7 @@
                                                 <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="vhq-sq-ASd">
                                                     <rect key="frame" x="17" y="153" width="348" height="5"/>
                                                 </box>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d9n-WO-gIz">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d9n-WO-gIz">
                                                     <rect key="frame" x="15" y="254" width="43" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Avatar" id="FUA-Lk-cqe">
                                                         <font key="font" metaFont="system"/>
@@ -1018,7 +1021,7 @@
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VGZ-sd-hv3">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VGZ-sd-hv3">
                                                     <rect key="frame" x="15" y="131" width="49" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Header" id="jUH-Xk-oTU">
                                                         <font key="font" metaFont="system"/>
@@ -1026,7 +1029,7 @@
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="J7K-OM-Nbl">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="J7K-OM-Nbl">
                                                     <rect key="frame" x="15" y="164" width="147" height="14"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Maximum size 400×400 px" id="8EV-M5-Nri">
                                                         <font key="font" metaFont="message" size="11"/>
@@ -1034,7 +1037,7 @@
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DNk-CZ-gqn">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DNk-CZ-gqn">
                                                     <rect key="frame" x="15" y="41" width="151" height="14"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Maximum size 1500×500 px" id="9Gz-Aq-hU2">
                                                         <font key="font" metaFont="message" size="11"/>
@@ -1046,7 +1049,7 @@
                                                     <rect key="frame" x="17" y="10" width="14" height="14"/>
                                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="info_small" id="Mif-t7-Uga"/>
                                                 </imageView>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="27w-fo-Xsc">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="27w-fo-Xsc">
                                                     <rect key="frame" x="35" y="10" width="339" height="14"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Click – or drop an image – into the wells to upload a new image." id="ka0-2P-FIZ">
                                                         <font key="font" metaFont="message" size="11"/>
@@ -1089,7 +1092,7 @@
                                             <rect key="frame" x="10" y="33" width="382" height="270"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vAJ-L7-D2B">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vAJ-L7-D2B">
                                                     <rect key="frame" x="15" y="244" width="104" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="100" id="ASj-kU-Tab"/>
@@ -1100,7 +1103,7 @@
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="S2a-g7-1jm">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="S2a-g7-1jm">
                                                     <rect key="frame" x="15" y="213" width="104" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Bio:" id="Xxd-OG-yoc">
                                                         <font key="font" usesAppearanceFont="YES"/>
@@ -1108,7 +1111,7 @@
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Qg-Bs-7GD">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Qg-Bs-7GD">
                                                     <rect key="frame" x="125" y="241" width="240" height="21"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="YhW-FQ-zUv">
                                                         <font key="font" metaFont="system"/>
@@ -1125,7 +1128,7 @@
                                                         </binding>
                                                     </connections>
                                                 </textField>
-                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="WVo-iT-hI4">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="WVo-iT-hI4">
                                                     <rect key="frame" x="125" y="171" width="240" height="60"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="60" id="yQM-zZ-4zq"/>
@@ -1151,7 +1154,7 @@
                                                         <rect key="frame" x="4" y="5" width="346" height="133"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Lg-Fo-88n">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Lg-Fo-88n">
                                                                 <rect key="frame" x="12" y="100" width="100" height="21"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="100" id="Fwb-Nk-w2Q"/>
@@ -1171,7 +1174,7 @@
                                                                     </binding>
                                                                 </connections>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BPq-yP-V3L">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BPq-yP-V3L">
                                                                 <rect key="frame" x="120" y="100" width="216" height="21"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="vs6-HP-ZtI">
                                                                     <font key="font" metaFont="system"/>
@@ -1188,7 +1191,7 @@
                                                                     </binding>
                                                                 </connections>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KWC-L6-msQ">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KWC-L6-msQ">
                                                                 <rect key="frame" x="12" y="72" width="100" height="21"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="100" id="xy1-8l-pkP"/>
@@ -1207,7 +1210,7 @@
                                                                     </binding>
                                                                 </connections>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NRd-j8-TvP">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NRd-j8-TvP">
                                                                 <rect key="frame" x="120" y="72" width="216" height="21"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="20k-Pk-kTd">
                                                                     <font key="font" metaFont="system"/>
@@ -1224,7 +1227,7 @@
                                                                     </binding>
                                                                 </connections>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8d8-RX-tzG">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8d8-RX-tzG">
                                                                 <rect key="frame" x="12" y="44" width="100" height="21"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="100" id="IQT-JV-td5"/>
@@ -1244,7 +1247,7 @@
                                                                     </binding>
                                                                 </connections>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="c6A-A9-3pX">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="c6A-A9-3pX">
                                                                 <rect key="frame" x="120" y="44" width="216" height="21"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="jHH-tX-wa5">
                                                                     <font key="font" metaFont="system"/>
@@ -1261,7 +1264,7 @@
                                                                     </binding>
                                                                 </connections>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UFM-M4-fp6">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UFM-M4-fp6">
                                                                 <rect key="frame" x="12" y="16" width="100" height="21"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="100" id="e46-8J-Jkw"/>
@@ -1280,7 +1283,7 @@
                                                                     </binding>
                                                                 </connections>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pNY-m5-JQs">
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pNY-m5-JQs">
                                                                 <rect key="frame" x="120" y="16" width="216" height="21"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="32D-18-tqH">
                                                                     <font key="font" metaFont="system"/>
@@ -1361,7 +1364,7 @@
                                                                 <binding destination="3t8-w7-ug2" name="enabled" keyPath="self.canEdit" id="VHl-0z-DgQ"/>
                                                             </connections>
                                                         </button>
-                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CbL-eT-0sG">
+                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CbL-eT-0sG">
                                                             <rect key="frame" x="-2" y="56" width="235" height="14"/>
                                                             <textFieldCell key="cell" title="Requires you to manually approve followers." id="Mr0-dA-6gR">
                                                                 <font key="font" metaFont="message" size="11"/>
@@ -1380,7 +1383,7 @@
                                                                 <binding destination="3t8-w7-ug2" name="value" keyPath="selectedAccount.bot" id="6lE-Hn-Sph"/>
                                                             </connections>
                                                         </button>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="SeI-nB-FiX">
+                                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="SeI-nB-FiX">
                                                             <rect key="frame" x="-2" y="0.0" width="346" height="28"/>
                                                             <textFieldCell key="cell" title="This account mainly performs automated actions and might not be monitored." id="iZh-Lm-m4o">
                                                                 <font key="font" metaFont="message" size="11"/>
@@ -1395,7 +1398,7 @@
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
                                                         </button>
-                                                        <textField hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="LBa-S6-PDo">
+                                                        <textField hidden="YES" focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="LBa-S6-PDo">
                                                             <rect key="frame" x="-2" y="78" width="536" height="14"/>
                                                             <textFieldCell key="cell" title="The directory lets people find accounts based on interests and activity. Requires at least 10 followers." id="G7q-f7-YhI">
                                                                 <font key="font" metaFont="message" size="11"/>
@@ -1464,7 +1467,7 @@
                                                                                 <rect key="frame" x="0.0" y="0.0" width="149" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cqx-eO-MVL">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cqx-eO-MVL">
                                                                                         <rect key="frame" x="0.0" y="1" width="148" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="7Cj-34-Zhb">
@@ -1504,7 +1507,7 @@
                                                                                 <rect key="frame" x="149" y="0.0" width="197" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="03w-zG-PdU">
+                                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="03w-zG-PdU">
                                                                                         <rect key="frame" x="0.0" y="1" width="196" height="16"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="LA1-MF-EYt">
@@ -1561,14 +1564,14 @@
                                                     <subviews>
                                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="R6v-NJ-5pX">
                                                             <rect key="frame" x="22" y="3" width="22.5" height="17"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="22" id="3hk-9c-FF8"/>
-                                                                <constraint firstAttribute="height" constant="22" id="GUe-xM-d46"/>
-                                                            </constraints>
                                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="TYW-9Q-EhG">
                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="22" id="3hk-9c-FF8"/>
+                                                                <constraint firstAttribute="height" constant="22" id="GUe-xM-d46"/>
+                                                            </constraints>
                                                             <accessibility description="Delete Filter"/>
                                                             <connections>
                                                                 <action selector="confirmDeletingSelectedFilter:" target="QDL-6m-U3m" id="tIV-Ve-L99"/>
@@ -1577,14 +1580,14 @@
                                                         </button>
                                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oiR-Vc-Qeg">
                                                             <rect key="frame" x="0.0" y="-1.5" width="22.5" height="26"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="22" id="5nY-Iw-kHf"/>
-                                                                <constraint firstAttribute="height" constant="22" id="nF3-eS-S3U"/>
-                                                            </constraints>
                                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="pOr-Zd-L9H">
                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="22" id="5nY-Iw-kHf"/>
+                                                                <constraint firstAttribute="height" constant="22" id="nF3-eS-S3U"/>
+                                                            </constraints>
                                                             <accessibility description="Add Filter"/>
                                                             <connections>
                                                                 <action selector="showFilterCreator:" target="QDL-6m-U3m" id="WfV-Cv-Cau"/>
@@ -1627,7 +1630,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </customView>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2zM-qh-QzZ">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2zM-qh-QzZ">
                                                     <rect key="frame" x="15" y="251" width="352" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="The following filters only apply to the selected account:" id="n53-AJ-f47">
                                                         <font key="font" usesAppearanceFont="YES"/>
@@ -1757,7 +1760,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </box>
-                            <textField horizontalHuggingPriority="255" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="81J-7V-bx2">
+                            <textField focusRingType="none" horizontalHuggingPriority="255" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="81J-7V-bx2">
                                 <rect key="frame" x="40" y="12" width="618" height="32"/>
                                 <textFieldCell key="cell" title="Mastonaut does not support offline notification delivery. You will only receive notifications while Mastonaut is running." id="3zC-JY-08E">
                                     <font key="font" metaFont="system"/>
