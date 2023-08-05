@@ -183,6 +183,12 @@ public class MastonautPreferences: PreferencesController
 			return .enabled(value: 500)
 		}
 	}
+	
+	@objc public dynamic var enableStatusSwipeGestures: Bool
+	{
+		get { return bool(forKey: #keyPath(enableStatusSwipeGestures)) ?? true }
+		set { defaults.setValue(newValue, forKey: #keyPath(enableStatusSwipeGestures)) }
+	}
 
 	// Composing preferences
 

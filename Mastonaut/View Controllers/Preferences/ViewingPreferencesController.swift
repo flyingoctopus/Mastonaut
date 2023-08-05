@@ -22,26 +22,28 @@ import CoreTootin
 
 class ViewingPreferencesController: NSViewController
 {
-	@IBOutlet weak var fontSizePreferencesView: NSView!
-	
-	@IBOutlet private weak var sensitiveMediaHideSensitiveButton: NSButton!
-	@IBOutlet private weak var sensitiveMediaAlwaysRevealButton: NSButton!
-	@IBOutlet private weak var sensitiveMediaAlwaysHideButton: NSButton!
+	@IBOutlet var fontSizePreferencesView: NSView!
 
-	@IBOutlet private weak var spoilerStatusHideAllContentButton: NSButton!
-	@IBOutlet private weak var spoilerStatusRevealTextButton: NSButton!
-	@IBOutlet private weak var spoilerStatusRevealAllButton: NSButton!
+	@IBOutlet private var sensitiveMediaHideSensitiveButton: NSButton!
+	@IBOutlet private var sensitiveMediaAlwaysRevealButton: NSButton!
+	@IBOutlet private var sensitiveMediaAlwaysHideButton: NSButton!
 
-	@IBOutlet private weak var autoplayVideosButton: NSButton!
+	@IBOutlet private var spoilerStatusHideAllContentButton: NSButton!
+	@IBOutlet private var spoilerStatusRevealTextButton: NSButton!
+	@IBOutlet private var spoilerStatusRevealAllButton: NSButton!
 
-	@IBOutlet weak var longTootCutoffSlider: NSSlider!
+	@IBOutlet private var autoplayVideosButton: NSButton!
+
+	@IBOutlet private var longTootCutoffSlider: NSSlider!
+
+	@IBOutlet private var statusSwipeGesturesButton: NSButton!
 
 	private var preferenceObservers: [AnyObject] = []
 
 	override func viewDidLoad()
 	{
 		super.viewDidLoad()
-		
+
 		let fontSizeView = FontSizePreferencesView()
 		AppKitSwiftUIIntegration.hostSwiftUIView(fontSizeView, inView: fontSizePreferencesView)
 
@@ -52,7 +54,7 @@ class ViewingPreferencesController: NSViewController
 		]
 
 		preferenceObservers.append(PreferenceEnumRadioObserver(preference: \MastonautPreferences.mediaDisplayMode,
-															   buttonMap: sensitiveMediaButtonMap))
+		                                                       buttonMap: sensitiveMediaButtonMap))
 
 		let spoilerStatusButtonMap: [MastonautPreferences.SpoilerDisplayMode: NSButton] = [
 			.alwaysHide: spoilerStatusHideAllContentButton,
@@ -61,11 +63,13 @@ class ViewingPreferencesController: NSViewController
 		]
 
 		preferenceObservers.append(PreferenceEnumRadioObserver(preference: \MastonautPreferences.spoilerDisplayMode,
-															   buttonMap: spoilerStatusButtonMap))
+		                                                       buttonMap: spoilerStatusButtonMap))
 
 		preferenceObservers.append(PreferenceCheckboxObserver(preference: \.autoplayVideos,
-															  checkbox: autoplayVideosButton))
-		
+		                                                      checkbox: autoplayVideosButton))
+
 		preferenceObservers.append(PreferencesSliderObserver(preference: \.longTootCutoff, slider: longTootCutoffSlider))
+
+		preferenceObservers.append(PreferenceCheckboxObserver(preference: \.enableStatusSwipeGestures, checkbox: statusSwipeGesturesButton))
 	}
 }
