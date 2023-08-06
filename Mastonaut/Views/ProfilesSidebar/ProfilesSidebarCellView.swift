@@ -16,19 +16,25 @@ class ProfilesSidebarCellView: NSTableCellView
 		super.awakeFromNib()
 	}
 
-	@IBOutlet weak var userDisplayNameButton: NSButton!
+	@IBOutlet var userDisplayNameButton: NSButton!
 	@IBOutlet private unowned var agentAvatarButton: NSButton!
 	@IBOutlet private unowned var userAccountLabel: NSTextField!
 	@IBOutlet private unowned var userBioLabel: AttributedLabel!
 
+	unowned var account: Account?
+	unowned var instance: Instance?
+
 	func set(profile: Account, instance: Instance)
 	{
+		account = profile
+		self.instance = instance
+
 		userDisplayNameButton.title = profile.bestDisplayName
 		userAccountLabel.stringValue = profile.uri(in: instance)
 		userBioLabel.attributedStringValue = profile.attributedNote
-		
+
 		userBioLabel.backgroundColor = NSColor.clear
-		
+
 		AppDelegate.shared.avatarImageCache.fetchImage(account: profile)
 		{ [weak self] result in
 
@@ -43,5 +49,17 @@ class ProfilesSidebarCellView: NSTableCellView
 				}
 			}
 		}
+	}
+
+	@IBAction func showProfile(_ sender: Any)
+	{
+		guard let account,
+		      let instance,
+		      let authorizedAccountProvider = window?.windowController as? AuthorizedAccountProviding
+		else
+		{ return }
+
+		let profileSidebar = SidebarMode.profile(uri: account.uri(in: instance))
+		authorizedAccountProvider.presentInSidebar(profileSidebar)
 	}
 }

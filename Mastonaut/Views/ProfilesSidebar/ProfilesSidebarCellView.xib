@@ -23,6 +23,9 @@
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
                             </buttonCell>
+                            <connections>
+                                <action selector="showProfile:" target="c22-O7-iKe" id="8wz-Vt-cej"/>
+                            </connections>
                         </button>
                     </subviews>
                     <constraints>
