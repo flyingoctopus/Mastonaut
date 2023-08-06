@@ -163,4 +163,20 @@ class ProfilesSidebarViewController: NSViewController,
 
 		return cellView
 	}
+	
+	@IBAction func doubleClickRow(_ sender: Any)
+	{
+		let row = tableView.clickedRow
+		
+		guard let profiles,
+		      profiles.count >= row,
+			  let authorizedAccountProvider = view.window?.windowController as? AuthorizedAccountProviding
+		else
+		{ return }
+		
+		let profileURI = profiles[row].uri(in: instance)
+		
+		let profileSidebar = SidebarMode.profile(uri: profileURI)
+		authorizedAccountProvider.presentInSidebar(profileSidebar)
+	}
 }

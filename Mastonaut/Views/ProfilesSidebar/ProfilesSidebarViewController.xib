@@ -20,13 +20,13 @@
             <subviews>
                 <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="300" horizontalPageScroll="10" verticalLineScroll="300" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8BO-UK-THj">
                     <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="LAR-nL-Fsa">
                         <rect key="frame" x="1" y="1" width="298" height="298"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="300" rowSizeStyle="automatic" viewBased="YES" id="ljL-Z1-ICx">
-                                <rect key="frame" x="0.0" y="0.0" width="298" height="300"/>
+                                <rect key="frame" x="0.0" y="0.0" width="298" height="298"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="17" height="0.0"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -52,6 +52,7 @@
                                     </tableColumn>
                                 </tableColumns>
                                 <connections>
+                                    <action trigger="doubleAction" selector="doubleClickRow:" target="-2" id="sYN-Vc-JmU"/>
                                     <outlet property="dataSource" destination="-2" id="Kr4-q8-Apt"/>
                                     <outlet property="delegate" destination="-2" id="AsO-IJ-EaH"/>
                                 </connections>
