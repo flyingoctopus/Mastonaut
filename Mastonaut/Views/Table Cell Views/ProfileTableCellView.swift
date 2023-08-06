@@ -39,9 +39,14 @@ class ProfileTableCellView: MastonautTableCellView
 	@IBOutlet private unowned var followsCountLabel: NSTextField!
 	@IBOutlet private unowned var followersCountLabel: NSTextField!
 
+	@IBOutlet var followsStackView: NSStackView!
+	@IBOutlet var followersStackView: NSStackView!
+
 	@IBOutlet private unowned var listSourceSegmentedControl: NSSegmentedControl!
 
 	@IBOutlet private var fieldsController: ProfileFieldsController!
+
+	unowned var account: Account?
 
 	private static let bioLabelAttributes: [NSAttributedString.Key: AnyObject] = [
 		.foregroundColor: NSColor.labelColor, .font: NSFont.labelFont(ofSize: 14),
@@ -80,6 +85,12 @@ class ProfileTableCellView: MastonautTableCellView
 		relationshipButtonsContainer.isHidden = true
 
 		relationshipLabel.isHidden = true
+
+		var recognizer = NSClickGestureRecognizer(target: self, action: #selector(followsClicked))
+		followsStackView.gestureRecognizers.append(recognizer)
+
+		recognizer = NSClickGestureRecognizer(target: self, action: #selector(followersClicked))
+		followersStackView.gestureRecognizers.append(recognizer)
 	}
 
 	func clear()
@@ -96,6 +107,8 @@ class ProfileTableCellView: MastonautTableCellView
 
 	func updateAccountControls(with account: Account)
 	{
+		self.account = account
+
 		fieldsController.set(account: account)
 
 		let attributedNote = account.attributedNote
@@ -179,6 +192,32 @@ class ProfileTableCellView: MastonautTableCellView
 		{
 			headerImageView.image = #imageLiteral(resourceName: "missing_header")
 		}
+	}
+
+	private func presentInSidebar(mode: SidebarModel)
+	{
+		guard let authorizedAccountProvider = window?.windowController as? AuthorizedAccountProviding
+		else { return }
+
+		authorizedAccountProvider.presentInSidebar(mode)
+	}
+
+	@objc
+	func followsClicked(_ sender: Any)
+	{
+		guard let account else { return }
+
+		let mode = SidebarMode.profilesForProfile(whoRelateToOtherProfile: account, relationship: .following)
+		presentInSidebar(mode: mode)
+	}
+
+	@objc
+	func followersClicked(_ sender: Any)
+	{
+		guard let account else { return }
+
+		let mode = SidebarMode.profilesForProfile(whoRelateToOtherProfile: account, relationship: .follower)
+		presentInSidebar(mode: mode)
 	}
 
 	@IBAction func profileModeSegmentedControlAction(_ sender: NSSegmentedControl)
