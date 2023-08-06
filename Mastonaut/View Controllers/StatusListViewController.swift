@@ -127,22 +127,15 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 	}
 
 	func showReblogProfiles(status: Status)
-	{}
+	{
+		let sidebarMode = SidebarMode.profilesForStatus(whoInteractedWithStatus: status, purpose: .favorite)
+		authorizedAccountProvider?.presentInSidebar(sidebarMode)
+	}
 
 	func showFavoriteProfiles(status: Status) async
 	{
-		guard let client,
-		      let instance = authorizedAccountProvider?.currentInstance else { return }
-
-		let request = Statuses.favouritedBy(id: status.id)
-
-		do
-		{
-			let result = try await client.run(request)
-			let sidebarMode = SidebarMode.profiles(title: "Favorited by", profileURIs: result.value.map { $0.uri(in: instance) })
-			authorizedAccountProvider?.presentInSidebar(sidebarMode)
-		}
-		catch { return }
+		let sidebarMode = SidebarMode.profilesForStatus(whoInteractedWithStatus: status, purpose: .favorite)
+		authorizedAccountProvider?.presentInSidebar(sidebarMode)
 	}
 
 	func showStatusEdits(status: Status, edits: [StatusEdit])
