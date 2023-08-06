@@ -32,15 +32,15 @@ class ProfilesSidebarCellView: NSTableCellView
 		AppDelegate.shared.avatarImageCache.fetchImage(account: profile)
 		{ [weak self] result in
 
-			switch result
+			DispatchQueue.main.async
 			{
-			case .inCache(let avatarImage), .loaded(let avatarImage):
-				DispatchQueue.main.async
+				switch result
 				{
+				case .inCache(let avatarImage), .loaded(let avatarImage):
 					self?.agentAvatarButton.image = avatarImage
+				case .noImage:
+					self?.agentAvatarButton.image = #imageLiteral(resourceName: "missing")
 				}
-			case .noImage:
-				self?.agentAvatarButton.image = #imageLiteral(resourceName: "missing")
 			}
 		}
 	}
