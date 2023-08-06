@@ -18,8 +18,8 @@
 //
 
 import Cocoa
-import MastodonKit
 import CoreTootin
+import MastodonKit
 
 class ProfileTableCellView: MastonautTableCellView
 {
@@ -51,7 +51,7 @@ class ProfileTableCellView: MastonautTableCellView
 	private static let bioLabelAttributes: [NSAttributedString.Key: AnyObject] = [
 		.foregroundColor: NSColor.labelColor, .font: NSFont.labelFont(ofSize: 14),
 		.underlineStyle: NSNumber(value: 0) // <-- This is a hack to prevent the label's contents from shifting
-											// vertically when clicked.
+		// vertically when clicked.
 	]
 
 	private static let bioLabelLinkAttributes: [NSAttributedString.Key: AnyObject] = [
@@ -71,9 +71,9 @@ class ProfileTableCellView: MastonautTableCellView
 	{
 		switch mode
 		{
-		case .statuses: 			listSourceSegmentedControl.setSelected(true, forSegment: 0)
-		case .statusesAndReplies:	listSourceSegmentedControl.setSelected(true, forSegment: 1)
-		case .mediaOnly:			listSourceSegmentedControl.setSelected(true, forSegment: 2)
+		case .statuses: listSourceSegmentedControl.setSelected(true, forSegment: 0)
+		case .statusesAndReplies: listSourceSegmentedControl.setSelected(true, forSegment: 1)
+		case .mediaOnly: listSourceSegmentedControl.setSelected(true, forSegment: 2)
 		}
 	}
 
@@ -121,8 +121,8 @@ class ProfileTableCellView: MastonautTableCellView
 		{
 			userBioLabel.isHidden = false
 			userBioLabel.set(attributedStringValue: attributedNote,
-							 applyingAttributes: ProfileTableCellView.bioLabelAttributes,
-							 applyingEmojis: account.cacheableEmojis)
+			                 applyingAttributes: ProfileTableCellView.bioLabelAttributes,
+			                 applyingEmojis: account.cacheableEmojis)
 
 			userBioLabel.selectableAfterFirstClick = true
 		}
@@ -151,7 +151,9 @@ class ProfileTableCellView: MastonautTableCellView
 			relationshipLabel.isHidden = true
 		}
 
-		guard !relationship.contains(.isSelf) else {
+		guard !relationship.contains(.isSelf)
+		else
+		{
 			relationshipButtonsContainer.setHidden(true, animated: true)
 			return
 		}
@@ -162,19 +164,19 @@ class ProfileTableCellView: MastonautTableCellView
 		followButton.isEnabled = true
 		followButton.title = relationship.contains(.following) ? 🔠("Unfollow") : 🔠("Follow")
 		followButton.action = relationship.contains(.following) ? #selector(unfollowAccount(_:))
-																: #selector(followAccount(_:))
+			: #selector(followAccount(_:))
 
 		blockButton.target = self
 		blockButton.isEnabled = true
 		blockButton.title = relationship.contains(.blocked) ? 🔠("Unblock") : 🔠("Block")
 		blockButton.action = relationship.contains(.blocked) ? #selector(unblockAccount(_:))
-															 : #selector(blockAccount(_:))
+			: #selector(blockAccount(_:))
 
 		muteButton.target = self
 		muteButton.isEnabled = true
 		muteButton.title = relationship.contains(.muted) ? 🔠("Unmute") : 🔠("Mute")
 		muteButton.action = relationship.contains(.muted) ? #selector(unmuteAccount(_:))
-														  : #selector(muteAccount(_:))
+			: #selector(muteAccount(_:))
 	}
 
 	func setAvatar(with image: NSImage)
@@ -222,7 +224,7 @@ class ProfileTableCellView: MastonautTableCellView
 
 	@IBAction func profileModeSegmentedControlAction(_ sender: NSSegmentedControl)
 	{
-		guard let didChangeBlock = self.profileDisplayModeDidChange else { return }
+		guard let didChangeBlock = profileDisplayModeDidChange else { return }
 
 		switch sender.selectedSegment
 		{
@@ -284,16 +286,19 @@ private extension RelationshipSet
 	{
 		var sentences: [String] = []
 
-		if contains(.blocked) {
+		if contains(.blocked)
+		{
 			sentences.append(🔠("relationship.blocked"))
 		}
-		else if contains([.follower, .following]) {
+		else if contains([.follower, .following])
+		{
 			sentences.append(🔠("relationship.mutual"))
 		}
-		else if contains(.follower) {
+		else if contains(.follower)
+		{
 			sentences.append(🔠("relationship.follower"))
 		}
-		
+
 		if contains(.followingRequested)
 		{
 			sentences.append(🔠("relationship.followingRequested"))
@@ -309,7 +314,7 @@ private extension RelationshipSet
 			sentences.append(🔠("relationship.creator"))
 		}
 
-		return sentences.filter({!$0.isEmpty}).joined(separator: "\n")
+		return sentences.filter { !$0.isEmpty }.joined(separator: "\n")
 	}
 }
 
@@ -317,6 +322,6 @@ extension ProfileTableCellView: RichTextCapable
 {
 	func set(shouldDisplayAnimatedContents animates: Bool)
 	{
-		userBioLabel.animatedEmojiImageViews?.forEach({ $0.animates = animates })
+		userBioLabel.animatedEmojiImageViews?.forEach { $0.animates = animates }
 	}
 }
