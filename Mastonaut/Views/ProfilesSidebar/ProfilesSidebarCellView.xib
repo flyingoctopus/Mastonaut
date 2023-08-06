@@ -10,11 +10,11 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="c22-O7-iKe" customClass="ProfilesSidebarCellView" customModule="Mastonaut" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
+            <rect key="frame" x="0.0" y="0.0" width="310" height="115"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <customView wantsLayer="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ne2-An-GRN" customClass="BorderView" customModule="CoreTootin">
-                    <rect key="frame" x="60" y="191" width="42" height="42"/>
+                <customView wantsLayer="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ne2-An-GRN" customClass="BorderView" customModule="CoreTootin">
+                    <rect key="frame" x="20" y="53" width="42" height="42"/>
                     <subviews>
                         <button translatesAutoresizingMaskIntoConstraints="NO" id="D1s-zi-7vu">
                             <rect key="frame" x="0.0" y="0.0" width="42" height="42"/>
@@ -38,16 +38,27 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </customView>
-                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="PWY-S9-nSa">
-                    <rect key="frame" x="95" y="158" width="244" height="16"/>
+                <button verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="36H-cZ-o4a">
+                    <rect key="frame" x="70" y="79" width="220" height="16"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="smallSquare" title="John Appleseed followed you" bezelStyle="smallSquare" imagePosition="overlaps" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="R3g-tl-DlX">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="systemMedium" size="13"/>
+                    </buttonCell>
+                    <color key="contentTintColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                </button>
+                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PWY-S9-nSa">
+                    <rect key="frame" x="68" y="55" width="224" height="16"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" lineBreakMode="truncatingTail" title="steve.baum@mastodon.example" id="ULu-Vb-tC1">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="IIX-9E-jGB" customClass="AttributedLabel">
-                    <rect key="frame" x="159" y="87" width="65" height="14"/>
+                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IIX-9E-jGB" customClass="AttributedLabel">
+                    <rect key="frame" x="68" y="0.0" width="224" height="47"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <textFieldCell key="cell" title="Hello there!" allowsEditingTextAttributes="YES" id="SK8-MY-qc1">
                         <font key="font" metaFont="menu" size="11"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -58,16 +69,14 @@
             <constraints>
                 <constraint firstItem="ne2-An-GRN" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="67" id="L5t-nN-ghI"/>
                 <constraint firstItem="ne2-An-GRN" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="60" id="PTl-cx-g9G"/>
-                <constraint firstItem="PWY-S9-nSa" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="97" id="gHG-tZ-fOl"/>
-                <constraint firstItem="IIX-9E-jGB" firstAttribute="top" secondItem="PWY-S9-nSa" secondAttribute="bottom" constant="57" id="ihr-r4-y1u"/>
-                <constraint firstAttribute="trailing" secondItem="IIX-9E-jGB" secondAttribute="trailing" constant="78" id="jbD-rL-IIf"/>
-                <constraint firstItem="PWY-S9-nSa" firstAttribute="top" secondItem="ne2-An-GRN" secondAttribute="bottom" constant="17" id="uGY-pl-OfM"/>
-                <constraint firstAttribute="trailing" secondItem="PWY-S9-nSa" secondAttribute="trailing" constant="-37" id="wrB-ys-XYU"/>
             </constraints>
             <connections>
-                <outlet property="bioLabel" destination="IIX-9E-jGB" id="ucz-3H-nBX"/>
+                <outlet property="agentAvatarButton" destination="D1s-zi-7vu" id="LOZ-t5-RHl"/>
+                <outlet property="userAccountLabel" destination="PWY-S9-nSa" id="jFE-js-MGL"/>
+                <outlet property="userBioLabel" destination="IIX-9E-jGB" id="MBn-t7-VD3"/>
+                <outlet property="userDisplayNameLabel" destination="R3g-tl-DlX" id="WyD-rT-1Am"/>
             </connections>
-            <point key="canvasLocation" x="-3" y="135"/>
+            <point key="canvasLocation" x="2" y="42.5"/>
         </customView>
     </objects>
     <resources>

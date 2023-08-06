@@ -153,11 +153,13 @@ class ProfilesSidebarViewController: NSViewController,
 	{
 		let _cellView = tableView.makeView(withIdentifier: CellViewIdentifiers.profile, owner: nil)
 
-		guard let cellView = _cellView as? ProfilesSidebarCellView
+		guard let profiles,
+		      profiles.count >= row,
+		      let cellView = _cellView as? ProfilesSidebarCellView
 		else
 		{ return view }
 		
-		cellView.set(title: "hello")
+		cellView.set(profile: profiles[row], instance: instance)
 
 		return cellView
 	}
