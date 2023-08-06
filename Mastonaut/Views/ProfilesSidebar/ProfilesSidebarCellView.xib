@@ -13,11 +13,12 @@
             <rect key="frame" x="0.0" y="0.0" width="310" height="115"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <customView wantsLayer="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ne2-An-GRN" customClass="BorderView" customModule="CoreTootin">
+                <customView wantsLayer="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ne2-An-GRN" customClass="BorderView" customModule="CoreTootin">
                     <rect key="frame" x="20" y="53" width="42" height="42"/>
                     <subviews>
-                        <button translatesAutoresizingMaskIntoConstraints="NO" id="D1s-zi-7vu">
+                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D1s-zi-7vu">
                             <rect key="frame" x="0.0" y="0.0" width="42" height="42"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="missing" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Q9f-Zb-Rjt">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
@@ -25,12 +26,8 @@
                         </button>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="D1s-zi-7vu" firstAttribute="leading" secondItem="ne2-An-GRN" secondAttribute="leading" id="6ew-5J-28N"/>
                         <constraint firstAttribute="height" constant="42" id="Gev-UE-Zl7"/>
-                        <constraint firstAttribute="bottom" secondItem="D1s-zi-7vu" secondAttribute="bottom" id="IZD-jZ-JV7"/>
-                        <constraint firstItem="D1s-zi-7vu" firstAttribute="top" secondItem="ne2-An-GRN" secondAttribute="top" id="LII-4A-D9x"/>
                         <constraint firstAttribute="width" constant="42" id="MUn-Th-95G"/>
-                        <constraint firstAttribute="trailing" secondItem="D1s-zi-7vu" secondAttribute="trailing" id="dpS-J6-yh5"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="borderRadius">
@@ -41,7 +38,7 @@
                 <button verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="36H-cZ-o4a">
                     <rect key="frame" x="70" y="79" width="220" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="smallSquare" title="John Appleseed followed you" bezelStyle="smallSquare" imagePosition="overlaps" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="R3g-tl-DlX">
+                    <buttonCell key="cell" type="smallSquare" title="John Appleseed" bezelStyle="smallSquare" imagePosition="overlaps" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="R3g-tl-DlX">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="systemMedium" size="13"/>
                     </buttonCell>
@@ -67,14 +64,14 @@
                 </textField>
             </subviews>
             <constraints>
-                <constraint firstItem="ne2-An-GRN" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="67" id="L5t-nN-ghI"/>
-                <constraint firstItem="ne2-An-GRN" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="60" id="PTl-cx-g9G"/>
+                <constraint firstItem="ne2-An-GRN" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="20" id="L5t-nN-ghI"/>
+                <constraint firstItem="ne2-An-GRN" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" id="PTl-cx-g9G"/>
             </constraints>
             <connections>
                 <outlet property="agentAvatarButton" destination="D1s-zi-7vu" id="LOZ-t5-RHl"/>
                 <outlet property="userAccountLabel" destination="PWY-S9-nSa" id="jFE-js-MGL"/>
                 <outlet property="userBioLabel" destination="IIX-9E-jGB" id="MBn-t7-VD3"/>
-                <outlet property="userDisplayNameLabel" destination="R3g-tl-DlX" id="WyD-rT-1Am"/>
+                <outlet property="userDisplayNameButton" destination="36H-cZ-o4a" id="Opr-sf-hWb"/>
             </connections>
             <point key="canvasLocation" x="2" y="42.5"/>
         </customView>

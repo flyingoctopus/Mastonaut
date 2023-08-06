@@ -16,17 +16,19 @@ class ProfilesSidebarCellView: NSTableCellView
 		super.awakeFromNib()
 	}
 
-	@IBOutlet private unowned var userDisplayNameLabel: NSButtonCell!
+	@IBOutlet weak var userDisplayNameButton: NSButton!
 	@IBOutlet private unowned var agentAvatarButton: NSButton!
 	@IBOutlet private unowned var userAccountLabel: NSTextField!
 	@IBOutlet private unowned var userBioLabel: AttributedLabel!
 
 	func set(profile: Account, instance: Instance)
 	{
-		userDisplayNameLabel.stringValue = profile.bestDisplayName
+		userDisplayNameButton.title = profile.bestDisplayName
 		userAccountLabel.stringValue = profile.uri(in: instance)
 		userBioLabel.attributedStringValue = profile.attributedNote
-
+		
+		userBioLabel.backgroundColor = NSColor.clear
+		
 		AppDelegate.shared.avatarImageCache.fetchImage(account: profile)
 		{ [weak self] result in
 
