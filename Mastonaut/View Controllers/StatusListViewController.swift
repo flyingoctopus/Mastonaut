@@ -128,13 +128,13 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 
 	func showReblogProfiles(status: Status)
 	{
-		let sidebarMode = SidebarMode.profilesForStatus(whoInteractedWithStatus: status, purpose: .reblog)
+		let sidebarMode = SidebarMode.profilesForStatus(whoInteractedWithStatusId: status.id, purpose: .reblog)
 		authorizedAccountProvider?.presentInSidebar(sidebarMode)
 	}
 
 	func showFavoriteProfiles(status: Status) async
 	{
-		let sidebarMode = SidebarMode.profilesForStatus(whoInteractedWithStatus: status, purpose: .favorite)
+		let sidebarMode = SidebarMode.profilesForStatus(whoInteractedWithStatusId: status.id, purpose: .favorite)
 		authorizedAccountProvider?.presentInSidebar(sidebarMode)
 	}
 

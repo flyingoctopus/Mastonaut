@@ -13,10 +13,11 @@ import MastodonKit
 class ProfilesSidebarViewController: NSViewController,
 	NSTableViewDataSource, NSTableViewDelegate, SidebarPresentable
 {
-	init(status: Status, purpose: SidebarMode.StatusInteractionKind,
-	     client: ClientType, instance: Instance)
+	init(statusUrl: String, purpose: SidebarMode.StatusInteractionKind,
+	     client: ClientType, instance: Instance,
+	     sidebarMode: SidebarMode)
 	{
-		sidebarModelValue = SidebarMode.profilesForStatus(whoInteractedWithStatus: status, purpose: purpose)
+		sidebarModelValue = sidebarMode
 		
 		switch purpose
 		{
@@ -34,10 +35,11 @@ class ProfilesSidebarViewController: NSViewController,
 		refresh()
 	}
 	
-	init(profile: Account, relationship: SidebarMode.RelationshipKind,
-	     client: ClientType, instance: Instance)
+	init(profileUrl: String, relationship: SidebarMode.RelationshipKind,
+	     client: ClientType, instance: Instance,
+	     sidebarMode: SidebarMode)
 	{
-		sidebarModelValue = SidebarMode.profilesForProfile(whoRelateToOtherProfile: profile, relationship: relationship)
+		sidebarModelValue = sidebarMode
 		
 		switch relationship
 		{
@@ -53,6 +55,13 @@ class ProfilesSidebarViewController: NSViewController,
 		super.init(nibName: "ProfilesSidebarViewController", bundle: .main)
 		
 		refresh()
+	}
+	
+	override func awakeFromNib()
+	{
+		super.awakeFromNib()
+
+		tableView.usesAutomaticRowHeights = true
 	}
 	
 	@available(*, unavailable)
@@ -96,22 +105,22 @@ class ProfilesSidebarViewController: NSViewController,
 		
 		switch sidebarModelValue
 		{
-		case SidebarMode.profilesForStatus(let status, let purpose):
+		case SidebarMode.profilesForStatus(let statusUrl, let purpose):
 			switch purpose
 			{
 			case .favorite:
-				request = Statuses.favouritedBy(id: status.id)
+				request = Statuses.favouritedBy(id: statusUrl)
 			case .reblog:
-				request = Statuses.rebloggedBy(id: status.id)
+				request = Statuses.rebloggedBy(id: statusUrl)
 			}
 		
-		case SidebarMode.profilesForProfile(let profile, let relationship):
+		case SidebarMode.profilesForProfile(let profileUrl, let relationship):
 			switch relationship
 			{
 			case .follower:
-				request = Accounts.followers(id: profile.id)
+				request = Accounts.followers(id: profileUrl)
 			case .following:
-				request = Accounts.following(id: profile.id)
+				request = Accounts.following(id: profileUrl)
 			}
 			
 		default:
@@ -170,7 +179,7 @@ class ProfilesSidebarViewController: NSViewController,
 		
 		guard let profiles,
 		      profiles.count >= row,
-			  let authorizedAccountProvider = view.window?.windowController as? AuthorizedAccountProviding
+		      let authorizedAccountProvider = view.window?.windowController as? AuthorizedAccountProviding
 		else
 		{ return }
 		

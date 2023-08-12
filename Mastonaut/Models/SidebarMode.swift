@@ -31,21 +31,21 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 	case favorites
 	case edits(status: Status?, edits: [StatusEdit]?)
 
-	enum StatusInteractionKind
+	enum StatusInteractionKind: String
 	{
 		case reblog
 		case favorite
 	}
 
-	case profilesForStatus(whoInteractedWithStatus: Status, purpose: StatusInteractionKind)
+	case profilesForStatus(whoInteractedWithStatusId: String, purpose: StatusInteractionKind)
 
-	enum RelationshipKind
+	enum RelationshipKind: String
 	{
 		case follower
 		case following
 	}
 
-	case profilesForProfile(whoRelateToOtherProfile: Account, relationship: RelationshipKind)
+	case profilesForProfile(whoRelateToOtherProfileId: String, relationship: RelationshipKind)
 
 	var rawValue: String
 	{
@@ -66,23 +66,11 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 		case .edits(let status, _):
 			return "edits\n\(status?.id ?? "")"
 
-		case .profilesForStatus(let status, let purpose):
-			return "profilesForStatus\n\(status.id)\n\(purpose)"
+		case .profilesForStatus(let statusId, let purpose):
+			return "profilesForStatus\n\(statusId)\n\(purpose)"
 
-		case .profilesForProfile(let profile, let relationship):
-			return "profilesForProfile\n\(profile.url))\n\(relationship)"
-
-//		case .profiles(let title, let profileURIs):
-//			do
-//			{
-//				let encodedProfileURIs = try JSONEncoder().encode(profileURIs)
-//
-//				return "profiles\n\(title)\n" + String(data: encodedProfileURIs, encoding: .utf8)!
-//			}
-//			catch
-//			{
-//				return ""
-//			}
+		case .profilesForProfile(let profileId, let relationship):
+			return "profilesForProfile\n\(profileId))\n\(relationship)"
 		}
 	}
 
@@ -124,20 +112,24 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 		}
 		else if components.count == 3
 		{
-//			if components.first == "profilesForStatus"
-//				else if components.first == "profilesForProfile"
-//			let title = components[1]
-//
-//			do
-//			{
-//				let profileURIs = try JSONDecoder().decode([String].self, from: Data(components[2].utf8))
-//
-//				self = .profiles(title: String(title), profileURIs: profileURIs)
-//			}
-//			catch
-//			{
-			return nil
-//			}
+			if components.first == "profilesForStatus",
+			   let interactionKind = StatusInteractionKind(rawValue: String(components[2]))
+			{
+				let statusId = String(components[1])
+
+				self = .profilesForStatus(whoInteractedWithStatusId: statusId, purpose: interactionKind)
+			}
+			else if components.first == "profilesForProfile",
+			        let relationship = RelationshipKind(rawValue: String(components[2]))
+			{
+				let profileId = String(components[1])
+
+				self = .profilesForProfile(whoRelateToOtherProfileId: profileId, relationship: relationship)
+			}
+			else
+			{
+				return nil
+			}
 		}
 		else
 		{
@@ -175,11 +167,11 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 		case .edits(let status, let edits):
 			return EditHistoryViewController(status: status, edits: edits)
 
-		case .profilesForStatus(let status, let purpose):
-			return ProfilesSidebarViewController(status: status, purpose: purpose, client: client, instance: currentInstance)
+		case .profilesForStatus(let statusUrl, let purpose):
+			return ProfilesSidebarViewController(statusUrl: statusUrl, purpose: purpose, client: client, instance: currentInstance, sidebarMode: self)
 
-		case .profilesForProfile(let profile, let relationship):
-			return ProfilesSidebarViewController(profile: profile, relationship: relationship, client: client, instance: currentInstance)
+		case .profilesForProfile(let profileUrl, let relationship):
+			return ProfilesSidebarViewController(profileUrl: profileUrl, relationship: relationship, client: client, instance: currentInstance, sidebarMode: self)
 		}
 	}
 

@@ -209,7 +209,7 @@ class ProfileTableCellView: MastonautTableCellView
 	{
 		guard let account else { return }
 
-		let mode = SidebarMode.profilesForProfile(whoRelateToOtherProfile: account, relationship: .following)
+		let mode = SidebarMode.profilesForProfile(whoRelateToOtherProfileId: account.id, relationship: .following)
 		presentInSidebar(mode: mode)
 	}
 
@@ -218,7 +218,7 @@ class ProfileTableCellView: MastonautTableCellView
 	{
 		guard let account else { return }
 
-		let mode = SidebarMode.profilesForProfile(whoRelateToOtherProfile: account, relationship: .follower)
+		let mode = SidebarMode.profilesForProfile(whoRelateToOtherProfileId: account.id, relationship: .follower)
 		presentInSidebar(mode: mode)
 	}
 
