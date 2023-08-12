@@ -25,11 +25,12 @@
                         <rect key="frame" x="1" y="1" width="298" height="298"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="300" rowSizeStyle="automatic" viewBased="YES" id="ljL-Z1-ICx">
-                                <rect key="frame" x="0.0" y="0.0" width="298" height="298"/>
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="300" rowSizeStyle="automatic" viewBased="YES" id="ljL-Z1-ICx" customClass="DrawsGridOnlyForPopulatedTableView" customModule="Mastonaut" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="298" height="300"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="17" height="0.0"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <tableViewGridLines key="gridStyleMask" horizontal="YES"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
                                     <tableColumn identifier="column" width="286" minWidth="40" maxWidth="1000" id="AFc-pc-DrW">

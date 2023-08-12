@@ -38,37 +38,43 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </customView>
-                <button verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="36H-cZ-o4a">
-                    <rect key="frame" x="70" y="79" width="220" height="16"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <button verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="36H-cZ-o4a">
+                    <rect key="frame" x="70" y="79" width="235" height="16"/>
                     <buttonCell key="cell" type="smallSquare" title="John Appleseed" bezelStyle="smallSquare" imagePosition="overlaps" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="R3g-tl-DlX">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="systemMedium" size="13"/>
                     </buttonCell>
                     <color key="contentTintColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                 </button>
-                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PWY-S9-nSa">
-                    <rect key="frame" x="68" y="55" width="224" height="16"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" lineBreakMode="truncatingTail" title="steve.baum@mastodon.example" id="ULu-Vb-tC1">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IIX-9E-jGB" customClass="AttributedLabel">
+                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IIX-9E-jGB" customClass="AttributedLabel">
                     <rect key="frame" x="68" y="0.0" width="224" height="47"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <textFieldCell key="cell" title="Hello there!" allowsEditingTextAttributes="YES" id="SK8-MY-qc1">
                         <font key="font" metaFont="menu" size="11"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PWY-S9-nSa">
+                    <rect key="frame" x="68" y="55" width="224" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" title="steve.baum@mastodon.example" id="ULu-Vb-tC1">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
             </subviews>
             <constraints>
+                <constraint firstItem="IIX-9E-jGB" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="70" id="IpE-6n-mKB"/>
                 <constraint firstItem="ne2-An-GRN" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="20" id="L5t-nN-ghI"/>
+                <constraint firstItem="IIX-9E-jGB" firstAttribute="trailing" secondItem="36H-cZ-o4a" secondAttribute="trailing" id="NHb-oo-R9r"/>
                 <constraint firstItem="ne2-An-GRN" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" id="PTl-cx-g9G"/>
+                <constraint firstItem="IIX-9E-jGB" firstAttribute="leading" secondItem="PWY-S9-nSa" secondAttribute="leading" id="TII-wQ-vRS"/>
+                <constraint firstAttribute="bottom" secondItem="IIX-9E-jGB" secondAttribute="bottom" id="aoW-If-TMT"/>
+                <constraint firstItem="IIX-9E-jGB" firstAttribute="top" secondItem="PWY-S9-nSa" secondAttribute="bottom" constant="8" symbolic="YES" id="cLG-TJ-LUU"/>
+                <constraint firstItem="36H-cZ-o4a" firstAttribute="top" secondItem="ne2-An-GRN" secondAttribute="top" id="hg9-fR-A7O"/>
+                <constraint firstAttribute="trailing" secondItem="IIX-9E-jGB" secondAttribute="trailing" constant="5" id="iPT-pS-0jr"/>
+                <constraint firstItem="IIX-9E-jGB" firstAttribute="trailing" secondItem="PWY-S9-nSa" secondAttribute="trailing" id="vkV-ti-Ye7"/>
+                <constraint firstItem="IIX-9E-jGB" firstAttribute="leading" secondItem="36H-cZ-o4a" secondAttribute="leading" id="zVa-uf-hr0"/>
             </constraints>
             <connections>
                 <outlet property="agentAvatarButton" destination="D1s-zi-7vu" id="LOZ-t5-RHl"/>

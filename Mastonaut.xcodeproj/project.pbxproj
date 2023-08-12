@@ -508,6 +508,7 @@
 		5F0AA8A72A7EF60800E284ED /* ProfilesSidebarCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F0AA8A62A7EF60800E284ED /* ProfilesSidebarCellView.xib */; };
 		5F0AA8A92A7EF65000E284ED /* ProfilesSidebarCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0AA8A82A7EF65000E284ED /* ProfilesSidebarCellView.swift */; };
 		5F0AA8AB2A7EF71800E284ED /* ProfilesSidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0AA8AA2A7EF71800E284ED /* ProfilesSidebarViewController.swift */; };
+		5F0AA8B12A8018EE00E284ED /* DrawsGridOnlyForPopulatedTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0AA8B02A8018EE00E284ED /* DrawsGridOnlyForPopulatedTableView.swift */; };
 		5F176FAC290EF03900DF043C /* FollowedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F176FAB290EF03900DF043C /* FollowedList.swift */; };
 		5F176FAF290EF65200DF043C /* FollowedListsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F176FAE290EF65200DF043C /* FollowedListsService.swift */; };
 		5F1F20D62938E86D0057E585 /* LoggingOSLog in Frameworks */ = {isa = PBXBuildFile; productRef = 5F1F20D52938E86D0057E585 /* LoggingOSLog */; };
@@ -1010,6 +1011,7 @@
 		5F0AA8A62A7EF60800E284ED /* ProfilesSidebarCellView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfilesSidebarCellView.xib; sourceTree = "<group>"; };
 		5F0AA8A82A7EF65000E284ED /* ProfilesSidebarCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilesSidebarCellView.swift; sourceTree = "<group>"; };
 		5F0AA8AA2A7EF71800E284ED /* ProfilesSidebarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilesSidebarViewController.swift; sourceTree = "<group>"; };
+		5F0AA8B02A8018EE00E284ED /* DrawsGridOnlyForPopulatedTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawsGridOnlyForPopulatedTableView.swift; sourceTree = "<group>"; };
 		5F176FAB290EF03900DF043C /* FollowedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedList.swift; sourceTree = "<group>"; };
 		5F176FAD290EF4AD00DF043C /* Mastonaut 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mastonaut 8.xcdatamodel"; sourceTree = "<group>"; };
 		5F176FAE290EF65200DF043C /* FollowedListsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedListsService.swift; sourceTree = "<group>"; };
@@ -1886,6 +1888,7 @@
 				5F0AA8A62A7EF60800E284ED /* ProfilesSidebarCellView.xib */,
 				5F0AA8AA2A7EF71800E284ED /* ProfilesSidebarViewController.swift */,
 				5F0AA8A42A7EF4C300E284ED /* ProfilesSidebarViewController.xib */,
+				5F0AA8B02A8018EE00E284ED /* DrawsGridOnlyForPopulatedTableView.swift */,
 			);
 			path = ProfilesSidebar;
 			sourceTree = "<group>";
@@ -3089,6 +3092,7 @@
 				1519EBD722A72122007AB87F /* IndexPath+Helpers.swift in Sources */,
 				151D8817230DEA62002583D3 /* BaseAccountsPreferencesViewController.swift in Sources */,
 				15DC02E1225979C0008407A6 /* AccountReference.swift in Sources */,
+				5F0AA8B12A8018EE00E284ED /* DrawsGridOnlyForPopulatedTableView.swift in Sources */,
 				15EE2B08232EA28600155E16 /* NSImage+ErrorImages.swift in Sources */,
 				1563AE9D2378281800D4849B /* NSTableView+Helpers.swift in Sources */,
 				5FCD67622A02B9350083EDB2 /* SwiftPMAcknowledgements.swift in Sources */,
