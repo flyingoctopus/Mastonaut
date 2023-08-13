@@ -17,6 +17,12 @@ packages:
   Sdifft:
     url: https://github.com/wzxhahaha/Sdifft
     majorVersion: 2.0.0
+  Starscream:
+    url: https://github.com/daltoniam/Starscream.git
+    majorVersion: 3.1.0
+  SVGKit:
+    url: https://github.com/SVGKit/SVGKit
+    majorVersion: 3.0.0
   DSFSparkline:
     url: https://github.com/dagronf/DSFSparkline
     majorVersion: 4.0.0
@@ -27,12 +33,14 @@ targets:
     sources:
       - path: Mastonaut
     dependencies:
-      - package: LoggingOSLog
       - package: FontPicker
+      - package: LoggingOSLog
       - package: Sdifft
-      - package: DSFSparkline
+      - package: Starscream
+      - package: SVGKit
       - target: CoreTootin
       - target: MastodonKit
+      - target: PullRefreshableScrollView
   Mastonaut (Mock):
     type: application
     platform: macOS
@@ -51,6 +59,8 @@ targets:
     platform: macOS
     sources:
       - path: CoreTootin
+    dependencies:
+      - package: DSFSparkline
   MastodonKit:
     type: framework
     platform: macOS
@@ -62,3 +72,9 @@ targets:
     platform: macOS
     sources:
       - path: MastonautHelp
+  PullRefreshableScrollView:
+    type: framework
+    platform: macOS
+    sources:
+    - path: Dependencies/PullRefreshableScrollView/PullRefreshableScrollView
+      group: Dependencies
