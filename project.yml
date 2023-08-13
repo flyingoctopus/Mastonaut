@@ -28,6 +28,8 @@ targets:
       - package: FontPicker
       - package: Sdifft
       - package: DSFSparkline
+      - target: CoreTootin
+      - target: MastodonKit
   Mastonaut (Mock):
     type: application
     platform: macOS
@@ -46,6 +48,12 @@ targets:
     platform: macOS
     sources:
       - path: CoreTootin
+  MastodonKit:
+    type: framework
+    platform: macOS
+    sources:
+      - path: Dependencies/MastodonKit/Sources/MastodonKit
+        name: MastodonKit
   MastonautHelp:
     type: bundle
     platform: macOS
