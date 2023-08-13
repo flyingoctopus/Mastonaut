@@ -1,4 +1,7 @@
 name: Mastonaut
+options:
+  deploymentTarget:
+    macOS: "12.0"
 configs:
   Debug: debug
   Mock: mock
