@@ -1,0 +1,53 @@
+name: Mastonaut
+configs:
+  Debug: debug
+  Mock: mock
+  Release: release
+  Release HSE: release-hse
+packages:
+  LoggingOSLog:
+    url: https://github.com/chrisaljoudi/swift-log-oslog.git
+    branch: master
+  FontPicker:
+    url: https://github.com/chucker/FontPicker.git
+    branch: main
+  Sdifft:
+    url: https://github.com/wzxhahaha/Sdifft
+    majorVersion: 2.0.0
+  DSFSparkline:
+    url: https://github.com/dagronf/DSFSparkline
+    majorVersion: 4.0.0
+targets:
+  Mastonaut:
+    type: application
+    platform: macOS
+    sources:
+      - path: Mastonaut
+    dependencies:
+      - package: LoggingOSLog
+      - package: FontPicker
+      - package: Sdifft
+      - package: DSFSparkline
+  Mastonaut (Mock):
+    type: application
+    platform: macOS
+    sources:
+      - path: Mastonaut
+  QuickToot:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: QuickToot
+  MastonautTests:
+    type: bundle.unit-test
+    platform: macOS
+  CoreTootin:
+    type: framework
+    platform: macOS
+    sources:
+      - path: CoreTootin
+  MastonautHelp:
+    type: bundle
+    platform: macOS
+    sources:
+      - path: MastonautHelp
