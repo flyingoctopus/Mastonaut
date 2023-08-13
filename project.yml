@@ -30,6 +30,9 @@ targets:
   Mastonaut:
     type: application
     platform: macOS
+    settings:
+      base:
+        SWIFT_OBJC_BRIDGING_HEADER: "Mastonaut/Supporting Files/Mastonaut-Bridging-Header.h"
     sources:
       - path: Mastonaut
     dependencies:
