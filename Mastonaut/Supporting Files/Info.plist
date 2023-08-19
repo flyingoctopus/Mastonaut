@@ -31,7 +31,7 @@
 			<string>Mastonaut OAuth2 Callback</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>mastonaut-auth</string>
+				<string>$(AUTH_URL_SCHEME)</string>
 			</array>
 		</dict>
 	</array>
@@ -43,6 +43,8 @@
 	<string>public.app-category.social-networking</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>MastonautAuthURLScheme</key>
+	<string>$(AUTH_URL_SCHEME)</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

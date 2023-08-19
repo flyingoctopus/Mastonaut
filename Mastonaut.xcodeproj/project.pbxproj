@@ -3719,6 +3719,7 @@
 			baseConfigurationReference = F78A836510592DFADE095479 /* Pods-Mastonaut.debug.xcconfig */;
 			buildSettings = {
 				APP_ICON_NAME = MastonautDebug;
+				AUTH_URL_SCHEME = "mastonaut-auth-debug";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Mastonaut/Supporting Files/Mastonaut.entitlements";
 				CODE_SIGN_IDENTITY = "-";
@@ -3752,6 +3753,7 @@
 			baseConfigurationReference = E884A5BDB042D4FBEE510962 /* Pods-Mastonaut.release.xcconfig */;
 			buildSettings = {
 				APP_ICON_NAME = Mastonaut;
+				AUTH_URL_SCHEME = "mastonaut-auth";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Mastonaut/Supporting Files/Mastonaut.entitlements";
 				CODE_SIGN_IDENTITY = "-";
@@ -3895,6 +3897,7 @@
 			baseConfigurationReference = D052D8D7DC75AE86FA6E38F0 /* Pods-Mastonaut.adhoc.xcconfig */;
 			buildSettings = {
 				APP_ICON_NAME = MastonautDebug;
+				AUTH_URL_SCHEME = "mastonaut-auth";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Mastonaut/Supporting Files/Mastonaut.entitlements";
 				CODE_SIGN_IDENTITY = "-";
