@@ -25,14 +25,6 @@ class StatusThreadViewController: StatusListViewController, SidebarPresentable
 {
 	private let statusURI: String
 	private var status: Status?
-	{
-		didSet
-		{
-			guard let status = status else { return }
-			prepareNewEntries([status], for: .above, pagination: nil)
-			fetchContextStatuses()
-		}
-	}
 
 	var sidebarModelValue: SidebarModel
 	{
@@ -56,7 +48,6 @@ class StatusThreadViewController: StatusListViewController, SidebarPresentable
 
 	init(status: Status)
 	{
-		self.status = status
 		self.statusURI = status.resolvableURI
 		super.init()
 	}
@@ -72,6 +63,29 @@ class StatusThreadViewController: StatusListViewController, SidebarPresentable
 	required init?(coder: NSCoder)
 	{
 		fatalError("init(coder:) has not been implemented")
+	}
+
+	override func fetchEntries(for insertion: ListViewController<Status>.InsertionPoint)
+	{
+		super.fetchEntries(for: insertion)
+
+		guard let client else { return }
+
+		ResolverService(client: client).resolveStatus(uri: statusURI)
+		{
+			[weak self] result in
+
+			guard let self, case .success(let status) = result
+			else { return }
+
+			DispatchQueue.main.async
+			{
+				self.status = status
+
+				self.prepareNewEntries([status], for: .above, pagination: nil)
+				self.fetchContextStatuses()
+			}
+		}
 	}
 
 	override func registerCells()
