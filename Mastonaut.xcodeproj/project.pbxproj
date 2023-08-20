@@ -3980,7 +3980,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = JCPU77PBZS;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MastonautHelp/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 Bruno Philipe. All rights reserved.";
@@ -4003,7 +4002,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = JCPU77PBZS;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MastonautHelp/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 Bruno Philipe. All rights reserved.";
@@ -4026,7 +4024,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = JCPU77PBZS;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MastonautHelp/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 Bruno Philipe. All rights reserved.";
