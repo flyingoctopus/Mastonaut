@@ -60,9 +60,9 @@ public class AppRegistrationAgent
 		}
 	}
 
-	private func redirectUri(for baseDomain: String) -> String
-	{
-		return "mastonaut-auth://oauth/grant/\(baseDomain)/code/"
+	private func redirectUri(for baseDomain: String) -> String {
+		let urlScheme = Bundle.main.object(forInfoDictionaryKey: "MastonautAuthURLScheme") as? String ?? "mastonaut-auth"
+		return "\(urlScheme)://oauth/grant/\(baseDomain)/code/"
 	}
 
 	private func registerApplication(onInstance baseDomain: String,
