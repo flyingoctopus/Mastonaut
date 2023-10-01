@@ -7,6 +7,13 @@ configs:
   Mock: mock
   Release: release
   Release HSE: release-hse
+configFiles:
+  Debug: userspecific.xcconfig
+  Mock: userspecific.xcconfig
+  Release: userspecific.xcconfig
+  Release HSE: userspecific.xcconfig
+fileGroups:
+  - userspecific.xcconfig
 packages:
   LoggingOSLog:
     url: https://github.com/chrisaljoudi/swift-log-oslog.git
@@ -60,6 +67,12 @@ targets:
   CoreTootin:
     type: framework
     platform: macOS
+    preBuildScripts:
+      - script: |
+                "$PROJECT_DIR/Mastonaut/Supporting Files/BuildConfig.sh" \
+                > "${PROJECT_DIR}/CoreTootin/Supporting Files/BuildConfig.generated.swift"
+        outputFiles:
+          - "${PROJECT_DIR}/CoreTootin/Supporting Files/BuildConfig.generated.swift"
     sources:
       - path: CoreTootin
     dependencies:
@@ -70,6 +83,8 @@ targets:
     sources:
       - path: Dependencies/MastodonKit/Sources/MastodonKit
         name: MastodonKit
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
   MastonautHelp:
     type: bundle
     platform: macOS
