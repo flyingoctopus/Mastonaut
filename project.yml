@@ -1,19 +1,18 @@
 name: Mastonaut
+
 options:
   deploymentTarget:
     macOS: "12.0"
+
 configs:
   Debug: debug
   Mock: mock
   Release: release
   Release HSE: release-hse
-configFiles:
-  Debug: userspecific.xcconfig
-  Mock: userspecific.xcconfig
-  Release: userspecific.xcconfig
-  Release HSE: userspecific.xcconfig
+
 fileGroups:
   - userspecific.xcconfig
+
 packages:
   LoggingOSLog:
     url: https://github.com/chrisaljoudi/swift-log-oslog.git
@@ -33,24 +32,32 @@ packages:
   DSFSparkline:
     url: https://github.com/dagronf/DSFSparkline
     majorVersion: 4.0.0
+
 targets:
   Mastonaut:
     type: application
     platform: macOS
+    configFiles:
+      # don't add these globally; it breaks linking
+      Debug: userspecific.xcconfig
+      Mock: userspecific.xcconfig
+      Release: userspecific.xcconfig
+      Release HSE: userspecific.xcconfig
     settings:
       base:
+        INFOPLIST_FILE: "Mastonaut/Supporting Files/Info.plist"
         SWIFT_OBJC_BRIDGING_HEADER: "Mastonaut/Supporting Files/Mastonaut-Bridging-Header.h"
-    sources:
-      - path: Mastonaut
-    dependencies:
-      - package: FontPicker
-      - package: LoggingOSLog
-      - package: Sdifft
-      - package: Starscream
-      - package: SVGKit
-      - target: CoreTootin
-      - target: MastodonKit
-      - target: PullRefreshableScrollView
+      sources:
+        - path: Mastonaut
+      dependencies:
+        - package: FontPicker
+        - package: LoggingOSLog
+        - package: Sdifft
+        - package: Starscream
+        - package: SVGKit
+        - target: CoreTootin
+        - target: MastodonKit
+        - target: PullRefreshableScrollView
   Mastonaut (Mock):
     type: application
     platform: macOS
@@ -83,8 +90,6 @@ targets:
     sources:
       - path: Dependencies/MastodonKit/Sources/MastodonKit
         name: MastodonKit
-    settings:
-      GENERATE_INFOPLIST_FILE: YES
   MastonautHelp:
     type: bundle
     platform: macOS
