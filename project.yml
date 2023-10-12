@@ -73,10 +73,12 @@ targets:
           - "$(SRCROOT)/Mastonaut/Supporting Files/Info.plist"
         outputFiles:
           - "$(DERIVED_FILE_DIR)/BundleVersions.h"
+        name: "Generate Versions Header (Run Script)"
     sources:
       - path: Mastonaut
-      - path: "CoreTootin/Supporting Files/BuildConfig.generated.swift"
       - path: "CoreTootin/Extensions/Logger+CurrentType.swift"
+      - path: "CoreTootin/Supporting Files/BuildConfig.generated.swift"
+      - path: "CoreTootin/Supporting Files/CoreAssets.xcassets"
     dependencies:
       - package: FontPicker
       - package: Sdifft
@@ -107,9 +109,11 @@ targets:
                 > "${PROJECT_DIR}/CoreTootin/Supporting Files/BuildConfig.generated.swift"
         outputFiles:
           - "${PROJECT_DIR}/CoreTootin/Supporting Files/BuildConfig.generated.swift"
+        name: "Apply Build Config (Run Script)"
     settings:
       base:
         OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
+        PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).coretootin"
     configFiles:
       # don't add these globally; it breaks linking
       Debug: userspecific.xcconfig
