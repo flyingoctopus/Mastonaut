@@ -60,20 +60,12 @@ targets:
           - "$(SRCROOT)/Mastonaut/Supporting Files/Info.plist"
         outputFiles:
           - "$(DERIVED_FILE_DIR)/BundleVersions.h"
-    # configFiles:
-    #   # don't add these globally; it breaks linking
-    #   Debug: userspecific.xcconfig
-    #   Mock: userspecific.xcconfig
-    #   Release: userspecific.xcconfig
-    #   Release HSE: userspecific.xcconfig
     sources:
       - path: Mastonaut
       - path: "CoreTootin/Supporting Files/BuildConfig.generated.swift"
       - path: "CoreTootin/Extensions/Logger+CurrentType.swift"
     dependencies:
-      # - package: CocoaLumberjack
       - package: FontPicker
-      - package: LoggingOSLog
       - package: Sdifft
       - package: Starscream
       - package: SVGKit
@@ -114,14 +106,16 @@ targets:
     sources:
       - path: CoreTootin
         excludes:
-          - "CoreTootin/Extensions/Logger+CurrentType.swift"
+          - "Extensions/Logger+CurrentType.swift"
     dependencies:
       - package: DSFSparkline
+      - package: LoggingOSLog
   MastodonKit:
     type: framework
     platform: macOS
     settings:
       base:
+        GENERATE_INFOPLIST_FILE: true
         OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
     sources:
       - path: Dependencies/MastodonKit/Sources/MastodonKit
