@@ -52,6 +52,19 @@ targets:
         CURRENT_PROJECT_VERSION: "135"
         PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).mac"
         OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
+      configs:
+        Debug:
+          APP_ICON_NAME: "MastonautDebug"
+          AUTH_URL_SCHEME: "mastonaut-auth-debug"
+        Mock:
+          APP_ICON_NAME: "MastonautDebug"
+          AUTH_URL_SCHEME: "mastonaut-auth-debug"
+        Release:
+          APP_ICON_NAME: "Mastonaut"
+          AUTH_URL_SCHEME: "mastonaut-auth"
+        Release HSE:
+          APP_ICON_NAME: "Mastonaut"
+          AUTH_URL_SCHEME: "mastonaut-auth"
     preBuildScripts:
       - script: |
                 BUNDLE_VERSION=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' $SRCROOT/Mastonaut/Supporting\ Files/Info.plist)
