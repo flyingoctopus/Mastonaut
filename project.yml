@@ -4,6 +4,12 @@ options:
   deploymentTarget:
     macOS: "12.0"
 
+configFiles:
+  Debug: userspecific.xcconfig
+  Mock: userspecific.xcconfig
+  Release: userspecific.xcconfig
+  Release HSE: userspecific.xcconfig
+
 configs:
   Debug: debug
   Mock: mock
@@ -45,7 +51,7 @@ targets:
         MARKETING_VERSION: "1.3.9"
         CURRENT_PROJECT_VERSION: "135"
         PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).mac"
-        OTHER_LDFLAGS: ""
+        OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
     preBuildScripts:
       - script: |
                 BUNDLE_VERSION=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' $SRCROOT/Mastonaut/Supporting\ Files/Info.plist)
@@ -98,7 +104,7 @@ targets:
           - "${PROJECT_DIR}/CoreTootin/Supporting Files/BuildConfig.generated.swift"
     settings:
       base:
-        OTHER_LDFLAGS: ""
+        OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
     configFiles:
       # don't add these globally; it breaks linking
       Debug: userspecific.xcconfig
@@ -114,6 +120,9 @@ targets:
   MastodonKit:
     type: framework
     platform: macOS
+    settings:
+      base:
+        OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
     sources:
       - path: Dependencies/MastodonKit/Sources/MastodonKit
         name: MastodonKit
@@ -125,6 +134,9 @@ targets:
   PullRefreshableScrollView:
     type: framework
     platform: macOS
+    settings:
+      base:
+        OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
     sources:
     - path: Dependencies/PullRefreshableScrollView/PullRefreshableScrollView
       group: Dependencies
