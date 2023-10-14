@@ -116,9 +116,15 @@ targets:
   MastonautTests:
     type: bundle.unit-test
     platform: macOS
+    sources:
+      - path: MastonautTests
+    dependencies:
+      - target: CoreTootin
+      - target: Mastonaut
     settings:
       base:
         INFOPLIST_FILE: "MastonautTests/Info.plist"
+        OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
         PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).tests"
   CoreTootin:
     type: framework
@@ -179,6 +185,8 @@ schemes:
       config: Debug
     test:
       config: Debug
+      targets:
+        - MastonautTests
     profile:
       config: Debug
     analyze:
