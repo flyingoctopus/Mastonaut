@@ -118,6 +118,7 @@ targets:
     platform: macOS
     settings:
       base:
+        INFOPLIST_FILE: "MastonautTests/Info.plist"
         PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).tests"
   CoreTootin:
     type: framework
