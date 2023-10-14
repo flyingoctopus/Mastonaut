@@ -46,6 +46,7 @@ targets:
     settings:
       base:
         CODE_SIGN_ENTITLEMENTS: "Mastonaut/Supporting Files/Mastonaut.entitlements"
+        ENABLE_HARDENED_RUNTIME: true
         INFOPLIST_FILE: "Mastonaut/Supporting Files/Info.plist"
         SWIFT_OBJC_BRIDGING_HEADER: "Mastonaut/Supporting Files/Mastonaut-Bridging-Header.h"
         INFOPLIST_KEY_LSApplicationCategoryType: "public.app-category.social-networking"
@@ -105,6 +106,7 @@ targets:
     settings:
       base:
         CODE_SIGN_ENTITLEMENTS: "QuickToot/QuickToot.entitlements"
+        ENABLE_HARDENED_RUNTIME: true
         OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
         PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).mac.QuickToot"
     sources:
