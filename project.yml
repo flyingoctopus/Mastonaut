@@ -17,7 +17,7 @@ configs:
   Release HSE: release-hse
 
 fileGroups:
-  - userspecific.xcconfig
+  - userspecific.xcconfig # show in project
 
 packages:
   LoggingOSLog:
@@ -114,12 +114,6 @@ targets:
       base:
         OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
         PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).coretootin"
-    configFiles:
-      # don't add these globally; it breaks linking
-      Debug: userspecific.xcconfig
-      Mock: userspecific.xcconfig
-      Release: userspecific.xcconfig
-      Release HSE: userspecific.xcconfig
     sources:
       - path: CoreTootin
         excludes:
