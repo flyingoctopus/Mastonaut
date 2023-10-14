@@ -160,3 +160,30 @@ targets:
     sources:
     - path: Dependencies/PullRefreshableScrollView/PullRefreshableScrollView
       group: Dependencies
+
+schemes:
+  Mastonaut:
+    build:
+      targets:
+        Mastonaut: all
+        MastonautTests: test
+    run:
+      config: Debug
+    test:
+      config: Debug
+    profile:
+      config: Debug
+    analyze:
+      config: Release
+  Mastonaut Release:
+    build:
+      targets:
+        Mastonaut: [build, run, profile, analyze, archive]
+    run:
+      config: Release
+    profile:
+      config: Release
+    analyze:
+      config: Release
+    archive:
+      config: Release
