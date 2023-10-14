@@ -91,6 +91,9 @@ targets:
       - target: CoreTootin
       - target: MastodonKit
       - target: PullRefreshableScrollView
+      - target: QuickToot
+        copyFiles:
+          destination: plugins
   Mastonaut (Mock): # FIXME: unclear if needed, or if this can be a config
     type: application
     platform: macOS
@@ -107,6 +110,7 @@ targets:
     sources:
       - path: QuickToot
       - path: "CoreTootin/Extensions/Logger+CurrentType.swift"
+      - path: "Mastonaut/Application/Mastonaut.icns"
     dependencies:
       - target: CoreTootin
   MastonautTests:
