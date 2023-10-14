@@ -97,9 +97,13 @@ targets:
     platform: macOS
     settings:
       base:
+        OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
         PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).mac.QuickToot"
     sources:
       - path: QuickToot
+      - path: "CoreTootin/Extensions/Logger+CurrentType.swift"
+    dependencies:
+      - target: CoreTootin
   MastonautTests:
     type: bundle.unit-test
     platform: macOS
