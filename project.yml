@@ -45,6 +45,7 @@ targets:
     platform: macOS
     settings:
       base:
+        CODE_SIGN_ENTITLEMENTS: "Mastonaut/Supporting Files/Mastonaut.entitlements"
         INFOPLIST_FILE: "Mastonaut/Supporting Files/Info.plist"
         SWIFT_OBJC_BRIDGING_HEADER: "Mastonaut/Supporting Files/Mastonaut-Bridging-Header.h"
         INFOPLIST_KEY_LSApplicationCategoryType: "public.app-category.social-networking"
@@ -97,6 +98,7 @@ targets:
     platform: macOS
     settings:
       base:
+        CODE_SIGN_ENTITLEMENTS: "QuickToot/QuickToot.entitlements"
         OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
         PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).mac.QuickToot"
     sources:
