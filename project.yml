@@ -77,6 +77,9 @@ targets:
         name: "Generate Versions Header (Run Script)"
     sources:
       - path: Mastonaut
+        excludes:
+          - "Mocks/Data/*.json"
+          - "Supporting Files/*.sh"
       - path: "CoreTootin/Extensions/Logger+CurrentType.swift"
       - path: "CoreTootin/Supporting Files/BuildConfig.generated.swift"
       - path: "CoreTootin/Supporting Files/CoreAssets.xcassets"
