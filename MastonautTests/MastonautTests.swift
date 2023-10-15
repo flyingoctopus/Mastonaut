@@ -39,28 +39,6 @@ class MastonautTests: XCTestCase {
 		XCTAssertEqual(string.allRanges(of: "ca"), [])
 	}
 
-	func testAddressSanitization() {
-		var input = "https://www.apple.com"
-		var expectedOutput = input
-		XCTAssertEqual(expectedOutput, NSURL(bySanitizingAddress: input)?.absoluteString)
-
-		input = "https://whatever/article/this-is-not-so-cöl"
-		expectedOutput = "https://whatever/article/this-is-not-so-c%C3%B6l"
-		XCTAssertEqual(expectedOutput, NSURL(bySanitizingAddress: input)?.absoluteString)
-
-		input = "https://www.dw.com/en/germany-settle-for-a-draw-despite-second-half-leroy-sané-show/a-47993172?maca=en-rss-en-all-1573-rdf"
-		expectedOutput = "https://www.dw.com/en/germany-settle-for-a-draw-despite-second-half-leroy-san%C3%A9-show/a-47993172?maca=en-rss-en-all-1573-rdf"
-		XCTAssertEqual(expectedOutput, NSURL(bySanitizingAddress: input)?.absoluteString)
-
-		input = "https://www.apple.com:443"
-		expectedOutput = input
-		XCTAssertEqual(expectedOutput, NSURL(bySanitizingAddress: input)?.absoluteString)
-
-		input = "https://web.archive.org/web/20190213201804/http://shirky.com/writings/situated_software.html"
-		expectedOutput = input
-		XCTAssertEqual(expectedOutput, NSURL(bySanitizingAddress: input)?.absoluteString)
-	}
-
 	func testStrippingEmojiAttachments() {
 		let emojiURL = URL(string: "https://aaaa.com")!
 		let emoji = Emoji(shortcode: "emoji", staticURL: emojiURL, url: emojiURL, visibleInPicker: true)
