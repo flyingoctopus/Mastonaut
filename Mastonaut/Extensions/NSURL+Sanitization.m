@@ -50,8 +50,8 @@
 
 		regex = [NSRegularExpression regularExpressionWithPattern:@"(?<protocol>\\w+)(?<slashes>://)((?<user>\\w+)"
 																   "(:(?<password>\\w+))?@)?(?<host>[^:/]+)((?<colon>:)"
-																   "(?<port>\\d+))?(?<path>/[^?]*)?(?<query>\\?"
-																   "[^#]*)?(?:#(?<fragment>.*))?"
+																   "(?<port>\\d+))?(?<path>/[^#?]*)?(?<query>\\?"
+																   "[^#]+)?((?<octothorpe>#)(?<fragment>.+))?"
 														  options:0
 															error:nil];
 	});
@@ -93,7 +93,7 @@
 	NSArray *groups = @[@"protocol", @"slashes", @"user",
 						@"password", @"host", @"colon",
 						@"port", @"path", @"query",
-						@"fragment"];
+                        @"octothorpe", @"fragment"];
 
 	NSMutableString *sanitizedAddress = [[NSMutableString alloc] initWithCapacity:[cleanString length]];
 
