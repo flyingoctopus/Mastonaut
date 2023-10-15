@@ -17,9 +17,9 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
-import MastodonKit
+import Cocoa
 import CoreTootin
+import MastodonKit
 
 protocol SidebarContainer: AnyObject
 {

@@ -17,9 +17,9 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
-import MastodonKit
+import Cocoa
 import CoreTootin
+import MastodonKit
 
 class SearchResultsViewController<Element: AnyObject>: NSViewController, NSTableViewDataSource, NSTableViewDelegate, SearchResultsPresenter
 {

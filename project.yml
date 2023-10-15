@@ -1,0 +1,227 @@
+name: Mastonaut
+
+options:
+  deploymentTarget:
+    macOS: "12.0" # FIXME is technically wrong for HSE
+
+configFiles:
+  Debug: userspecific.xcconfig
+  Mock: userspecific.xcconfig
+  Release: userspecific.xcconfig
+  Release HSE: userspecific.xcconfig
+
+configs:
+  Debug: debug
+  Mock: mock
+  Release: release
+  Release HSE: release-hse
+
+fileGroups:
+  - userspecific.xcconfig # show in project
+
+packages:
+  LoggingOSLog:
+    url: https://github.com/chrisaljoudi/swift-log-oslog.git
+    branch: master
+  FontPicker:
+    url: https://github.com/chucker/FontPicker.git
+    branch: main
+  Sdifft:
+    url: https://github.com/wzxhahaha/Sdifft
+    majorVersion: 2.0.0
+  Starscream:
+    url: https://github.com/daltoniam/Starscream.git
+    majorVersion: 3.1.0
+  SVGKit:
+    url: https://github.com/SVGKit/SVGKit
+    majorVersion: 3.0.0
+  DSFSparkline:
+    url: https://github.com/dagronf/DSFSparkline
+    majorVersion: 4.0.0
+
+targets:
+  Mastonaut:
+    type: application
+    platform: macOS
+    settings:
+      base:
+        CODE_SIGN_ENTITLEMENTS: "Mastonaut/Supporting Files/Mastonaut.entitlements"
+        ENABLE_HARDENED_RUNTIME: true
+        INFOPLIST_FILE: "Mastonaut/Supporting Files/Info.plist"
+        SWIFT_OBJC_BRIDGING_HEADER: "Mastonaut/Supporting Files/Mastonaut-Bridging-Header.h"
+        INFOPLIST_KEY_LSApplicationCategoryType: "public.app-category.social-networking"
+        MARKETING_VERSION: "1.3.9"
+        CURRENT_PROJECT_VERSION: "135"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).mac"
+        OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
+      configs:
+        Debug:
+          APP_ICON_NAME: "MastonautDebug"
+          AUTH_URL_SCHEME: "mastonaut-auth-debug"
+        Mock:
+          APP_ICON_NAME: "MastonautDebug"
+          AUTH_URL_SCHEME: "mastonaut-auth-debug"
+        Release:
+          APP_ICON_NAME: "Mastonaut"
+          AUTH_URL_SCHEME: "mastonaut-auth"
+        Release HSE:
+          APP_ICON_NAME: "Mastonaut"
+          AUTH_URL_SCHEME: "mastonaut-auth"
+    preBuildScripts:
+      - script: |
+                BUNDLE_VERSION=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' $SRCROOT/Mastonaut/Supporting\ Files/Info.plist)
+                echo "#define BUNDLE_VERSION \"$MARKETING_VERSION\"" > $DERIVED_FILE_DIR/BundleVersions.h
+        inputFiles:
+          - "$(SRCROOT)/Mastonaut/Supporting Files/Info.plist"
+        outputFiles:
+          - "$(DERIVED_FILE_DIR)/BundleVersions.h"
+        name: "Generate Versions Header (Run Script)"
+    sources:
+      - path: Mastonaut
+        excludes:
+          - "Mocks/Data/*.json"
+          - "Supporting Files/*.sh"
+      - path: "CoreTootin/Extensions/Logger+CurrentType.swift"
+      - path: "CoreTootin/Supporting Files/BuildConfig.generated.swift"
+      - path: "CoreTootin/Supporting Files/CoreAssets.xcassets"
+    dependencies:
+      - package: FontPicker
+      - package: Sdifft
+      - package: Starscream
+      - package: SVGKit
+      - target: CoreTootin
+      - target: MastodonKit
+      - target: MastonautHelp
+        copyFiles:
+          destination: resources
+      - target: PullRefreshableScrollView
+      - target: QuickToot
+        copyFiles:
+          destination: plugins
+  Mastonaut (Mock): # FIXME: unclear if needed, or if this can be a config
+    type: application
+    platform: macOS
+    sources:
+      - path: Mastonaut
+  QuickToot:
+    type: app-extension
+    platform: macOS
+    settings:
+      base:
+        CODE_SIGN_ENTITLEMENTS: "QuickToot/QuickToot.entitlements"
+        ENABLE_HARDENED_RUNTIME: true
+        OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
+        PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).mac.QuickToot"
+    sources:
+      - path: QuickToot
+      - path: "CoreTootin/Extensions/Logger+CurrentType.swift"
+      - path: "Mastonaut/Application/Mastonaut.icns"
+    dependencies:
+      - target: CoreTootin
+  MastonautTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: MastonautTests
+    dependencies:
+      - target: CoreTootin
+      - target: Mastonaut
+    settings:
+      base:
+        INFOPLIST_FILE: "MastonautTests/Info.plist"
+        OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
+        PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).tests"
+  CoreTootin:
+    type: framework
+    platform: macOS
+    preBuildScripts:
+      - script: |
+                "$PROJECT_DIR/Mastonaut/Supporting Files/BuildConfig.sh" \
+                > "${PROJECT_DIR}/CoreTootin/Supporting Files/BuildConfig.generated.swift"
+        outputFiles:
+          - "${PROJECT_DIR}/CoreTootin/Supporting Files/BuildConfig.generated.swift"
+        name: "Apply Build Config (Run Script)"
+    settings:
+      base:
+        OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
+        PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).coretootin"
+    sources:
+      - path: CoreTootin
+        excludes:
+          - "Extensions/Logger+CurrentType.swift"
+    dependencies:
+      - package: DSFSparkline
+      - package: LoggingOSLog
+  MastodonKit:
+    type: framework
+    platform: macOS
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: true
+        OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
+    sources:
+      - path: Dependencies/MastodonKit/Sources/MastodonKit
+        name: MastodonKit
+  MastonautHelp:
+    type: bundle
+    platform: macOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).mac.QuickToot"
+        WRAPPER_EXTENSION: "help"
+    sources:
+      - path: MastonautHelp/book-icon.png
+      - path: MastonautHelp/Info.plist
+      - path: MastonautHelp/nav.js
+      - path: MastonautHelp/_English.lproj/InfoPlist.strings
+    postBuildScripts:
+      - script: |
+                cd MastonautHelp
+
+                # purge help cache
+                hiutil -P
+
+                source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
+                source /opt/homebrew/opt/chruby/share/chruby/auto.sh
+                chruby ruby-3.1.3
+
+                /usr/bin/make
+        name: "Build Help (Run Script)"
+  PullRefreshableScrollView:
+    type: framework
+    platform: macOS
+    settings:
+      base:
+        OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
+    sources:
+    - path: Dependencies/PullRefreshableScrollView/PullRefreshableScrollView
+      group: Dependencies
+
+schemes:
+  Mastonaut:
+    build:
+      targets:
+        Mastonaut: all
+        MastonautTests: test
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - MastonautTests
+    profile:
+      config: Debug
+    analyze:
+      config: Release
+  Mastonaut Release:
+    build:
+      targets:
+        Mastonaut: [build, run, profile, analyze, archive]
+    run:
+      config: Release
+    profile:
+      config: Release
+    analyze:
+      config: Release
+    archive:
+      config: Release

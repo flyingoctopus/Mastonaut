@@ -17,7 +17,7 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
+import Cocoa
 
 @objc class TimelinesWindowRestoration: NSObject, NSWindowRestoration
 {
