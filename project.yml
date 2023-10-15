@@ -91,6 +91,9 @@ targets:
       - package: SVGKit
       - target: CoreTootin
       - target: MastodonKit
+      - target: MastonautHelp
+        copyFiles:
+          destination: resources
       - target: PullRefreshableScrollView
       - target: QuickToot
         copyFiles:
@@ -165,8 +168,25 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).mac.QuickToot"
+        WRAPPER_EXTENSION: "help"
     sources:
-      - path: MastonautHelp
+      - path: MastonautHelp/book-icon.png
+      - path: MastonautHelp/Info.plist
+      - path: MastonautHelp/nav.js
+      - path: MastonautHelp/_English.lproj/InfoPlist.strings
+    postBuildScripts:
+      - script: |
+                cd MastonautHelp
+
+                # purge help cache
+                hiutil -P
+
+                source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
+                source /opt/homebrew/opt/chruby/share/chruby/auto.sh
+                chruby ruby-3.1.3
+
+                /usr/bin/make
+        name: "Build Help (Run Script)"
   PullRefreshableScrollView:
     type: framework
     platform: macOS
