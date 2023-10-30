@@ -10,17 +10,11 @@ import SwiftUI
 struct ArrangeColumnsView: View {
     var body: some View {
         HStack {
-            HStack {
-                Image(systemName: "house")
-                Text("Home")
-            }.frame(minWidth: 160, minHeight: 100)
-                .border(.secondary)
+            ArrangeableColumn(icon: "house", text: "Home")
 
-            HStack {
-                Image(systemName: "bell")
-                Text("Notifications")
-            }.frame(minWidth: 160, minHeight: 100)
-                .border(.secondary)
+            ArrangeableColumn(icon: "bell", text: "Notifications")
+
+            ArrangeableColumn(icon: "star", text: "Favorites")
         }.padding(10)
     }
 }
