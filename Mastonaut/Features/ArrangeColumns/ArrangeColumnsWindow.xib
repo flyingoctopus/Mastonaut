@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="ArrangeColumnsWindowController" customModule="Mastonaut" customModuleProvider="target">
+            <connections>
+                <outlet property="window" destination="QvC-M9-y7g" id="JJW-gE-XPl"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="196" y="240" width="480" height="270"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1512" height="944"/>
+            <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6Cq-CW-6uC">
+                        <rect key="frame" x="401" y="13" width="66" height="32"/>
+                        <buttonCell key="cell" type="push" title="Done" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7Es-C0-NLl">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="done:" target="-2" id="Him-jg-SmO"/>
+                        </connections>
+                    </button>
+                    <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ljS-sl-Ta6">
+                        <rect key="frame" x="0.0" y="60" width="480" height="210"/>
+                        <clipView key="contentView" id="dbb-ln-cTG">
+                            <rect key="frame" x="1" y="1" width="478" height="208"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <collectionView selectable="YES" id="IYj-mm-J94">
+                                    <rect key="frame" x="0.0" y="0.0" width="478" height="158"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                    <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="Yu3-ue-Ky7">
+                                        <size key="itemSize" width="50" height="50"/>
+                                    </collectionViewFlowLayout>
+                                    <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <connections>
+                                        <outlet property="dataSource" destination="-2" id="Kih-GP-SaT"/>
+                                        <outlet property="delegate" destination="-2" id="wv6-nL-h2D"/>
+                                    </connections>
+                                </collectionView>
+                            </subviews>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="4uH-08-XGx">
+                            <rect key="frame" x="1" y="144" width="233" height="15"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="CiV-bN-SRm">
+                            <rect key="frame" x="408" y="1" width="16" height="157"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                    </scrollView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="6Cq-CW-6uC" firstAttribute="top" secondItem="ljS-sl-Ta6" secondAttribute="bottom" constant="20" symbolic="YES" id="2Sp-XX-kB7"/>
+                    <constraint firstItem="ljS-sl-Ta6" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="3pO-N8-pRM"/>
+                    <constraint firstAttribute="trailing" secondItem="ljS-sl-Ta6" secondAttribute="trailing" id="BLQ-yM-BLG"/>
+                    <constraint firstItem="ljS-sl-Ta6" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="D6y-1Y-bcC"/>
+                    <constraint firstAttribute="trailing" secondItem="6Cq-CW-6uC" secondAttribute="trailing" constant="20" symbolic="YES" id="frT-qQ-vuH"/>
+                    <constraint firstAttribute="bottom" secondItem="6Cq-CW-6uC" secondAttribute="bottom" constant="20" symbolic="YES" id="wrs-0i-lrt"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="2" y="125"/>
+        </window>
+    </objects>
+</document>

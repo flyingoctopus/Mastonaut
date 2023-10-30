@@ -698,17 +698,25 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
 		}
 
 		items.append(.separator())
+        items.append(.sectionHeader(🔠("This column")))
 
 		let reloadColumnItem = NSMenuItem()
-		reloadColumnItem.title = 🔠("Reload this Column")
+        reloadColumnItem.title = 🔠("Reload")
 		reloadColumnItem.target = self
 		reloadColumnItem.representedObject = index
 		reloadColumnItem.action = #selector(TimelinesWindowController.reloadColumn(_:))
 		items.append(reloadColumnItem)
 
 		if index > 0 {
+            let rearrangeColumnsItem = NSMenuItem()
+            rearrangeColumnsItem.title = 🔠("Rearrange…")
+            rearrangeColumnsItem.target = self
+            rearrangeColumnsItem.representedObject = index
+            rearrangeColumnsItem.action = #selector(TimelinesWindowController.rearrangeColumns(_:))
+            items.append(rearrangeColumnsItem)
+
 			let removeColumnItem = NSMenuItem()
-			removeColumnItem.title = 🔠("Remove this Column")
+            removeColumnItem.title = 🔠("Remove")
 			removeColumnItem.target = self
 			removeColumnItem.representedObject = index
 			removeColumnItem.action = #selector(TimelinesWindowController.removeColumn(_:))
@@ -1102,6 +1110,25 @@ extension TimelinesWindowController // IBActions
 
 		replaceColumn(at: columnIndex, with: newModel.makeViewController())
 	}
+
+    @IBAction private func rearrangeColumns(_ sender: Any?) {
+//        guard
+//            let menuItem = sender as? NSMenuItem,
+//            let columnIndex = menuItem.representedObject as? Int
+//        else {
+//            return
+//        }
+//
+//        removeColumn(at: columnIndex, contract: true)
+
+        let wc = ArrangeColumnsWindowController()
+
+        if let childWindow = wc.window,
+           let parentWindow = window
+        {
+            parentWindow.beginSheet(childWindow)
+        }
+    }
 
 	@IBAction private func removeColumn(_ sender: Any?) {
 		guard
