@@ -31,6 +31,10 @@ class ProfilesSidebarCellView: NSTableCellView
 
 		userDisplayNameButton.title = profile.bestDisplayName
 		userAccountLabel.stringValue = profile.uri(in: instance)
+
+		// grey out links here, since we don't allow interaction
+		userBioLabel.linkTextAttributes =
+			[NSAttributedString.Key.foregroundColor: NSColor.secondaryLabelColor]
 		userBioLabel.attributedStringValue = profile.attributedNote
 
 		userBioLabel.backgroundColor = NSColor.clear
