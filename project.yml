@@ -222,7 +222,7 @@ schemes:
     build:
       targets:
         Mastonaut: all
-        MastonautTests: test
+        MastonautTests: [test]
     run:
       config: Debug
     test:
