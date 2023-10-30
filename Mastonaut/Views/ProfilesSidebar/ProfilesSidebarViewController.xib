@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22146" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22146"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,15 +18,14 @@
             <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="300" horizontalPageScroll="10" verticalLineScroll="300" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8BO-UK-THj">
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8BO-UK-THj">
                     <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="LAR-nL-Fsa">
                         <rect key="frame" x="1" y="1" width="298" height="298"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="300" rowSizeStyle="automatic" viewBased="YES" id="ljL-Z1-ICx" customClass="DrawsGridOnlyForPopulatedTableView" customModule="Mastonaut" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="298" height="300"/>
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" usesAutomaticRowHeights="YES" viewBased="YES" id="ljL-Z1-ICx" customClass="DrawsGridOnlyForPopulatedTableView" customModule="Mastonaut" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="298" height="298"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="17" height="0.0"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -46,7 +45,7 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="vdb-Jb-1gA" customClass="ProfilesSidebarCellView" customModule="Mastonaut" customModuleProvider="target">
-                                                <rect key="frame" x="8" y="0.0" width="281" height="300"/>
+                                                <rect key="frame" x="8" y="0.0" width="281" height="24"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             </tableCellView>
                                         </prototypeCellViews>
@@ -70,6 +69,12 @@
                     </scroller>
                 </scrollView>
             </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="8BO-UK-THj" secondAttribute="trailing" id="CD5-SJ-xGq"/>
+                <constraint firstItem="8BO-UK-THj" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="KlQ-rY-BYJ"/>
+                <constraint firstItem="8BO-UK-THj" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="LJr-1S-eEs"/>
+                <constraint firstAttribute="bottom" secondItem="8BO-UK-THj" secondAttribute="bottom" id="M0j-FY-f10"/>
+            </constraints>
             <point key="canvasLocation" x="-3" y="135"/>
         </customView>
     </objects>
