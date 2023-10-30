@@ -17,9 +17,9 @@
 //  GNU General Public License for more details.
 //
 
+import CoreTootin
 import Foundation
 import MastodonKit
-import CoreTootin
 
 enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 {
@@ -30,6 +30,22 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 	case status(uri: String, status: Status?)
 	case favorites
 	case edits(status: Status?, edits: [StatusEdit]?)
+
+	enum StatusInteractionKind: String
+	{
+		case reblog
+		case favorite
+	}
+
+	case profilesForStatus(whoInteractedWithStatusId: String, purpose: StatusInteractionKind)
+
+	enum RelationshipKind: String
+	{
+		case follower
+		case following
+	}
+
+	case profilesForProfile(whoRelateToOtherProfileId: String, relationship: RelationshipKind)
 
 	var rawValue: String
 	{
@@ -46,9 +62,15 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 
 		case .favorites:
 			return "favorites"
-			
+
 		case .edits(let status, _):
 			return "edits\n\(status?.id ?? "")"
+
+		case .profilesForStatus(let statusId, let purpose):
+			return "profilesForStatus\n\(statusId)\n\(purpose)"
+
+		case .profilesForProfile(let profileId, let relationship):
+			return "profilesForProfile\n\(profileId))\n\(relationship)"
 		}
 	}
 
@@ -88,6 +110,27 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 		{
 			self = .favorites
 		}
+		else if components.count == 3
+		{
+			if components.first == "profilesForStatus",
+			   let interactionKind = StatusInteractionKind(rawValue: String(components[2]))
+			{
+				let statusId = String(components[1])
+
+				self = .profilesForStatus(whoInteractedWithStatusId: statusId, purpose: interactionKind)
+			}
+			else if components.first == "profilesForProfile",
+			        let relationship = RelationshipKind(rawValue: String(components[2]))
+			{
+				let profileId = String(components[1])
+
+				self = .profilesForProfile(whoRelateToOtherProfileId: profileId, relationship: relationship)
+			}
+			else
+			{
+				return nil
+			}
+		}
 		else
 		{
 			return nil
@@ -95,8 +138,8 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 	}
 
 	func makeViewController(client: ClientType,
-							currentAccount: AuthorizedAccount?,
-							currentInstance: Instance) -> SidebarViewController
+	                        currentAccount: AuthorizedAccount?,
+	                        currentInstance: Instance) -> SidebarViewController
 	{
 		switch self
 		{
@@ -109,7 +152,7 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 		case .tag(let tag):
 			let bookmarkService = currentAccount.map { TagBookmarkService(account: $0) }
 			let followService = currentAccount.map { TagFollowService(account: $0, client: client) }
-			
+
 			return TagViewController(tag: tag, tagBookmarkService: bookmarkService, tagFollowService: followService)
 
 		case .status(let uri, nil):
@@ -120,9 +163,15 @@ enum SidebarMode: RawRepresentable, SidebarModel, Equatable
 
 		case .favorites:
 			return FavoritesViewController()
-			
+
 		case .edits(let status, let edits):
 			return EditHistoryViewController(status: status, edits: edits)
+
+		case .profilesForStatus(let statusUrl, let purpose):
+			return ProfilesSidebarViewController(statusUrl: statusUrl, purpose: purpose, client: client, instance: currentInstance, sidebarMode: self)
+
+		case .profilesForProfile(let profileUrl, let relationship):
+			return ProfilesSidebarViewController(profileUrl: profileUrl, relationship: relationship, client: client, instance: currentInstance, sidebarMode: self)
 		}
 	}
 

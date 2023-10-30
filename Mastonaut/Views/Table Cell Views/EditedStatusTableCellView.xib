@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22146" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22146"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -69,7 +69,7 @@
                                                 <action selector="showAuthor:" target="wHx-2W-SPr" id="jL0-r7-8ZB"/>
                                             </connections>
                                         </button>
-                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="gLo-Zh-1gw">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="gLo-Zh-1gw">
                                             <rect key="frame" x="-2" y="0.0" width="193" height="14"/>
                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" title="john.appleseed@mastodon.example" id="ZAG-ZY-OTy">
                                                 <font key="font" metaFont="controlContent" size="11"/>
@@ -96,7 +96,7 @@
                                                 <customView ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zJf-IG-CbP" customClass="BackgroundView" customModule="CoreTootin">
                                                     <rect key="frame" x="0.0" y="0.0" width="32" height="21"/>
                                                     <subviews>
-                                                        <textField toolTip="Content Warning" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZO2-gK-Za0">
+                                                        <textField toolTip="Content Warning" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZO2-gK-Za0">
                                                             <rect key="frame" x="4" y="3" width="24" height="14"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="CW" id="iDl-v0-Bw6">
                                                                 <font key="font" metaFont="systemSemibold" size="11"/>
@@ -117,7 +117,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </customView>
-                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" ambiguous="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gzR-6O-Ptr" customClass="AttributedLabel">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" ambiguous="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gzR-6O-Ptr" customClass="AttributedLabel">
                                                     <rect key="frame" x="38" y="3" width="194" height="16"/>
                                                     <textFieldCell key="cell" selectable="YES" allowsUndo="NO" alignment="left" title="The quick brown fox" allowsEditingTextAttributes="YES" id="ywb-0b-cJl">
                                                         <font key="font" metaFont="system"/>
@@ -154,7 +154,7 @@
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </customView>
-                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VTv-FV-jId" customClass="AttributedLabel">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VTv-FV-jId" customClass="AttributedLabel">
                                             <rect key="frame" x="-2" y="219" width="75" height="16"/>
                                             <textFieldCell key="cell" selectable="YES" allowsUndo="NO" title="Hello there!" allowsEditingTextAttributes="YES" id="1fZ-nB-Kft">
                                                 <font key="font" metaFont="system"/>
@@ -188,7 +188,7 @@
                                                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="0gj-Zc-nk8">
                                                     <rect key="frame" x="72" y="15" width="158" height="35"/>
                                                     <subviews>
-                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="751" horizontalCompressionResistancePriority="490" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="559-vd-Gfc">
+                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="751" horizontalCompressionResistancePriority="490" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="559-vd-Gfc">
                                                             <rect key="frame" x="-2" y="0.0" width="162" height="16"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" title="www.longdomainexample.com" id="E2o-lY-cO4">
                                                                 <font key="font" metaFont="system"/>
@@ -196,7 +196,7 @@
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                         </textField>
-                                                        <textField horizontalHuggingPriority="252" verticalHuggingPriority="752" horizontalCompressionResistancePriority="489" translatesAutoresizingMaskIntoConstraints="NO" id="45T-Nc-CCi">
+                                                        <textField focusRingType="none" horizontalHuggingPriority="252" verticalHuggingPriority="752" horizontalCompressionResistancePriority="489" translatesAutoresizingMaskIntoConstraints="NO" id="45T-Nc-CCi">
                                                             <rect key="frame" x="-2" y="19" width="162" height="16"/>
                                                             <textFieldCell key="cell" truncatesLastVisibleLine="YES" title="Card Title" id="rrE-fA-b17">
                                                                 <font key="font" metaFont="systemMedium" size="13"/>
@@ -262,7 +262,7 @@
                                         <stackView hidden="YES" distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LOm-Mw-xHU">
                                             <rect key="frame" x="0.0" y="250" width="29" height="14"/>
                                             <subviews>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8z9-DV-e8G">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8z9-DV-e8G">
                                                     <rect key="frame" x="-2" y="0.0" width="33" height="14"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="Dyw-cr-ig6">
                                                         <font key="font" metaFont="controlContent" size="11"/>
@@ -294,7 +294,7 @@
                                         <real value="3.4028234663852886e+38"/>
                                     </customSpacing>
                                 </stackView>
-                                <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Glq-Dm-gaq" customClass="RefreshingFormattedTextField" customModule="Mastonaut" customModuleProvider="target">
+                                <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Glq-Dm-gaq" customClass="RefreshingFormattedTextField" customModule="Mastonaut" customModuleProvider="target">
                                     <rect key="frame" x="235" y="1" width="73" height="14"/>
                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" alignment="right" title="A minute ago" id="LTT-x0-IwG">
                                         <font key="font" metaFont="controlContent" size="11"/>

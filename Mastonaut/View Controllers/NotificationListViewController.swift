@@ -189,6 +189,12 @@ class NotificationListViewController: ListViewController<MastodonNotification>, 
 		authorizedAccountProvider?.presentInSidebar(SidebarMode.tag(tag.name))
 	}
 	
+	func showReblogProfiles(status: Status){
+		
+	}
+
+	func showFavoriteProfiles(status: Status){}
+	
 	func showStatusEdits(status: MastodonKit.Status, edits: [StatusEdit]) {
 		authorizedAccountProvider?.presentInSidebar(SidebarMode.edits(status: status, edits: edits))
 	}

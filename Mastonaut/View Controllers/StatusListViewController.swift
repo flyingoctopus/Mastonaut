@@ -126,6 +126,18 @@ class StatusListViewController: ListViewController<Status>, StatusInteractionHan
 		authorizedAccountProvider?.presentInSidebar(SidebarMode.tag(tag.name))
 	}
 
+	func showReblogProfiles(status: Status)
+	{
+		let sidebarMode = SidebarMode.profilesForStatus(whoInteractedWithStatusId: status.id, purpose: .reblog)
+		authorizedAccountProvider?.presentInSidebar(sidebarMode)
+	}
+
+	func showFavoriteProfiles(status: Status) async
+	{
+		let sidebarMode = SidebarMode.profilesForStatus(whoInteractedWithStatusId: status.id, purpose: .favorite)
+		authorizedAccountProvider?.presentInSidebar(sidebarMode)
+	}
+
 	func showStatusEdits(status: Status, edits: [StatusEdit])
 	{
 		let sidebarMode = SidebarMode.edits(status: status,

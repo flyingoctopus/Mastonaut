@@ -17,9 +17,9 @@
 //  GNU General Public License for more details.
 //
 
+import CoreTootin
 import Foundation
 import MastodonKit
-import CoreTootin
 
 protocol StatusDisplaying
 {
@@ -32,10 +32,10 @@ protocol StatusDisplaying
 	///   - interactionHandler: The object that will handle status interaction events.
 	///   - activeInstance: The instance where the active user is registered.
 	func set(displayedStatus: Status,
-			 poll: Poll?,
-			 attachmentPresenter: AttachmentPresenting,
-			 interactionHandler: StatusInteractionHandling,
-			 activeInstance: Instance)
+	         poll: Poll?,
+	         attachmentPresenter: AttachmentPresenting,
+	         interactionHandler: StatusInteractionHandling,
+	         activeInstance: Instance)
 
 	/// Set whether a poll reload task is active for the associated poll.
 	func setHasActivePollTask(_ hasTask: Bool)
@@ -67,7 +67,13 @@ protocol StatusInteractionHandling: AnyObject
 
 	/// Tells the handler the user asked for more details on a tag to be displayed.
 	func show(tag: Tag)
-	
+
+	/// Tells the handler the user asked for who reblogged this status.
+	func showReblogProfiles(status: Status) async
+
+	/// Tells the handler the user asked for who favorited this status.
+	func showFavoriteProfiles(status: Status) async
+
 	/// Tells the handler the user asked for a status' edit history to be displayed.
 	func showStatusEdits(status: Status, edits: [StatusEdit])
 
@@ -84,8 +90,8 @@ protocol StatusInteractionHandling: AnyObject
 	func redraft(status: Status)
 
 	/// Tells the handler the user wants to edit a status.
-	func edit(status:Status)
-	
+	func edit(status: Status)
+
 	/// Asks the handler to open a URL the user has clicked.
 	func handle(linkURL: URL, knownTags: [Tag]?)
 
@@ -116,7 +122,7 @@ extension StatusInteractionHandling
 			status in completion((status?.favourited ?? true) != true)
 		}
 	}
-	
+
 	func reblogStatus(with statusID: String, completion: @escaping (Bool) -> Void)
 	{
 		interact(using: Statuses.reblog(id: statusID))
@@ -132,7 +138,7 @@ extension StatusInteractionHandling
 			status in completion((status?.reblogged ?? true) != true)
 		}
 	}
-	
+
 	func bookmarkStatus(with statusID: String, completion: @escaping (Bool) -> Void)
 	{
 		interact(using: Statuses.bookmark(id: statusID))
@@ -148,7 +154,7 @@ extension StatusInteractionHandling
 			status in completion((status?.bookmarked ?? true) != true)
 		}
 	}
-	
+
 	func fetchEditHistory(for statusID: String, completion: (([StatusEdit]?) -> Void)? = nil)
 	{
 		client?.run(Statuses.history(id: statusID))
@@ -204,24 +210,24 @@ extension StatusInteractionHandling
 	func reallyDelete(status: Status, redraft: Bool)
 	{
 		client?.run(Statuses.delete(id: status.id))
+		{
+			[weak self] result in
+
+			DispatchQueue.main.async
 			{
-				[weak self] (result) in
+				switch result
+				{
+				case .failure(let error):
+					self?.handle(interactionError: NetworkError(error))
 
-				DispatchQueue.main.async
+				case .success:
+					if redraft
 					{
-						switch result
-						{
-						case .failure(let error):
-							self?.handle(interactionError: NetworkError(error))
-
-						case .success:
-							if redraft
-							{
-								self?.redraft(status: status)
-							}
-						}
+						self?.redraft(status: status)
 					}
+				}
 			}
+		}
 	}
 
 	func pin(status: Status)

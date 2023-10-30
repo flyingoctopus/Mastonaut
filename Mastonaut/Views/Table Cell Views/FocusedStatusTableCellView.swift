@@ -46,6 +46,12 @@ class FocusedStatusTableCellView: StatusTableCellView
 			[weak self] _, _ in
 			self?.updateFont()
 		}
+
+		var recognizer = NSClickGestureRecognizer(target: self, action: #selector(reblogCountClicked))
+		reblogCount.gestureRecognizers.append(recognizer)
+
+		recognizer = NSClickGestureRecognizer(target: self, action: #selector(favoriteCountClicked))
+		favoriteCount.gestureRecognizers.append(recognizer)
 	}
 
 	private var fontObserver: NSKeyValueObservation?
@@ -129,5 +135,26 @@ class FocusedStatusTableCellView: StatusTableCellView
 		}
 
 		NSWorkspace.shared.open(url)
+	}
+
+	@objc
+	func reblogCountClicked(_ sender: Any)
+	{
+		guard let cellModel else { return }
+
+		Task
+		{
+			await cellModel.interactionHandler.showReblogProfiles(status: cellModel.status)
+		}
+	}
+
+	@IBAction func favoriteCountClicked(_ sender: Any)
+	{
+		guard let cellModel else { return }
+
+		Task
+		{
+			await cellModel.interactionHandler.showFavoriteProfiles(status: cellModel.status)
+		}
 	}
 }
