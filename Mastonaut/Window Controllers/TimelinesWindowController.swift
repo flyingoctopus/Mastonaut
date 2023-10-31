@@ -1123,6 +1123,8 @@ extension TimelinesWindowController // IBActions
 
         let wc = ArrangeColumnsWindowController()
 
+        wc.columnViewControllers = timelinesViewController.columnViewControllers
+        
         if let childWindow = wc.window,
            let parentWindow = window
         {

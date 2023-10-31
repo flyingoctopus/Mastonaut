@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ArrangeColumnsWindowController" customModule="Mastonaut" customModuleProvider="target">
             <connections>
+                <outlet property="collectionView" destination="IYj-mm-J94" id="o9z-OV-Bcl"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="JJW-gE-XPl"/>
             </connections>
         </customObject>
@@ -32,20 +33,20 @@ DQ
 </string>
                         </buttonCell>
                         <connections>
-                            <action selector="done:" target="-2" id="Him-jg-SmO"/>
+                            <action selector="what:" target="-2" id="hbh-c3-EHL"/>
                         </connections>
                     </button>
-                    <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ljS-sl-Ta6">
+                    <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" verticalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="ljS-sl-Ta6">
                         <rect key="frame" x="0.0" y="60" width="480" height="210"/>
                         <clipView key="contentView" id="dbb-ln-cTG">
                             <rect key="frame" x="1" y="1" width="478" height="208"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <collectionView selectable="YES" id="IYj-mm-J94">
+                                <collectionView id="IYj-mm-J94">
                                     <rect key="frame" x="0.0" y="0.0" width="478" height="158"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                    <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="Yu3-ue-Ky7">
-                                        <size key="itemSize" width="50" height="50"/>
+                                    <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" scrollDirection="horizontal" id="Yu3-ue-Ky7">
+                                        <size key="itemSize" width="135" height="180"/>
                                     </collectionViewFlowLayout>
                                     <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <connections>
@@ -60,7 +61,7 @@ DQ
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="CiV-bN-SRm">
-                            <rect key="frame" x="408" y="1" width="16" height="157"/>
+                            <rect key="frame" x="-100" y="-100" width="16" height="157"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>

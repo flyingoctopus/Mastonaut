@@ -8,26 +8,52 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ArrangeColumnsViewItem" customModule="Mastonaut" customModuleProvider="target">
             <connections>
+                <outlet property="box" destination="Uas-iT-pMx" id="dCp-dY-qlu"/>
+                <outlet property="image" destination="hAd-lL-LVf" id="Y7b-cY-Ezb"/>
+                <outlet property="label" destination="0h3-QX-qhE" id="mBk-XP-tRL"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView translatesAutoresizingMaskIntoConstraints="NO" id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="343" height="210"/>
+            <rect key="frame" x="0.0" y="0.0" width="231" height="189"/>
             <subviews>
-                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hAd-lL-LVf">
-                    <rect key="frame" x="20" y="20" width="303" height="170"/>
-                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSComputer" id="RFo-By-Gd8"/>
-                </imageView>
+                <box borderType="line" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="Uas-iT-pMx">
+                    <rect key="frame" x="17" y="16" width="197" height="155"/>
+                    <view key="contentView" id="gbq-b6-app">
+                        <rect key="frame" x="4" y="5" width="189" height="147"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hAd-lL-LVf">
+                                <rect key="frame" x="20" y="58" width="50" height="32"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSComputer" id="RFo-By-Gd8"/>
+                            </imageView>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" id="0h3-QX-qhE">
+                                <rect key="frame" x="76" y="66" width="37" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="XIm-D9-i0e">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="0h3-QX-qhE" firstAttribute="leading" secondItem="hAd-lL-LVf" secondAttribute="trailing" constant="8" symbolic="YES" id="SXP-kB-XDT"/>
+                            <constraint firstItem="hAd-lL-LVf" firstAttribute="leading" secondItem="gbq-b6-app" secondAttribute="leading" constant="20" symbolic="YES" id="k2P-f5-XHL"/>
+                            <constraint firstItem="hAd-lL-LVf" firstAttribute="centerY" secondItem="gbq-b6-app" secondAttribute="centerY" id="qtu-Xu-Smr"/>
+                        </constraints>
+                    </view>
+                </box>
             </subviews>
             <constraints>
-                <constraint firstItem="hAd-lL-LVf" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" symbolic="YES" id="551-1z-iMS"/>
-                <constraint firstAttribute="trailing" secondItem="hAd-lL-LVf" secondAttribute="trailing" constant="20" symbolic="YES" id="EnQ-SC-1UV"/>
-                <constraint firstItem="hAd-lL-LVf" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="20" symbolic="YES" id="fnW-MJ-IQ3"/>
-                <constraint firstAttribute="bottom" secondItem="hAd-lL-LVf" secondAttribute="bottom" constant="20" symbolic="YES" id="jrv-g6-p3e"/>
+                <constraint firstItem="Uas-iT-pMx" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" symbolic="YES" id="QEy-kf-bq8"/>
+                <constraint firstAttribute="bottom" secondItem="Uas-iT-pMx" secondAttribute="bottom" constant="20" symbolic="YES" id="Ynd-NJ-dmf"/>
+                <constraint firstItem="Uas-iT-pMx" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="20" symbolic="YES" id="osO-B5-SgP"/>
+                <constraint firstAttribute="trailing" secondItem="Uas-iT-pMx" secondAttribute="trailing" constant="20" symbolic="YES" id="q7N-f5-365"/>
             </constraints>
-            <point key="canvasLocation" x="-66.5" y="104"/>
+            <point key="canvasLocation" x="-132.5" y="61.5"/>
         </customView>
         <collectionViewItem id="bge-Cz-Vwd" customClass="ArrangeColumnsViewItem" customModule="Mastonaut" customModuleProvider="target">
             <connections>
