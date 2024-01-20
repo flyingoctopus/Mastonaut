@@ -21,14 +21,19 @@ class ArrangeColumnsViewItem: NSCollectionViewItem {
     }
     
     func set(columnViewController: ColumnViewController) {
-        guard let label,
+        guard //let label,
               let columnMode = columnViewController.modelRepresentation as? ColumnMode
         else { return }
         
-        label.stringValue = columnMode.getTitle()
-        image.image = columnMode.getImage()
+//        label.stringValue = columnMode.getTitle()
+//        image.image = columnMode.getImage()
         
         // TODO: MAYBE aspect ratio
 //        box.frame = NSRect(x: 0, y: 0, width: 100, height: 100)
+    }
+    
+    func setHighlighted(_ highlighted: Bool) {
+        view.layer?.borderColor = highlighted ? NSColor.systemRed.cgColor : NSColor.systemBlue.cgColor
+        view.layer?.borderWidth = highlighted ? 3.0 : 0.0
     }
 }
