@@ -10,14 +10,14 @@ $(DESTINATION) : * **/*
 	[[ -s "$(HOME)/.rvm/environments/default" ]] && source "$(HOME)/.rvm/environments/default" ; \
 	(which -s jekyll || (echo "error: Jekyll not found - check setup requirements" ; false )) \
 	&& jekyll build
-	
+
 	echo "Destination: $(HELP)"
 
 	# check for things like broken links
 	htmlproofer --allow-missing-href _site
-	
-	cp -R _site "$(DESTINATION)"
-	
+
+	cp -R _site/ "$(DESTINATION)"
+
 	for LPROJ in "$(DESTINATION)"/*.lproj ; do \
 		LOCALE=$$(basename "$$LPROJ" .lproj) ; \
 		echo "Indexing: $$LPROJ" ; \
@@ -25,3 +25,6 @@ $(DESTINATION) : * **/*
 		hiutil -I corespotlight -1 -vv --create --anchors --locale=$$LOCALE --file "$$LPROJ/search.cshelpindex" "$$LPROJ" 2>&1 | \
 		awk "{ if (/error:/) {printf \"error: \" ; err = 1} else {printf \"warning: \"} ; print} END {exit err}" ; \
 	done
+
+	# hack: this dir should not exist
+	rm -r "$(DESTINATION)/_English.lproj"

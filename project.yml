@@ -69,8 +69,8 @@ targets:
           AUTH_URL_SCHEME: "mastonaut-auth"
     preBuildScripts:
       - script: |
-                BUNDLE_VERSION=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' $SRCROOT/Mastonaut/Supporting\ Files/Info.plist)
-                echo "#define BUNDLE_VERSION \"$MARKETING_VERSION\"" > $DERIVED_FILE_DIR/BundleVersions.h
+          BUNDLE_VERSION=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' $SRCROOT/Mastonaut/Supporting\ Files/Info.plist)
+          echo "#define BUNDLE_VERSION \"$MARKETING_VERSION\"" > $DERIVED_FILE_DIR/BundleVersions.h
         inputFiles:
           - "$(SRCROOT)/Mastonaut/Supporting Files/Info.plist"
         outputFiles:
@@ -136,8 +136,8 @@ targets:
     platform: macOS
     preBuildScripts:
       - script: |
-                "$PROJECT_DIR/Mastonaut/Supporting Files/BuildConfig.sh" \
-                > "${PROJECT_DIR}/CoreTootin/Supporting Files/BuildConfig.generated.swift"
+          "$PROJECT_DIR/Mastonaut/Supporting Files/BuildConfig.sh" \
+          > "${PROJECT_DIR}/CoreTootin/Supporting Files/BuildConfig.generated.swift"
         outputFiles:
           - "${PROJECT_DIR}/CoreTootin/Supporting Files/BuildConfig.generated.swift"
         name: "Apply Build Config (Run Script)"
@@ -167,7 +167,7 @@ targets:
     platform: macOS
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).mac.QuickToot"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).mac.MastonautHelp"
         WRAPPER_EXTENSION: "help"
     sources:
       - path: MastonautHelp/book-icon.png
@@ -176,17 +176,19 @@ targets:
       - path: MastonautHelp/_English.lproj/InfoPlist.strings
     postBuildScripts:
       - script: |
-                cd MastonautHelp
+          cd MastonautHelp
 
-                # purge help cache
-                hiutil -P
+          # purge help cache
+          hiutil -P
 
-                source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
-                source /opt/homebrew/opt/chruby/share/chruby/auto.sh
-                chruby ruby-3.1.3
+          source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
+          source /opt/homebrew/opt/chruby/share/chruby/auto.sh
+          chruby ruby-3.1.3
 
-                /usr/bin/make
+          /usr/bin/make --always-make
         name: "Build Help (Run Script)"
+        outputFiles:
+          - "_site/nav.js"
   PullRefreshableScrollView:
     type: framework
     platform: macOS
@@ -194,8 +196,8 @@ targets:
       base:
         OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
     sources:
-    - path: Dependencies/PullRefreshableScrollView/PullRefreshableScrollView
-      group: Dependencies
+      - path: Dependencies/PullRefreshableScrollView/PullRefreshableScrollView
+        group: Dependencies
 
 schemes:
   Mastonaut:
