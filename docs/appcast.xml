@@ -4,6 +4,29 @@
         <title>Mastonaut</title>
 
         <item>
+            <title>1.9.0</title>
+            <pubDate>2024-03-13</pubDate>
+            <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/chucker/Mastonaut/releases/download/app-1.9.0/Mastonaut-1.9.0.zip"
+                sparkle:version="143" sparkle:shortVersionString="1.9.0" length="9423519"
+                type="application/octet-stream" />-->
+            <description>
+                <![CDATA[
+<p>This release comes with some under-the-hood changes, but is otherwise relatively minor.</p>
+<h2>Features</h2>
+<ul>
+<li>When within a thread, you can now pull-to-refresh. <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1858238436" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/160" data-hovercard-type="pull_request" data-hovercard-url="/chucker/Mastonaut/pull/160/hovercard" href="https://github.com/chucker/Mastonaut/pull/160">#160</a></li>
+<li>When viewing a toot's favorites and boosts, or a profile's follows and followers, you can now click to see a list of the people. You can then double-click to go to their respective profiles. <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1837950175" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/151" data-hovercard-type="pull_request" data-hovercard-url="/chucker/Mastonaut/pull/151/hovercard" href="https://github.com/chucker/Mastonaut/pull/151">#151</a></li>
+</ul>
+<h2>Fixes</h2>
+<ul>
+<li>URLs with anchors/fragments in them would no longer get opened correctly. <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1865468741" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/163" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/163/hovercard" href="https://github.com/chucker/Mastonaut/issues/163">#163</a>, <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1977713046" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/169" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/169/hovercard" href="https://github.com/chucker/Mastonaut/issues/169">#169</a></li>
+</ul>
+                ]]>
+            </description>
+        </item>
+        
+        <item>
             <title>1.8.0</title>
             <pubDate>2023-08-05</pubDate>
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
