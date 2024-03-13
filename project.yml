@@ -165,13 +165,22 @@ targets:
   MastonautHelp:
     type: bundle
     platform: macOS
+    info:
+      path: MastonautHelp/Info.plist
+      properties:
+        CFBundleSignature: "hbwr"
+        HPDBookAccessPath: "index.html"
+        HPDBookCSIndexPath: "search.cshelpindex"
+        HPDBookIconPath: "book-icon.png"
+        HPDBookIndexPath: "search.helpindex"
+        HPDBookTitle: "$(PROJECT_NAME) Help"
+        HPDBookType: "3"
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).mac.MastonautHelp"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).MastonautHelp"
         WRAPPER_EXTENSION: "help"
     sources:
       - path: MastonautHelp/book-icon.png
-      - path: MastonautHelp/Info.plist
       - path: MastonautHelp/nav.js
       - path: MastonautHelp/_English.lproj/InfoPlist.strings
     postBuildScripts:
