@@ -12,6 +12,7 @@ Sidebars appear when you click on:
 - [a hashtag](Hashtag.html)
 - [a status](Status.html), revealing more details such as replies
 - [a status's edits](StatusEdits.html), revealing the edit history
+- [a user list](UserList.html), referring to related users
 
 Sidebars are visually distinct in that they are always rightmost, and always feature at least back/forward buttons, a title, and a close button at their top.
 
