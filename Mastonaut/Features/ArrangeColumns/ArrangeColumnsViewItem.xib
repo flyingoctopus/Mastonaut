@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ArrangeColumnsViewItem" customModule="Mastonaut" customModuleProvider="target">
             <connections>
+                <outlet property="image" destination="Y0n-ws-Gdk" id="suK-he-3cs"/>
+                <outlet property="label" destination="22P-Y3-Q72" id="Juq-BL-I6k"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -16,7 +18,7 @@
         <customView translatesAutoresizingMaskIntoConstraints="NO" id="Hz6-mo-xeY">
             <rect key="frame" x="0.0" y="0.0" width="200" height="170"/>
             <subviews>
-                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="22P-Y3-Q72">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="22P-Y3-Q72">
                     <rect key="frame" x="48" y="50" width="104" height="100"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="lq7-8v-Gbn"/>
@@ -28,17 +30,17 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y0n-ws-Gdk">
+                    <rect key="frame" x="20" y="102" width="48" height="48"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="owz-SP-BK2"/>
+                </imageView>
             </subviews>
             <constraints>
                 <constraint firstItem="22P-Y3-Q72" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="GiT-4K-osc"/>
                 <constraint firstItem="22P-Y3-Q72" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="20" symbolic="YES" id="yUn-UH-Hnf"/>
             </constraints>
-            <point key="canvasLocation" x="-132.5" y="61.5"/>
+            <point key="canvasLocation" x="-133" y="61"/>
         </customView>
-        <collectionViewItem id="bge-Cz-Vwd" customClass="ArrangeColumnsViewItem" customModule="Mastonaut" customModuleProvider="target">
-            <connections>
-                <outlet property="view" destination="Hz6-mo-xeY" id="b2w-hs-tyq"/>
-            </connections>
-        </collectionViewItem>
     </objects>
 </document>
