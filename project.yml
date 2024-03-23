@@ -4,6 +4,11 @@ options:
   deploymentTarget:
     macOS: "12.0" # FIXME is technically wrong for HSE
 
+settingGroups:
+  versioning:
+    MARKETING_VERSION: "1.3.9"
+    CURRENT_PROJECT_VERSION: "135"
+
 configFiles:
   Debug: userspecific.xcconfig
   Mock: userspecific.xcconfig
@@ -50,10 +55,10 @@ targets:
         INFOPLIST_FILE: "Mastonaut/Supporting Files/Info.plist"
         SWIFT_OBJC_BRIDGING_HEADER: "Mastonaut/Supporting Files/Mastonaut-Bridging-Header.h"
         INFOPLIST_KEY_LSApplicationCategoryType: "public.app-category.social-networking"
-        MARKETING_VERSION: "1.3.9"
-        CURRENT_PROJECT_VERSION: "135"
         PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).mac"
         OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
+      groups:
+        - versioning
       configs:
         Debug:
           APP_ICON_NAME: "MastonautDebug"
@@ -114,6 +119,8 @@ targets:
         ENABLE_HARDENED_RUNTIME: true
         OTHER_LDFLAGS: "" # prevent framework autolink (Xcode 15A240d)
         PRODUCT_BUNDLE_IDENTIFIER: "$(MASTONAUT_BUNDLE_ID_BASE).mac.QuickToot"
+      groups:
+        - versioning
     sources:
       - path: QuickToot
       - path: "CoreTootin/Extensions/Logger+CurrentType.swift"
