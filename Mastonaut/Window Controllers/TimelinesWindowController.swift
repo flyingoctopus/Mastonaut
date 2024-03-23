@@ -76,6 +76,8 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
     private var placeholderViewController: NSViewController?
     private var searchWindowController: NSWindowController?
 
+    private var arrangeColumnsWindowController: ArrangeColumnsWindowController?
+
     // MARK: Lifecycle Support
 
     private var preservedWindowFrameStack: Stack<CGRect> = []
@@ -1121,7 +1123,8 @@ extension TimelinesWindowController // IBActions
 //
 //        removeColumn(at: columnIndex, contract: true)
 
-        let wc = ArrangeColumnsWindowController()
+        arrangeColumnsWindowController = ArrangeColumnsWindowController()
+        let wc = arrangeColumnsWindowController!
 
         wc.columnViewControllers = timelinesViewController.columnViewControllers
         

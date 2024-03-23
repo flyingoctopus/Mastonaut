@@ -111,6 +111,4 @@ class ArrangeColumnsWindowController: NSWindowController, NSCollectionViewDelega
     @IBAction func done(_ sender: Any) {
         close()
     }
-
-    @IBAction func what(_ sender: Any) {}
 }

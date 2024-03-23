@@ -33,7 +33,7 @@ DQ
 </string>
                         </buttonCell>
                         <connections>
-                            <action selector="what:" target="-2" id="hbh-c3-EHL"/>
+                            <action selector="done:" target="-2" id="yzo-Rh-xBg"/>
                         </connections>
                     </button>
                     <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" verticalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="ljS-sl-Ta6">
