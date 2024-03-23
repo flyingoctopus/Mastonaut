@@ -85,6 +85,8 @@ targets:
       - path: "CoreTootin/Supporting Files/BuildConfig.generated.swift"
       - path: "CoreTootin/Supporting Files/CoreAssets.xcassets"
     dependencies:
+      - sdk: AVKit.framework
+        embed: false
       - package: FontPicker
       - package: Sdifft
       - package: Starscream
