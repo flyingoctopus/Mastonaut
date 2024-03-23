@@ -4,6 +4,23 @@
         <title>Mastonaut</title>
 
         <item>
+            <title>1.9.1</title>
+            <pubDate>2024-03-23</pubDate>
+            <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/chucker/Mastonaut/releases/download/app-1.9.1/Mastonaut-1.9.1.zip"
+                sparkle:version="144" sparkle:shortVersionString="1.9.1" length="9423348"
+                type="application/octet-stream" />-->
+            <description>
+                <![CDATA[
+<h2>Fixes</h2>
+<ul>
+<li>In 1.9.0, you could no longer view attached images <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2192803033" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/175" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/175/hovercard" href="https://github.com/chucker/Mastonaut/issues/175">#175</a></li>
+</ul>
+                ]]>
+            </description>
+        </item>
+        
+        <item>
             <title>1.9.0</title>
             <pubDate>2024-03-13</pubDate>
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
