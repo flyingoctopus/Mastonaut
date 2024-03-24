@@ -1113,15 +1113,35 @@ extension TimelinesWindowController // IBActions
         replaceColumn(at: columnIndex, with: newModel.makeViewController())
     }
 
+    private func selectPreviouslySelectedColumnMode(_ sender: Any?) {
+        guard
+            let menuItem = sender as? NSMenuItem,
+            let columnIndex = menuItem.representedObject as? Int
+        else {
+            return
+        }
+
+        let columnViewController = timelinesViewController.columnViewControllers[columnIndex]
+
+        if
+            let previousColumnMode = columnViewController.modelRepresentation as? ColumnMode
+        {
+            let previouslySelectedItem = menuItem.menu?.items.first {
+                guard let columnMode = $0.representedObject as? ColumnMode
+                else { return false }
+
+                return columnMode == previousColumnMode
+            }
+
+            let popupButton = columnPopUpButtonMap.object(forKey: columnViewController)
+
+            popupButton?.select(previouslySelectedItem)
+        }
+    }
+
     @IBAction private func rearrangeColumns(_ sender: Any?) {
-//        guard
-//            let menuItem = sender as? NSMenuItem,
-//            let columnIndex = menuItem.representedObject as? Int
-//        else {
-//            return
-//        }
-//
-//        removeColumn(at: columnIndex, contract: true)
+        // the Rearrange… menu item should only show as current temporarily
+        selectPreviouslySelectedColumnMode(sender)
 
         arrangeColumnsWindowController = ArrangeColumnsWindowController()
         let wc = arrangeColumnsWindowController!
