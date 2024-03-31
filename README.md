@@ -6,42 +6,47 @@ can still be [installed from the App Store](https://apps.apple.com/us/app/maston
 
 ### Some features since 1.3.9
 
-(As of 1.7.0.)
+(As of 1.9.1. Features marked with a mountain ⛰️ are also available for macOS 10.13 High Sierra through macOS 11 Big Sur; all other features require macOS 12 Monterey or newer.)
 
 #### Accessibility
 
-* The font size of statuses can be increased.
-* Assorted accessibility improvements
+* The font size of statuses can be increased
+* Assorted accessibility improvements ⛰️
 
 #### Composing
 
-* Edit your toots
+* Edit your toots ⛰️
 * Autocomplete for hashtags (1.3.9 already had autocomplete for user names)
+* Autocomplete for emoji, e.g. `:cat:`
+* Open multiple compose windows at once
 
 #### Notifications
 
 * Filter notifications by type (for example, to only see mentions)
+* Support for seeing and responding to follow requests
 
 #### Search
 
-* Search for (already known) toots by text or their URL
+* Search for (already known) toots by text or their URL ⛰️
 
 #### Timeline
 
-* Pull to refresh
-* View a list as a column
-* View your favorites or bookmarks as a column
+* Pull to refresh ⛰️
+* View a list as a column ⛰️
+* View your favorites or bookmarks as a column ⛰️
 * Follow hashtags in the Home timeline
 
 #### Viewing
 
-* See if a toot has been edited, and view previous versions
+* See if a toot has been edited, and view previous versions ⛰️
 * The font face and size can be customized.
-* Interaction statistics (how many replies, boosts, favorites) can be seen
+* Pull-to-refresh on threads
+* Interaction statistics (how many replies, boosts, favorites) can be seen ⛰️
+* People who interacted with you can be navigated to
 
 ## 👩🏽‍💻 End Users: Install
 
-To use it, you just want to [download 1.7 here](https://github.com/chucker/Mastonaut/releases/download/app-1.7.0/Mastonaut-1.7.0.zip).
+To use it, you just want to [download 1.9.1 here](https://github.com/chucker/Mastonaut/releases/download/app-1.9.1/Mastonaut-1.9.1.zip).
 
 ## 🗺️ Roadmap
 
