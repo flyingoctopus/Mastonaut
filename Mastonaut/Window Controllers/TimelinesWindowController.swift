@@ -1149,8 +1149,15 @@ extension TimelinesWindowController // IBActions
         wc.columnViewControllers = timelinesViewController.columnViewControllers
         
         if let childWindow = wc.window,
-           let parentWindow = window
+           let parentWindow = window,
+           let screen = parentWindow.screen
         {
+            let sheetWidth: CGFloat = 480
+            let sheetHeight: CGFloat = 298
+
+            childWindow.minSize = NSSize(width: sheetWidth, height: sheetHeight)
+            childWindow.maxSize = NSSize(width: screen.frame.width, height: sheetHeight)
+
             parentWindow.beginSheet(childWindow)
         }
     }
