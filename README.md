@@ -134,3 +134,19 @@ development teams, including "Your Name Here", do not support the Push
 Notifications capability.`, you may have to go _Signing and Capabilities_ and
 delete the "Push Notifications" capability by clicking the little
 trash can next to it. **Do not check in this change.**
+
+### Working on the Help
+
+MastonautHelp uses https://github.com/chuckhoupt/jekyll-apple-help. Each page is authored in Markdown with some [Front Matter](https://jekyllrb.com/docs/front-matter/) metadata written in YAML.
+
+When working on changes to the help, it's easiest to run:
+
+```sh
+source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
+source /opt/homebrew/opt/chruby/share/chruby/auto.sh
+chruby ruby-3.1.3
+cd MastonautHelp
+jekyll serve --livereload
+```
+
+This will launch a web server with live reload capability. Open that in your browser, and saving one of the help files will cause the browser to refresh.
