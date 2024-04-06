@@ -14,11 +14,6 @@ class ArrangeColumnsViewItem: NSCollectionViewItem {
     @IBOutlet var image: NSImageView!
     
     private var columnViewController: ColumnViewController?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do view setup here.
-    }
     
     func set(columnViewController: ColumnViewController) {
         guard let label,
@@ -27,13 +22,5 @@ class ArrangeColumnsViewItem: NSCollectionViewItem {
         
         label.stringValue = columnMode.getTitle()
         image.image = columnMode.getImage()
-        
-        // TODO: MAYBE aspect ratio
-//        box.frame = NSRect(x: 0, y: 0, width: 100, height: 100)
-    }
-    
-    func setHighlighted(_ highlighted: Bool) {
-        view.layer?.borderColor = highlighted ? NSColor.systemRed.cgColor : NSColor.systemBlue.cgColor
-        view.layer?.borderWidth = highlighted ? 3.0 : 0.0
     }
 }

@@ -1146,11 +1146,24 @@ extension TimelinesWindowController // IBActions
         arrangeColumnsWindowController = ArrangeColumnsWindowController()
         let wc = arrangeColumnsWindowController!
 
-        wc.columnViewControllers = timelinesViewController.columnViewControllers
-        
+        wc.getColumnViewControllers = { [self] in timelinesViewController.columnViewControllers }
+        wc.moveColumnViewController = { [self]
+            newControllerAtOldIndex, newIndex in
+
+                guard let oldIndex = timelinesViewController.columnViewControllers.firstIndex(where: { $0 == newControllerAtOldIndex }),
+                      let newModeAtOldIndex = newControllerAtOldIndex.modelRepresentation,
+                      let oldModeAtNewIndex = timelinesViewController.columnViewControllers[newIndex].modelRepresentation
+                else { return }
+
+                print("Found \(newModeAtOldIndex) at \(String(describing: oldIndex)); swapping with \(oldModeAtNewIndex) at \(newIndex)")
+
+                replaceColumn(at: newIndex, with: newModeAtOldIndex.makeViewController())
+                replaceColumn(at: oldIndex, with: oldModeAtNewIndex.makeViewController())
+        }
+
         if let childWindow = wc.window,
-           let parentWindow = window,
-           let screen = parentWindow.screen
+           let window,
+           let screen = window.screen
         {
             let sheetWidth: CGFloat = 480
             let sheetHeight: CGFloat = 298
@@ -1158,7 +1171,7 @@ extension TimelinesWindowController // IBActions
             childWindow.minSize = NSSize(width: sheetWidth, height: sheetHeight)
             childWindow.maxSize = NSSize(width: screen.frame.width, height: sheetHeight)
 
-            parentWindow.beginSheet(childWindow)
+            window.beginSheet(childWindow)
         }
     }
 

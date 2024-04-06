@@ -42,12 +42,13 @@ DQ
                             <rect key="frame" x="1" y="1" width="478" height="208"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <collectionView selectable="YES" allowsMultipleSelection="YES" id="IYj-mm-J94">
+                                <collectionView selectable="YES" id="IYj-mm-J94">
                                     <rect key="frame" x="0.0" y="0.0" width="478" height="158"/>
                                     <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
-                                    <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" scrollDirection="horizontal" id="Yu3-ue-Ky7">
-                                        <size key="itemSize" width="135" height="180"/>
-                                    </collectionViewFlowLayout>
+                                    <collectionViewGridLayout key="collectionViewLayout" maximumNumberOfRows="1" id="EsS-OT-eL1">
+                                        <size key="minimumItemSize" width="135" height="180"/>
+                                        <size key="maximumItemSize" width="135" height="180"/>
+                                    </collectionViewGridLayout>
                                     <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <connections>
                                         <outlet property="dataSource" destination="-2" id="Kih-GP-SaT"/>

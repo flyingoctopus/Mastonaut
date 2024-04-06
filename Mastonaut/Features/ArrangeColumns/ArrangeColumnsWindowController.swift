@@ -29,83 +29,70 @@ class ArrangeColumnsWindowController: NSWindowController, NSCollectionViewDelega
 
 //        collectionView.registerForDraggedTypes([NSPasteboard.PasteboardType(UTType.item.identifier)])
 //        collectionView.setDraggingSourceOperationMask(.move, forLocal: true)
-        
+
         collectionView.registerForDraggedTypes([.string])
         collectionView.setDraggingSourceOperationMask(.every, forLocal: true)
         collectionView.setDraggingSourceOperationMask(.every, forLocal: false)
     }
 
-    var columnViewControllers: [ColumnViewController]?
+    var getColumnViewControllers: (() -> [ColumnViewController])?
+    var moveColumnViewController: ((ColumnViewController, Int) -> Void)?
 
     func numberOfSections(in collectionView: NSCollectionView) -> Int {
         1
     }
-    
-    func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
-        highlightItems(true, at: indexPaths)
-    }
 
-    func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
-        highlightItems(false, at: indexPaths)
-    }
-    
-    func highlightItems(_ highlighted: Bool, at indexPaths: Set<IndexPath>) {
-        for indexPath in indexPaths {
-            guard let item = collectionView.item(at: indexPath) as? ArrangeColumnsViewItem else { continue }
-            item.setHighlighted(highlighted)
-        }
-    }
-    
     func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-        columnViewControllers?.count ?? 0
+        getColumnViewControllers?().count ?? 0
     }
 
-    func collectionView(_ collectionView: NSCollectionView,
-                        pasteboardWriterForItemAt indexPath: IndexPath) -> NSPasteboardWriting?
-    {
-        print("pasteboardWriterForItemAt")
-        return nil
-    }
-
-    func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem
-    {
+    func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let identifier = ReuseIdentifiers.item
         let item = collectionView.makeItem(withIdentifier: identifier, for: indexPath)
 
         let index = indexPath.item
 
         guard let viewItem = item as? ArrangeColumnsViewItem,
-              let columnViewControllers,
-              columnViewControllers.count >= index
+              let getColumnViewControllers,
+              getColumnViewControllers().count >= index
         else { return item }
 
-        viewItem.set(columnViewController: columnViewControllers[index])
-        
-        viewItem.setHighlighted(false)
+        viewItem.set(columnViewController: getColumnViewControllers()[index])
 
         return viewItem
     }
 
-    func collectionView(_ collectionView: NSCollectionView, writeItemsAt indexes: IndexSet, to pasteboard: NSPasteboard) -> Bool {
-        print("writeItemsAt")
-        return true
+    func collectionView(_ collectionView: NSCollectionView, pasteboardWriterForItemAt indexPath: IndexPath) -> NSPasteboardWriting? {
+        return String(indexPath.item) as NSString
     }
 
-    func collectionView(_ collectionView: NSCollectionView, canDragItemsAt indexes: IndexSet, with event: NSEvent) -> Bool {
-        print("canDragItemsAt")
-        return true
+    func collectionView(_ collectionView: NSCollectionView, validateDrop draggingInfo: NSDraggingInfo, proposedIndexPath proposedDropIndexPath: AutoreleasingUnsafeMutablePointer<NSIndexPath>, dropOperation proposedDropOperation: UnsafeMutablePointer<NSCollectionView.DropOperation>) -> NSDragOperation {
+        if proposedDropOperation.pointee == .on {
+            proposedDropOperation.pointee = .before
+        }
+
+        return .move
     }
 
-    func collectionView(_ collectionView: NSCollectionView, acceptDrop draggingInfo: NSDraggingInfo, index: Int, dropOperation: NSCollectionView.DropOperation) -> Bool {
-        print("acceptDrop")
-        // TODO: check type
+    func collectionView(_ collectionView: NSCollectionView, acceptDrop draggingInfo: NSDraggingInfo, indexPath: IndexPath, dropOperation: NSCollectionView.DropOperation) -> Bool {
+        guard let stringResult = draggingInfo.draggingPasteboard.propertyList(forType: .string) as? String,
+              let stringUtf8Data = stringResult.data(using: .utf8)
+        else { return false }
+
+        guard let item = try? JSONDecoder().decode(Int.self, from: stringUtf8Data),
+              let getColumnViewControllers,
+              let moveColumnViewController
+        else { return false }
+
+        let colController = getColumnViewControllers()[item]
+
+        print("Moving \(colController) to \(indexPath.item)")
+
+        moveColumnViewController(colController, indexPath.item)
+        
+        collectionView.reloadData()
 
         return true
-    }
-
-    func collectionView(_ collectionView: NSCollectionView, validateDrop draggingInfo: NSDraggingInfo, proposedIndex proposedDropIndex: UnsafeMutablePointer<Int>, dropOperation proposedDropOperation: UnsafeMutablePointer<NSCollectionView.DropOperation>) -> NSDragOperation {
-        print("validateDrop")
-        return NSDragOperation.move
     }
 
     @IBAction func done(_ sender: Any) {
