@@ -69,8 +69,8 @@ DQ
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fcq-zJ-X8L">
-                        <rect key="frame" x="18" y="18" width="447" height="23"/>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fcq-zJ-X8L">
+                        <rect key="frame" x="18" y="23" width="447" height="14"/>
                         <textFieldCell key="cell" title="Drag the boxes to rearrange their corresponding columns, or click an X to close one." id="SZh-XP-vcq">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -85,6 +85,7 @@ DQ
                     <constraint firstItem="ljS-sl-Ta6" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="D6y-1Y-bcC"/>
                     <constraint firstItem="6Cq-CW-6uC" firstAttribute="leading" secondItem="fcq-zJ-X8L" secondAttribute="trailing" constant="20" id="HBF-lm-XSF"/>
                     <constraint firstAttribute="trailing" secondItem="6Cq-CW-6uC" secondAttribute="trailing" constant="20" symbolic="YES" id="frT-qQ-vuH"/>
+                    <constraint firstItem="fcq-zJ-X8L" firstAttribute="firstBaseline" secondItem="6Cq-CW-6uC" secondAttribute="firstBaseline" id="j3Y-mM-s8b"/>
                     <constraint firstAttribute="bottom" secondItem="6Cq-CW-6uC" secondAttribute="bottom" constant="20" symbolic="YES" id="wrs-0i-lrt"/>
                     <constraint firstItem="fcq-zJ-X8L" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="zEp-45-kWN"/>
                 </constraints>
