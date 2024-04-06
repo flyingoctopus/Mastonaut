@@ -95,6 +95,10 @@ class ArrangeColumnsWindowController: NSWindowController, NSCollectionViewDelega
 
         return true
     }
+    
+    func reloadData() {
+        collectionView.reloadData()
+    }
 
     @IBAction func done(_ sender: Any) {
         close()

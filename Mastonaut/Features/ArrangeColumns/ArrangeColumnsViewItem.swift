@@ -35,5 +35,7 @@ class ArrangeColumnsViewItem: NSCollectionViewItem {
         else { return }
         
         closeColumn(columnViewController)
+        
+        arrangeColumnsController?.reloadData()
     }
 }
