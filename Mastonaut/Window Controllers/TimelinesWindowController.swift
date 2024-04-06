@@ -23,8 +23,7 @@ import Logging
 import MastodonKit
 import PullRefreshableScrollView
 
-class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, ToolbarWindowController
-{
+class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, ToolbarWindowController {
     private var logger: Logger!
 
     // MARK: Outlets
@@ -194,20 +193,18 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
         return timelinesSplitViewController.children.first as! TimelinesViewController
     }
 
-    private lazy var accountMenuItems: [NSMenuItem] = {
-        [
-            NSMenuItem(title: 🔠("View Profile"),
-                       action: #selector(showUserProfile(_:)),
-                       keyEquivalent: ""),
-            NSMenuItem(title: 🔠("Open Profile in Browser"),
-                       action: #selector(openUserProfileInBrowser(_:)),
-                       keyEquivalent: ""),
-            NSMenuItem(title: 🔠("View Favorites"),
-                       action: #selector(showUserFavorites(_:)),
-                       keyEquivalent: "F").with(modifierMask: [.command, .shift]),
-            .separator()
-        ]
-    }()
+    private lazy var accountMenuItems: [NSMenuItem] = [
+        NSMenuItem(title: 🔠("View Profile"),
+                   action: #selector(showUserProfile(_:)),
+                   keyEquivalent: ""),
+        NSMenuItem(title: 🔠("Open Profile in Browser"),
+                   action: #selector(openUserProfileInBrowser(_:)),
+                   keyEquivalent: ""),
+        NSMenuItem(title: 🔠("View Favorites"),
+                   action: #selector(showUserFavorites(_:)),
+                   keyEquivalent: "F").with(modifierMask: [.command, .shift]),
+        .separator()
+    ]
 
     // MARK: Window Controller Lifecycle
 
@@ -551,10 +548,10 @@ class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, 
         var constraints: [NSLayoutConstraint] = []
         let contentView = timelinesViewController.mainContentView
 
-        [currentUserPopUpButton, statusComposerSegmentedControl, searchSegmentedControl, newColumnSegmentedControl].forEach {
-            toolbarView.addSubview($0)
+        for item in [currentUserPopUpButton, statusComposerSegmentedControl, searchSegmentedControl, newColumnSegmentedControl] {
+            toolbarView.addSubview(item)
             let referenceView = toolbarView.superview ?? toolbarView
-            constraints.append(referenceView.centerYAnchor.constraint(equalTo: $0.centerYAnchor))
+            constraints.append(referenceView.centerYAnchor.constraint(equalTo: item.centerYAnchor))
         }
 
         constraints.append(TrackingLayoutConstraint.constraint(trackingMaxXOf: contentView,
@@ -1173,7 +1170,7 @@ extension TimelinesWindowController // IBActions
            let screen = window.screen
         {
             let sheetWidth: CGFloat = 480
-            let sheetHeight: CGFloat = 298
+            let sheetHeight: CGFloat = 188
 
             childWindow.minSize = NSSize(width: sheetWidth, height: sheetHeight)
             childWindow.maxSize = NSSize(width: screen.frame.width, height: sheetHeight)
