@@ -15,12 +15,25 @@ class ArrangeColumnsViewItem: NSCollectionViewItem {
     
     private var columnViewController: ColumnViewController?
     
-    func set(columnViewController: ColumnViewController) {
+    private var arrangeColumnsController: ArrangeColumnsWindowController?
+    
+    func set(columnViewController: ColumnViewController, arrangeColumnsController: ArrangeColumnsWindowController) {
         guard let label,
               let columnMode = columnViewController.modelRepresentation as? ColumnMode
         else { return }
         
+        self.columnViewController = columnViewController
+        self.arrangeColumnsController = arrangeColumnsController
+        
         label.stringValue = columnMode.getTitle()
         image.image = columnMode.getImage()
+    }
+    
+    @IBAction func closeColumn(_ sender: Any) {
+        guard let columnViewController,
+              let closeColumn = arrangeColumnsController?.closeColumn
+        else { return }
+        
+        closeColumn(columnViewController)
     }
 }

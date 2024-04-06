@@ -37,6 +37,7 @@ class ArrangeColumnsWindowController: NSWindowController, NSCollectionViewDelega
 
     var getColumnViewControllers: (() -> [ColumnViewController])?
     var moveColumnViewController: ((ColumnViewController, Int) -> Void)?
+    var closeColumn: ((ColumnViewController) -> Void)?
 
     func numberOfSections(in collectionView: NSCollectionView) -> Int {
         1
@@ -57,7 +58,7 @@ class ArrangeColumnsWindowController: NSWindowController, NSCollectionViewDelega
               getColumnViewControllers().count >= index
         else { return item }
 
-        viewItem.set(columnViewController: getColumnViewControllers()[index])
+        viewItem.set(columnViewController: getColumnViewControllers()[index], arrangeColumnsController: self)
 
         return viewItem
     }
@@ -89,7 +90,7 @@ class ArrangeColumnsWindowController: NSWindowController, NSCollectionViewDelega
         print("Moving \(colController) to \(indexPath.item)")
 
         moveColumnViewController(colController, indexPath.item)
-        
+
         collectionView.reloadData()
 
         return true

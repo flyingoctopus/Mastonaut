@@ -1161,6 +1161,13 @@ extension TimelinesWindowController // IBActions
                 replaceColumn(at: oldIndex, with: oldModeAtNewIndex.makeViewController())
         }
 
+        wc.closeColumn = { [self] columnViewController in
+
+            guard let index = timelinesViewController.columnViewControllers.firstIndex(where: { $0 == columnViewController }) else { return }
+
+            removeColumn(at: index, contract: true)
+        }
+
         if let childWindow = wc.window,
            let window,
            let screen = window.screen
