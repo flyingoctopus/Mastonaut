@@ -23,1232 +23,1318 @@ import Logging
 import MastodonKit
 import PullRefreshableScrollView
 
-class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, ToolbarWindowController
-{
-	private var logger: Logger!
+class TimelinesWindowController: NSWindowController, UserPopUpButtonDisplaying, ToolbarWindowController {
+    private var logger: Logger!
 
-	// MARK: Outlets
+    // MARK: Outlets
 
-	@IBOutlet private var newColumnMenu: NSMenu!
+    @IBOutlet private var newColumnMenu: NSMenu!
 
-	// MARK: Services
-
-	private unowned let accountsService = AppDelegate.shared.accountsService
-	private unowned let instanceService = AppDelegate.shared.instanceService
+    // MARK: Services
 
-	// MARK: KVO Observers
-
-	private var observations = [NSKeyValueObservation]()
-	private var accountObservations = [NSKeyValueObservation]()
-
-	// MARK: Toolbar Buttons
-
-	internal lazy var toolbarContainerView: NSView? = makeToolbarContainerView()
-	internal var currentUserPopUpButton: NSPopUpButton = makeAccountsPopUpButton()
-	private var searchSegmentedControl: NSSegmentedControl = makeSearchSegmentedControl()
-	private var statusComposerSegmentedControl: NSSegmentedControl = makeStatusComposerSegmentedControl()
-	private var newColumnSegmentedControl: NSSegmentedControl = makeNewColumnSegmentedControl()
-	private var userPopUpButtonController: UserPopUpButtonSubcontroller!
-	private var popUpButtonConstraints = [NSLayoutConstraint]()
-	private let columnPopUpButtonMap = NSMapTable<NSViewController, NSPopUpButton>(keyOptions: .weakMemory,
-	                                                                               valueOptions: .weakMemory)
-
-	// MARK: Toolbar Sidebar Controls
-
-	private var sidebarNavigationSegmentedControl: NSSegmentedControl = makeSidebarNavigationSegmentedControl()
-	private var sidebarTitleViewController = SidebarTitleViewController()
-	private var sidebarTitleViewCenterXConstraint: NSLayoutConstraint?
-	private var closeSidebarSegmentedControl: NSSegmentedControl?
-
-	// MARK: Sidebar
-
-	private lazy var sidebarSubcontroller = SidebarSubcontroller(sidebarContainer: self,
-	                                                             navigationControl: sidebarNavigationSegmentedControl,
-	                                                             navigationStack: nil)
-
-	internal var sidebarViewController: SidebarViewController? {
-		get { return timelinesSplitViewController.sidebarViewController }
-		set { timelinesSplitViewController.sidebarViewController = newValue }
-	}
-
-	// MARK: Child View Controllers
-
-	private var placeholderViewController: NSViewController?
-	private var searchWindowController: NSWindowController?
-
-	// MARK: Lifecycle Support
-
-	private var preservedWindowFrameStack: Stack<CGRect> = []
-
-	var currentInstance: Instance? {
-		didSet {
-			if let sidebarMode = sidebarSubcontroller.navigationStack?.currentItem,
-			   sidebarViewController == nil
-			{
-				let oldStack = preservedWindowFrameStack
-				sidebarSubcontroller.installSidebar(mode: sidebarMode)
-				preservedWindowFrameStack = oldStack
-			}
-		}
-	}
-
-	var firstColumnFrame: NSRect? {
-		if timelinesViewController.columnViewControllers.count == 0 {
-			return nil
-		}
-
-		return timelinesViewController.columnViewControllers[0].view.frame
-	}
-
-	private(set) var client: ClientType? {
-		didSet {
-			guard AppDelegate.shared.appIsReady else { return }
-
-			timelinesViewController.columnViewControllers.forEach { $0.client = client }
-			revalidateSidebarAccountReference()
-		}
-	}
-
-	internal var currentUser: UUID? {
-		get { return currentAccount?.uuid }
-		set {
-			currentAccount = newValue.flatMap { accountsService.account(with: $0) }
-
-			updateColumnsPopUpButtons(for: timelinesViewController.columnViewControllers)
-		}
-	}
-
-	internal var currentAccount: AuthorizedAccount? {
-		didSet {
-			let hasUser: Bool
-
-			if let currentAccount = currentAccount {
-				hasUser = true
-				let client = Client.create(for: currentAccount)
-
-				if let window = window {
-					if let instance = currentAccount.baseDomain {
-						window.title = "@\(currentAccount.username!) — \(instance)"
-					}
-					else {
-						window.title = "@\(currentAccount.username!)"
-					}
-				}
-
-				removePlaceholderIfInstalled()
-				updateUserPopUpButton()
-
-				instanceService.instance(for: currentAccount) {
-					[weak self] instance in
-					DispatchQueue.main.async {
-						self?.client = client
-						self?.currentInstance = instance
-					}
-				}
-
-				accountObservations.observe(currentAccount, \.bookmarkedTags) {
-					_, _ in AppDelegate.shared.updateAccountsMenu()
-				}
-			}
-			else {
-				hasUser = false
-				client = nil
-				currentInstance = nil
-				accountObservations.removeAll()
-				sidebarSubcontroller.uninstallSidebar()
-				installPlaceholder()
-				window?.title = 🔠("Mastonaut — No Account Selected")
-			}
-
-			searchSegmentedControl.isHidden = !hasUser
-			statusComposerSegmentedControl.isHidden = !hasUser
-			newColumnSegmentedControl.isHidden = !hasUser
-			timelinesViewController.columnViewControllers.forEach { columnPopUpButtonMap.object(forKey: $0)?.isHidden = !hasUser }
-			columnPopUpButtonMap.objectEnumerator()?.forEach { ($0 as? NSControl)?.isHidden = !hasUser }
-
-			invalidateRestorableState()
-
-			if window?.isKeyWindow == true {
-				AppDelegate.shared.updateAccountsMenu()
-			}
-		}
-	}
-
-	var hasNotificationsColumn: Bool {
-		for controller in timelinesViewController.columnViewControllers {
-			if case .some(ColumnMode.notifications) = controller.modelRepresentation {
-				return true
-			}
-		}
-
-		return false
-	}
-
-	private var timelinesSplitViewController: TimelinesSplitViewController {
-		return contentViewController as! TimelinesSplitViewController
-	}
-
-	private var timelinesViewController: TimelinesViewController {
-		return timelinesSplitViewController.children.first as! TimelinesViewController
-	}
-
-	private lazy var accountMenuItems: [NSMenuItem] = {
-		[
-			NSMenuItem(title: 🔠("View Profile"),
-			           action: #selector(showUserProfile(_:)),
-			           keyEquivalent: ""),
-			NSMenuItem(title: 🔠("Open Profile in Browser"),
-			           action: #selector(openUserProfileInBrowser(_:)),
-			           keyEquivalent: ""),
-			NSMenuItem(title: 🔠("View Favorites"),
-			           action: #selector(showUserFavorites(_:)),
-			           keyEquivalent: "F").with(modifierMask: [.command, .shift]),
-			.separator()
-		]
-	}()
-
-	// MARK: Window Controller Lifecycle
-
-	func prepareAsEmptyWindow() {
-		if Preferences.newWindowAccountMode == .pickFirstOne, let account = accounts.first {
-			currentAccount = account
-		}
-		else {
-			currentAccount = nil
-		}
-
-		appendColumnIfFitting(model: ColumnMode.timeline)
-	}
-
-	override func encodeRestorableState(with coder: NSCoder) {
-		let columnModels = timelinesViewController.columnViewControllers.compactMap { $0.modelRepresentation }
-		let encodedColumnModels = columnModels.map { $0.rawValue }.joined(separator: ";")
-
-		coder.encode(currentAccount?.uuid, forKey: CodingKeys.currentUser)
-		coder.encode(encodedColumnModels, forKey: CodingKeys.columns)
-		coder.encode(preservedWindowFrameStack.map { NSValue(rect: $0) }, forKey: CodingKeys.preservedWindowFrameStack)
-
-		if let navigationStack = sidebarSubcontroller.navigationStack {
-			// HOTFIX: Swift classes with parameter types do not encode properly in *Release*
-			// Since we know the type in advance, we use a separate archiver for the navigation stack which skips
-			// the class name level and encodes only the internals.
-			let encoder = NSKeyedArchiver(requiringSecureCoding: false)
-			navigationStack.encode(with: encoder)
-			coder.encode(encoder.encodedData, forKey: CodingKeys.sidebarNavigationStack)
-
-//			coder.encode(navigationStack, forKey: CodingKeys.sidebarNavigationStack)
-		}
-	}
-
-	override func restoreState(with coder: NSCoder) {
-		if let uuid: UUID = coder.decodeObject(forKey: CodingKeys.currentUser),
-		   let account = accountsService.account(with: uuid)
-		{
-			currentAccount = account
-		}
-		else {
-			currentAccount = nil
-		}
-
-		if let encodedColumnModels: String = coder.decodeObject(forKey: CodingKeys.columns) {
-			let columnModels = encodedColumnModels.split(separator: ";")
-				.compactMap { ColumnMode(rawValue: String($0)) }
-
-			for model in columnModels {
-				appendColumnIfFitting(model: model, expand: false)
-			}
-		}
-
-		if let frameStack: [NSValue] = coder.decodeObject(forKey: CodingKeys.preservedWindowFrameStack) {
-			preservedWindowFrameStack = Stack(frameStack.compactMap { $0.rectValue })
-		}
-		else {
-			preservedWindowFrameStack = []
-		}
-
-		if timelinesViewController.columnViewControllers.isEmpty {
-			// Fallback if no columns were installed from decoding
-			appendColumnIfFitting(model: ColumnMode.timeline)
-		}
-
-		// HOTFIX: Swift classes with parameter types do not encode properly in *Release*
-		// Since we know the type in advance, we use a separate archiver for the navigation stack which skips
-		// the class name level and encodes only the internals.
-//		if let stack: NavigationStack<SidebarMode> = coder.decodeObject(forKey: CodingKeys.sidebarNavigationStack)
-		if let stackEncodedData: Data = coder.decodeObject(forKey: CodingKeys.sidebarNavigationStack) {
-			let decoder = NSKeyedUnarchiver(forReadingWith: stackEncodedData)
-			if let stack = NavigationStack<SidebarMode>(coder: decoder) {
-				timelinesSplitViewController.preserveSplitViewSizeForNextSidebarInstall = true
-				sidebarSubcontroller = SidebarSubcontroller(sidebarContainer: self,
-				                                            navigationControl: sidebarNavigationSegmentedControl,
-				                                            navigationStack: stack)
-			}
-		}
-
-		updateUserPopUpButton()
-	}
-
-	override func windowDidLoad() {
-		super.windowDidLoad()
-
-		logger = Logger(subsystemType: self)
-
-		shouldCascadeWindows = true
-
-		window?.restorationClass = TimelinesWindowRestoration.self
-
-		newColumnSegmentedControl.setMenu(newColumnMenu, forSegment: 0)
-
-		userPopUpButtonController = UserPopUpButtonSubcontroller(display: self)
-
-		observations.observe(on: .main, timelinesViewController, \TimelinesViewController.columnViewControllersCount) {
-			[weak self] timelinesViewController, _ in
-			self?.updateColumnsPopUpButtons(for: timelinesViewController.columnViewControllers)
-			self?.newColumnSegmentedControl.setEnabled(timelinesViewController.canAppendStatusList, forSegment: 0)
-			self?.invalidateRestorableState()
-		}
-
-		observations.observe(AppDelegate.shared, \AppDelegate.appIsReady) {
-			[weak self] appDelegate, _ in
-
-			if appDelegate.appIsReady, let client = self?.client {
-				self?.timelinesViewController.columnViewControllers.forEach { $0.client = client }
-				self?.revalidateSidebarAccountReference()
-			}
-		}
-
-		guard let window = window else { return }
-
-		window.backgroundColor = .timelineBackground
-	}
-
-	func handleDetach() {
-		for _ in 0 ..< timelinesViewController.columnViewControllersCount {
-			removeColumn(at: 0, contract: false)
-		}
-	}
-
-	// MARK: UI Handling
-
-	func updateUserPopUpButton() {
-		userPopUpButtonController.updateUserPopUpButton()
-	}
-
-	func shouldChangeCurrentUser(to userUUID: UUID) -> Bool {
-		return true
-	}
-
-	func redraft(status: Status) {
-		AppDelegate.shared.composeStatus(self)
-		guard let composerWindowController = AppDelegate.shared.statusComposerWindowControllers.last else { return }
-		composerWindowController.showWindow(nil)
-		composerWindowController.setUpAsRedraft(of: status, using: currentAccount)
-	}
-
-	func edit(status: Status) {
-		AppDelegate.shared.composeStatus(self)
-		guard let composerWindowController = AppDelegate.shared.statusComposerWindowControllers.last else { return }
-		composerWindowController.showWindow(nil)
-		composerWindowController.setUpAsEdit(of: status, using: currentAccount)
-	}
-
-	func composeReply(for status: Status, sender: Any?) {
-		AppDelegate.shared.composeStatus(self)
-		guard let composerWindowController = AppDelegate.shared.statusComposerWindowControllers.last else { return }
-		composerWindowController.showWindow(sender)
-		composerWindowController.setupAsReply(to: status, using: currentAccount, senderWindowController: self)
-	}
-
-	func composeMention(userHandle: String, directMessage: Bool) {
-		AppDelegate.shared.composeStatus(self)
-		guard let composerWindowController = AppDelegate.shared.statusComposerWindowControllers.last else { return }
-		composerWindowController.showWindow(nil)
-
-		composerWindowController.setupAsMention(handle: userHandle, using: currentAccount, directMessage: directMessage)
-	}
-
-	func installPlaceholder() {
-		guard let contentView = contentViewController?.view, placeholderViewController == nil else { return }
-
-		let accounts = accountsService.authorizedAccounts
-		let viewController: NSViewController
-
-		if accounts.isEmpty {
-			// Show welcome placeholder
-			viewController = WelcomePlaceholderController()
-		}
-		else {
-			// Show account picker placeholder
-			viewController = AccountsPlaceholderController()
-		}
-
-		contentView.subviews.forEach { $0.isHidden = true }
-
-		contentViewController?.addChild(viewController)
-		contentView.addSubview(viewController.view)
-		placeholderViewController = viewController
-
-		NSLayoutConstraint.activate([
-			contentView.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor),
-			contentView.trailingAnchor.constraint(equalTo: viewController.view.trailingAnchor),
-			contentView.topAnchor.constraint(equalTo: viewController.view.topAnchor),
-			contentView.bottomAnchor.constraint(equalTo: viewController.view.bottomAnchor)
-		])
-	}
-
-	func removePlaceholderIfInstalled() {
-		placeholderViewController?.view.removeFromSuperview()
-		placeholderViewController?.removeFromParent()
-		placeholderViewController = nil
-
-		contentViewController?.view.subviews.forEach { $0.isHidden = false }
-	}
-
-	func presentSearchWindow() {
-		let storyboard = NSStoryboard(name: "Search", bundle: .main)
-
-		guard
-			currentInstance != nil,
-			let account = currentAccount,
-			let client = client,
-			let searchWindowController = storyboard.instantiateInitialController() as? SearchWindowController,
-			let searchWindow = searchWindowController.window,
-			let timelinesWindow = window
-		else {
-			return
-		}
-
-		searchWindowController.set(client: client)
-		searchWindowController.set(searchDelegate: self)
-
-		AppDelegate.shared.instanceService.instance(for: account) {
-			[weak self] instance in
-
-			guard let instance = instance else { return }
-
-			searchWindowController.set(instance: instance)
-			self?.searchWindowController = searchWindowController
-
-			timelinesWindow.beginSheet(searchWindow) {
-				_ in self?.searchWindowController = nil
-			}
-		}
-	}
-
-	func adjustWindowFrame(adjustment: WindowSizeAdjustment) {
-		guard
-			let window = window,
-			window.styleMask.contains(.fullScreen) == false,
-			let screen = window.screen
-		else { return }
-
-		let originalWindowFrame = window.frame
-		var frame = originalWindowFrame
-
-		switch adjustment {
-		case .nudgeIfClipped:
-			let excessWidth = window.frame.maxX - screen.frame.maxX
-			guard excessWidth > 0 else { return }
-			frame.origin.x -= excessWidth
-
-		case .expand(by: let extraWidth):
-			preservedWindowFrameStack.push(originalWindowFrame)
-
-			if originalWindowFrame.maxX + extraWidth <= screen.frame.maxX {
-				frame.size.width = originalWindowFrame.width + extraWidth
-			}
-			else {
-				frame.size.width = screen.frame.maxX - window.frame.origin.x
-			}
-
-			if let contentView = window.contentView {
-				let contentFrame = window.contentRect(forFrameRect: frame)
-				contentView.setFrameSize(contentFrame.size)
-				contentView.layoutSubtreeIfNeeded()
-
-				let difference = contentView.frame.width - contentFrame.width
-
-				if difference > 0 {
-					frame.origin.x -= difference
-				}
-			}
-
-		case .contract(by: let extraWidth, let tryPoppingPreservedFrame):
-			if tryPoppingPreservedFrame, let preservedFrame = preservedWindowFrameStack.popIfNotEmpty() {
-				frame = preservedFrame
-			}
-			else {
-				frame.size.width -= extraWidth
-			}
-
-		case .restorePreservedOriginIfPossible:
-			if let preservedFrame = preservedWindowFrameStack.popIfNotEmpty() {
-				frame.origin = preservedFrame.origin
-			}
-		}
-
-		window.animator().setFrame(frame, display: false)
-	}
-
-	override func mouseDragged(with event: NSEvent) {
-		super.mouseDragged(with: event)
-
-		if preservedWindowFrameStack.isEmpty == false {
-			preservedWindowFrameStack = []
-		}
-	}
-
-	enum WindowSizeAdjustment {
-		case expand(by: CGFloat)
-		case nudgeIfClipped
-		case contract(by: CGFloat, poppingPreservedFrameIfPossible: Bool)
-		case restorePreservedOriginIfPossible
-	}
-
-	// MARK: ToolbarWindowController
-
-	func didToggleToolbarShown(_ window: ToolbarWindow) {
-		if window.toolbar?.isVisible == true {
-			updateColumnsPopUpButtons(for: timelinesViewController.columnViewControllers)
-		}
-	}
-
-	// MARK: Internal helper methods
-
-	private func revalidateSidebarAccountReference() {
-		if let accountBoundSidebar = timelinesSplitViewController.sidebarViewController as? AccountBound,
-		   let currentAccount = accountBoundSidebar.account,
-		   let instance = currentInstance,
-		   let client = client
-		{
-			ResolverService(client: client).resolve(account: currentAccount, activeInstance: instance) {
-				[weak self] result in
-
-				DispatchQueue.main.async {
-					switch result {
-					case .success(let account):
-						if AppDelegate.shared.appIsReady {
-							self?.timelinesSplitViewController.sidebarViewController?.client = client
-						}
-						accountBoundSidebar.setRecreatedAccount(account)
-						self?.invalidateRestorableState()
-
-					case .failure(let error):
-						self?.displayError(error)
-						self?.sidebarSubcontroller.uninstallSidebar()
-					}
-				}
-			}
-		}
-		else {
-			timelinesSplitViewController.sidebarViewController?.client = client
-		}
-	}
-
-	private func installPersistentToolbarButtons(toolbarView: NSView) {
-		var constraints: [NSLayoutConstraint] = []
-		let contentView = timelinesViewController.mainContentView
-
-		[currentUserPopUpButton, statusComposerSegmentedControl, searchSegmentedControl, newColumnSegmentedControl].forEach {
-			toolbarView.addSubview($0)
-			let referenceView = toolbarView.superview ?? toolbarView
-			constraints.append(referenceView.centerYAnchor.constraint(equalTo: $0.centerYAnchor))
-		}
-
-		constraints.append(TrackingLayoutConstraint.constraint(trackingMaxXOf: contentView,
-		                                                       targetView: newColumnSegmentedControl,
-		                                                       containerView: toolbarView,
-		                                                       targetAttribute: .trailing,
-		                                                       containerAttribute: .leading)
-				.with(priority: .defaultLow))
-
-		constraints.append(contentsOf: [
-			currentUserPopUpButton.leadingAnchor.constraint(equalTo: toolbarView.leadingAnchor, constant: 6),
-			searchSegmentedControl.leadingAnchor.constraint(equalTo: statusComposerSegmentedControl.trailingAnchor,
-			                                                constant: 8),
-			newColumnSegmentedControl.leadingAnchor.constraint(equalTo: searchSegmentedControl.trailingAnchor,
-			                                                   constant: 8),
-			toolbarView.trailingAnchor.constraint(greaterThanOrEqualTo: newColumnSegmentedControl.trailingAnchor, constant: 6)
-		])
-
-		NSLayoutConstraint.activate(constraints)
-	}
-
-	private func updateColumnsPopUpButtons(for columnViewControllers: [ColumnViewController]) {
-		guard let toolbarView = toolbarContainerView?.superview else { return }
-
-		NSLayoutConstraint.deactivate(popUpButtonConstraints)
-		popUpButtonConstraints.removeAll()
-
-		let takenModes = columnViewControllers.compactMap { $0.modelRepresentation as? ColumnMode }
-
-		var previousButton = currentUserPopUpButton
-
-		// Install column buttons
-		for (index, column) in columnViewControllers.enumerated() {
-			guard let popUpButton = columnPopUpButtonMap.object(forKey: column) else {
-				continue
-			}
-
-			guard let currentModel = column.modelRepresentation as? ColumnMode else {
-				continue
-			}
-
-			let popupButtonMenu = buildColumnsPopupButtonMenu(currentColumnMode: currentModel,
-			                                                  takenModes: takenModes,
-			                                                  index: index)
-
-			popUpButton.menu = popupButtonMenu
-			popUpButton.tag = index
-			popUpButton.select(popupButtonMenu.item(withRepresentedObject: currentModel))
-
-			popUpButtonConstraints.append(TrackingLayoutConstraint
-				.constraint(trackingMidXOf: column.view,
-				            targetView: popUpButton,
-				            containerView: toolbarView,
-				            targetAttribute: .centerX,
-				            containerAttribute: .leading)
-				.with(priority: .defaultLow + 248))
-
-			popUpButtonConstraints.append(popUpButton.leadingAnchor.constraint(
-				greaterThanOrEqualTo: previousButton.trailingAnchor,
-				constant: 8
-			))
-
-			previousButton = popUpButton
-		}
-
-		if previousButton != currentUserPopUpButton {
-			popUpButtonConstraints.append(statusComposerSegmentedControl.leadingAnchor.constraint(
-				greaterThanOrEqualTo: previousButton.trailingAnchor,
-				constant: 8
-			))
-		}
-
-		let newColumnMenuItems = buildNewColumnMenuItems(takenModes: takenModes)
-
-		newColumnMenu.setItems(newColumnMenuItems)
-
-		newColumnSegmentedControl.setEnabled(!newColumnMenu.items.isEmpty, forSegment: 0)
-
-		NSLayoutConstraint.activate(popUpButtonConstraints)
-	}
-
-	func buildColumnsPopupButtonMenu(currentColumnMode: ColumnMode,
-	                                 takenModes: [ColumnMode],
-	                                 index: Int) -> NSMenu
-	{
-		let followedLists = currentAccount?.followedLists
-
-		logger.debug2("Building columns popup menu. Followed lists: \(followedLists?.count ?? 0)")
-
-		var menuItemSection = 0
-
-		let staticColumnModes = ColumnMode.staticItems
-
-		let menu = NSMenu(title: "")
-
-		menu.autoenablesItems = false
-
-		var items: [NSMenuItem] = staticColumnModes.filter { !takenModes.contains($0) }
-			.map { $0.makeMenuItemForChanging(with: self, columnId: index) }
-
-		if currentColumnMode.menuItemSection == menuItemSection {
-			items.append(currentColumnMode.makeMenuItemForChanging(with: self, columnId: index))
-		}
-
-		items.sort(by: { $0.columnModel! < $1.columnModel! })
-
-		menuItemSection = 1
-
-		items.append(.separator())
-
-		let personalItems = ColumnMode.staticPersonalItems.filter { !takenModes.contains($0) }
-			.map { $0.makeMenuItemForChanging(with: self, columnId: index) }
-
-		for _item in personalItems {
-			items.append(_item)
-		}
-
-		if currentColumnMode.menuItemSection == menuItemSection {
-			items.append(currentColumnMode.makeMenuItemForChanging(with: self, columnId: index))
-		}
-
-		var listItems: [NSMenuItem] = []
-		var haveAtLeastOneList = false
-
-		if let followedLists = followedLists {
-			if followedLists.count > 0 {
-				listItems.append(.separator())
-				listItems.append(.sectionHeader(🔠("Lists")))
-
-				for _list in followedLists {
-					if let list = _list as? FollowedList {
-						let columnMode = ColumnMode.list(list: list)
-
-						listItems.append(columnMode.makeMenuItemForChanging(with: self, columnId: index))
-						haveAtLeastOneList = true
-					}
-				}
-			}
-		}
-
-		if haveAtLeastOneList {
-			items.append(contentsOf: listItems)
-		}
-
-		items.append(.separator())
-
-		let reloadColumnItem = NSMenuItem()
-		reloadColumnItem.title = 🔠("Reload this Column")
-		reloadColumnItem.target = self
-		reloadColumnItem.representedObject = index
-		reloadColumnItem.action = #selector(TimelinesWindowController.reloadColumn(_:))
-		items.append(reloadColumnItem)
-
-		if index > 0 {
-			let removeColumnItem = NSMenuItem()
-			removeColumnItem.title = 🔠("Remove this Column")
-			removeColumnItem.target = self
-			removeColumnItem.representedObject = index
-			removeColumnItem.action = #selector(TimelinesWindowController.removeColumn(_:))
-			items.append(removeColumnItem)
-		}
-
-		menu.setItems(items)
-
-		return menu
-	}
-
-	func buildNewColumnMenuItems(takenModes: [ColumnMode]) -> [NSMenuItem] {
-		var items: [NSMenuItem] = ColumnMode.staticItems.filter { !takenModes.contains($0) }
-			.map { $0.makeMenuItemForAdding(with: self) }
-
-		items.append(.separator())
-
-		let personalItems = ColumnMode.staticPersonalItems.filter { !takenModes.contains($0) }
-			.map { $0.makeMenuItemForAdding(with: self) }
-
-		for _item in personalItems {
-			items.append(_item)
-		}
-
-		let followedLists = currentAccount?.followedLists
-
-		logger.debug2("Building new column menu. Followed lists: \(followedLists?.count ?? 0)")
-
-		var listItems: [NSMenuItem] = []
-		var haveAtLeastOneList = false
-
-		if let followedLists = followedLists {
-			if followedLists.count > 0 {
-				listItems.append(.separator())
-				listItems.append(.sectionHeader(🔠("Lists")))
-
-				for _list in followedLists {
-					if let list = _list as? FollowedList {
-						let columnMode = ColumnMode.list(list: list)
-
-						if !takenModes.contains(columnMode) {
-							listItems.append(columnMode.makeMenuItemForAdding(with: self))
-							haveAtLeastOneList = true
-						}
-					}
-				}
-			}
-		}
-
-		if haveAtLeastOneList {
-			items.append(contentsOf: listItems)
-		}
-
-		return items
-	}
-
-	// MARK: - Keyboard Navigation
-
-	override func moveRight(_ sender: Any?) {
-		timelinesViewController.makeNextColumnFirstResponder()
-	}
-
-	override func moveDown(_ sender: Any?) {
-		timelinesViewController.makeNextColumnFirstResponder()
-	}
-
-	override func moveUp(_ sender: Any?) {
-		timelinesViewController.makeNextColumnFirstResponder()
-	}
-
-	override func moveLeft(_ sender: Any?) {
-		timelinesViewController.makePreviousColumnFirstResponder()
-	}
+    private unowned let accountsService = AppDelegate.shared.accountsService
+    private unowned let instanceService = AppDelegate.shared.instanceService
+
+    // MARK: KVO Observers
+
+    private var observations = [NSKeyValueObservation]()
+    private var accountObservations = [NSKeyValueObservation]()
+
+    // MARK: Toolbar Buttons
+
+    lazy var toolbarContainerView: NSView? = makeToolbarContainerView()
+    var currentUserPopUpButton: NSPopUpButton = makeAccountsPopUpButton()
+    private var searchSegmentedControl: NSSegmentedControl = makeSearchSegmentedControl()
+    private var statusComposerSegmentedControl: NSSegmentedControl = makeStatusComposerSegmentedControl()
+    private var newColumnSegmentedControl: NSSegmentedControl = makeNewColumnSegmentedControl()
+    private var userPopUpButtonController: UserPopUpButtonSubcontroller!
+    private var popUpButtonConstraints = [NSLayoutConstraint]()
+    private let columnPopUpButtonMap = NSMapTable<NSViewController, NSPopUpButton>(keyOptions: .weakMemory,
+                                                                                   valueOptions: .weakMemory)
+
+    // MARK: Toolbar Sidebar Controls
+
+    private var sidebarNavigationSegmentedControl: NSSegmentedControl = makeSidebarNavigationSegmentedControl()
+    private var sidebarTitleViewController = SidebarTitleViewController()
+    private var sidebarTitleViewCenterXConstraint: NSLayoutConstraint?
+    private var closeSidebarSegmentedControl: NSSegmentedControl?
+
+    // MARK: Sidebar
+
+    private lazy var sidebarSubcontroller = SidebarSubcontroller(sidebarContainer: self,
+                                                                 navigationControl: sidebarNavigationSegmentedControl,
+                                                                 navigationStack: nil)
+
+    var sidebarViewController: SidebarViewController? {
+        get { return timelinesSplitViewController.sidebarViewController }
+        set { timelinesSplitViewController.sidebarViewController = newValue }
+    }
+
+    // MARK: Child View Controllers
+
+    private var placeholderViewController: NSViewController?
+    private var searchWindowController: NSWindowController?
+
+    private var arrangeColumnsWindowController: ArrangeColumnsWindowController?
+
+    // MARK: Lifecycle Support
+
+    private var preservedWindowFrameStack: Stack<CGRect> = []
+
+    var currentInstance: Instance? {
+        didSet {
+            if let sidebarMode = sidebarSubcontroller.navigationStack?.currentItem,
+               sidebarViewController == nil
+            {
+                let oldStack = preservedWindowFrameStack
+                sidebarSubcontroller.installSidebar(mode: sidebarMode)
+                preservedWindowFrameStack = oldStack
+            }
+        }
+    }
+
+    var firstColumnFrame: NSRect? {
+        if timelinesViewController.columnViewControllers.count == 0 {
+            return nil
+        }
+
+        return timelinesViewController.columnViewControllers[0].view.frame
+    }
+
+    private(set) var client: ClientType? {
+        didSet {
+            guard AppDelegate.shared.appIsReady else { return }
+
+            timelinesViewController.columnViewControllers.forEach { $0.client = client }
+            revalidateSidebarAccountReference()
+        }
+    }
+
+    var currentUser: UUID? {
+        get { return currentAccount?.uuid }
+        set {
+            currentAccount = newValue.flatMap { accountsService.account(with: $0) }
+
+            updateColumnsPopUpButtons(for: timelinesViewController.columnViewControllers)
+        }
+    }
+
+    var currentAccount: AuthorizedAccount? {
+        didSet {
+            let hasUser: Bool
+
+            if let currentAccount = currentAccount {
+                hasUser = true
+                let client = Client.create(for: currentAccount)
+
+                if let window = window {
+                    if let instance = currentAccount.baseDomain {
+                        window.title = "@\(currentAccount.username!) — \(instance)"
+                    }
+                    else {
+                        window.title = "@\(currentAccount.username!)"
+                    }
+                }
+
+                removePlaceholderIfInstalled()
+                updateUserPopUpButton()
+
+                instanceService.instance(for: currentAccount) {
+                    [weak self] instance in
+                    DispatchQueue.main.async {
+                        self?.client = client
+                        self?.currentInstance = instance
+                    }
+                }
+
+                accountObservations.observe(currentAccount, \.bookmarkedTags) {
+                    _, _ in AppDelegate.shared.updateAccountsMenu()
+                }
+            }
+            else {
+                hasUser = false
+                client = nil
+                currentInstance = nil
+                accountObservations.removeAll()
+                sidebarSubcontroller.uninstallSidebar()
+                installPlaceholder()
+                window?.title = 🔠("Mastonaut — No Account Selected")
+            }
+
+            searchSegmentedControl.isHidden = !hasUser
+            statusComposerSegmentedControl.isHidden = !hasUser
+            newColumnSegmentedControl.isHidden = !hasUser
+            timelinesViewController.columnViewControllers.forEach { columnPopUpButtonMap.object(forKey: $0)?.isHidden = !hasUser }
+            columnPopUpButtonMap.objectEnumerator()?.forEach { ($0 as? NSControl)?.isHidden = !hasUser }
+
+            invalidateRestorableState()
+
+            if window?.isKeyWindow == true {
+                AppDelegate.shared.updateAccountsMenu()
+            }
+        }
+    }
+
+    var hasNotificationsColumn: Bool {
+        for controller in timelinesViewController.columnViewControllers {
+            if case .some(ColumnMode.notifications) = controller.modelRepresentation {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    private var timelinesSplitViewController: TimelinesSplitViewController {
+        return contentViewController as! TimelinesSplitViewController
+    }
+
+    private var timelinesViewController: TimelinesViewController {
+        return timelinesSplitViewController.children.first as! TimelinesViewController
+    }
+
+    private lazy var accountMenuItems: [NSMenuItem] = [
+        NSMenuItem(title: 🔠("View Profile"),
+                   action: #selector(showUserProfile(_:)),
+                   keyEquivalent: ""),
+        NSMenuItem(title: 🔠("Open Profile in Browser"),
+                   action: #selector(openUserProfileInBrowser(_:)),
+                   keyEquivalent: ""),
+        NSMenuItem(title: 🔠("View Favorites"),
+                   action: #selector(showUserFavorites(_:)),
+                   keyEquivalent: "F").with(modifierMask: [.command, .shift]),
+        .separator()
+    ]
+
+    // MARK: Window Controller Lifecycle
+
+    func prepareAsEmptyWindow() {
+        if Preferences.newWindowAccountMode == .pickFirstOne, let account = accounts.first {
+            currentAccount = account
+        }
+        else {
+            currentAccount = nil
+        }
+
+        appendColumnIfFitting(model: ColumnMode.timeline)
+    }
+
+    override func encodeRestorableState(with coder: NSCoder) {
+        let columnModels = timelinesViewController.columnViewControllers.compactMap { $0.modelRepresentation }
+        let encodedColumnModels = columnModels.map { $0.rawValue }.joined(separator: ";")
+
+        coder.encode(currentAccount?.uuid, forKey: CodingKeys.currentUser)
+        coder.encode(encodedColumnModels, forKey: CodingKeys.columns)
+        coder.encode(preservedWindowFrameStack.map { NSValue(rect: $0) }, forKey: CodingKeys.preservedWindowFrameStack)
+
+        if let navigationStack = sidebarSubcontroller.navigationStack {
+            // HOTFIX: Swift classes with parameter types do not encode properly in *Release*
+            // Since we know the type in advance, we use a separate archiver for the navigation stack which skips
+            // the class name level and encodes only the internals.
+            let encoder = NSKeyedArchiver(requiringSecureCoding: false)
+            navigationStack.encode(with: encoder)
+            coder.encode(encoder.encodedData, forKey: CodingKeys.sidebarNavigationStack)
+
+            //			coder.encode(navigationStack, forKey: CodingKeys.sidebarNavigationStack)
+        }
+    }
+
+    override func restoreState(with coder: NSCoder) {
+        if let uuid: UUID = coder.decodeObject(forKey: CodingKeys.currentUser),
+           let account = accountsService.account(with: uuid)
+        {
+            currentAccount = account
+        }
+        else {
+            currentAccount = nil
+        }
+
+        if let encodedColumnModels: String = coder.decodeObject(forKey: CodingKeys.columns) {
+            let columnModels = encodedColumnModels.split(separator: ";")
+                .compactMap { ColumnMode(rawValue: String($0)) }
+
+            for model in columnModels {
+                appendColumnIfFitting(model: model, expand: false)
+            }
+        }
+
+        if let frameStack: [NSValue] = coder.decodeObject(forKey: CodingKeys.preservedWindowFrameStack) {
+            preservedWindowFrameStack = Stack(frameStack.compactMap { $0.rectValue })
+        }
+        else {
+            preservedWindowFrameStack = []
+        }
+
+        if timelinesViewController.columnViewControllers.isEmpty {
+            // Fallback if no columns were installed from decoding
+            appendColumnIfFitting(model: ColumnMode.timeline)
+        }
+
+        // HOTFIX: Swift classes with parameter types do not encode properly in *Release*
+        // Since we know the type in advance, we use a separate archiver for the navigation stack which skips
+        // the class name level and encodes only the internals.
+        //		if let stack: NavigationStack<SidebarMode> = coder.decodeObject(forKey: CodingKeys.sidebarNavigationStack)
+        if let stackEncodedData: Data = coder.decodeObject(forKey: CodingKeys.sidebarNavigationStack) {
+            let decoder = NSKeyedUnarchiver(forReadingWith: stackEncodedData)
+            if let stack = NavigationStack<SidebarMode>(coder: decoder) {
+                timelinesSplitViewController.preserveSplitViewSizeForNextSidebarInstall = true
+                sidebarSubcontroller = SidebarSubcontroller(sidebarContainer: self,
+                                                            navigationControl: sidebarNavigationSegmentedControl,
+                                                            navigationStack: stack)
+            }
+        }
+
+        updateUserPopUpButton()
+    }
+
+    override func windowDidLoad() {
+        super.windowDidLoad()
+
+        logger = Logger(subsystemType: self)
+
+        shouldCascadeWindows = true
+
+        window?.restorationClass = TimelinesWindowRestoration.self
+
+        newColumnSegmentedControl.setMenu(newColumnMenu, forSegment: 0)
+
+        userPopUpButtonController = UserPopUpButtonSubcontroller(display: self)
+
+        observations.observe(on: .main, timelinesViewController, \TimelinesViewController.columnViewControllersCount) {
+            [weak self] timelinesViewController, _ in
+            self?.updateColumnsPopUpButtons(for: timelinesViewController.columnViewControllers)
+            self?.newColumnSegmentedControl.setEnabled(timelinesViewController.canAppendStatusList, forSegment: 0)
+            self?.invalidateRestorableState()
+        }
+
+        observations.observe(AppDelegate.shared, \AppDelegate.appIsReady) {
+            [weak self] appDelegate, _ in
+
+            if appDelegate.appIsReady, let client = self?.client {
+                self?.timelinesViewController.columnViewControllers.forEach { $0.client = client }
+                self?.revalidateSidebarAccountReference()
+            }
+        }
+
+        guard let window = window else { return }
+
+        window.backgroundColor = .timelineBackground
+    }
+
+    func handleDetach() {
+        for _ in 0 ..< timelinesViewController.columnViewControllersCount {
+            removeColumn(at: 0, contract: false)
+        }
+    }
+
+    // MARK: UI Handling
+
+    func updateUserPopUpButton() {
+        userPopUpButtonController.updateUserPopUpButton()
+    }
+
+    func shouldChangeCurrentUser(to userUUID: UUID) -> Bool {
+        return true
+    }
+
+    func redraft(status: Status) {
+        AppDelegate.shared.composeStatus(self)
+        guard let composerWindowController = AppDelegate.shared.statusComposerWindowControllers.last else { return }
+        composerWindowController.showWindow(nil)
+        composerWindowController.setUpAsRedraft(of: status, using: currentAccount)
+    }
+
+    func edit(status: Status) {
+        AppDelegate.shared.composeStatus(self)
+        guard let composerWindowController = AppDelegate.shared.statusComposerWindowControllers.last else { return }
+        composerWindowController.showWindow(nil)
+        composerWindowController.setUpAsEdit(of: status, using: currentAccount)
+    }
+
+    func composeReply(for status: Status, sender: Any?) {
+        AppDelegate.shared.composeStatus(self)
+        guard let composerWindowController = AppDelegate.shared.statusComposerWindowControllers.last else { return }
+        composerWindowController.showWindow(sender)
+        composerWindowController.setupAsReply(to: status, using: currentAccount, senderWindowController: self)
+    }
+
+    func composeMention(userHandle: String, directMessage: Bool) {
+        AppDelegate.shared.composeStatus(self)
+        guard let composerWindowController = AppDelegate.shared.statusComposerWindowControllers.last else { return }
+        composerWindowController.showWindow(nil)
+
+        composerWindowController.setupAsMention(handle: userHandle, using: currentAccount, directMessage: directMessage)
+    }
+
+    func installPlaceholder() {
+        guard let contentView = contentViewController?.view, placeholderViewController == nil else { return }
+
+        let accounts = accountsService.authorizedAccounts
+        let viewController: NSViewController
+
+        if accounts.isEmpty {
+            // Show welcome placeholder
+            viewController = WelcomePlaceholderController()
+        }
+        else {
+            // Show account picker placeholder
+            viewController = AccountsPlaceholderController()
+        }
+
+        contentView.subviews.forEach { $0.isHidden = true }
+
+        contentViewController?.addChild(viewController)
+        contentView.addSubview(viewController.view)
+        placeholderViewController = viewController
+
+        NSLayoutConstraint.activate([
+            contentView.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: viewController.view.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: viewController.view.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: viewController.view.bottomAnchor)
+        ])
+    }
+
+    func removePlaceholderIfInstalled() {
+        placeholderViewController?.view.removeFromSuperview()
+        placeholderViewController?.removeFromParent()
+        placeholderViewController = nil
+
+        contentViewController?.view.subviews.forEach { $0.isHidden = false }
+    }
+
+    func presentSearchWindow() {
+        let storyboard = NSStoryboard(name: "Search", bundle: .main)
+
+        guard
+            currentInstance != nil,
+            let account = currentAccount,
+            let client = client,
+            let searchWindowController = storyboard.instantiateInitialController() as? SearchWindowController,
+            let searchWindow = searchWindowController.window,
+            let timelinesWindow = window
+        else {
+            return
+        }
+
+        searchWindowController.set(client: client)
+        searchWindowController.set(searchDelegate: self)
+
+        AppDelegate.shared.instanceService.instance(for: account) {
+            [weak self] instance in
+
+            guard let instance = instance else { return }
+
+            searchWindowController.set(instance: instance)
+            self?.searchWindowController = searchWindowController
+
+            timelinesWindow.beginSheet(searchWindow) {
+                _ in self?.searchWindowController = nil
+            }
+        }
+    }
+
+    func adjustWindowFrame(adjustment: WindowSizeAdjustment) {
+        guard
+            let window = window,
+            window.styleMask.contains(.fullScreen) == false,
+            let screen = window.screen
+        else { return }
+
+        let originalWindowFrame = window.frame
+        var frame = originalWindowFrame
+
+        switch adjustment {
+        case .nudgeIfClipped:
+            let excessWidth = window.frame.maxX - screen.frame.maxX
+            guard excessWidth > 0 else { return }
+            frame.origin.x -= excessWidth
+
+        case .expand(by: let extraWidth):
+            preservedWindowFrameStack.push(originalWindowFrame)
+
+            if originalWindowFrame.maxX + extraWidth <= screen.frame.maxX {
+                frame.size.width = originalWindowFrame.width + extraWidth
+            }
+            else {
+                frame.size.width = screen.frame.maxX - window.frame.origin.x
+            }
+
+            if let contentView = window.contentView {
+                let contentFrame = window.contentRect(forFrameRect: frame)
+                contentView.setFrameSize(contentFrame.size)
+                contentView.layoutSubtreeIfNeeded()
+
+                let difference = contentView.frame.width - contentFrame.width
+
+                if difference > 0 {
+                    frame.origin.x -= difference
+                }
+            }
+
+        case .contract(by: let extraWidth, let tryPoppingPreservedFrame):
+            if tryPoppingPreservedFrame, let preservedFrame = preservedWindowFrameStack.popIfNotEmpty() {
+                frame = preservedFrame
+            }
+            else {
+                frame.size.width -= extraWidth
+            }
+
+        case .restorePreservedOriginIfPossible:
+            if let preservedFrame = preservedWindowFrameStack.popIfNotEmpty() {
+                frame.origin = preservedFrame.origin
+            }
+        }
+
+        window.animator().setFrame(frame, display: false)
+    }
+
+    override func mouseDragged(with event: NSEvent) {
+        super.mouseDragged(with: event)
+
+        if preservedWindowFrameStack.isEmpty == false {
+            preservedWindowFrameStack = []
+        }
+    }
+
+    enum WindowSizeAdjustment {
+        case expand(by: CGFloat)
+        case nudgeIfClipped
+        case contract(by: CGFloat, poppingPreservedFrameIfPossible: Bool)
+        case restorePreservedOriginIfPossible
+    }
+
+    // MARK: ToolbarWindowController
+
+    func didToggleToolbarShown(_ window: ToolbarWindow) {
+        if window.toolbar?.isVisible == true {
+            updateColumnsPopUpButtons(for: timelinesViewController.columnViewControllers)
+        }
+    }
+
+    // MARK: Internal helper methods
+
+    private func revalidateSidebarAccountReference() {
+        if let accountBoundSidebar = timelinesSplitViewController.sidebarViewController as? AccountBound,
+           let currentAccount = accountBoundSidebar.account,
+           let instance = currentInstance,
+           let client = client
+        {
+            ResolverService(client: client).resolve(account: currentAccount, activeInstance: instance) {
+                [weak self] result in
+
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let account):
+                        if AppDelegate.shared.appIsReady {
+                            self?.timelinesSplitViewController.sidebarViewController?.client = client
+                        }
+                        accountBoundSidebar.setRecreatedAccount(account)
+                        self?.invalidateRestorableState()
+
+                    case .failure(let error):
+                        self?.displayError(error)
+                        self?.sidebarSubcontroller.uninstallSidebar()
+                    }
+                }
+            }
+        }
+        else {
+            timelinesSplitViewController.sidebarViewController?.client = client
+        }
+    }
+
+    private func installPersistentToolbarButtons(toolbarView: NSView) {
+        var constraints: [NSLayoutConstraint] = []
+        let contentView = timelinesViewController.mainContentView
+
+        for item in [currentUserPopUpButton, statusComposerSegmentedControl, searchSegmentedControl, newColumnSegmentedControl] {
+            toolbarView.addSubview(item)
+            let referenceView = toolbarView.superview ?? toolbarView
+            constraints.append(referenceView.centerYAnchor.constraint(equalTo: item.centerYAnchor))
+        }
+
+        constraints.append(TrackingLayoutConstraint.constraint(trackingMaxXOf: contentView,
+                                                               targetView: newColumnSegmentedControl,
+                                                               containerView: toolbarView,
+                                                               targetAttribute: .trailing,
+                                                               containerAttribute: .leading)
+                .with(priority: .defaultLow))
+
+        constraints.append(contentsOf: [
+            currentUserPopUpButton.leadingAnchor.constraint(equalTo: toolbarView.leadingAnchor, constant: 6),
+            searchSegmentedControl.leadingAnchor.constraint(equalTo: statusComposerSegmentedControl.trailingAnchor,
+                                                            constant: 8),
+            newColumnSegmentedControl.leadingAnchor.constraint(equalTo: searchSegmentedControl.trailingAnchor,
+                                                               constant: 8),
+            toolbarView.trailingAnchor.constraint(greaterThanOrEqualTo: newColumnSegmentedControl.trailingAnchor, constant: 6)
+        ])
+
+        NSLayoutConstraint.activate(constraints)
+    }
+
+    private func updateColumnsPopUpButtons(for columnViewControllers: [ColumnViewController]) {
+        guard let toolbarView = toolbarContainerView?.superview else { return }
+
+        NSLayoutConstraint.deactivate(popUpButtonConstraints)
+        popUpButtonConstraints.removeAll()
+
+        let takenModes = columnViewControllers.compactMap { $0.modelRepresentation as? ColumnMode }
+
+        var previousButton = currentUserPopUpButton
+
+        // Install column buttons
+        for (index, column) in columnViewControllers.enumerated() {
+            guard let popUpButton = columnPopUpButtonMap.object(forKey: column) else {
+                continue
+            }
+
+            guard let currentModel = column.modelRepresentation as? ColumnMode else {
+                continue
+            }
+
+            let popupButtonMenu = buildColumnsPopupButtonMenu(currentColumnMode: currentModel,
+                                                              takenModes: takenModes,
+                                                              index: index)
+
+            popUpButton.menu = popupButtonMenu
+            popUpButton.tag = index
+            popUpButton.select(popupButtonMenu.item(withRepresentedObject: currentModel))
+
+            popUpButtonConstraints.append(TrackingLayoutConstraint
+                .constraint(trackingMidXOf: column.view,
+                            targetView: popUpButton,
+                            containerView: toolbarView,
+                            targetAttribute: .centerX,
+                            containerAttribute: .leading)
+                .with(priority: .defaultLow + 248))
+
+            popUpButtonConstraints.append(popUpButton.leadingAnchor.constraint(
+                greaterThanOrEqualTo: previousButton.trailingAnchor,
+                constant: 8
+            ))
+
+            previousButton = popUpButton
+        }
+
+        if previousButton != currentUserPopUpButton {
+            popUpButtonConstraints.append(statusComposerSegmentedControl.leadingAnchor.constraint(
+                greaterThanOrEqualTo: previousButton.trailingAnchor,
+                constant: 8
+            ))
+        }
+
+        let newColumnMenuItems = buildNewColumnMenuItems(takenModes: takenModes)
+
+        newColumnMenu.setItems(newColumnMenuItems)
+
+        newColumnSegmentedControl.setEnabled(!newColumnMenu.items.isEmpty, forSegment: 0)
+
+        NSLayoutConstraint.activate(popUpButtonConstraints)
+    }
+
+    func buildColumnsPopupButtonMenu(currentColumnMode: ColumnMode,
+                                     takenModes: [ColumnMode],
+                                     index: Int) -> NSMenu
+    {
+        let followedLists = currentAccount?.followedLists
+
+        logger.debug2("Building columns popup menu. Followed lists: \(followedLists?.count ?? 0)")
+
+        var menuItemSection = 0
+
+        let staticColumnModes = ColumnMode.staticItems
+
+        let menu = NSMenu(title: "")
+
+        menu.autoenablesItems = false
+
+        var items: [NSMenuItem] = staticColumnModes.filter { !takenModes.contains($0) }
+            .map { $0.makeMenuItemForChanging(with: self, columnId: index) }
+
+        if currentColumnMode.menuItemSection == menuItemSection {
+            items.append(currentColumnMode.makeMenuItemForChanging(with: self, columnId: index))
+        }
+
+        items.sort(by: { $0.columnModel! < $1.columnModel! })
+
+        menuItemSection = 1
+
+        items.append(.separator())
+
+        let personalItems = ColumnMode.staticPersonalItems.filter { !takenModes.contains($0) }
+            .map { $0.makeMenuItemForChanging(with: self, columnId: index) }
+
+        for _item in personalItems {
+            items.append(_item)
+        }
+
+        if currentColumnMode.menuItemSection == menuItemSection {
+            items.append(currentColumnMode.makeMenuItemForChanging(with: self, columnId: index))
+        }
+
+        var listItems: [NSMenuItem] = []
+        var haveAtLeastOneList = false
+
+        if let followedLists = followedLists {
+            if followedLists.count > 0 {
+                listItems.append(.separator())
+                listItems.append(.sectionHeader(🔠("Lists")))
+
+                for _list in followedLists {
+                    if let list = _list as? FollowedList {
+                        let columnMode = ColumnMode.list(list: list)
+
+                        listItems.append(columnMode.makeMenuItemForChanging(with: self, columnId: index))
+                        haveAtLeastOneList = true
+                    }
+                }
+            }
+        }
+
+        if haveAtLeastOneList {
+            items.append(contentsOf: listItems)
+        }
+
+        items.append(.separator())
+        items.append(.sectionHeader(🔠("This column")))
+
+        let reloadColumnItem = NSMenuItem()
+        reloadColumnItem.title = 🔠("Reload")
+        reloadColumnItem.target = self
+        reloadColumnItem.representedObject = index
+        reloadColumnItem.action = #selector(TimelinesWindowController.reloadColumn(_:))
+        items.append(reloadColumnItem)
+
+        if index > 0 {
+            let rearrangeColumnsItem = NSMenuItem()
+            rearrangeColumnsItem.title = 🔠("Rearrange…")
+            rearrangeColumnsItem.target = self
+            rearrangeColumnsItem.representedObject = index
+            rearrangeColumnsItem.action = #selector(TimelinesWindowController.rearrangeColumns(_:))
+            items.append(rearrangeColumnsItem)
+
+            let removeColumnItem = NSMenuItem()
+            removeColumnItem.title = 🔠("Remove")
+            removeColumnItem.target = self
+            removeColumnItem.representedObject = index
+            removeColumnItem.action = #selector(TimelinesWindowController.removeColumn(_:))
+            items.append(removeColumnItem)
+        }
+
+        menu.setItems(items)
+
+        return menu
+    }
+
+    func buildNewColumnMenuItems(takenModes: [ColumnMode]) -> [NSMenuItem] {
+        var items: [NSMenuItem] = ColumnMode.staticItems.filter { !takenModes.contains($0) }
+            .map { $0.makeMenuItemForAdding(with: self) }
+
+        items.append(.separator())
+
+        let personalItems = ColumnMode.staticPersonalItems.filter { !takenModes.contains($0) }
+            .map { $0.makeMenuItemForAdding(with: self) }
+
+        for _item in personalItems {
+            items.append(_item)
+        }
+
+        let followedLists = currentAccount?.followedLists
+
+        logger.debug2("Building new column menu. Followed lists: \(followedLists?.count ?? 0)")
+
+        var listItems: [NSMenuItem] = []
+        var haveAtLeastOneList = false
+
+        if let followedLists = followedLists {
+            if followedLists.count > 0 {
+                listItems.append(.separator())
+                listItems.append(.sectionHeader(🔠("Lists")))
+
+                for _list in followedLists {
+                    if let list = _list as? FollowedList {
+                        let columnMode = ColumnMode.list(list: list)
+
+                        if !takenModes.contains(columnMode) {
+                            listItems.append(columnMode.makeMenuItemForAdding(with: self))
+                            haveAtLeastOneList = true
+                        }
+                    }
+                }
+            }
+        }
+
+        if haveAtLeastOneList {
+            items.append(contentsOf: listItems)
+        }
+
+        return items
+    }
+
+    // MARK: - Keyboard Navigation
+
+    override func moveRight(_ sender: Any?) {
+        timelinesViewController.makeNextColumnFirstResponder()
+    }
+
+    override func moveDown(_ sender: Any?) {
+        timelinesViewController.makeNextColumnFirstResponder()
+    }
+
+    override func moveUp(_ sender: Any?) {
+        timelinesViewController.makeNextColumnFirstResponder()
+    }
+
+    override func moveLeft(_ sender: Any?) {
+        timelinesViewController.makePreviousColumnFirstResponder()
+    }
 }
 
 extension TimelinesWindowController: SidebarContainer {
-	func willInstallSidebar(viewController: NSViewController) {
-		if let currentWindowFrame = window?.frame {
-			preservedWindowFrameStack.push(currentWindowFrame)
-		}
+    func willInstallSidebar(viewController: NSViewController) {
+        if let currentWindowFrame = window?.frame {
+            preservedWindowFrameStack.push(currentWindowFrame)
+        }
 
-		contentViewController?.addChild(viewController)
-	}
+        contentViewController?.addChild(viewController)
+    }
 
-	func didInstallSidebar(viewController: NSViewController, with mode: SidebarMode) {
-		guard
-			let toolbarView = toolbarContainerView,
-			closeSidebarSegmentedControl?.superview == nil,
-			sidebarNavigationSegmentedControl.superview == nil,
-			let titleMode = sidebarViewController?.titleMode
-		else {
-			invalidateRestorableState()
-			return
-		}
+    func didInstallSidebar(viewController: NSViewController, with mode: SidebarMode) {
+        guard
+            let toolbarView = toolbarContainerView,
+            closeSidebarSegmentedControl?.superview == nil,
+            sidebarNavigationSegmentedControl.superview == nil,
+            let titleMode = sidebarViewController?.titleMode
+        else {
+            invalidateRestorableState()
+            return
+        }
 
-		let navigationControl = sidebarNavigationSegmentedControl
+        let navigationControl = sidebarNavigationSegmentedControl
 
-		let closeSidebarButton = makeCloseSidebarButton()
-		toolbarView.addSubview(closeSidebarButton)
-		toolbarView.addSubview(navigationControl)
+        let closeSidebarButton = makeCloseSidebarButton()
+        toolbarView.addSubview(closeSidebarButton)
+        toolbarView.addSubview(navigationControl)
 
-		let titleView = sidebarTitleViewController.view
-		sidebarTitleViewController.titleMode = titleMode
-		toolbarView.addSubview(titleView)
+        let titleView = sidebarTitleViewController.view
+        sidebarTitleViewController.titleMode = titleMode
+        toolbarView.addSubview(titleView)
 
-		let leadingConstraint = TrackingLayoutConstraint.constraint(
-			trackingMaxXOf: timelinesViewController.mainContentView,
-			offset: timelinesSplitViewController.splitView.dividerThickness,
-			targetView: navigationControl,
-			containerView: toolbarView,
-			targetAttribute: .leading,
-			containerAttribute: .leading
-		).with(priority: .defaultLow + 1)
+        let leadingConstraint = TrackingLayoutConstraint.constraint(
+            trackingMaxXOf: timelinesViewController.mainContentView,
+            offset: timelinesSplitViewController.splitView.dividerThickness,
+            targetView: navigationControl,
+            containerView: toolbarView,
+            targetAttribute: .leading,
+            containerAttribute: .leading
+        ).with(priority: .defaultLow + 1)
 
-		let centerConstraint = TrackingLayoutConstraint.constraint(
-			trackingMidXOf: sidebarViewController!.view.firstParentViewInsideSplitView(),
-			offset: timelinesSplitViewController.splitView.dividerThickness,
-			targetView: titleView,
-			containerView: toolbarView,
-			targetAttribute: .centerX,
-			containerAttribute: .leading
-		).with(priority: .defaultLow + 1)
+        let centerConstraint = TrackingLayoutConstraint.constraint(
+            trackingMidXOf: sidebarViewController!.view.firstParentViewInsideSplitView(),
+            offset: timelinesSplitViewController.splitView.dividerThickness,
+            targetView: titleView,
+            containerView: toolbarView,
+            targetAttribute: .centerX,
+            containerAttribute: .leading
+        ).with(priority: .defaultLow + 1)
 
-		sidebarTitleViewCenterXConstraint = centerConstraint
+        sidebarTitleViewCenterXConstraint = centerConstraint
 
-		NSLayoutConstraint.activate([
-			toolbarView.trailingAnchor.constraint(equalTo: closeSidebarButton.trailingAnchor, constant: 8),
-			leadingConstraint,
-			navigationControl.leadingAnchor.constraint(greaterThanOrEqualTo: newColumnSegmentedControl.trailingAnchor,
-			                                           constant: 10),
+        NSLayoutConstraint.activate([
+            toolbarView.trailingAnchor.constraint(equalTo: closeSidebarButton.trailingAnchor, constant: 8),
+            leadingConstraint,
+            navigationControl.leadingAnchor.constraint(greaterThanOrEqualTo: newColumnSegmentedControl.trailingAnchor,
+                                                       constant: 10),
 
-			titleView.leadingAnchor.constraint(greaterThanOrEqualTo: navigationControl.trailingAnchor, constant: 8),
-			closeSidebarButton.leadingAnchor.constraint(greaterThanOrEqualTo: titleView.trailingAnchor, constant: 8),
-			centerConstraint,
+            titleView.leadingAnchor.constraint(greaterThanOrEqualTo: navigationControl.trailingAnchor, constant: 8),
+            closeSidebarButton.leadingAnchor.constraint(greaterThanOrEqualTo: titleView.trailingAnchor, constant: 8),
+            centerConstraint,
 
-			toolbarView.centerYAnchor.constraint(equalTo: closeSidebarButton.centerYAnchor),
-			toolbarView.centerYAnchor.constraint(equalTo: navigationControl.centerYAnchor),
-			toolbarView.centerYAnchor.constraint(equalTo: titleView.centerYAnchor)
-		])
+            toolbarView.centerYAnchor.constraint(equalTo: closeSidebarButton.centerYAnchor),
+            toolbarView.centerYAnchor.constraint(equalTo: navigationControl.centerYAnchor),
+            toolbarView.centerYAnchor.constraint(equalTo: titleView.centerYAnchor)
+        ])
 
-		closeSidebarSegmentedControl = closeSidebarButton
+        closeSidebarSegmentedControl = closeSidebarButton
 
-		invalidateRestorableState()
-	}
+        invalidateRestorableState()
+    }
 
-	func didUpdateSidebar(viewController: NSViewController, previousViewController: NSViewController, with mode: SidebarMode) {
-		guard let toolbarView = toolbarContainerView,
-		      let sidebarViewController = sidebarViewController
-		else { return }
+    func didUpdateSidebar(viewController: NSViewController, previousViewController: NSViewController, with mode: SidebarMode) {
+        guard let toolbarView = toolbarContainerView,
+              let sidebarViewController = sidebarViewController
+        else { return }
 
-		sidebarTitleViewController.titleMode = sidebarViewController.titleMode
+        sidebarTitleViewController.titleMode = sidebarViewController.titleMode
 
-		sidebarTitleViewCenterXConstraint?.isActive = false
+        sidebarTitleViewCenterXConstraint?.isActive = false
 
-		let centerConstraint = TrackingLayoutConstraint.constraint(
-			trackingMidXOf: sidebarViewController.view.firstParentViewInsideSplitView(),
-			offset: timelinesSplitViewController.splitView.dividerThickness,
-			targetView: sidebarTitleViewController.view,
-			containerView: toolbarView,
-			targetAttribute: .centerX,
-			containerAttribute: .leading
-		).with(priority: .defaultLow + 1)
-		centerConstraint.isActive = true
+        let centerConstraint = TrackingLayoutConstraint.constraint(
+            trackingMidXOf: sidebarViewController.view.firstParentViewInsideSplitView(),
+            offset: timelinesSplitViewController.splitView.dividerThickness,
+            targetView: sidebarTitleViewController.view,
+            containerView: toolbarView,
+            targetAttribute: .centerX,
+            containerAttribute: .leading
+        ).with(priority: .defaultLow + 1)
+        centerConstraint.isActive = true
 
-		sidebarTitleViewCenterXConstraint = centerConstraint
+        sidebarTitleViewCenterXConstraint = centerConstraint
 
-		previousViewController.removeFromParent()
+        previousViewController.removeFromParent()
 
-		invalidateRestorableState()
-	}
+        invalidateRestorableState()
+    }
 
-	func willUninstallSidebar(viewController: NSViewController) {
-		adjustWindowFrame(adjustment: .restorePreservedOriginIfPossible)
-	}
+    func willUninstallSidebar(viewController: NSViewController) {
+        adjustWindowFrame(adjustment: .restorePreservedOriginIfPossible)
+    }
 
-	func didUninstallSidebar(viewController: NSViewController) {
-		sidebarNavigationSegmentedControl.removeFromSuperview()
-		sidebarTitleViewController.view.removeFromSuperview()
-		closeSidebarSegmentedControl?.removeFromSuperview()
-		closeSidebarSegmentedControl = nil
+    func didUninstallSidebar(viewController: NSViewController) {
+        sidebarNavigationSegmentedControl.removeFromSuperview()
+        sidebarTitleViewController.view.removeFromSuperview()
+        closeSidebarSegmentedControl?.removeFromSuperview()
+        closeSidebarSegmentedControl = nil
 
-		viewController.removeFromParent()
+        viewController.removeFromParent()
 
-		invalidateRestorableState()
-	}
+        invalidateRestorableState()
+    }
 
-	func reloadSidebarTitleMode() {
-		sidebarTitleViewController.titleMode = sidebarViewController?.titleMode ?? .none
-	}
+    func reloadSidebarTitleMode() {
+        sidebarTitleViewController.titleMode = sidebarViewController?.titleMode ?? .none
+    }
 
-	private enum CodingKeys: String {
-		case currentUser
-		case columns
-		case sidebarNavigationStack
-		case preservedWindowFrameStack
-	}
+    private enum CodingKeys: String {
+        case currentUser
+        case columns
+        case sidebarNavigationStack
+        case preservedWindowFrameStack
+    }
 }
 
 extension TimelinesWindowController {
-	func appendColumnIfFitting(model: ColumnModel, expand: Bool = true) {
-		guard
-			let columnViewController = timelinesViewController.appendColumnIfFitting(model: model, expand: expand)
-		else {
-			return
-		}
+    func appendColumnIfFitting(model: ColumnModel, expand: Bool = true) {
+        guard
+            let columnViewController = timelinesViewController.appendColumnIfFitting(model: model, expand: expand)
+        else {
+            return
+        }
 
-		columnViewController.client = AppDelegate.shared.appIsReady ? client : nil
+        columnViewController.client = AppDelegate.shared.appIsReady ? client : nil
 
-		guard let toolbarView = toolbarContainerView else {
-			return
-		}
+        guard let toolbarView = toolbarContainerView else {
+            return
+        }
 
-		let popUpButton = NSPopUpButton(frame: .zero, pullsDown: false)
-		popUpButton.bezelStyle = .texturedRounded
-		popUpButton.translatesAutoresizingMaskIntoConstraints = false
-		popUpButton.isHidden = currentUser == nil
-		popUpButton.setContentCompressionResistancePriority(.defaultLow + 249, for: .horizontal)
-		toolbarView.addSubview(popUpButton)
+        let popUpButton = NSPopUpButton(frame: .zero, pullsDown: false)
+        popUpButton.bezelStyle = .texturedRounded
+        popUpButton.translatesAutoresizingMaskIntoConstraints = false
+        popUpButton.isHidden = currentUser == nil
+        popUpButton.setContentCompressionResistancePriority(.defaultLow + 249, for: .horizontal)
+        toolbarView.addSubview(popUpButton)
 
-		let anyColumnPopUpButton = columnPopUpButtonMap.objectEnumerator()?.nextObject() as? NSPopUpButton
+        let anyColumnPopUpButton = columnPopUpButtonMap.objectEnumerator()?.nextObject() as? NSPopUpButton
 
-		columnPopUpButtonMap.setObject(popUpButton, forKey: columnViewController)
+        columnPopUpButtonMap.setObject(popUpButton, forKey: columnViewController)
 
-		NSLayoutConstraint.activate([
-			toolbarView.centerYAnchor.constraint(equalTo: popUpButton.centerYAnchor),
-			popUpButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 40).with(priority: .defaultHigh)
-		])
+        NSLayoutConstraint.activate([
+            toolbarView.centerYAnchor.constraint(equalTo: popUpButton.centerYAnchor),
+            popUpButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 40).with(priority: .defaultHigh)
+        ])
 
-		if let otherPopUpButton = anyColumnPopUpButton {
-			otherPopUpButton.widthAnchor.constraint(equalTo: popUpButton.widthAnchor).isActive = true
-		}
-	}
+        if let otherPopUpButton = anyColumnPopUpButton {
+            otherPopUpButton.widthAnchor.constraint(equalTo: popUpButton.widthAnchor).isActive = true
+        }
+    }
 
-	func replaceColumn(at columnIndex: Int, with newViewController: ColumnViewController) {
-		let oldViewController = timelinesViewController.replaceColumn(at: columnIndex, with: newViewController)
-		let popUpButton = columnPopUpButtonMap.object(forKey: oldViewController)!
+    func replaceColumn(at columnIndex: Int, with newViewController: ColumnViewController) {
+        let oldViewController = timelinesViewController.replaceColumn(at: columnIndex, with: newViewController)
+        let popUpButton = columnPopUpButtonMap.object(forKey: oldViewController)!
 
-		columnPopUpButtonMap.removeObject(forKey: oldViewController)
-		columnPopUpButtonMap.setObject(popUpButton, forKey: newViewController)
+        columnPopUpButtonMap.removeObject(forKey: oldViewController)
+        columnPopUpButtonMap.setObject(popUpButton, forKey: newViewController)
 
-		newViewController.client = client
-	}
+        newViewController.client = client
+    }
 
-	func removeColumn(at columnIndex: Int, contract: Bool) {
-		let columnViewController = timelinesViewController.removeColumn(at: columnIndex, contract: true)
-		let popUpButton = columnPopUpButtonMap.object(forKey: columnViewController)!
+    func removeColumn(at columnIndex: Int, contract: Bool) {
+        let columnViewController = timelinesViewController.removeColumn(at: columnIndex, contract: true)
+        let popUpButton = columnPopUpButtonMap.object(forKey: columnViewController)!
 
-		columnPopUpButtonMap.removeObject(forKey: columnViewController)
-		popUpButton.removeFromSuperview()
-	}
+        columnPopUpButtonMap.removeObject(forKey: columnViewController)
+        popUpButton.removeFromSuperview()
+    }
 
-	func reloadColumn(at columnIndex: Int) {
-		timelinesViewController.reloadColumn(at: columnIndex)
-		updateColumnsPopUpButtons(for: timelinesViewController.columnViewControllers)
-	}
+    func reloadColumn(at columnIndex: Int) {
+        timelinesViewController.reloadColumn(at: columnIndex)
+        updateColumnsPopUpButtons(for: timelinesViewController.columnViewControllers)
+    }
 }
 
 extension TimelinesWindowController: NSWindowDelegate {
-	func windowDidChangeOcclusionState(_ notification: Foundation.Notification) {
-		guard let occlusionState = window?.occlusionState else { return }
-		timelinesViewController.columnViewControllers.forEach { $0.containerWindowOcclusionStateDidChange(occlusionState) }
-	}
+    func windowDidChangeOcclusionState(_ notification: Foundation.Notification) {
+        guard let occlusionState = window?.occlusionState else { return }
+        timelinesViewController.columnViewControllers.forEach { $0.containerWindowOcclusionStateDidChange(occlusionState) }
+    }
 
-	func windowWillClose(_ notification: Foundation.Notification) {
-		sidebarSubcontroller.uninstallSidebar()
-		AppDelegate.shared.detachTimelinesWindow(for: self)
-	}
+    func windowWillClose(_ notification: Foundation.Notification) {
+        sidebarSubcontroller.uninstallSidebar()
+        AppDelegate.shared.detachTimelinesWindow(for: self)
+    }
 }
 
 extension TimelinesWindowController: NSMenuItemValidation {
-	func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
-		if menuItem.action == #selector(TimelinesWindowController.dismissSidebar(_:)) {
-			return sidebarSubcontroller.sidebarMode != nil
-		}
+    func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        if menuItem.action == #selector(TimelinesWindowController.dismissSidebar(_:)) {
+            return sidebarSubcontroller.sidebarMode != nil
+        }
 
-		return true
-	}
+        return true
+    }
 }
 
 extension TimelinesWindowController: SearchViewDelegate {
-	func searchView(_ searchView: SearchViewController, userDidSelect selection: SearchResultSelection) {
-		guard let instance = currentInstance else { return }
+    func searchView(_ searchView: SearchViewController, userDidSelect selection: SearchResultSelection) {
+        guard let instance = currentInstance else { return }
 
-		switch selection {
-		case .account(let account):
-			presentInSidebar(SidebarMode.profile(uri: account.uri(in: instance), account: account))
+        switch selection {
+        case .account(let account):
+            presentInSidebar(SidebarMode.profile(uri: account.uri(in: instance), account: account))
 
-		case .status(let status):
-			presentInSidebar(SidebarMode.status(uri: status.resolvableURI, status: status))
+        case .status(let status):
+            presentInSidebar(SidebarMode.status(uri: status.resolvableURI, status: status))
 
-		case .tag(let tagName):
-			presentInSidebar(SidebarMode.tag(tagName))
-		}
-	}
+        case .tag(let tagName):
+            presentInSidebar(SidebarMode.tag(tagName))
+        }
+    }
 }
 
 extension TimelinesWindowController: AccountAuthorizationSource {
-	var sourceWindow: NSWindow? {
-		return window
-	}
+    var sourceWindow: NSWindow? {
+        return window
+    }
 
-	func prepareForAuthorization() {}
+    func prepareForAuthorization() {}
 
-	func successfullyAuthenticatedUser(with userUUID: UUID) {
-		currentAccount = accountsService.account(with: userUUID)
-	}
+    func successfullyAuthenticatedUser(with userUUID: UUID) {
+        currentAccount = accountsService.account(with: userUUID)
+    }
 
-	func finalizeAuthorization() {
-		updateUserPopUpButton()
-	}
+    func finalizeAuthorization() {
+        updateUserPopUpButton()
+    }
 }
 
 extension TimelinesWindowController: AuthorizedAccountProviding {
-	var attachmentPresenter: AttachmentPresenting {
-		return timelinesViewController
-	}
+    var attachmentPresenter: AttachmentPresenting {
+        return timelinesViewController
+    }
 
-	func presentInSidebar(_ mode: SidebarModel) {
-		(mode as? SidebarMode).map { sidebarSubcontroller.installSidebar(mode: $0) }
-	}
+    func presentInSidebar(_ mode: SidebarModel) {
+        (mode as? SidebarMode).map { sidebarSubcontroller.installSidebar(mode: $0) }
+    }
 
-	func handle(linkURL: URL) {
-		// wrapping these in `Task{}` is potentially dangerous, but we're just opening URLs, so it's fire and forget
-		Task {
-			await MastodonURLResolver.resolve(using: client, url: linkURL, knownTags: nil, source: self)
-		}
-	}
+    func handle(linkURL: URL) {
+        // wrapping these in `Task{}` is potentially dangerous, but we're just opening URLs, so it's fire and forget
+        Task {
+            await MastodonURLResolver.resolve(using: client, url: linkURL, knownTags: nil, source: self)
+        }
+    }
 
-	func handle(linkURL: URL, knownTags: [Tag]?) {
-		Task {
-			await MastodonURLResolver.resolve(using: client, url: linkURL, knownTags: knownTags, source: self)
-		}
-	}
+    func handle(linkURL: URL, knownTags: [Tag]?) {
+        Task {
+            await MastodonURLResolver.resolve(using: client, url: linkURL, knownTags: knownTags, source: self)
+        }
+    }
 }
 
 extension TimelinesWindowController // IBActions
 {
-	@IBAction func composeStatus(_ sender: Any?) {
-		AppDelegate.shared.composeStatus(sender)
-		guard let composerWindowController = AppDelegate.shared.statusComposerWindowControllers.last else { return }
-		guard let composerWindow = composerWindowController.window else { return }
+    @IBAction func composeStatus(_ sender: Any?) {
+        AppDelegate.shared.composeStatus(sender)
+        guard let composerWindowController = AppDelegate.shared.statusComposerWindowControllers.last else { return }
+        guard let composerWindow = composerWindowController.window else { return }
 
-		if let composerScreen = composerWindow.screen, let timelinesScreen = window?.screen,
-		   composerScreen !== timelinesScreen
-		{
-			// Move window to the inside of the screen where the current timelines window is
-			composerWindow.setFrameOrigin(timelinesScreen.visibleFrame.origin)
-		}
+        if let composerScreen = composerWindow.screen, let timelinesScreen = window?.screen,
+           composerScreen !== timelinesScreen
+        {
+            // Move window to the inside of the screen where the current timelines window is
+            composerWindow.setFrameOrigin(timelinesScreen.visibleFrame.origin)
+        }
 
-		composerWindowController.showWindow(sender)
-		composerWindow.center()
+        composerWindowController.showWindow(sender)
+        composerWindow.center()
 
-		composerWindowController.currentAccount = currentAccount
-	}
+        composerWindowController.currentAccount = currentAccount
+    }
 
-	@IBAction func showSearch(_ sender: Any?) {
-		presentSearchWindow()
-	}
+    @IBAction func showSearch(_ sender: Any?) {
+        presentSearchWindow()
+    }
 
-	@IBAction func addColumnMode(_ sender: Any?) {
-		if let menuItem = sender as? NSMenuItem, let newModel = menuItem.representedObject as? ColumnMode {
-			appendColumnIfFitting(model: newModel)
-		}
-		else if let control = sender as? NSSegmentedControl, let event = NSApp.currentEvent {
-			control.menu(forSegment: 0).map { NSMenu.popUpContextMenu($0, with: event, for: control) }
-		}
-	}
+    @IBAction func addColumnMode(_ sender: Any?) {
+        if let menuItem = sender as? NSMenuItem, let newModel = menuItem.representedObject as? ColumnMode {
+            appendColumnIfFitting(model: newModel)
+        }
+        else if let control = sender as? NSSegmentedControl, let event = NSApp.currentEvent {
+            control.menu(forSegment: 0).map { NSMenu.popUpContextMenu($0, with: event, for: control) }
+        }
+    }
 
-	@IBAction func changeColumnMode(_ sender: Any?) {
-		guard
-			let menuItem = sender as? NSMenuItem,
-			let newModel = menuItem.representedObject as? ColumnMode
-		else {
-			return
-		}
+    @IBAction func changeColumnMode(_ sender: Any?) {
+        guard
+            let menuItem = sender as? NSMenuItem,
+            let newModel = menuItem.representedObject as? ColumnMode
+        else {
+            return
+        }
 
-		let columnIndex = menuItem.tag
-		let columnViewControllers = timelinesViewController.columnViewControllers
+        let columnIndex = menuItem.tag
+        let columnViewControllers = timelinesViewController.columnViewControllers
 
-		guard columnIndex >= 0, columnIndex < columnViewControllers.count else {
-			return
-		}
+        guard columnIndex >= 0, columnIndex < columnViewControllers.count else {
+            return
+        }
 
-		guard
-			let selectableCurrentModel = columnViewControllers[columnIndex].modelRepresentation as? ColumnMode,
-			selectableCurrentModel != newModel
-		else {
-			// Nothing to change
-			return
-		}
+        guard
+            let selectableCurrentModel = columnViewControllers[columnIndex].modelRepresentation as? ColumnMode,
+            selectableCurrentModel != newModel
+        else {
+            // Nothing to change
+            return
+        }
 
-		replaceColumn(at: columnIndex, with: newModel.makeViewController())
-	}
+        replaceColumn(at: columnIndex, with: newModel.makeViewController())
+    }
 
-	@IBAction private func removeColumn(_ sender: Any?) {
-		guard
-			let menuItem = sender as? NSMenuItem,
-			let columnIndex = menuItem.representedObject as? Int
-		else {
-			return
-		}
+    private func selectPreviouslySelectedColumnMode(_ sender: Any?) {
+        guard
+            let menuItem = sender as? NSMenuItem,
+            let columnIndex = menuItem.representedObject as? Int
+        else {
+            return
+        }
 
-		removeColumn(at: columnIndex, contract: true)
-	}
+        let columnViewController = timelinesViewController.columnViewControllers[columnIndex]
 
-	@IBAction private func reloadColumn(_ sender: Any?) {
-		guard
-			let menuItem = sender as? NSMenuItem,
-			let columnIndex = menuItem.representedObject as? Int
-		else {
-			return
-		}
+        if
+            let previousColumnMode = columnViewController.modelRepresentation as? ColumnMode
+        {
+            let previouslySelectedItem = menuItem.menu?.items.first {
+                guard let columnMode = $0.representedObject as? ColumnMode
+                else { return false }
 
-		reloadColumn(at: columnIndex)
-	}
+                return columnMode == previousColumnMode
+            }
 
-	@IBAction private func dismissSidebar(_ sender: Any?) {
-		sidebarSubcontroller.uninstallSidebar()
-	}
+            let popupButton = columnPopUpButtonMap.object(forKey: columnViewController)
 
-	@IBAction private func showUserProfile(_ sender: Any?) {
-		guard let accountURI = currentAccount?.uri else { return }
-		sidebarSubcontroller.installSidebar(mode: SidebarMode.profile(uri: accountURI))
-	}
+            popupButton?.select(previouslySelectedItem)
+        }
+    }
 
-	@IBAction private func showUserFavorites(_ sender: Any?) {
-		sidebarSubcontroller.installSidebar(mode: SidebarMode.favorites)
-	}
+    @IBAction private func rearrangeColumns(_ sender: Any?) {
+        // the Rearrange… menu item should only show as current temporarily
+        selectPreviouslySelectedColumnMode(sender)
 
-	@IBAction private func openUserProfileInBrowser(_ sender: Any?) {
-		guard let account = currentAccount else { return }
-		accountsService.details(for: account) {
-			if case .success(let details) = $0 {
-				DispatchQueue.main.async { NSWorkspace.shared.open(details.account.url) }
-			}
-		}
-	}
+        arrangeColumnsWindowController = ArrangeColumnsWindowController()
+        let wc = arrangeColumnsWindowController!
 
-	@IBAction func showTag(_ sender: Any?) {
-		if let menuItem = sender as? NSMenuItem, let tagName = menuItem.representedObject as? String {
-			presentInSidebar(SidebarMode.tag(tagName))
-		}
-	}
+        wc.getColumnViewControllers = { [self] in timelinesViewController.columnViewControllers }
+        wc.moveColumnViewController = { [self]
+            newControllerAtOldIndex, _newIndex in
+
+                // if user drags past the end, treat it as the end
+                let newIndex = min(_newIndex, timelinesViewController.columnViewControllers.count - 1)
+
+                guard let oldIndex = timelinesViewController.columnViewControllers.firstIndex(where: { $0 == newControllerAtOldIndex }),
+                      oldIndex != newIndex
+                else {
+                    print("oldIndex wasn't found or is the same as newIndex")
+
+                    return
+                }
+
+                guard let newModeAtOldIndex = newControllerAtOldIndex.modelRepresentation,
+                      let oldModeAtNewIndex = timelinesViewController.columnViewControllers[newIndex].modelRepresentation
+                else { return }
+
+                print("Found \(newModeAtOldIndex) at \(String(describing: oldIndex)); swapping with \(oldModeAtNewIndex) at \(newIndex)")
+
+                replaceColumn(at: newIndex, with: newModeAtOldIndex.makeViewController())
+                replaceColumn(at: oldIndex, with: oldModeAtNewIndex.makeViewController())
+        }
+
+        wc.closeColumn = { [self] columnViewController in
+
+            guard let index = timelinesViewController.columnViewControllers.firstIndex(where: { $0 == columnViewController }) else { return }
+
+            removeColumn(at: index, contract: true)
+        }
+
+        if let childWindow = wc.window,
+           let window,
+           let screen = window.screen
+        {
+            let sheetWidth: CGFloat = 480
+            let sheetHeight: CGFloat = 188
+
+            childWindow.minSize = NSSize(width: sheetWidth, height: sheetHeight)
+            childWindow.maxSize = NSSize(width: screen.frame.width, height: sheetHeight)
+
+            window.beginSheet(childWindow)
+        }
+    }
+
+    @IBAction private func removeColumn(_ sender: Any?) {
+        guard
+            let menuItem = sender as? NSMenuItem,
+            let columnIndex = menuItem.representedObject as? Int
+        else {
+            return
+        }
+
+        removeColumn(at: columnIndex, contract: true)
+    }
+
+    @IBAction private func reloadColumn(_ sender: Any?) {
+        guard
+            let menuItem = sender as? NSMenuItem,
+            let columnIndex = menuItem.representedObject as? Int
+        else {
+            return
+        }
+
+        reloadColumn(at: columnIndex)
+    }
+
+    @IBAction private func dismissSidebar(_ sender: Any?) {
+        sidebarSubcontroller.uninstallSidebar()
+    }
+
+    @IBAction private func showUserProfile(_ sender: Any?) {
+        guard let accountURI = currentAccount?.uri else { return }
+        sidebarSubcontroller.installSidebar(mode: SidebarMode.profile(uri: accountURI))
+    }
+
+    @IBAction private func showUserFavorites(_ sender: Any?) {
+        sidebarSubcontroller.installSidebar(mode: SidebarMode.favorites)
+    }
+
+    @IBAction private func openUserProfileInBrowser(_ sender: Any?) {
+        guard let account = currentAccount else { return }
+        accountsService.details(for: account) {
+            if case .success(let details) = $0 {
+                DispatchQueue.main.async { NSWorkspace.shared.open(details.account.url) }
+            }
+        }
+    }
+
+    @IBAction func showTag(_ sender: Any?) {
+        if let menuItem = sender as? NSMenuItem, let tagName = menuItem.representedObject as? String {
+            presentInSidebar(SidebarMode.tag(tagName))
+        }
+    }
 }
 
 extension TimelinesWindowController: AccountsMenuProvider {
-	private var accounts: [AuthorizedAccount] {
-		return accountsService.authorizedAccounts
-	}
+    private var accounts: [AuthorizedAccount] {
+        return accountsService.authorizedAccounts
+    }
 
-	var accountsMenuItems: [NSMenuItem] {
-		let accountItems = accounts.makeMenuItems(currentUser: currentAccount?.uuid,
-		                                          action: #selector(UserPopUpButtonSubcontroller.selectAccount(_:)),
-		                                          target: userPopUpButtonController,
-		                                          emojiContainer: nil,
-		                                          setKeyEquivalents: true).menuItems
+    var accountsMenuItems: [NSMenuItem] {
+        let accountItems = accounts.makeMenuItems(currentUser: currentAccount?.uuid,
+                                                  action: #selector(UserPopUpButtonSubcontroller.selectAccount(_:)),
+                                                  target: userPopUpButtonController,
+                                                  emojiContainer: nil,
+                                                  setKeyEquivalents: true).menuItems
 
-		let bookmarkedTags = currentAccount?.bookmarkedTagsList ?? []
-		var tagMenuItems: [NSMenuItem] = []
+        let bookmarkedTags = currentAccount?.bookmarkedTagsList ?? []
+        var tagMenuItems: [NSMenuItem] = []
 
-		if bookmarkedTags.isEmpty == false {
-			tagMenuItems.append(.separator())
+        if bookmarkedTags.isEmpty == false {
+            tagMenuItems.append(.separator())
 
-			let bookmarkedTagItems = MenuItemFactory.makeMenuItems(forTags: bookmarkedTags,
-			                                                       action: #selector(showTag(_:)),
-			                                                       target: self)
+            let bookmarkedTagItems = MenuItemFactory.makeMenuItems(forTags: bookmarkedTags,
+                                                                   action: #selector(showTag(_:)),
+                                                                   target: self)
 
-			let menu = NSMenu(title: "")
-			menu.setItems(bookmarkedTagItems)
-			tagMenuItems.append(NSMenuItem(title: 🔠("Bookmarked Tags"), submenu: menu))
-			tagMenuItems.append(.separator())
-		}
+            let menu = NSMenu(title: "")
+            menu.setItems(bookmarkedTagItems)
+            tagMenuItems.append(NSMenuItem(title: 🔠("Bookmarked Tags"), submenu: menu))
+            tagMenuItems.append(.separator())
+        }
 
-		return accountMenuItems + tagMenuItems + accountItems
-	}
+        return accountMenuItems + tagMenuItems + accountItems
+    }
 }
 
 private extension TimelinesWindowController {
-	func makeCloseSidebarButton() -> NSSegmentedControl {
-		let button = NSSegmentedControl(images: [#imageLiteral(resourceName: "close_sidebar")], trackingMode: .momentary,
-		                                target: self, action: #selector(dismissSidebar(_:)))
-		button.translatesAutoresizingMaskIntoConstraints = false
-		return button
-	}
+    func makeCloseSidebarButton() -> NSSegmentedControl {
+        let button = NSSegmentedControl(images: [#imageLiteral(resourceName: "close_sidebar")], trackingMode: .momentary,
+                                        target: self, action: #selector(dismissSidebar(_:)))
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }
 
-	static func makeSidebarNavigationSegmentedControl() -> NSSegmentedControl {
-		let segmentedControl = NSSegmentedControl(images: [NSImage(named: NSImage.goBackTemplateName)!,
-		                                                   NSImage(named: NSImage.goForwardTemplateName)!],
-		                                          trackingMode: .momentary, target: nil, action: nil)
-		segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-		return segmentedControl
-	}
+    static func makeSidebarNavigationSegmentedControl() -> NSSegmentedControl {
+        let segmentedControl = NSSegmentedControl(images: [NSImage(named: NSImage.goBackTemplateName)!,
+                                                           NSImage(named: NSImage.goForwardTemplateName)!],
+                                                  trackingMode: .momentary, target: nil, action: nil)
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        return segmentedControl
+    }
 
-	static func makeAccountsPopUpButton() -> NSPopUpButton {
-		let popUpButton = NonVibrantPopUpButton()
-		popUpButton.bezelStyle = .texturedRounded
-		popUpButton.translatesAutoresizingMaskIntoConstraints = false
-		popUpButton.setAccessibilityLabel("Choose account")
-		return popUpButton
-	}
+    static func makeAccountsPopUpButton() -> NSPopUpButton {
+        let popUpButton = NonVibrantPopUpButton()
+        popUpButton.bezelStyle = .texturedRounded
+        popUpButton.translatesAutoresizingMaskIntoConstraints = false
+        popUpButton.setAccessibilityLabel("Choose account")
+        return popUpButton
+    }
 
-	static func makeNewColumnSegmentedControl() -> NSSegmentedControl {
-		let image = #imageLiteral(resourceName: "add_panel")
-		image.accessibilityDescription = "Add new column"
+    static func makeNewColumnSegmentedControl() -> NSSegmentedControl {
+        let image = #imageLiteral(resourceName: "add_panel")
+        image.accessibilityDescription = "Add new column"
 
-		let segmentedControl = NSSegmentedControl(images: [image], trackingMode: .momentary,
-		                                          target: nil, action: #selector(addColumnMode(_:)))
-		segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-		return segmentedControl
-	}
+        let segmentedControl = NSSegmentedControl(images: [image], trackingMode: .momentary,
+                                                  target: nil, action: #selector(addColumnMode(_:)))
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        return segmentedControl
+    }
 
-	static func makeStatusComposerSegmentedControl() -> NSSegmentedControl {
-		let image = #imageLiteral(resourceName: "compose")
-		image.accessibilityDescription = "Compose new status"
+    static func makeStatusComposerSegmentedControl() -> NSSegmentedControl {
+        let image = #imageLiteral(resourceName: "compose")
+        image.accessibilityDescription = "Compose new status"
 
-		let segmentedControl = NSSegmentedControl(images: [image], trackingMode: .momentary,
-		                                          target: nil, action: #selector(composeStatus(_:)))
-		segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-		return segmentedControl
-	}
+        let segmentedControl = NSSegmentedControl(images: [image], trackingMode: .momentary,
+                                                  target: nil, action: #selector(composeStatus(_:)))
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        return segmentedControl
+    }
 
-	static func makeSearchSegmentedControl() -> NSSegmentedControl {
-		let segmentedControl = NSSegmentedControl(images: [NSImage(systemSymbolName: "magnifyingglass", accessibilityDescription: "Search")!],
-		                                          trackingMode: .momentary,
-		                                          target: nil, action: #selector(showSearch(_:)))
-		segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-		return segmentedControl
-	}
+    static func makeSearchSegmentedControl() -> NSSegmentedControl {
+        let segmentedControl = NSSegmentedControl(images: [NSImage(systemSymbolName: "magnifyingglass", accessibilityDescription: "Search")!],
+                                                  trackingMode: .momentary,
+                                                  target: nil, action: #selector(showSearch(_:)))
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        return segmentedControl
+    }
 
-	func makeToolbarContainerView() -> NSView? {
-		guard let toolbarView: NSView = (window as? ToolbarWindow)?.toolbarView else {
-			return nil
-		}
+    func makeToolbarContainerView() -> NSView? {
+        guard let toolbarView: NSView = (window as? ToolbarWindow)?.toolbarView else {
+            return nil
+        }
 
-		guard let toolbarItemsContainer = toolbarView.findSubview(withClassName: "NSToolbarItemViewer") else {
-			installPersistentToolbarButtons(toolbarView: toolbarView)
-			return toolbarView
-		}
+        guard let toolbarItemsContainer = toolbarView.findSubview(withClassName: "NSToolbarItemViewer") else {
+            installPersistentToolbarButtons(toolbarView: toolbarView)
+            return toolbarView
+        }
 
-		installPersistentToolbarButtons(toolbarView: toolbarItemsContainer)
-		return toolbarItemsContainer.superview!
-	}
+        installPersistentToolbarButtons(toolbarView: toolbarItemsContainer)
+        return toolbarItemsContainer.superview!
+    }
 }
