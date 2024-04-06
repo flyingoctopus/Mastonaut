@@ -27,9 +27,6 @@ class ArrangeColumnsWindowController: NSWindowController, NSCollectionViewDelega
         collectionView.register(ArrangeColumnsViewItem.self,
                                 forItemWithIdentifier: ReuseIdentifiers.item)
 
-//        collectionView.registerForDraggedTypes([NSPasteboard.PasteboardType(UTType.item.identifier)])
-//        collectionView.setDraggingSourceOperationMask(.move, forLocal: true)
-
         collectionView.registerForDraggedTypes([.string])
         collectionView.setDraggingSourceOperationMask(.every, forLocal: true)
         collectionView.setDraggingSourceOperationMask(.every, forLocal: false)
