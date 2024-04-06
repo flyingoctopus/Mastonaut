@@ -95,9 +95,14 @@ class ArrangeColumnsWindowController: NSWindowController, NSCollectionViewDelega
 
         return true
     }
-    
+
     func reloadData() {
         collectionView.reloadData()
+
+        // if only one column remains, there's nothing left for the user to do in the sheet
+        if let viewControllers = getColumnViewControllers?(), viewControllers.count == 1 {
+            close()
+        }
     }
 
     @IBAction func done(_ sender: Any) {
