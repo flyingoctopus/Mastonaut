@@ -1145,10 +1145,20 @@ extension TimelinesWindowController // IBActions
 
         wc.getColumnViewControllers = { [self] in timelinesViewController.columnViewControllers }
         wc.moveColumnViewController = { [self]
-            newControllerAtOldIndex, newIndex in
+            newControllerAtOldIndex, _newIndex in
+
+                // if user drags past the end, treat it as the end
+                let newIndex = min(_newIndex, timelinesViewController.columnViewControllers.count - 1)
 
                 guard let oldIndex = timelinesViewController.columnViewControllers.firstIndex(where: { $0 == newControllerAtOldIndex }),
-                      let newModeAtOldIndex = newControllerAtOldIndex.modelRepresentation,
+                      oldIndex != newIndex
+                else {
+                    print("oldIndex wasn't found or is the same as newIndex")
+
+                    return
+                }
+
+                guard let newModeAtOldIndex = newControllerAtOldIndex.modelRepresentation,
                       let oldModeAtNewIndex = timelinesViewController.columnViewControllers[newIndex].modelRepresentation
                 else { return }
 

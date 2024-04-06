@@ -68,14 +68,14 @@ class ArrangeColumnsWindowController: NSWindowController, NSCollectionViewDelega
     }
 
     func collectionView(_ collectionView: NSCollectionView, validateDrop draggingInfo: NSDraggingInfo, proposedIndexPath proposedDropIndexPath: AutoreleasingUnsafeMutablePointer<NSIndexPath>, dropOperation proposedDropOperation: UnsafeMutablePointer<NSCollectionView.DropOperation>) -> NSDragOperation {
-        if proposedDropOperation.pointee == .on {
-            proposedDropOperation.pointee = .before
-        }
+        print("proposed index path: \(proposedDropIndexPath.pointee.item), drop operation: \(proposedDropOperation.pointee)")
 
         return .move
     }
 
     func collectionView(_ collectionView: NSCollectionView, acceptDrop draggingInfo: NSDraggingInfo, indexPath: IndexPath, dropOperation: NSCollectionView.DropOperation) -> Bool {
+        print("dropping at: \(indexPath.item)")
+
         guard let stringResult = draggingInfo.draggingPasteboard.propertyList(forType: .string) as? String,
               let stringUtf8Data = stringResult.data(using: .utf8)
         else { return false }
