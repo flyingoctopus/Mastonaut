@@ -4,6 +4,24 @@
         <title>Mastonaut</title>
 
         <item>
+            <title>1.7.1</title>
+            <pubDate>2024-04-07</pubDate>
+            <sparkle:minimumSystemVersion>10.13</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/chucker/Mastonaut/releases/download/app-1.7.1-hse/Mastonaut.zip"
+                sparkle:version="145" sparkle:shortVersionString="1.7.1" length="13822782"
+                type="application/octet-stream" />
+            <description>
+                <![CDATA[
+<p>(If you have macOS 12.0 Monterey or newer, you want <a href="https://github.com/chucker/Mastonaut/releases/tag/app-1.9.1">1.9.1</a> instead!)</p>
+<h2>Fixes</h2>
+<ul>
+<li>URLs with anchors/fragments in them would no longer get opened correctly. <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1865468741" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/163" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/163/hovercard" href="https://github.com/chucker/Mastonaut/issues/163">#163</a>, <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1977713046" data-permission-text="Title is private" data-url="https://github.com/chucker/Mastonaut/issues/169" data-hovercard-type="issue" data-hovercard-url="/chucker/Mastonaut/issues/169/hovercard" href="https://github.com/chucker/Mastonaut/issues/169">#169</a></li>
+</ul>
+                ]]>
+            </description>
+        </item>
+        
+        <item>
             <title>1.7.0</title>
             <pubDate>2023-06-04</pubDate>
             <sparkle:minimumSystemVersion>10.13</sparkle:minimumSystemVersion>
