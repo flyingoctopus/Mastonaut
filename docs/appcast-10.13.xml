@@ -3,6 +3,7 @@
     <channel>
         <title>Mastonaut</title>
 
+        <!--
         <item>
             <title>1.7.1</title>
             <pubDate>2024-04-07</pubDate>
@@ -20,6 +21,7 @@
                 ]]>
             </description>
         </item>
+        -->
         
         <item>
             <title>1.7.0</title>
