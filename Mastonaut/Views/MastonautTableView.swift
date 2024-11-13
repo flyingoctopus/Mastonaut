@@ -46,6 +46,13 @@ class MastonautTableView: NoInsetsTableView {
 	override func keyDown(with event: NSEvent) {
 
 		switch Int(event.keyCode) {
+		case kVK_ANSI_J, kVK_ANSI_K: // Handle homerow up and down
+        guard selectedRowIndexes.first.flatMap({ isRowVisible($0) }) != true else {
+            super.keyDown(with: event)
+            return
+        }
+        selectFirstVisibleRow()
+
 		case kVK_DownArrow, kVK_UpArrow:
 			guard selectedRowIndexes.first.flatMap({ isRowVisible($0) }) != true else {
 				super.keyDown(with: event)
